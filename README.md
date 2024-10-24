@@ -11,6 +11,7 @@ JEPA for claims allows us to extract representations at a variety of abstraction
 So, want to infer a provider's specialty?  Extract a level 1 provider embedding (within claims) because that captures the procedures and diagnoses providers do.  Optionally also include level 2 provider embeddings since the claims up and downstream from a provider introduce temporal contextual information.  Inferring referring provider is a more obvious use case for level 2 representations.  These features are now the input to the supervised learning model of your choice (or prediction head on this model).
 
 *New*
+
 I've extended this to do claims generation that can be inspected via csv.  It actually works surprisingly well given the smallish training data (12k obs).  I previously had implemented a GAN within here as well and it does improve the generative quality by my manual inspection, but it's not in this public version because frankly it adds quite a bit of complexity to the code itself.
 
 Another interesting point is that although I'm doing claims here, this approach can be conceptually applied to pretty much any sequence-of-composite-entity problems.
