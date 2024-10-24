@@ -1,5 +1,6 @@
 # utils/tensor_utils.py
 import torch
+import random
 
 def masked_mean(tensor, mask, dim):
     """
@@ -50,5 +51,38 @@ def masked_variance(tensor, mask, dim):
     variance = torch.where(mask_valid, variance, torch.zeros_like(variance))
 
     return variance
+
+def calculate_entropy(probs):
+    # probs: [batch_size, vocab_size]
+    # Add a small epsilon to prevent log(0)
+    epsilon = 1e-12
+    log_probs = torch.log(probs + epsilon)
+    entropy = -torch.sum(probs * log_probs, dim=-1)  # Shape: [batch_size]
+    return entropy
+
+def adaptive_sampling(probs, entropy, base_temp=1.0, base_top_p=0.9, entropy_adjustment_factor=0.5):
+    random.seed()
+    # Adjust temperature based on entropy
+    temperature = base_temp / (1 + entropy_adjustment_factor * entropy.unsqueeze(-1))
+    # Ensure temperature is within a reasonable range
+    temperature = torch.clamp(temperature, min=0.5, max=2.0)
+
+    # Apply temperature
+    adjusted_logits = torch.log(probs + 1e-12) / temperature
+
+    # Apply top-p filtering
+    sorted_probs, sorted_indices = torch.sort(torch.softmax(adjusted_logits, dim=-1), descending=True)
+    cumulative_probs = torch.cumsum(sorted_probs, dim=-1)
+    cutoff = cumulative_probs > base_top_p
+    cutoff[..., 0] = False  # Ensure at least one token remains
+    sorted_probs[cutoff] = 0
+    sorted_probs = sorted_probs / torch.sum(sorted_probs, dim=-1, keepdim=True)
+
+    # Sample from adjusted distribution
+    next_token = torch.multinomial(sorted_probs, num_samples=1)
+    next_token = sorted_indices.gather(-1, next_token)
+    return next_token
+
+
 
 

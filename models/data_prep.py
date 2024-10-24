@@ -1,12 +1,13 @@
 # data_prep.py
 import torch
 from pandas import read_parquet
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from utils.preprocessing import (
     filter_rows_with_min_ttnc_tokens,
     transform_target,
     tokenize_input,
-    remove_trailing_time_token
+    remove_trailing_time_token,
+    filter_out_na_target
 )
 from data.vocab import create_vocab, calculate_rarity
 from models.dataset import ClaimsDataset
@@ -17,6 +18,10 @@ def prepare_data(config):
     pd_training_df = read_parquet(config.data_path)
 
     print('data prep, num rows before filter', pd_training_df.shape[0])
+    # Optionally filter out NA targets
+    if not config.use_na_targets:
+        pd_training_df = filter_out_na_target(pd_training_df)
+        
     # Filter rows with minimum TTNC tokens
     filtered_pd_training_df = filter_rows_with_min_ttnc_tokens(pd_training_df, config.min_ttnc_tokens).copy()
     print('data prep, num rows after filter', filtered_pd_training_df.shape[0])
@@ -62,18 +67,42 @@ def prepare_data(config):
         ttnc_vocab=ttnc_vocab,
         config=config
     )
-    dataloader = DataLoader(
-        dataset,
+
+    # Split dataset into training and evaluation sets if needed
+    if config.use_generative_save:
+        # Calculate split lengths
+        total_length = len(dataset)
+        eval_length = int(total_length * 0.2)
+        train_length = total_length - eval_length
+
+        # Split the dataset
+        train_dataset, eval_dataset = random_split(dataset, [train_length, eval_length])
+    else:
+        train_dataset = dataset
+        eval_dataset = None
+
+    # Create DataLoaders
+    train_dataloader = DataLoader(
+        train_dataset,
         batch_size=128,
         collate_fn=dataset.collate_fn,
         shuffle=True
     )
 
+    eval_dataloader = None
+    if eval_dataset is not None:
+        eval_dataloader = DataLoader(
+            eval_dataset,
+            batch_size=128,
+            collate_fn=dataset.collate_fn,
+            shuffle=False
+        )
+
     # Update config with vocab sizes and steps
     config.cpt_vocab_size = len(cpt_vocab)
     config.icd_vocab_size = len(icd_vocab)
     config.ttnc_vocab_size = len(ttnc_vocab)
-    config.steps_per_epoch = len(dataloader)
+    config.steps_per_epoch = len(train_dataloader)
 
     # Initialize rarity score tensors for CPT
     cpt_rarity_scores = torch.ones(len(cpt_vocab))
@@ -104,4 +133,8 @@ def prepare_data(config):
     config.icd_rarity_scores = icd_rarity_scores
     config.ttnc_rarity_scores = ttnc_rarity_scores
 
-    return dataset, dataloader, config
+    config.cpt_id_to_token = {idx: token for token, idx in cpt_vocab.items()}
+    config.icd_id_to_token = {idx: token for token, idx in icd_vocab.items()}
+    config.ttnc_id_to_token = {idx: token for token, idx in ttnc_vocab.items()}
+
+    return train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset

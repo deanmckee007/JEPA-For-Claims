@@ -6,8 +6,11 @@ from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+from tqdm import tqdm
+from torch.utils.data import DataLoader
 from models.data_prep import prepare_data
 from models.hierarchical_model import HierarchicalClaimsModel
+from utils.tensor_utils import calculate_entropy, adaptive_sampling
 from utils.metrics import calculate_rmse
 from utils.config import Config
 
@@ -17,7 +20,7 @@ def main():
     config = Config()
 
     print('Preparing Data')
-    dataset, dataloader, config = prepare_data(config)
+    train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
 
     # Initialize model
     print('max claims len', config.max_claims_len)
@@ -29,12 +32,12 @@ def main():
 
     # Initialize Trainer
     trainer = pl.Trainer(
-        max_epochs=100,
+        max_epochs=config.epochs,
         accelerator='gpu',
-        gradient_clip_val=3.0,
+        # gradient_clip_val=10.0,
         logger=pl.loggers.TensorBoardLogger("tb_logs", name="jepa"),
         callbacks=[
-            pl.callbacks.EarlyStopping(monitor='Iloss2', patience=10, mode='min'),
+            #pl.callbacks.EarlyStopping(monitor='val_rmse', patience=10, mode='min'),
             pl.callbacks.ModelCheckpoint(
                 monitor='val_rmse',
                 dirpath='checkpoints/',
@@ -45,48 +48,148 @@ def main():
         ]
     )
 
-    print('Finding learning rate')
-    tuner = pl.tuner.Tuner(trainer)
-    # lr_finder = tuner.lr_find(model, dataloader)
-    # suggested_lr = lr_finder.suggestion()
-    # print('Using lr: ', suggested_lr)
-
-    model.lr = 1e-3
+    if config.use_lr_find:
+        print('Finding learning rate')
+        tuner = pl.tuner.Tuner(trainer)
+        lr_finder = tuner.lr_find(model, train_dataloader)
+        suggested_lr = lr_finder.suggestion()
+        print('Using lr: ', suggested_lr)
+    else:
+        model.lr = config.lr
 
     print('Training')
     # Train the model
-    trainer.fit(model, dataloader)
+    trainer.fit(model, train_dataloader)
 
-    model.eval()
-    all_embeddings = []
-    all_labels = []
+    # === Modified Generation Block Start ===
+    if config.use_generative_save and config.use_token_prediction_head:
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        model = model.to(device)
+        model.eval()
+        evaluation_dataloader = DataLoader(
+            eval_dataset,
+            batch_size=128,
+            collate_fn=dataset.collate_fn,
+            shuffle=False
+        )
+        results = []
 
-    with torch.no_grad():
-        for batch in dataloader:
-            cpt_tensor, icd_tensor, ttnc_tensor, labels = batch  # Adjust this line based on your data structure
-            outputs = model(cpt_tensor, icd_tensor, ttnc_tensor)
-            embeddings = outputs['patient_representation']
-            all_embeddings.append(embeddings.cpu().numpy())
-            all_labels.append(labels.cpu().numpy())
+        with torch.no_grad():
+            for batch in tqdm(evaluation_dataloader):
+                cpt_tensor, icd_tensor, ttnc_tensor, target = batch
+                cpt_tensor = cpt_tensor.to(device)
+                icd_tensor = icd_tensor.to(device)
+                ttnc_tensor = ttnc_tensor.to(device)
+                target = target.to(device)
 
-    all_embeddings = np.concatenate(all_embeddings, axis=0)
-    all_labels = np.concatenate(all_labels, axis=0)
+                # Invoke the model with generation mode enabled
+                outputs = model(
+                    cpt_tensor=cpt_tensor,
+                    icd_tensor=icd_tensor,
+                    ttnc_tensor=ttnc_tensor,
+                    generation=True,  # Enable generation mode
+                    teacher_forcing=False
+                )
 
-    # Step 2: Apply t-SNE
-    tsne = TSNE(n_components=2, random_state=42)
-    embeddings_2d = tsne.fit_transform(all_embeddings)
+                # Extract predictions
+                predicted_cpt_codes = outputs['predicted_cpt_codes']  # [batch_size, max_generated_tokens]
+                predicted_icd_codes = outputs['predicted_icd_codes']  # [batch_size, max_generated_tokens - 1]
+                predicted_ttnc_code = outputs['predicted_ttnc_code']  # [batch_size]
 
-    # Step 3: Visualize
-    df = pd.DataFrame(embeddings_2d, columns=['Dim1', 'Dim2'])
-    df['label'] = all_labels
+                for i in range(cpt_tensor.size(0)):
+                    # Process predicted CPT codes
+                    predicted_cpt_indices = (predicted_cpt_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()  # Get the indices of all the '1's
+                    predicted_cpt_codes_list = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in predicted_cpt_indices if idx != 0]
 
-    plt.figure(figsize=(8, 6))
-    sns.scatterplot(x='Dim1', y='Dim2', hue='label', palette='tab10', data=df, s=60, alpha=0.7)
-    plt.title("t-SNE Visualization of Embeddings")
-    plt.xlabel("t-SNE Dim 1")
-    plt.ylabel("t-SNE Dim 2")
-    plt.legend(title='Class')
-    plt.show()
+                    # Process actual CPT codes (from the last claim)
+                    actual_cpt_indices = cpt_tensor[i, -1, :].cpu().numpy()
+                    actual_cpt_codes = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in actual_cpt_indices if idx != 0]
+
+                    # Process predicted ICD codes
+                    predicted_icd_indices = (predicted_icd_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()  # Get the indices of all the '1's
+                    predicted_icd_codes_list = [config.icd_id_to_token.get(idx, '<UNK>') for idx in predicted_icd_indices if idx != 0]
+
+                    # Process actual ICD codes (from the last claim)
+                    actual_icd_indices = icd_tensor[i, -1, :].cpu().numpy()
+                    actual_icd_codes = [config.icd_id_to_token.get(idx, '<UNK>') for idx in actual_icd_indices if idx != 0]
+
+                    # Process predicted TTNC code
+                    predicted_ttnc_idx = predicted_ttnc_code[i].item()
+                    predicted_ttnc_code_str = config.ttnc_id_to_token.get(predicted_ttnc_idx, '<UNK>')
+
+                    # Process actual TTNC code
+                    actual_ttnc_idx = ttnc_tensor[i, -1].item()
+                    actual_ttnc_code = config.ttnc_id_to_token.get(actual_ttnc_idx, '<UNK>') if actual_ttnc_idx != 0 else ''
+
+                    # Compile results
+                    result = {
+                        'predicted_cpt': ' '.join(predicted_cpt_codes_list),
+                        'actual_cpt': ' '.join(actual_cpt_codes),
+                        'predicted_icd': ' '.join(predicted_icd_codes_list),
+                        'actual_icd': ' '.join(actual_icd_codes),
+                        'predicted_ttnc': predicted_ttnc_code_str,
+                        'actual_ttnc': actual_ttnc_code,
+                        'target': target[i].item()
+                    }
+                    results.append(result)
+
+        df = pd.DataFrame(results)
+        df.to_csv('predictions.csv', index=False)
+
+    # === Plotting Block (Unchanged) ===
+    if config.use_plotting:
+        model.eval()
+        all_embeddings = []
+        all_labels = []
+
+        with torch.no_grad():
+            for batch in train_dataloader:
+                cpt_tensor, icd_tensor, ttnc_tensor, labels = batch  # Adjust this line based on your data structure
+                outputs = model(
+                    cpt_tensor=cpt_tensor,
+                    icd_tensor=icd_tensor,
+                    ttnc_tensor=ttnc_tensor,
+                    target=labels,  # Pass target if needed for embeddings
+                    generation=False  # Ensure training_forward is used
+                )
+                embeddings = outputs['patient_representation']
+                all_embeddings.append(embeddings.cpu().numpy())
+                labels_exp = torch.exp(labels)
+                all_labels.append(labels_exp.cpu().numpy())
+
+        all_embeddings = np.concatenate(all_embeddings, axis=0)
+        all_labels = np.concatenate(all_labels, axis=0)
+
+        def bucket_labels(label):
+                if label < 1500:
+                    return '< 1500'
+                elif 1500 <= label <= 4500:
+                    return '1500-4500'
+                elif 4500 <= label <= 7500:
+                    return '4500-7500'
+                else:
+                    return '> 7500'
+
+        # Apply bucketing to all_labels
+        all_labels_buckets = np.array([bucket_labels(label) for label in all_labels])
+
+        # Step 2: Apply t-SNE
+        tsne = TSNE(n_components=2, random_state=42, init='pca', perplexity=50)
+        embeddings_2d = tsne.fit_transform(all_embeddings)
+
+        # Step 3: Visualize
+        df = pd.DataFrame(embeddings_2d, columns=['Dim1', 'Dim2'])
+        df['label'] = all_labels_buckets  # Use bucketed labels
+
+        plt.figure(figsize=(8, 6))
+        sns.scatterplot(x='Dim1', y='Dim2', hue='label', palette='tab10', data=df, s=60, alpha=0.7)
+        plt.title("t-SNE Visualization of Embeddings with Bucketed Labels")
+        plt.xlabel("t-SNE Dim 1")
+        plt.ylabel("t-SNE Dim 2")
+        plt.legend(title='Class')
+        plt.show()
+    # === Plotting Block End ===
+
 
 if __name__ == '__main__':
     main()

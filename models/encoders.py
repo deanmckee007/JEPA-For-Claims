@@ -5,6 +5,24 @@ import torch.nn.functional as F
 from utils.tensor_utils import masked_mean, masked_variance
 
 class Level1Encoder(nn.Module):
+    """
+    Encodes CPT or ICD tokens into embeddings, applies masking, and aggregates the embeddings (mean, max, min).
+    This creates a representation of an individual component within a claim - 
+    so a representation of the CPTs OR ICDs on a claim.
+    Args:
+        cpt_vocab_size (int): Size of the CPT vocabulary.
+        icd_vocab_size (int): Size of the ICD vocabulary.
+        embedding_dim (int): Dimensionality of the embeddings.
+        padding_idx (int): The padding index in the input tokens (default is 0).
+
+    Forward pass:
+        tokens (Tensor): Input token IDs, shape [batch_size, num_claims, num_tokens].
+        token_type (str): Token type, either 'cpt' or 'icd'.
+
+    Returns:
+        Tuple[Tensor, Tensor]: Aggregated embeddings (mean, max, min) for each claim, shape [batch_size, num_claims, embedding_dim * 3].
+                               Per-claim mask, shape [batch_size, num_claims], indicating which claims are valid (non-padding).
+    """
     def __init__(self, cpt_vocab_size, icd_vocab_size, embedding_dim, padding_idx=0):
         super(Level1Encoder, self).__init__()
         self.padding_idx = padding_idx
@@ -39,17 +57,47 @@ class Level1Encoder(nn.Module):
             torch.min(embeds.masked_fill(~padding_mask.unsqueeze(-1), float('inf')), dim=2).values
         )
         
-        aggregated = torch.cat([mean_embeds, max_embeds, min_embeds], dim=2)  
+        aggregated = torch.cat([mean_embeds, max_embeds, min_embeds], dim=2) 
+        # Compute claim-level mask
+        per_claim_mask = padding_mask.any(dim=2)  # Shape: [batch_size, num_claims]
+ 
         
-        return aggregated
+        return aggregated, per_claim_mask
 
 
 class Level2Encoder(nn.Module):
+    """
+    Encodes CPT, ICD, and TTNC tokens with attention pooling, token rarity, and component-level attention.
+    This creates a representation of an entire claim - using all of the components.
+    Args:
+        cpt_vocab_size (int): Size of the CPT vocabulary.
+        icd_vocab_size (int): Size of the ICD vocabulary.
+        ttnc_vocab_size (int): Size of the TTNC vocabulary.
+        embedding_dim (int): Dimensionality of the embeddings.
+        padding_idx (int): Padding index in the token sequences.
+        cpt_rarity_scores (Tensor, optional): Rarity scores for CPT tokens.
+        icd_rarity_scores (Tensor, optional): Rarity scores for ICD tokens.
+        ttnc_rarity_scores (Tensor, optional): Rarity scores for TTNC tokens.
+        use_token_rarity (bool): Whether to use token rarity during attention pooling.
+        use_code_attention (bool): Whether to use attention across tokens for each claim.
+        use_variance_embeddings (bool): Whether to use variance embeddings.
+        use_aggregate_attention (bool): Whether to use attention across aggregate embeddings (mean, attention, variance).
+        use_component_attention (bool): Whether to use attention across CPT, ICD, and TTNC components.
+        dropout (float): Dropout rate.
+
+    Forward pass:
+        cpt_tokens (Tensor): CPT token IDs, shape [batch_size, num_claims, num_cpt_tokens].
+        icd_tokens (Tensor): ICD token IDs, shape [batch_size, num_claims, num_icd_tokens].
+        ttnc_tokens (Tensor): TTNC token IDs, shape [batch_size, num_claims, num_ttnc_tokens].
+
+    Returns:
+        Tensor: Aggregated embeddings for each claim, shape [batch_size, num_claims, embedding_dim].
+    """
     def __init__(self, cpt_vocab_size, icd_vocab_size, ttnc_vocab_size, embedding_dim, padding_idx=0, 
                  cpt_rarity_scores=None, icd_rarity_scores=None, ttnc_rarity_scores=None, 
                  use_token_rarity=True, use_code_attention=True,
                  use_variance_embeddings=True, use_aggregate_attention=True,
-                 use_component_attention=True):
+                 use_component_attention=True, dropout=.05):
         super(Level2Encoder, self).__init__()
         print("Initializing Level2Encoder")
         self.layer_norm = nn.LayerNorm(embedding_dim)
@@ -94,6 +142,8 @@ class Level2Encoder(nn.Module):
         self.icd_weight = nn.Parameter(torch.tensor(1.0))  # Scalar for ICD
         self.ttnc_weight = nn.Parameter(torch.tensor(1.0))  # Scalar for TTNC
 
+        self.dropout = nn.Dropout(dropout)
+
         if self.use_aggregate_attention:
             self.agg_attention_weights = nn.Sequential(
                 nn.Linear(embedding_dim, 128),  
@@ -102,104 +152,130 @@ class Level2Encoder(nn.Module):
             )
 
 
-    def component_attention_pooling(self, cpt_agg, icd_agg, ttnc_embeds, ttnc_padding_mask):
-        components = [cpt_agg, icd_agg, ttnc_embeds]
-        # Stack components
-        stacked_components = torch.stack(components, dim=2)
-        stacked_masks = ttnc_padding_mask.unsqueeze(-1).expand(-1, -1, len(components)).unsqueeze(-1)
-        stacked_components = torch.where(stacked_masks, stacked_components, torch.zeros_like(stacked_components))
+    def component_attention_pooling(self, cpt_agg, icd_agg, ttnc_embeds, valid_mask):
+        """
+        Applies attention pooling across CPT, ICD, and TTNC embeddings at the claim level.
+        
+        Args:
+            cpt_agg (Tensor): Aggregated CPT embeddings, shape [batch_size, num_claims, emb_size].
+            icd_agg (Tensor): Aggregated ICD embeddings, shape [batch_size, num_claims, emb_size].
+            ttnc_embeds (Tensor): TTNC embeddings, shape [batch_size, num_claims, emb_size].
+            valid_mask (Tensor): Mask indicating valid claims, shape [batch_size, num_claims].
+
+        Returns:
+            Tensor: Aggregated embeddings after applying component-level attention, shape [batch_size, num_claims, emb_size].
+        """
+        components = torch.stack([cpt_agg, icd_agg, ttnc_embeds], dim=2)  # [batch_size, num_claims, 3, emb_size]
+
+        # Component-level mask (assuming all components are valid if the claim is valid)
+        component_mask = valid_mask.unsqueeze(-1).unsqueeze(-1)  # [batch_size, num_claims, 1, 1]
+        component_mask = component_mask.expand(-1, -1, 3, -1)    # [batch_size, num_claims, 3, 1]
 
         if self.use_component_attention:
-            # Compute attention scores
-            attention_scores = [self.component_attention(comp).squeeze(-1) for comp in components]
-            attention_scores = torch.stack(attention_scores, dim=-1)
+            attention_scores = self.component_attention(components)  # [batch_size, num_claims, 3, 1]
+            attention_scores = attention_scores.squeeze(-1)          # [batch_size, num_claims, 3]
 
-            # Apply mask
-            attention_scores = torch.where(stacked_masks.squeeze(-1), attention_scores, float('-inf'))
-            all_inf_mask = torch.isneginf(attention_scores).all(dim=-1)
-            if all_inf_mask.any():
-                attention_scores = attention_scores.masked_fill(all_inf_mask.unsqueeze(-1), 0.0)
+            # Apply mask to attention scores
+            attention_scores = attention_scores.masked_fill(~valid_mask.unsqueeze(-1), -1e9)
 
-            attention_weights = torch.softmax(attention_scores, dim=-1)
-            weighted_components = stacked_components * attention_weights.unsqueeze(-1)
-            component_attention_output = weighted_components.sum(dim=2)
+            attention_weights = torch.softmax(attention_scores, dim=-1)  # [batch_size, num_claims, 3]
+
+            # Apply attention weights
+            attention_weights = attention_weights.unsqueeze(-1)  # [batch_size, num_claims, 3, 1]
+            weighted_components = components * attention_weights  # [batch_size, num_claims, 3, emb_size]
+            component_attention_output = weighted_components.sum(dim=2)  # [batch_size, num_claims, emb_size]
         else:
-            # Simple sum or mean over components
-            component_attention_output = stacked_components.sum(dim=2)
-            # Alternatively, use mean
-            # component_attention_output = stacked_components.mean(dim=2)
+            # Sum over components if we're not using attention
+            component_attention_output = components.sum(dim=2)  # [batch_size, num_claims, emb_size]
 
         return component_attention_output
 
 
+    def attention_pooling_on_aggregates(self, mean_embeds, attention_embeds, variance_embeds, valid_mask):
+        """
+        Applies attention pooling across different aggregate embeddings (mean, attention, variance).
+        
+        Args:
+            mean_embeds (Tensor): Mean embeddings, shape [batch_size, num_claims, emb_size].
+            attention_embeds (Tensor): Attention embeddings, shape [batch_size, num_claims, emb_size].
+            variance_embeds (Tensor, optional): Variance embeddings, shape [batch_size, num_claims, emb_size].
+            valid_mask (Tensor): Mask indicating valid claims, shape [batch_size, num_claims].
 
-    def attention_pooling_on_aggregates(self, mean_embeds, attention_embeds, variance_embeds, ttnc_padding_mask):
+        Returns:
+            Tensor: Aggregated embeddings after applying attention pooling, shape [batch_size, num_claims, emb_size].
+        """
         components = [mean_embeds, attention_embeds]
         if self.use_variance_embeddings:
             components.append(variance_embeds)
 
-        # Stack components
+        # Stack components: [batch_size, num_claims, num_components, emb_size]
         stacked_components = torch.stack(components, dim=2)
-        stacked_masks = ttnc_padding_mask.unsqueeze(-1).expand(-1, -1, len(components)).unsqueeze(-1)
-        stacked_components = torch.where(stacked_masks, stacked_components, torch.zeros_like(stacked_components))
+
+        # Create a mask for valid claims
+        component_mask = valid_mask.unsqueeze(-1).unsqueeze(-1).expand(-1, -1, len(components), 1)  # [batch_size, num_claims, num_components, 1]
 
         if self.use_aggregate_attention:
-            # Compute attention scores
-            valid_embeds = [torch.where(ttnc_padding_mask.unsqueeze(-1), comp, torch.zeros_like(comp)) for comp in components]
-            attention_scores = [self.component_attention(comp).squeeze(-1) for comp in valid_embeds]
-            attention_scores = torch.stack(attention_scores, dim=-1)
+            attention_scores = self.agg_attention_weights(stacked_components)  # [batch_size, num_claims, num_components, 1]
+            attention_scores = attention_scores.squeeze(-1)  # [batch_size, num_claims, num_components]
 
-            # Apply mask
-            attention_scores = torch.where(stacked_masks.squeeze(-1), attention_scores, float('-inf'))
-            all_inf_mask = torch.isneginf(attention_scores).all(dim=-1)
-            if all_inf_mask.any():
-                attention_scores = attention_scores.masked_fill(all_inf_mask.unsqueeze(-1), 0.0)
+            # Apply mask to attention scores: set scores of invalid claims to a large negative value
+            attention_scores = attention_scores.masked_fill(~valid_mask.unsqueeze(-1), -1e9)
 
-            attention_weights = torch.softmax(attention_scores, dim=-1)
-            weighted_aggs = stacked_components * attention_weights.unsqueeze(-1)
-            agg_attention_output = weighted_aggs.sum(dim=2)
+            attention_weights = torch.softmax(attention_scores, dim=-1)  # [batch_size, num_claims, num_components]
+            # Apply attention weights
+            attention_weights = attention_weights.unsqueeze(-1)  # [batch_size, num_claims, num_components, 1]
+            weighted_components = stacked_components * attention_weights  # [batch_size, num_claims, num_components, emb_size]
+            agg_attention_output = weighted_components.sum(dim=2)  # [batch_size, num_claims, emb_size]
         else:
-            # Simple sum or mean over components
-            agg_attention_output = stacked_components.sum(dim=2)
-            # Alternatively, use mean
-            # agg_attention_output = stacked_components.mean(dim=2)
+            # If not using attention, sum over components directly
+            agg_attention_output = stacked_components.sum(dim=2)  # [batch_size, num_claims, emb_size]
 
         return agg_attention_output
 
 
-
     def code_attention_pooling(self, embeds, padding_mask, tokens, token_rarity_scores):
-        # embeds shape: [batch_size, num_claims, num_codes, emb_size]
-        # padding_mask shape: [batch_size, num_claims, num_codes]
-        # tokens shape: [batch_size, num_claims, num_codes]
+        """
+        Applies attention pooling across codes in a claim, optionally using token rarity scores.
+        
+        Args:
+            embeds (Tensor): Token embeddings, shape [batch_size, num_claims, num_codes, emb_size].
+            padding_mask (Tensor): Mask indicating valid tokens, shape [batch_size, num_claims, num_codes].
+            tokens (Tensor): Token IDs, shape [batch_size, num_claims, num_codes].
+            token_rarity_scores (Tensor): Rarity scores for tokens, optional.
 
+        Returns:
+            Tensor: Aggregated embeddings after applying attention pooling, shape [batch_size, num_claims, emb_size].
+        """
         batch_size, num_claims, num_codes, emb_size = embeds.size()
-        embeds = embeds.view(-1, num_codes, emb_size)           # [batch_size*num_claims, num_codes, emb_size]
+        embeds = embeds.reshape(-1, num_codes, emb_size)           # [batch_size*num_claims, num_codes, emb_size]
         padding_mask = padding_mask.view(-1, num_codes)         # [batch_size*num_claims, num_codes]
         tokens = tokens.reshape(-1, num_codes)                     # [batch_size*num_claims, num_codes]
 
+        # Convert padding_mask to float mask for calculations (1 for valid, 0 for padding)
+        float_mask = padding_mask.float()
+
         if self.use_code_attention:
-            # Compute attention scores
             attention_scores = self.attention_weights(embeds).squeeze(-1)  # [batch_size*num_claims, num_codes]
+
             if self.use_token_rarity and token_rarity_scores is not None:
-                token_rarity_scores = token_rarity_scores[tokens].to(embeds.device)
-                # Clamp to prevent log(0)
-                token_rarity_scores = torch.clamp(token_rarity_scores, min=1e-8)
-                attention_scores += torch.log(token_rarity_scores)
-            # Apply mask
-            attention_scores = torch.where(padding_mask, attention_scores, float('-inf'))
-            # Handle sequences where all tokens are masked
-            all_inf_mask = torch.isneginf(attention_scores).all(dim=-1)
-            if all_inf_mask.any():
-                # Replace attention_scores with zeros for these sequences
-                attention_scores = attention_scores.masked_fill(all_inf_mask.unsqueeze(-1), 0.0)
-                attention_weights = torch.zeros_like(attention_scores)
-            else:
-                attention_weights = torch.softmax(attention_scores, dim=-1)
+                token_rarity_scores_batch = token_rarity_scores[tokens].to(embeds.device)
+                # Avoid log(0) by clamping
+                token_rarity_scores_batch = torch.clamp(token_rarity_scores_batch, min=1e-8)
+                attention_scores = attention_scores + torch.log(token_rarity_scores_batch)
+
+            # Apply mask by setting scores of padding tokens to a very negative value
+            attention_scores = attention_scores.masked_fill(~padding_mask, -1e9)
+
+            # Compute attention weights
+            attention_weights = torch.softmax(attention_scores, dim=-1)
+
+            # Zero out attention weights of padding tokens to ensure they have no contribution
+            # This is necessary here but not for the other attention functions above because
+            # we're at the lowest level and still have padding within claims
+            attention_weights = attention_weights * float_mask
         else:
-            # If code attention is not used, use uniform attention weights over non-masked tokens
-            attention_weights = torch.ones_like(padding_mask, dtype=embeds.dtype)
-            attention_weights = attention_weights * padding_mask  # Zero out masked positions
+            # Uniform attention weights over non-masked tokens
+            attention_weights = float_mask
             # Normalize attention weights so they sum to 1 over non-masked tokens
             attention_weights_sum = attention_weights.sum(dim=-1, keepdim=True).clamp(min=1e-8)
             attention_weights = attention_weights / attention_weights_sum
@@ -207,6 +283,7 @@ class Level2Encoder(nn.Module):
         # Apply attention weights to embeds
         attention_weights = attention_weights.unsqueeze(-1)  # [batch_size*num_claims, num_codes, 1]
         weighted_embeds = embeds * attention_weights         # [batch_size*num_claims, num_codes, emb_size]
+
         # Sum over the code dimension (num_codes)
         attention_output = weighted_embeds.sum(dim=1)        # [batch_size*num_claims, emb_size]
 
@@ -216,13 +293,29 @@ class Level2Encoder(nn.Module):
 
 
     def forward(self, cpt_tokens, icd_tokens, ttnc_tokens):
+        """
+        Forward pass for the Level 2 encoder.
+
+        Args:
+            cpt_tokens (Tensor): CPT token IDs, shape [batch_size, num_claims, num_cpt_tokens].
+            icd_tokens (Tensor): ICD token IDs, shape [batch_size, num_claims, num_icd_tokens].
+            ttnc_tokens (Tensor): TTNC token IDs, shape [batch_size, num_claims].
+
+        Returns:
+            Tensor: Aggregated claim-level embeddings.  We're primarily applying three attention 
+            weighted aggregations.  Across codes, across statistical representations of the codes
+            (mean, attention mean, variance), and then across the component representations.
+        """
         device = cpt_tokens.device
+
+        cpt_tokens = cpt_tokens.long()
+        icd_tokens = icd_tokens.long()
+        ttnc_tokens = ttnc_tokens.long()
 
         cpt_embeds = self.cpt_embedding(cpt_tokens)
         icd_embeds = self.icd_embedding(icd_tokens)
         ttnc_embeds = self.ttnc_embedding(ttnc_tokens)
 
-        # Create padding masks
         cpt_padding_mask = cpt_tokens != self.cpt_embedding.padding_idx
         icd_padding_mask = icd_tokens != self.icd_embedding.padding_idx
         ttnc_padding_mask = ttnc_tokens != self.ttnc_embedding.padding_idx
@@ -232,7 +325,6 @@ class Level2Encoder(nn.Module):
         if self.use_token_rarity and self.icd_rarity_scores is not None:
             self.icd_rarity_scores = self.icd_rarity_scores.to(device)
 
-        # Apply code pooling
         cpt_attention_embeds = self.code_attention_pooling(cpt_embeds, cpt_padding_mask, cpt_tokens, self.cpt_rarity_scores)
         icd_attention_embeds = self.code_attention_pooling(icd_embeds, icd_padding_mask, icd_tokens, self.icd_rarity_scores)
 
@@ -248,15 +340,13 @@ class Level2Encoder(nn.Module):
             cpt_variance_embeds = torch.zeros_like(cpt_mean_embeds)
             icd_variance_embeds = torch.zeros_like(icd_mean_embeds)
 
-        # Aggregate embeddings with attention pooling
-        cpt_agg = self.attention_pooling_on_aggregates(cpt_mean_embeds, cpt_attention_embeds, cpt_variance_embeds, ttnc_padding_mask)
-        icd_agg = self.attention_pooling_on_aggregates(icd_mean_embeds, icd_attention_embeds, icd_variance_embeds, ttnc_padding_mask)
+        valid_mask = ttnc_padding_mask
+        cpt_agg = self.attention_pooling_on_aggregates(cpt_mean_embeds, cpt_attention_embeds, cpt_variance_embeds, valid_mask )
+        icd_agg = self.attention_pooling_on_aggregates(icd_mean_embeds, icd_attention_embeds, icd_variance_embeds, valid_mask )
 
-        # Component attention pooling
         aggregated_embeddings = self.component_attention_pooling(cpt_agg, icd_agg, ttnc_embeds, ttnc_padding_mask)
 
-        # Normalize
-        aggregated_embeddings = self.layer_norm(aggregated_embeddings)
+        aggregated_embeddings = self.dropout(aggregated_embeddings)
 
         return aggregated_embeddings
 

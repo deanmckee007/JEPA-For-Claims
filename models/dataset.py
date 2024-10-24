@@ -22,9 +22,8 @@ class ClaimsDataset(Dataset):
 
         for idx, row in dataframe.iterrows():
             claims = self.process_patient_sequence(row['input'])
-            if len(claims) == 0:
-                continue  # Skip patients with no valid claims
-
+            if len(claims) < config.min_valid_claims:
+                continue  # Skip patients with insufficient valid claims
             self.processed_data.append(claims)
             self.targets.append(row['target'])
 
@@ -71,13 +70,13 @@ class ClaimsDataset(Dataset):
         mean_target = np.mean(targets)
         
         # Compute the squared errors
-        squared_errors = (targets - mean_target) ** 2
+        squared_errors = (np.exp(targets) - np.exp(mean_target)) ** 2
         
         # Calculate the RMSE
         rmse = np.sqrt(np.mean(squared_errors))
         
         # Print the RMSE
-        print(f"RMSE of the error predicting mean log1p(target): {rmse:.4f}")
+        print(f"RMSE of the error predicting mean target(ln): {rmse:.4f}")
 
 
     def __len__(self):
@@ -123,12 +122,16 @@ class ClaimsDataset(Dataset):
                 ttnc_tokens.append(self.ttnc_vocab.get(claim['ttnc'], self.ttnc_vocab.get('<PAD>', 0)))
 
             # Pad claims to max_claims_len if they are shorter
-            while len(cpt_tokens) < max_claims_len:
-                cpt_tokens.append([self.cpt_vocab.get('<PAD>', 0)] * max_cpt_tokens)
-            while len(icd_tokens) < max_claims_len:
-                icd_tokens.append([self.icd_vocab.get('<PAD>', 0)] * max_icd_tokens)
-            while len(ttnc_tokens) < max_claims_len:
-                ttnc_tokens.append(self.ttnc_vocab.get('<PAD>', 0))
+            num_padding = max_claims_len - len(cpt_tokens)
+            if num_padding > 0:
+                pad_cpt = [[self.cpt_vocab.get('<PAD>', 0)] * max_cpt_tokens] * num_padding
+                pad_icd = [[self.icd_vocab.get('<PAD>', 0)] * max_icd_tokens] * num_padding
+                pad_ttnc = [self.ttnc_vocab.get('<PAD>', 0)] * num_padding
+
+                # Pad at the beginning
+                cpt_tokens = pad_cpt + cpt_tokens
+                icd_tokens = pad_icd + icd_tokens
+                ttnc_tokens = pad_ttnc + ttnc_tokens
 
             cpt_lists.append(cpt_tokens)
             icd_lists.append(icd_tokens)
