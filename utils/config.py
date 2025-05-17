@@ -48,3 +48,6 @@ class Config:
     use_zero_target_mask = True # Zeros are bad data in my DS - used with use_na_targets
     use_token_prediction_head = True
     use_generative_save = True
+    use_sparse_autoencoder: bool = True
+    sae_hidden_dim: int = 128
+    sae_k: int = 32
