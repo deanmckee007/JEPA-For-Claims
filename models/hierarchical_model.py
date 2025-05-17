@@ -7,6 +7,7 @@ import pytorch_lightning as pl
 import numpy as np
 from models.encoders import Level1Encoder, Level2Encoder
 from models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
+from models.sparse_autoencoder import SparseAutoencoder
 from utils.metrics import calculate_rmse
 from utils.tensor_utils import calculate_entropy
 from sklearn.model_selection import KFold
@@ -189,6 +190,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_level1 = config.use_level1
         self.use_zero_target_mask = config.use_zero_target_mask
         self.use_token_prediction_head = config.use_token_prediction_head
+        self.use_sparse_autoencoder = config.use_sparse_autoencoder
         self.cpt_vocab_size=config.cpt_vocab_size,
         self.icd_vocab_size=config.icd_vocab_size,
 
@@ -265,6 +267,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
             icd_vocab_size=config.icd_vocab_size,
         )
 
+        if self.use_sparse_autoencoder:
+            self.sparse_autoencoder = SparseAutoencoder(
+                input_dim=config.embedding_dim,
+                hidden_dim=config.sae_hidden_dim,
+                k=config.sae_k,
+            )
+
         self.lr = config.lr
         self.loss_fn = nn.MSELoss()
         # Adjust the size of log_vars since we're removing the adversarial component
@@ -273,8 +282,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'vicreg_lvl2': nn.Parameter(torch.zeros(1)),
             'task': nn.Parameter(torch.zeros(1)),
             'token_pred': nn.Parameter(torch.zeros(1)),
+            'sae': nn.Parameter(torch.zeros(1)),
             #'adversarial': nn.Parameter(torch.zeros(1)),
-        }) 
+        })
 
         if self.use_predictor_head:
             self.non_linear_predictor = nn.Sequential(
@@ -394,12 +404,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         return vicreg_loss, var_loss, inv_loss
 
-    def calculate_total_loss(self, vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss):
+    def calculate_total_loss(self, vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss, sae_loss=0):
         # Conceptually - https://arxiv.org/pdf/1705.07115
         log_var_denom = 2
         log_var_denom += 1 if self.use_level1 else 0
         log_var_denom += 1 if self.use_predictor_head else 0
         log_var_denom += 1 if self.use_token_prediction_head else 0
+        log_var_denom += 1 if self.use_sparse_autoencoder else 0
 
 
         clamped_log_vars = {k: torch.clamp(v, min=-10, max=10) for k, v in self.log_vars.items()}
@@ -434,6 +445,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
             total_loss = total_loss + weighted_token_loss
             total_precision = total_precision + precision_token
             total_log_var = total_log_var + clamped_log_vars['token_pred']
+
+        if self.use_sparse_autoencoder:
+            precision_sae = torch.exp(clamped_log_vars['sae'])
+            weighted_sae_loss = sae_loss * precision_sae
+            total_loss = total_loss + weighted_sae_loss
+            total_precision = total_precision + precision_sae
+            total_log_var = total_log_var + clamped_log_vars['sae']
 
             # precision_adv = torch.exp(clamped_log_vars['adversarial'])
             # total_loss += adversarial_loss * precision_adv
@@ -670,13 +688,19 @@ class HierarchicalClaimsModel(pl.LightningModule):
             # adversarial_loss = self.adversarial_loss(fake_preds_for_generator, real_labels_for_generator)
 
 
+        sae_loss = 0
+        if self.use_sparse_autoencoder:
+            recon = self.sparse_autoencoder(patient_representation)
+            sae_loss = F.mse_loss(recon, patient_representation)
+
         # Compute total loss
         total_loss, task_loss = self.calculate_total_loss(
-            vicreg_loss_lvl1, 
-            vicreg_loss_lvl2, 
-            task_loss, 
+            vicreg_loss_lvl1,
+            vicreg_loss_lvl2,
+            task_loss,
             lvl2_weight=self.level_2_weight,
             token_pred_loss=token_pred_loss,
+            sae_loss=sae_loss,
             #adversarial_loss=adversarial_loss
         )
 
@@ -693,6 +717,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'patient_representation': patient_representation,
             'task_loss': task_loss,
             'token_pred_loss': token_pred_loss,
+            'sae_loss': sae_loss,
             'cpt_logits': cpt_logits if self.use_token_prediction_head else None,
             'icd_logits': icd_logits if self.use_token_prediction_head else None,
             'ttnc_logits': ttnc_logits if self.use_token_prediction_head else None,
@@ -784,7 +809,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
             vicreg_loss_lvl2=outputs['vicreg_loss_lvl2'],
             task_loss=outputs['task_loss'],
             lvl2_weight=self.level_2_weight,
-            token_pred_loss=outputs['token_pred_loss']
+            token_pred_loss=outputs['token_pred_loss'],
+            sae_loss=outputs['sae_loss']
         )
 
         # --- Logging ---
@@ -793,6 +819,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         # Preserve existing logging
         if self.use_token_prediction_head:
             self.log('token_pred_loss', outputs['token_pred_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        if self.use_sparse_autoencoder:
+            self.log('sae_loss', outputs['sae_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
@@ -903,6 +931,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
             gen_params.extend(self.prediction_block_lvl1.parameters())
         gen_params.extend(self.context_encoder_lvl2.parameters())
         gen_params.extend(self.prediction_block_lvl2.parameters())
+        if self.use_sparse_autoencoder:
+            gen_params.extend(self.sparse_autoencoder.parameters())
         gen_params.extend(self.log_vars.parameters())  # Add individual parameters from ParameterDict
         gen_params.extend(self.logits_generator.parameters())
         if self.use_predictor_head:
