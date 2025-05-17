@@ -3,6 +3,13 @@ Joint Embedding Predictive Architecture for healthcare claims.  A hierarchical a
 
 Conceptually, the goal here is to generate high quality embeddings for a variety of downstream tasks.  I have a simple prediction head attached that's toggled on/off in config and that should be fine for specializing to a task or expanding to multi-task.  The claims components here are limited to procedures and diagnoses, but anyone implementing this should introduce all of the components relevant for their inference/prediction tasks.
 
+## Setup
+
+Install the dependencies with:
+```bash
+pip install -r requirements.txt
+```
+
 # What can I do with this thing?
 Self-supervised models shine where you have a ton of unlabeled data and you want to maximize value from the labeled data you do have.
 Claims often have missing/incorrect entries.  Commercial directories and downloads from CMS are often wrong or simply outdated.
