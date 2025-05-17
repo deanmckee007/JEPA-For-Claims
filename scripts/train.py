@@ -25,6 +25,7 @@ def main():
 
     # Initialize model
     print('max claims len', config.max_claims_len)
+    print(f'Using {config.epochs} epochs')
     try:
         model = HierarchicalClaimsModel(config)
         print("Model instantiated successfully")
