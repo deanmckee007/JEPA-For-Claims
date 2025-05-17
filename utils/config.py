@@ -49,5 +49,6 @@ class Config:
     use_token_prediction_head = True
     use_generative_save = True
     use_sparse_autoencoder: bool = True
+    use_gated_fusion: bool = False
     sae_hidden_dim: int = 128
     sae_k: int = 32
