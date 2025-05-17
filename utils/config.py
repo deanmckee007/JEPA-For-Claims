@@ -19,7 +19,7 @@ class Config:
     dropout: float = 0.00
     rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru'
     lr: float = 7e-4            # Default, but overridden by LR finder
-    epochs: int = 100
+    epochs: int = 10
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
@@ -35,10 +35,10 @@ class Config:
     lambda_entropy = 0.05  # Adjust this value as needed
     max_generated_tokens = 10
     use_token_rarity = False  # Whether to use token rarity scores
-    use_code_attention = True  # Whether to use attention in code pooling
-    use_variance_embeddings = True  # Whether to include variance embeddings in aggregation
-    use_aggregate_attention = True  # Whether to use attention pooling on aggregates
-    use_component_attention = True  # Whether to use component-level attention pooling
+    use_code_attention = False  # Whether to use attention in code pooling
+    use_variance_embeddings = False  # Whether to include variance embeddings in aggregation
+    use_aggregate_attention = False  # Whether to use attention pooling on aggregates
+    use_component_attention = False  # Whether to use component-level attention pooling
     use_predictor_head = False
     use_grad_print = False
     use_na_targets = False
@@ -46,9 +46,9 @@ class Config:
     use_lr_find = False
     use_plotting = False
     use_zero_target_mask = True # Zeros are bad data in my DS - used with use_na_targets
-    use_token_prediction_head = True
-    use_generative_save = True
+    use_token_prediction_head = False
+    use_generative_save = False
     use_sparse_autoencoder: bool = True
-    use_gated_fusion: bool = False
+    use_gated_fusion: bool = True
     sae_hidden_dim: int = 128
     sae_k: int = 32

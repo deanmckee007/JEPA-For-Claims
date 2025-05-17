@@ -919,7 +919,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 avg_rmse = sum(rmse_list) / len(rmse_list)
                 print(f" Average Validation RMSE: {avg_rmse}")
                 self.log('val_rmse', avg_rmse, on_step=False, on_epoch=True, prog_bar=False, logger=True)
-                print("log_vars", self.log_vars)
+                for name, param in self.log_vars.items():
+                    print(self.log(name, param.item(), prog_bar=True))
+
                 # Reset the accumulated data
                 self.accumulated_representations = []
                 self.accumulated_targets = []

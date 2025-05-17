@@ -1,6 +1,7 @@
 # scripts/train.py
 import torch
 import pytorch_lightning as pl
+from pytorch_lightning.callbacks import RichProgressBar, RichModelSummary
 import numpy as np
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
@@ -38,6 +39,8 @@ def main():
         logger=pl.loggers.TensorBoardLogger("tb_logs", name="jepa"),
         callbacks=[
             #pl.callbacks.EarlyStopping(monitor='val_rmse', patience=10, mode='min'),
+            RichProgressBar(refresh_rate=1),# 1 = update every batch
+            RichModelSummary(max_depth=2),
             pl.callbacks.ModelCheckpoint(
                 monitor='val_rmse',
                 dirpath='checkpoints/',

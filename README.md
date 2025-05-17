@@ -24,12 +24,7 @@ I'm using my personal laptop for training (yes, yes, I know) - with a GeForce GT
 ## Sparse Autoencoder with Gated Fusion
 
 JEPA can optionally leverage a Sparse Autoencoder (SAE) to pretrain claim level
-representations.  Train the SAE using the provided `train_sparse_autoencoder.py`
-script just like the main training routine:
-
-```bash
-python train_sparse_autoencoder.py --config path/to/sae_config.yaml
-```
+representations. 
 
 To fuse the SAE representation with the JEPA encoders set a gating option in the
 configuration.  Set `use_gated_fusion = True` in your `Config` dataclass and the
