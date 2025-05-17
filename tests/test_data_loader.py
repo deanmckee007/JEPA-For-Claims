@@ -1,15 +1,27 @@
 # tests/test_data_loader.py
+import os
+import tempfile
 import unittest
+import pandas as pd
+
 from data.data_loader import load_data
+
 
 class TestDataLoader(unittest.TestCase):
     def test_load_data(self):
-        training_path = 'path/to/training_set.pckl'
-        testing_path = 'path/to/test_set.pckl'
-        pd_training_df, pd_test_df = load_data(training_path, testing_path)
-        self.assertIsInstance(pd_training_df, pd.DataFrame)
-        self.assertIsInstance(pd_test_df, pd.DataFrame)
-        # Add more assertions as needed
+        with tempfile.TemporaryDirectory() as tmpdir:
+            train_path = os.path.join(tmpdir, "train.pckl")
+            test_path = os.path.join(tmpdir, "test.pckl")
+            # create dummy dataframes
+            train_df = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+            test_df = pd.DataFrame({"c": [5, 6], "d": [7, 8]})
+            train_df.to_pickle(train_path)
+            test_df.to_pickle(test_path)
 
-if __name__ == '__main__':
+            loaded_train, loaded_test = load_data(train_path, test_path)
+            self.assertTrue(loaded_train.equals(train_df))
+            self.assertTrue(loaded_test.equals(test_df))
+
+
+if __name__ == "__main__":
     unittest.main()
