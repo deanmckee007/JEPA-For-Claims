@@ -191,6 +191,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_zero_target_mask = config.use_zero_target_mask
         self.use_token_prediction_head = config.use_token_prediction_head
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
+        self.use_gated_fusion = config.use_gated_fusion
         self.cpt_vocab_size=config.cpt_vocab_size,
         self.icd_vocab_size=config.icd_vocab_size,
 
@@ -273,6 +274,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 hidden_dim=config.sae_hidden_dim,
                 k=config.sae_k,
             )
+            if self.use_gated_fusion:
+                self.sae_to_embed = nn.Linear(config.sae_hidden_dim, config.embedding_dim)
+                self.gating_network = nn.Sequential(
+                    nn.Linear(config.embedding_dim + config.embedding_dim, config.embedding_dim),
+                    nn.Sigmoid()
+                )
 
         self.lr = config.lr
         self.loss_fn = nn.MSELoss()
@@ -692,6 +699,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_sparse_autoencoder:
             recon = self.sparse_autoencoder(patient_representation)
             sae_loss = F.mse_loss(recon, patient_representation)
+            if self.use_gated_fusion:
+                sae_encoded = self.sparse_autoencoder.encoder(patient_representation)
+                sae_embed = self.sae_to_embed(sae_encoded)
+                gate_input = torch.cat([patient_representation, sae_embed], dim=-1)
+                gate = self.gating_network(gate_input)
+                patient_representation = gate * sae_embed + (1 - gate) * patient_representation
 
         # Compute total loss
         total_loss, task_loss = self.calculate_total_loss(

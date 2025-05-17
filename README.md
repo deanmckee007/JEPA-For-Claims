@@ -32,11 +32,11 @@ python train_sparse_autoencoder.py --config path/to/sae_config.yaml
 ```
 
 To fuse the SAE representation with the JEPA encoders set a gating option in the
-configuration.  Add a boolean field such as `use_gated_fusion = True` in your
-`Config` dataclass and enable it when training JEPA.  When active, the model
-learns a small gating network that blends the SAE output with the contextual
-embedding from JEPA.  This improves stability and allows the pretrained SAE to
-guide the hierarchical encoders during early training.
+configuration.  Set `use_gated_fusion = True` in your `Config` dataclass and the
+model will instantiate a small gating network that blends the SAE output with
+the contextual embedding from JEPA.  This mechanism is now implemented and
+improves training stability by letting the pretrained SAE guide the hierarchical
+encoders during early epochs.
 
 # Future state
 I'm considering adding a GAN back to the public version.
