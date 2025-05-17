@@ -199,6 +199,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.accumulated_targets = []
         self.regression_weights = None
         self.alternate_flag = True
+        # Initialize SAE loss tracking
+        self.sae_loss_total = 0.0
+        self.sae_loss_count = 0
 
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
@@ -834,6 +837,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.log('token_pred_loss', outputs['token_pred_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         if self.use_sparse_autoencoder:
             self.log('sae_loss', outputs['sae_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+            # Track SAE loss for epoch-level logging
+            self.sae_loss_total += outputs['sae_loss'].item()
+            self.sae_loss_count += 1
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
@@ -936,7 +942,15 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         # Compute least squares solution
         solution = torch.linalg.lstsq(X_sample, y_sample)
-        self.regression_weights = solution.solution.to(self.device) 
+        self.regression_weights = solution.solution.to(self.device)
+
+    def on_train_epoch_end(self):
+        """Log average SAE loss at the end of each epoch."""
+        if self.use_sparse_autoencoder and self.sae_loss_count > 0:
+            avg_sae_loss = self.sae_loss_total / self.sae_loss_count
+            self.log('avg_sae_loss', avg_sae_loss, prog_bar=True, logger=True)
+            self.sae_loss_total = 0.0
+            self.sae_loss_count = 0
 
     def configure_optimizers(self):
         # Generator parameters
