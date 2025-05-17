@@ -840,6 +840,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             # Track SAE loss for epoch-level logging
             self.sae_loss_total += outputs['sae_loss'].item()
             self.sae_loss_count += 1
+            print(f"sae_loss: {outputs['sae_loss'].item()}")
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
@@ -926,7 +927,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 print(f" Average Validation RMSE: {avg_rmse}")
                 self.log('val_rmse', avg_rmse, on_step=False, on_epoch=True, prog_bar=False, logger=True)
                 for name, param in self.log_vars.items():
-                    print(self.log(name, param.item(), prog_bar=True))
+                    self.log(name, param.item(), prog_bar=True)
+                    print(f"{name}: {param.item()}")
 
                 # Reset the accumulated data
                 self.accumulated_representations = []
