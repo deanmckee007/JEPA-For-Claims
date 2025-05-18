@@ -840,7 +840,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             # Track SAE loss for epoch-level logging
             self.sae_loss_total += outputs['sae_loss'].item()
             self.sae_loss_count += 1
-            print(f"sae_loss: {outputs['sae_loss'].item()}")
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
@@ -951,6 +950,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_sparse_autoencoder and self.sae_loss_count > 0:
             avg_sae_loss = self.sae_loss_total / self.sae_loss_count
             self.log('avg_sae_loss', avg_sae_loss, prog_bar=True, logger=True)
+            print(f"Average SAE loss: {avg_sae_loss}")
             self.sae_loss_total = 0.0
             self.sae_loss_count = 0
 
