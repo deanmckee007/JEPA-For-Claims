@@ -1,5 +1,5 @@
 # utils/config.py
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass
 class Config:
@@ -53,3 +53,10 @@ class Config:
     sae_hidden_dim: int = 128
     sae_k: int = 4
     gating_hidden_dim: int = 128
+    use_context_pooled_patient_representation: bool = False
+    patient_representation_dim: int = field(init=False)
+
+    def __post_init__(self):
+        self.patient_representation_dim = self.embedding_dim * (
+            2 if self.use_context_pooled_patient_representation else 1
+        )

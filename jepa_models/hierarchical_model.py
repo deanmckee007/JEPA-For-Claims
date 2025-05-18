@@ -268,18 +268,19 @@ class HierarchicalClaimsModel(pl.LightningModule):
             rnn_type=config.rnn_type,
             cpt_vocab_size=config.cpt_vocab_size,
             icd_vocab_size=config.icd_vocab_size,
+            use_context_pooled_patient_representation=config.use_context_pooled_patient_representation,
         )
 
         if self.use_sparse_autoencoder:
             self.sparse_autoencoder = SparseAutoencoder(
-                input_dim=config.embedding_dim,
+                input_dim=config.patient_representation_dim,
                 hidden_dim=config.sae_hidden_dim,
                 k=config.sae_k,
             )
             if self.use_gated_fusion:
                 self.sae_to_embed = nn.Linear(config.sae_hidden_dim, config.embedding_dim)
                 self.gating_network = nn.Sequential(
-                    nn.Linear(config.embedding_dim * 2, config.gating_hidden_dim),
+                    nn.Linear(config.patient_representation_dim + config.embedding_dim, config.gating_hidden_dim),
                     nn.ReLU(),
                     nn.Linear(config.gating_hidden_dim, config.embedding_dim),
                     nn.Sigmoid()
