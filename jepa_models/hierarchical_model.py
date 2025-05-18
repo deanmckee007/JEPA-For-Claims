@@ -950,7 +950,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_sparse_autoencoder and self.sae_loss_count > 0:
             avg_sae_loss = self.sae_loss_total / self.sae_loss_count
             self.log('avg_sae_loss', avg_sae_loss, prog_bar=True, logger=True)
-            print(f"Average SAE loss: {avg_sae_loss}")
             self.sae_loss_total = 0.0
             self.sae_loss_count = 0
 
