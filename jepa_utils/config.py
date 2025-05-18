@@ -52,3 +52,4 @@ class Config:
     use_gated_fusion: bool = True
     sae_hidden_dim: int = 128
     sae_k: int = 4
+    gating_hidden_dim: int = 128

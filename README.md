@@ -35,8 +35,10 @@ representations.
 
 To fuse the SAE representation with the JEPA encoders set a gating option in the
 configuration.  Set `use_gated_fusion = True` in your `Config` dataclass and the
-model will instantiate a small gating network that blends the SAE output with
-the contextual embedding from JEPA.  This mechanism is now implemented and
+model will instantiate a multi-layer gating network that blends the SAE output with
+the contextual embedding from JEPA.  The hidden size is controlled by
+`gating_hidden_dim`.  The average gating weight is logged each epoch so you can
+monitor how much the model relies on the SAE representation.  This mechanism
 improves training stability by letting the pretrained SAE guide the hierarchical
 encoders during early epochs.
 
