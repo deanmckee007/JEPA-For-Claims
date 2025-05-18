@@ -2,10 +2,14 @@ import pandas as pd
 
 
 def _read_file(path: str) -> pd.DataFrame:
-    """Read a dataframe from a parquet or pickle file based on extension."""
+    """Read a dataframe from a parquet or pickle file based on extension.
+
+    Supports ``.parquet`` as well as pickle extensions ``.pckl``, ``.pickle``
+    and ``.pkl``.
+    """
     if path.endswith('.parquet'):
         return pd.read_parquet(path)
-    if path.endswith('.pckl') or path.endswith('.pickle'):
+    if path.endswith('.pckl') or path.endswith('.pickle') or path.endswith('.pkl'):
         return pd.read_pickle(path)
     # fallback to csv
     return pd.read_csv(path)

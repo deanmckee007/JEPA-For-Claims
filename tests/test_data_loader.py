@@ -22,6 +22,20 @@ class TestDataLoader(unittest.TestCase):
             self.assertTrue(loaded_train.equals(train_df))
             self.assertTrue(loaded_test.equals(test_df))
 
+    def test_load_data_pkl_extension(self):
+        """Ensure loading works with ``.pkl`` files."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            train_path = os.path.join(tmpdir, "train.pkl")
+            test_path = os.path.join(tmpdir, "test.pkl")
+            train_df = pd.DataFrame({"a": [9, 10]})
+            test_df = pd.DataFrame({"b": [11, 12]})
+            train_df.to_pickle(train_path)
+            test_df.to_pickle(test_path)
+
+            loaded_train, loaded_test = load_data(train_path, test_path)
+            self.assertTrue(loaded_train.equals(train_df))
+            self.assertTrue(loaded_test.equals(test_df))
+
 
 if __name__ == "__main__":
     unittest.main()
