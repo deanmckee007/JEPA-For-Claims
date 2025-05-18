@@ -39,10 +39,10 @@ class Config:
     use_variance_embeddings = False  # Whether to include variance embeddings in aggregation
     use_aggregate_attention = False  # Whether to use attention pooling on aggregates
     use_component_attention = False  # Whether to use component-level attention pooling
-    use_predictor_head = True
+    use_predictor_head = False
     use_grad_print = False
     use_na_targets = False
-    use_level1 = True
+    use_level1 = False
     use_lr_find = False
     use_plotting = False
     use_zero_target_mask = True # Zeros are bad data in my DS - used with use_na_targets
@@ -51,4 +51,4 @@ class Config:
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
     sae_hidden_dim: int = 128
-    sae_k: int = 32
+    sae_k: int = 4
