@@ -6,9 +6,9 @@ class Config:
     data_path: str = 'C:/Users/tmcke/Desktop/claims_data/training_set.parquet'
     min_ttnc_tokens: int = 3    # Min number of claims per patient (use >= 3)
     min_valid_claims: int = min_ttnc_tokens - 1 # Clean this filtering up
-    max_cpt_tokens: int = 10    # Max number of procedures per claim
-    max_icd_tokens: int = 10  # Max number of diagnoses per claim
-    max_claims_len: int = 50   # Max number of claims per patient
+    max_cpt_tokens: int = 5    # Max number of procedures per claim
+    max_icd_tokens: int = 5  # Max number of diagnoses per claim
+    max_claims_len: int = 20   # Max number of claims per patient
     embedding_dim: int = 128    
     hidden_dim: int = 200
     rnn_hidden_dim: int = 400
@@ -50,6 +50,6 @@ class Config:
     use_generative_save = False
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
-    sae_hidden_dim: int = 128
-    sae_k: int = 4
-    gating_hidden_dim: int = 128
+    sae_hidden_dim: int = 512
+    sae_k: int = 5
+    gating_hidden_dim: int = 512
