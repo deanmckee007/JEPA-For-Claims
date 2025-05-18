@@ -2,7 +2,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from utils.tensor_utils import masked_mean, masked_variance
+from jepa_utils.tensor_utils import masked_mean, masked_variance
 
 class Level1Encoder(nn.Module):
     """

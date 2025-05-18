@@ -5,11 +5,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
 import numpy as np
-from models.encoders import Level1Encoder, Level2Encoder
-from models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
-from models.sparse_autoencoder import SparseAutoencoder
-from utils.metrics import calculate_rmse
-from utils.tensor_utils import calculate_entropy
+from jepa_models.encoders import Level1Encoder, Level2Encoder
+from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
+from jepa_models.sparse_autoencoder import SparseAutoencoder
+from jepa_utils.metrics import calculate_rmse
+from jepa_utils.tensor_utils import calculate_entropy
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
 

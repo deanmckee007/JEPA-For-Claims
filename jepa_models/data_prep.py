@@ -2,7 +2,7 @@
 import torch
 from pandas import read_parquet
 from torch.utils.data import DataLoader, random_split
-from utils.preprocessing import (
+from jepa_utils.preprocessing import (
     filter_rows_with_min_ttnc_tokens,
     transform_target,
     tokenize_input,
@@ -10,8 +10,8 @@ from utils.preprocessing import (
     filter_out_na_target
 )
 from data.vocab import create_vocab, calculate_rarity
-from models.dataset import ClaimsDataset
-from utils.config import Config
+from jepa_models.dataset import ClaimsDataset
+from jepa_utils.config import Config
 
 def prepare_data(config):
     # Load data

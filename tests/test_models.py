@@ -1,8 +1,8 @@
 # tests/test_models.py
 import unittest
 import torch
-from models.encoders import Level1Encoder, Level2Encoder
-from models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock
+from jepa_models.encoders import Level1Encoder, Level2Encoder
+from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock
 
 class TestEncoders(unittest.TestCase):
     def test_level1_encoder(self):

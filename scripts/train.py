@@ -9,11 +9,11 @@ import seaborn as sns
 import pandas as pd
 from tqdm import tqdm
 from torch.utils.data import DataLoader
-from models.data_prep import prepare_data
-from models.hierarchical_model import HierarchicalClaimsModel
-from utils.tensor_utils import calculate_entropy, adaptive_sampling
-from utils.metrics import calculate_rmse
-from utils.config import Config
+from jepa_models.data_prep import prepare_data
+from jepa_models.hierarchical_model import HierarchicalClaimsModel
+from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
+from jepa_utils.metrics import calculate_rmse
+from jepa_utils.config import Config
 
 
 def main():
