@@ -969,6 +969,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         gen_params.extend(self.prediction_block_lvl2.parameters())
         if self.use_sparse_autoencoder:
             gen_params.extend(self.sparse_autoencoder.parameters())
+            if self.use_gated_fusion:
+                gen_params.extend(self.sae_to_embed.parameters())
+                gen_params.extend(self.gating_network.parameters())
         gen_params.extend(self.log_vars.parameters())  # Add individual parameters from ParameterDict
         if self.use_token_prediction_head:
             gen_params.extend(self.logits_generator.parameters())
