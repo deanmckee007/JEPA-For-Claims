@@ -278,12 +278,27 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 k=config.sae_k,
             )
             if self.use_gated_fusion:
-                self.sae_to_embed = nn.Linear(config.sae_hidden_dim, config.embedding_dim)
+                # Map the SAE hidden representation to the patient representation
+                # dimension. This ensures that the SAE embedding and the patient
+                # representation have matching sizes even when
+                # ``use_context_pooled_patient_representation`` doubles the
+                # dimensionality.
+                self.sae_to_embed = nn.Linear(
+                    config.sae_hidden_dim, config.patient_representation_dim
+                )
+                # The gating network takes the concatenation of the patient
+                # representation and SAE embedding and outputs a gating vector of
+                # the same dimensionality as ``patient_representation``.
                 self.gating_network = nn.Sequential(
-                    nn.Linear(config.patient_representation_dim + config.embedding_dim, config.gating_hidden_dim),
+                    nn.Linear(
+                        config.patient_representation_dim * 2,
+                        config.gating_hidden_dim,
+                    ),
                     nn.ReLU(),
-                    nn.Linear(config.gating_hidden_dim, config.embedding_dim),
-                    nn.Sigmoid()
+                    nn.Linear(
+                        config.gating_hidden_dim, config.patient_representation_dim
+                    ),
+                    nn.Sigmoid(),
                 )
 
         self.lr = config.lr

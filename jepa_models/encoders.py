@@ -113,10 +113,12 @@ class Level2Encoder(nn.Module):
         self.aggregate_attention_norm = nn.LayerNorm(embedding_dim)
         self.component_attention_norm = nn.LayerNorm(embedding_dim)
         self.rescale_factor = nn.Parameter(torch.ones(1) * 0.5)
-        
-        self.cpt_rarity_scores = cpt_rarity_scores if cpt_rarity_scores is not None else {}
-        self.icd_rarity_scores = icd_rarity_scores if icd_rarity_scores is not None else {}
-        self.ttnc_rarity_scores = ttnc_rarity_scores if ttnc_rarity_scores is not None else {}
+
+        # Rarity scores are optional tensors. Avoid assigning empty dictionaries
+        # which cannot be moved to a device.
+        self.cpt_rarity_scores = cpt_rarity_scores
+        self.icd_rarity_scores = icd_rarity_scores
+        self.ttnc_rarity_scores = ttnc_rarity_scores
 
         self.cpt_embedding = nn.Embedding(cpt_vocab_size, embedding_dim, padding_idx=padding_idx)
         self.icd_embedding = nn.Embedding(icd_vocab_size, embedding_dim, padding_idx=padding_idx)
@@ -320,9 +322,9 @@ class Level2Encoder(nn.Module):
         icd_padding_mask = icd_tokens != self.icd_embedding.padding_idx
         ttnc_padding_mask = ttnc_tokens != self.ttnc_embedding.padding_idx
 
-        if self.use_token_rarity and self.cpt_rarity_scores is not None:
+        if self.use_token_rarity and isinstance(self.cpt_rarity_scores, torch.Tensor):
             self.cpt_rarity_scores = self.cpt_rarity_scores.to(device)
-        if self.use_token_rarity and self.icd_rarity_scores is not None:
+        if self.use_token_rarity and isinstance(self.icd_rarity_scores, torch.Tensor):
             self.icd_rarity_scores = self.icd_rarity_scores.to(device)
 
         cpt_attention_embeds = self.code_attention_pooling(cpt_embeds, cpt_padding_mask, cpt_tokens, self.cpt_rarity_scores)
