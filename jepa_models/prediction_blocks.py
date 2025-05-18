@@ -93,16 +93,18 @@ class Level2PredictionBlock(nn.Module):
             Useful downstream as input for any patient level predictions.
         context_output (Tensor): The output predictions, shape [batch_size, output_dim].
     """
-    def __init__(self, embed_dim, output_dim, cpt_vocab_size, icd_vocab_size, 
+    def __init__(self, embed_dim, output_dim, cpt_vocab_size, icd_vocab_size,
                  ttnc_vocab_size, max_seq_length, padding_idx=0,
-                 num_layers=4, num_heads=4, ff_hidden_dim=1024, dropout=0.2, 
-                 rnn_type='transformer'):
+                 num_layers=4, num_heads=4, ff_hidden_dim=1024, dropout=0.2,
+                 rnn_type='transformer',
+                 use_context_pooled_patient_representation: bool = False):
         super(Level2PredictionBlock, self).__init__()
 
         self.padding_idx = padding_idx
         # Positional Embedding Layer
         self.position_embedding = nn.Embedding(max_seq_length, embed_dim)
         self.rnn_type = rnn_type
+        self.use_context_pooled_patient_representation = use_context_pooled_patient_representation
 
         # TTNC Embedding Layer
         self.ttnc_embedding = nn.Embedding(ttnc_vocab_size, embed_dim, padding_idx=padding_idx)
@@ -241,8 +243,11 @@ class Level2PredictionBlock(nn.Module):
         # Final predictions
         context_output = self.fc(context_pooled)
 
-        # Here we're simply choosing one of the pooled representations
-        patient_representation = self.dropout(context_mean_pool)
+        # Select the patient representation based on configuration
+        if self.use_context_pooled_patient_representation:
+            patient_representation = self.dropout(context_pooled)
+        else:
+            patient_representation = self.dropout(context_mean_pool)
 
         return patient_representation, context_output
     

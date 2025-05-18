@@ -41,5 +41,27 @@ class TestPredictionBlocks(unittest.TestCase):
         self.assertEqual(patient_representation.shape, (2, embed_dim))
         self.assertEqual(prediction.shape, (2, output_dim))
 
+    def test_level2_prediction_block_context_pooled(self):
+        embed_dim = 100
+        output_dim = 50
+        cpt_vocab_size = 200
+        icd_vocab_size = 150
+        ttnc_vocab_size = 50
+        max_seq_length = 100
+        block = Level2PredictionBlock(
+            embed_dim,
+            output_dim,
+            cpt_vocab_size,
+            icd_vocab_size,
+            ttnc_vocab_size,
+            max_seq_length,
+            use_context_pooled_patient_representation=True,
+        )
+        context_embeddings = torch.randn(2, 10, embed_dim)
+        ttnc_tokens = torch.randint(0, ttnc_vocab_size, (2, 10))
+        patient_representation, prediction = block(context_embeddings, ttnc_tokens)
+        self.assertEqual(patient_representation.shape, (2, embed_dim * 2))
+        self.assertEqual(prediction.shape, (2, output_dim))
+
 if __name__ == '__main__':
     unittest.main()
