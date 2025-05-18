@@ -205,7 +205,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
-        self.logits_generator = LogitsGenerator(config)
 
         # Initialize Encoders and Prediction Blocks
         if self.use_level1:
@@ -965,7 +964,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_sparse_autoencoder:
             gen_params.extend(self.sparse_autoencoder.parameters())
         gen_params.extend(self.log_vars.parameters())  # Add individual parameters from ParameterDict
-        gen_params.extend(self.logits_generator.parameters())
+        if self.use_token_prediction_head:
+            gen_params.extend(self.logits_generator.parameters())
         if self.use_predictor_head:
             gen_params.extend(self.non_linear_predictor.parameters())
         if self.use_token_prediction_head:
