@@ -53,6 +53,7 @@ class Config:
     sae_hidden_dim: int = 256
     sae_k: int = 10
     gating_hidden_dim: int = 256
+    use_diffusion: bool = False  # Toggle diffusion-based claim generation when available
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
 

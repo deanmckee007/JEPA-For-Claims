@@ -19,9 +19,15 @@ So, want to infer a provider's specialty?  Extract a level 1 provider embedding 
 
 *New*
 
-I've extended this to do claims generation that can be inspected via csv.  It actually works surprisingly well given the smallish training data (12k obs).  I previously had implemented a GAN within here as well and it does improve the generative quality by my manual inspection, but it's not in this public version because frankly it adds quite a bit of complexity to the code itself.
+I've extended this to do claims generation that can be inspected via csv.  It actually works surprisingly well given the smallish training data (12k obs).  The old GAN implementation was removed to keep things simple.
 
 Another interesting point is that although I'm doing claims here, this approach can be conceptually applied to pretty much any sequence-of-composite-entity problems.
+
+## Diffusion-based Generation (planned)
+
+The next revision of the generator will swap the old GAN approach for a diffusion model.
+Once that code lands you can enable it by setting `use_diffusion = True` in your `Config`.
+Leaving it `False` will disable diffusion-based claim synthesis.
 
 # Notes for use
 I have options to toggle all of the level 2 attentional transformations on/off.
@@ -43,5 +49,4 @@ improves training stability by letting the pretrained SAE guide the hierarchical
 encoders during early epochs.
 
 # Future state
-I'm considering adding a GAN back to the public version.
-It'd also be nice to extend the generator to longer sequences of claims.
+A diffusion-based generator is planned to replace the removed GAN code. Once implemented, toggle it via `use_diffusion` in the configuration. It'd also be nice to extend the generator to longer sequences of claims.
