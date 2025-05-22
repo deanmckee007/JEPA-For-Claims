@@ -8,7 +8,7 @@ class Config:
     min_valid_claims: int = min_ttnc_tokens - 1 # Clean this filtering up
     max_cpt_tokens: int = 5    # Max number of procedures per claim
     max_icd_tokens: int = 5  # Max number of diagnoses per claim
-    max_claims_len: int = 20   # Max number of claims per patient
+    max_claims_len: int = 50   # Max number of claims per patient
     embedding_dim: int = 128    
     hidden_dim: int = 200
     rnn_hidden_dim: int = 400
@@ -17,9 +17,9 @@ class Config:
     num_heads: int = 4         # For the prediction transformer
     ff_hidden_dim: int = 200   # For the prediction transformer
     dropout: float = 0.00
-    rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru'
-    lr: float = 7e-4            # Default, but overridden by LR finder
-    epochs: int = 10
+    rnn_type: str = 'lstm'       # Options: 'transformer', 'lstm', 'gru'
+    lr: float = 7e-3            # Default, but overridden by LR finder
+    epochs: int = 25
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
@@ -39,7 +39,7 @@ class Config:
     use_variance_embeddings = False  # Whether to include variance embeddings in aggregation
     use_aggregate_attention = False  # Whether to use attention pooling on aggregates
     use_component_attention = False  # Whether to use component-level attention pooling
-    use_predictor_head = False
+    use_predictor_head = True
     use_grad_print = False
     use_na_targets = False
     use_level1 = False
@@ -50,9 +50,9 @@ class Config:
     use_generative_save = False
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
-    sae_hidden_dim: int = 128
-    sae_k: int = 4
-    gating_hidden_dim: int = 128
+    sae_hidden_dim: int = 256
+    sae_k: int = 10
+    gating_hidden_dim: int = 256
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
 
