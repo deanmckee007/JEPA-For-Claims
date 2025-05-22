@@ -50,6 +50,8 @@ class Config:
     use_generative_save = False
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
+    use_diffusion: bool = False
+    diffusion_steps: int = 100
     sae_hidden_dim: int = 256
     sae_k: int = 10
     gating_hidden_dim: int = 256
