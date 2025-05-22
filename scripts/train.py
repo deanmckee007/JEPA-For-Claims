@@ -107,22 +107,30 @@ def main():
                 )
 
                 # Extract predictions
-                predicted_cpt_codes = outputs['predicted_cpt_codes']  # [batch_size, max_generated_tokens]
-                predicted_icd_codes = outputs['predicted_icd_codes']  # [batch_size, max_generated_tokens - 1]
-                predicted_ttnc_code = outputs['predicted_ttnc_code']  # [batch_size]
+                predicted_cpt_codes = outputs['predicted_cpt_codes']
+                predicted_icd_codes = outputs['predicted_icd_codes']
+                predicted_ttnc_code = outputs['predicted_ttnc_code']
 
                 for i in range(cpt_tensor.size(0)):
                     # Process predicted CPT codes
-                    predicted_cpt_indices = (predicted_cpt_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()  # Get the indices of all the '1's
-                    predicted_cpt_codes_list = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in predicted_cpt_indices if idx != 0]
+                    if predicted_cpt_codes.dim() == 2:
+                        pred_cpt_idx = (predicted_cpt_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()
+                        predicted_cpt_codes_list = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in pred_cpt_idx if idx != 0]
+                    else:
+                        pred_cpt_idx = predicted_cpt_codes[i].item()
+                        predicted_cpt_codes_list = [config.cpt_id_to_token.get(pred_cpt_idx, '<UNK>')]
 
                     # Process actual CPT codes (from the last claim)
                     actual_cpt_indices = cpt_tensor[i, -1, :].cpu().numpy()
                     actual_cpt_codes = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in actual_cpt_indices if idx != 0]
 
                     # Process predicted ICD codes
-                    predicted_icd_indices = (predicted_icd_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()  # Get the indices of all the '1's
-                    predicted_icd_codes_list = [config.icd_id_to_token.get(idx, '<UNK>') for idx in predicted_icd_indices if idx != 0]
+                    if predicted_icd_codes.dim() == 2:
+                        pred_icd_idx = (predicted_icd_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()
+                        predicted_icd_codes_list = [config.icd_id_to_token.get(idx, '<UNK>') for idx in pred_icd_idx if idx != 0]
+                    else:
+                        pred_icd_idx = predicted_icd_codes[i].item()
+                        predicted_icd_codes_list = [config.icd_id_to_token.get(pred_icd_idx, '<UNK>')]
 
                     # Process actual ICD codes (from the last claim)
                     actual_icd_indices = icd_tensor[i, -1, :].cpu().numpy()
