@@ -53,6 +53,10 @@ encoders during early epochs.
 Set `use_diffusion = True` in `Config` to train and sample from a denoising diffusion model.
 The diffusion generator produces CPT, ICD and TTNC tokens and can replace the
 heuristic generator during inference.
+The training script performs a short pretraining phase for the diffusion
+generator by default.  Disable this by setting `pretrain_diffusion = False` in
+`Config`.  If you are sharing embeddings across modalities, skip this phase to
+avoid interfering with the shared weights.
 
 # Future state
 A diffusion-based generator is planned to replace the removed GAN code. Once implemented, toggle it via `use_diffusion` in the configuration. It'd also be nice to extend the generator to longer sequences of claims.

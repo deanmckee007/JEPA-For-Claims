@@ -24,7 +24,7 @@ def main():
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
 
-    if config.use_diffusion:
+    if config.use_diffusion and getattr(config, "pretrain_diffusion", True):
         diffusion_model = DiffusionModel(config)
         diffusion_trainer = pl.Trainer(
             max_epochs=config.epochs,
