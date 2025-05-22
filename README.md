@@ -23,10 +23,10 @@ I've extended this to do claims generation that can be inspected via csv.  It ac
 
 Another interesting point is that although I'm doing claims here, this approach can be conceptually applied to pretty much any sequence-of-composite-entity problems.
 
-## Diffusion-based Generation (planned)
+## Diffusion-based Generation
 
-The next revision of the generator will swap the old GAN approach for a diffusion model.
-Once that code lands you can enable it by setting `use_diffusion = True` in your `Config`.
+The generator now uses a diffusion model instead of the old GAN approach.
+Enable it by setting `use_diffusion = True` in your `Config`.
 Leaving it `False` will disable diffusion-based claim synthesis.
 
 # Notes for use
