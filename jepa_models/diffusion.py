@@ -4,9 +4,13 @@ import torch.nn.functional as F
 import pytorch_lightning as pl
 
 class DiffusionModel(pl.LightningModule):
-    """Simple DDPM for CPT/ICD/TTNC token generation."""
+    """Simple DDPM for CPT/ICD/TTNC token generation.
 
-    def __init__(self, config):
+    Optionally conditions generation on an external representation when
+    ``condition_dim`` is provided.
+    """
+
+    def __init__(self, config, condition_dim=None):
         super().__init__()
         self.save_hyperparameters()
         self.embedding_dim = config.embedding_dim
@@ -41,15 +45,26 @@ class DiffusionModel(pl.LightningModule):
 
         self.lr = config.lr
 
+        # Optional conditioning for downstream tasks
+        self.condition_dim = condition_dim or getattr(config, 'diffusion_condition_dim', 0)
+        if self.condition_dim and self.condition_dim > 0:
+            self.condition_proj = nn.Linear(self.condition_dim, self.embedding_dim * 3)
+        else:
+            self.condition_proj = None
+
     def q_sample(self, x_start, t, noise):
         sqrt_acp = self.sqrt_alphas_cumprod[t].unsqueeze(1)
         sqrt_om_acp = self.sqrt_one_minus_alphas_cumprod[t].unsqueeze(1)
         return sqrt_acp * x_start + sqrt_om_acp * noise
 
-    def p_losses(self, x_start, t, noise):
+    def p_losses(self, x_start, t, noise, condition=None):
         x_noisy = self.q_sample(x_start, t, noise)
         t_emb = self.time_embed(t)
-        predicted = self.model(x_noisy + t_emb)
+        if condition is not None and self.condition_proj is not None:
+            cond = self.condition_proj(condition)
+        else:
+            cond = 0
+        predicted = self.model(x_noisy + t_emb + cond)
         return F.mse_loss(predicted, noise)
 
     def aggregate_tokens(self, cpt_tokens, icd_tokens, ttnc_tokens):
@@ -58,22 +73,26 @@ class DiffusionModel(pl.LightningModule):
         ttnc_emb = self.ttnc_embedding(ttnc_tokens)
         return torch.cat([cpt_emb, icd_emb, ttnc_emb], dim=1)
 
-    def forward(self, cpt_tokens, icd_tokens, ttnc_tokens):
+    def forward(self, cpt_tokens, icd_tokens, ttnc_tokens, condition=None):
         x_start = self.aggregate_tokens(cpt_tokens, icd_tokens, ttnc_tokens)
         batch_size = x_start.size(0)
         t = torch.randint(0, self.num_timesteps, (batch_size,), device=x_start.device).long()
         noise = torch.randn_like(x_start)
-        loss = self.p_losses(x_start, t, noise)
+        loss = self.p_losses(x_start, t, noise, condition)
         return loss
 
     @torch.no_grad()
-    def sample(self, batch_size):
+    def sample(self, batch_size, condition=None):
         device = self.betas.device
         x = torch.randn(batch_size, self.embedding_dim * 3, device=device)
+        if condition is not None and self.condition_proj is not None:
+            cond = self.condition_proj(condition)
+        else:
+            cond = 0
         for step in reversed(range(self.num_timesteps)):
             t = torch.full((batch_size,), step, device=device, dtype=torch.long)
             t_emb = self.time_embed(t)
-            noise_pred = self.model(x + t_emb)
+            noise_pred = self.model(x + t_emb + cond)
             coef1 = 1 / torch.sqrt(1 - self.betas[step])
             coef2 = self.betas[step] / torch.sqrt(1 - self.alphas_cumprod[step])
             x = coef1 * (x - coef2 * noise_pred)

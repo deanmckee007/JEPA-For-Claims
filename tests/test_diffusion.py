@@ -22,5 +22,19 @@ class TestDiffusionModel(unittest.TestCase):
         self.assertEqual(icd_pred.shape, (2,))
         self.assertEqual(ttnc_pred.shape, (2,))
 
+    def test_conditioned_sample(self):
+        config = Config()
+        config.cpt_vocab_size = 10
+        config.icd_vocab_size = 10
+        config.ttnc_vocab_size = 5
+        config.embedding_dim = 4
+        config.diffusion_steps = 5
+        model = DiffusionModel(config, condition_dim=4)
+        condition = torch.randn(2, 4)
+        cpt_pred, icd_pred, ttnc_pred = model.sample(2, condition=condition)
+        self.assertEqual(cpt_pred.shape, (2,))
+        self.assertEqual(icd_pred.shape, (2,))
+        self.assertEqual(ttnc_pred.shape, (2,))
+
 if __name__ == '__main__':
     unittest.main()
