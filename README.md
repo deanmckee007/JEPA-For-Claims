@@ -48,5 +48,11 @@ monitor how much the model relies on the SAE representation.  This mechanism
 improves training stability by letting the pretrained SAE guide the hierarchical
 encoders during early epochs.
 
+## Diffusion Generator
+
+Set `use_diffusion = True` in `Config` to train and sample from a denoising diffusion model.
+The diffusion generator produces CPT, ICD and TTNC tokens and can replace the
+heuristic generator during inference.
+
 # Future state
 A diffusion-based generator is planned to replace the removed GAN code. Once implemented, toggle it via `use_diffusion` in the configuration. It'd also be nice to extend the generator to longer sequences of claims.

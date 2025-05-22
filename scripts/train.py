@@ -11,6 +11,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from jepa_models.data_prep import prepare_data
 from jepa_models.hierarchical_model import HierarchicalClaimsModel
+from jepa_models.diffusion import DiffusionModel
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
@@ -22,6 +23,16 @@ def main():
 
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
+
+    if config.use_diffusion:
+        diffusion_model = DiffusionModel(config)
+        diffusion_trainer = pl.Trainer(
+            max_epochs=config.epochs,
+            accelerator='gpu',
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
+            callbacks=[RichProgressBar(refresh_rate=1)]
+        )
+        diffusion_trainer.fit(diffusion_model, train_dataloader)
 
     # Initialize model
     print('max claims len', config.max_claims_len)
