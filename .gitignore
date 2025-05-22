@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+
+# Logs and temp files
+*.log
+*.tmp
+*~
+.DS_Store
+
+# Virtual environments
+venv/
+ENV/
+
