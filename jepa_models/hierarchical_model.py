@@ -724,6 +724,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         sae_loss = 0
         gating_weight_mean = torch.tensor(0.0, device=self.device)
+        gating_sae_fraction = torch.tensor(0.0, device=self.device)
         if self.use_sparse_autoencoder:
             recon = self.sparse_autoencoder(patient_representation)
             sae_loss = F.mse_loss(recon, patient_representation)
@@ -732,8 +733,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 sae_embed = self.sae_to_embed(sae_encoded)
                 gate_input = torch.cat([patient_representation, sae_embed], dim=-1)
                 gate = self.gating_network(gate_input)
-                patient_representation = gate * sae_embed + (1 - gate) * patient_representation
+                sae_part = gate * sae_embed
+                patient_part = (1 - gate) * patient_representation
+                patient_representation = sae_part + patient_part
                 gating_weight_mean = gate.mean()
+                sae_contrib = torch.norm(sae_part, dim=-1).mean()
+                patient_contrib = torch.norm(patient_part, dim=-1).mean()
+                gating_sae_fraction = sae_contrib / (sae_contrib + patient_contrib + 1e-8)
 
         # Compute total loss
         total_loss, task_loss = self.calculate_total_loss(
@@ -762,6 +768,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'token_pred_loss': token_pred_loss,
             'sae_loss': sae_loss,
             'gating_weight_mean': gating_weight_mean,
+            'gating_sae_fraction': gating_sae_fraction,
             'cpt_logits': cpt_logits if self.use_token_prediction_head else None,
             'icd_logits': icd_logits if self.use_token_prediction_head else None,
             'ttnc_logits': ttnc_logits if self.use_token_prediction_head else None,
@@ -900,6 +907,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.sae_loss_count += 1
             if self.use_gated_fusion:
                 self.log('gating_weight_mean', outputs['gating_weight_mean'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+                self.log('gating_sae_fraction', outputs['gating_sae_fraction'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)

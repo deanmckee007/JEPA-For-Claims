@@ -44,8 +44,11 @@ configuration.  Set `use_gated_fusion = True` in your `Config` dataclass and the
 model will instantiate a multi-layer gating network that blends the SAE output with
 the contextual embedding from JEPA.  The hidden size is controlled by
 `gating_hidden_dim`.  The average gating weight is logged each epoch so you can
-monitor how much the model relies on the SAE representation.  This mechanism
-improves training stability by letting the pretrained SAE guide the hierarchical
+monitor how much the model relies on the SAE representation.  An additional
+metric, `gating_sae_fraction`, reports the L2 norm of the SAE contribution
+relative to the combined representation, giving a clearer picture of how much
+the SAE output influences the dense claim embedding. This mechanism improves
+training stability by letting the pretrained SAE guide the hierarchical
 encoders during early epochs.
 
 ## Diffusion Generator
