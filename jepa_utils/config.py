@@ -51,6 +51,7 @@ class Config:
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
     use_diffusion: bool = True  # Toggle diffusion-based claim generation
+    diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_steps: int = 100
     sae_hidden_dim: int = 256
     sae_k: int = 10
