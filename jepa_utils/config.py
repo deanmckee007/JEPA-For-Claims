@@ -56,6 +56,7 @@ class Config:
     # compatibility.
     pretrain_diffusion: bool = False
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
+    diffusion_type: str = "continuous"  # continuous | discrete
     diffusion_steps: int = 100
     sae_hidden_dim: int = 256
     sae_k: int = 10

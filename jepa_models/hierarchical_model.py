@@ -8,6 +8,7 @@ import numpy as np
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
 from jepa_models.diffusion import DiffusionModel
+from jepa_models.discrete_diffusion import DiscreteDiffusionModel
 from jepa_models.sparse_autoencoder import SparseAutoencoder
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.tensor_utils import calculate_entropy
@@ -193,6 +194,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
         self.use_gated_fusion = config.use_gated_fusion
         self.use_diffusion = getattr(config, 'use_diffusion', False)
+        self.diffusion_type = getattr(config, 'diffusion_type', 'continuous')
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
         self.cpt_vocab_size=config.cpt_vocab_size,
         self.icd_vocab_size=config.icd_vocab_size,
@@ -331,10 +333,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_diffusion:
             # Condition the diffusion generator on the predicted claim
             # representation from the Level 2 prediction block
-            self.diffusion_model = DiffusionModel(
-                config,
-                condition_dim=config.output_dim,
-            )
+            if self.diffusion_type == 'discrete':
+                self.diffusion_model = DiscreteDiffusionModel(
+                    config,
+                    condition_dim=config.output_dim,
+                )
+            else:
+                self.diffusion_model = DiffusionModel(
+                    config,
+                    condition_dim=config.output_dim,
+                )
 
         self.initialize_target_encoders()
 
