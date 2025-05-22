@@ -327,7 +327,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.logits_generator = LogitsGenerator(config)
 
         if self.use_diffusion:
-            self.diffusion_model = DiffusionModel(config)
+            # Condition the diffusion generator on the predicted claim
+            # representation from the Level 2 prediction block
+            self.diffusion_model = DiffusionModel(
+                config,
+                condition_dim=config.output_dim,
+            )
 
         self.initialize_target_encoders()
 
@@ -762,7 +767,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
         # self.reset_generated_sets(batch_size)
 
         if self.use_diffusion:
-            cpt_tokens, icd_tokens, ttnc_token = self.diffusion_model.sample(batch_size)
+            # Condition sampling on the predicted next-claim representation
+            context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
+            _, logit_context = self.prediction_block_lvl2(context_lvl2, ttnc_tensor)
+            cpt_tokens, icd_tokens, ttnc_token = self.diffusion_model.sample(
+                batch_size,
+                condition=logit_context,
+            )
             return {
                 'predicted_cpt_codes': cpt_tokens,
                 'predicted_icd_codes': icd_tokens,
