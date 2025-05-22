@@ -193,6 +193,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
         self.use_gated_fusion = config.use_gated_fusion
         self.use_diffusion = getattr(config, 'use_diffusion', False)
+        self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
         self.cpt_vocab_size=config.cpt_vocab_size,
         self.icd_vocab_size=config.icd_vocab_size,
 
@@ -311,6 +312,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'task': nn.Parameter(torch.zeros(1)),
             'token_pred': nn.Parameter(torch.zeros(1)),
             'sae': nn.Parameter(torch.zeros(1)),
+            'diffusion': nn.Parameter(torch.zeros(1)),
             #'adversarial': nn.Parameter(torch.zeros(1)),
         })
 
@@ -429,13 +431,14 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         return vicreg_loss, var_loss, inv_loss
 
-    def calculate_total_loss(self, vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss, sae_loss=0):
+    def calculate_total_loss(self, vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss, sae_loss=0, diffusion_loss=0):
         # Conceptually - https://arxiv.org/pdf/1705.07115
         log_var_denom = 2
         log_var_denom += 1 if self.use_level1 else 0
         log_var_denom += 1 if self.use_predictor_head else 0
         log_var_denom += 1 if self.use_token_prediction_head else 0
         log_var_denom += 1 if self.use_sparse_autoencoder else 0
+        log_var_denom += 1 if self.use_diffusion else 0
 
 
         clamped_log_vars = {k: torch.clamp(v, min=-10, max=10) for k, v in self.log_vars.items()}
@@ -477,6 +480,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
             total_loss = total_loss + weighted_sae_loss
             total_precision = total_precision + precision_sae
             total_log_var = total_log_var + clamped_log_vars['sae']
+
+        if self.use_diffusion:
+            precision_diff = torch.exp(clamped_log_vars['diffusion'])
+            weighted_diff_loss = diffusion_loss * precision_diff * self.diffusion_weight
+            total_loss = total_loss + weighted_diff_loss
+            total_precision = total_precision + precision_diff
+            total_log_var = total_log_var + clamped_log_vars['diffusion']
 
             # precision_adv = torch.exp(clamped_log_vars['adversarial'])
             # total_loss += adversarial_loss * precision_adv
@@ -665,12 +675,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
             task_loss = self.loss_fn(target_pred, target_normalized)
 
         token_pred_loss = 0  # Initialize token prediction loss
+        logit_context = prediction_lvl2
         if self.use_token_prediction_head:
             # Initialize generated sets
             batch_size = cpt_tensor.size(0)
             #self.reset_generated_sets(batch_size)
-
-            logit_context = prediction_lvl2
             if teacher_forcing:
                 # Use ground truth initial CPT code
                 initial_cpt = target_cpt.squeeze(1)[:, 0]  # First CPT code
@@ -748,6 +757,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'var_pred_lvl1': embedding_variance_lvl1,
             'var_pred_lvl2': embedding_variance_lvl2,
             'patient_representation': patient_representation,
+            'logit_context': prediction_lvl2,
             'task_loss': task_loss,
             'token_pred_loss': token_pred_loss,
             'sae_loss': sae_loss,
@@ -851,6 +861,18 @@ class HierarchicalClaimsModel(pl.LightningModule):
             generation=False
         )
 
+        diffusion_loss = 0
+        if self.use_diffusion:
+            cpt_tokens = batch[0][:, -1, :]
+            icd_tokens = batch[1][:, -1, :]
+            ttnc_tokens = batch[2][:, -1]
+            diffusion_loss = self.diffusion_model.forward(
+                cpt_tokens,
+                icd_tokens,
+                ttnc_tokens,
+                condition=outputs['logit_context'],
+            )
+
         # Total loss calculation
         total_loss, task_loss = self.calculate_total_loss(
             vicreg_loss_lvl1=outputs['vicreg_loss_lvl1'],
@@ -858,11 +880,15 @@ class HierarchicalClaimsModel(pl.LightningModule):
             task_loss=outputs['task_loss'],
             lvl2_weight=self.level_2_weight,
             token_pred_loss=outputs['token_pred_loss'],
-            sae_loss=outputs['sae_loss']
+            sae_loss=outputs['sae_loss'],
+            diffusion_loss=diffusion_loss,
         )
 
         # --- Logging ---
         self.log('loss', total_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
+
+        if self.use_diffusion:
+            self.log('diffusion_loss', diffusion_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
 
         # Preserve existing logging
         if self.use_token_prediction_head:
