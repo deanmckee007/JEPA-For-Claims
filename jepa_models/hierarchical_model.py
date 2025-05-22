@@ -7,6 +7,7 @@ import pytorch_lightning as pl
 import numpy as np
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
+from jepa_models.diffusion import DiffusionModel
 from jepa_models.sparse_autoencoder import SparseAutoencoder
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.tensor_utils import calculate_entropy
@@ -191,6 +192,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_token_prediction_head = config.use_token_prediction_head
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
         self.use_gated_fusion = config.use_gated_fusion
+        self.use_diffusion = getattr(config, 'use_diffusion', False)
         self.cpt_vocab_size=config.cpt_vocab_size,
         self.icd_vocab_size=config.icd_vocab_size,
 
@@ -323,6 +325,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         if self.use_token_prediction_head:
             self.logits_generator = LogitsGenerator(config)
+
+        if self.use_diffusion:
+            self.diffusion_model = DiffusionModel(config)
 
         self.initialize_target_encoders()
 
@@ -755,6 +760,14 @@ class HierarchicalClaimsModel(pl.LightningModule):
     def autoregressive_generation(self, cpt_tensor, icd_tensor, ttnc_tensor):
         batch_size = cpt_tensor.size(0)
         # self.reset_generated_sets(batch_size)
+
+        if self.use_diffusion:
+            cpt_tokens, icd_tokens, ttnc_token = self.diffusion_model.sample(batch_size)
+            return {
+                'predicted_cpt_codes': cpt_tokens,
+                'predicted_icd_codes': icd_tokens,
+                'predicted_ttnc_code': ttnc_token,
+            }
 
         # Obtain initial patient representation
         context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
