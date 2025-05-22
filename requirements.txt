@@ -16,3 +16,4 @@ fastparquet
 tensorboardX
 tensorboard
 rich
+pytest
