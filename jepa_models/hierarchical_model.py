@@ -67,7 +67,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
     - target_encoder_lvl2 (Level2Encoder): Encoder for the target sequence (next claim).
     - prediction_block_lvl1 (Level1PredictionBlock): Predicts within-claim relationships.
     - prediction_block_lvl2 (Level2PredictionBlock): Predicts across-claim relationships using context.
-    - discriminator (nn.Sequential): Discriminator used for adversarial training.
     - non_linear_predictor (nn.Sequential): Optional predictor head for regression tasks.
     - logits_generator (LogitsGenerator): Generates logits for CPT, ICD, and TTNC tokens.
 
@@ -90,15 +89,15 @@ class HierarchicalClaimsModel(pl.LightningModule):
             - var_loss (Tensor): Variance loss.
             - inv_loss (Tensor): Invariance loss (MSE).
     
-    calculate_total_loss(vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss, adversarial_loss):
-        Combines VICReg, task, token prediction, and adversarial losses into a total loss.
+    calculate_total_loss(vicreg_loss_lvl1, vicreg_loss_lvl2, task_loss, lvl2_weight, token_pred_loss, sae_loss=0):
+        Combines VICReg, task, token prediction, and sparse autoencoder losses into a total loss.
         - Parameters:
             - vicreg_loss_lvl1 (Tensor): VICReg loss at Level 1.
             - vicreg_loss_lvl2 (Tensor): VICReg loss at Level 2.
             - task_loss (Tensor): Loss for any regression tasks (optional).
             - lvl2_weight (float): Weight for the Level 2 VICReg loss.
             - token_pred_loss (Tensor): Loss for token prediction tasks (optional).
-            - adversarial_loss (Tensor): Loss from adversarial training (optional).
+            - sae_loss (Tensor): Sparse autoencoder reconstruction loss (optional).
         - Returns:
             - total_loss (Tensor): The combined total loss.
             - task_loss (Tensor): Task-specific loss (if applicable).
@@ -143,7 +142,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             - Dict with predicted CPT, ICD, and TTNC codes.
 
     training_step(batch, batch_idx):
-        Defines the training step, including manual optimization for generator and discriminator.
+        Defines the training step for the generator.
         - Parameters:
             - batch (Tuple): Batch of input data (CPT, ICD, TTNC tokens, target).
             - batch_idx (int): Index of the current batch.
@@ -158,7 +157,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             - batch_idx (int): Index of the current batch.
 
     configure_optimizers():
-        Configures optimizers for the generator and discriminator, with different learning rates and weight decay for specific parameters.
+        Configures the optimizer for the generator with different learning rates and weight decay for specific parameters.
     """
     def __init__(self, config):
         super(HierarchicalClaimsModel, self).__init__()
@@ -324,17 +323,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         if self.use_token_prediction_head:
             self.logits_generator = LogitsGenerator(config)
-
-        # self.discriminator = nn.Sequential(
-        #     nn.Linear(config.embedding_dim, config.hidden_dim),
-        #     nn.LeakyReLU(0.2),
-        #     nn.Dropout(config.dropout),
-        #     nn.Linear(config.hidden_dim, 1),
-        #     nn.Sigmoid()
-        # )
-        
-        # # Initialize discriminator parameters
-        # self._initialize_weights(self.discriminator)
 
         self.initialize_target_encoders()
 
@@ -1029,24 +1017,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             ]
         )
 
-        # If you plan to use a discriminator, define its optimizer similarly
-        # For now, it's commented out as per your current implementation
-        # Define discriminator optimizer (if applicable)
-        # optimizer_dis = torch.optim.AdamW(
-        #     [
-        #         {
-        #             'params': [param for param in dis_params if param.requires_grad and param.ndim > 1],
-        #             'lr': self.lr,
-        #             'weight_decay': 1e-4
-        #         },
-        #         {
-        #             'params': [param for param in dis_params if param.requires_grad and param.ndim == 1],
-        #             'lr': self.lr,
-        #             'weight_decay': 0
-        #         }
-        #     ]
-        # )
-
-        return optimizer_gen  # Return only the generator optimizer if discriminator is not used
+        return optimizer_gen  # Only a generator optimizer is required
 
 
