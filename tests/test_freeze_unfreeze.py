@@ -13,7 +13,7 @@ class TestFreezeUnfreeze(unittest.TestCase):
         cfg.ttnc_rarity_scores = None
         cfg.use_diffusion = False
         model = HierarchicalClaimsModel(cfg)
-        model.freeze_encoders(1)
+        model.freeze_encoder(1)
         frozen = [p.requires_grad for p in model.context_encoder_lvl2.parameters()]
         self.assertTrue(any(not f for f in frozen))
         model.unfreeze_encoders()

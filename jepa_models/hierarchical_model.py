@@ -206,6 +206,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         # Initialize SAE loss tracking
         self.sae_loss_total = 0.0
         self.sae_loss_count = 0
+        self._grad_check_done = False
 
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
@@ -306,6 +307,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 )
 
         self.lr = config.lr
+        self.adapter_lr = config.adapter_lr
+        self.generator_lr = config.generator_lr
         self.loss_fn = nn.MSELoss()
         self.log_vars = nn.ParameterDict({
             'vicreg_lvl1': nn.Parameter(torch.zeros(1)),
@@ -366,6 +369,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
             modules.extend([self.context_encoder_lvl1, self.target_encoder_lvl1])
         for mod in modules:
             self._unfreeze_last_n(mod, n_layers)
+
+    # Backwards compatibility alias matching documentation terminology
+    def freeze_encoder(self, except_last_n_layers: int = 1):
+        """Freeze encoders except the final ``except_last_n_layers`` modules."""
+        self.freeze_encoders(except_last_n_layers)
 
     def unfreeze_encoders(self):
         """Unfreeze all encoder parameters."""
@@ -962,6 +970,15 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
             self.prediction_block_lvl2.on_epoch_end()
 
+    def on_after_backward(self):
+        if not self._grad_check_done:
+            print("Grad check:")
+            for name, param in self.named_parameters():
+                if "encoder_lvl" in name:
+                    status = "None" if param.grad is None else "ok"
+                    print(f"  {name}: grad {status}")
+            self._grad_check_done = True
+
             if len(self.accumulated_representations) > 0:
                 # Stack accumulated data
                 X_accum = torch.cat(self.accumulated_representations)
@@ -1041,59 +1058,50 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.sae_loss_count = 0
 
     def configure_optimizers(self):
-        # Generator parameters
-        gen_params = []
+        # Parameters divided into encoder adapters and generator modules
+        adapter_params = []
+        generator_params = []
+
+        def collect_params(module, into_list):
+            for p in module.parameters():
+                if p.requires_grad:
+                    into_list.append(p)
+
         if self.use_level1:
-            gen_params.extend(self.context_encoder_lvl1.parameters())
-            gen_params.extend(self.prediction_block_lvl1.parameters())
-        gen_params.extend(self.context_encoder_lvl2.parameters())
-        gen_params.extend(self.prediction_block_lvl2.parameters())
+            collect_params(self.context_encoder_lvl1, adapter_params)
+            collect_params(self.target_encoder_lvl1, adapter_params)
+            collect_params(self.prediction_block_lvl1, generator_params)
+
+        collect_params(self.context_encoder_lvl2, adapter_params)
+        collect_params(self.target_encoder_lvl2, adapter_params)
+        collect_params(self.prediction_block_lvl2, generator_params)
+
         if self.use_sparse_autoencoder:
-            gen_params.extend(self.sparse_autoencoder.parameters())
+            collect_params(self.sparse_autoencoder, generator_params)
             if self.use_gated_fusion:
-                gen_params.extend(self.sae_to_embed.parameters())
-                gen_params.extend(self.gating_network.parameters())
-        gen_params.extend(self.log_vars.parameters())  # Add individual parameters from ParameterDict
+                collect_params(self.sae_to_embed, generator_params)
+                collect_params(self.gating_network, generator_params)
+
+        collect_params(self.log_vars, generator_params)
         if self.use_token_prediction_head:
-            gen_params.extend(self.logits_generator.parameters())
+            collect_params(self.logits_generator, generator_params)
+            generator_params.append(self.threshold)
+            generator_params.append(self.lambda_entropy)
+
         if self.use_predictor_head:
-            gen_params.extend(self.non_linear_predictor.parameters())
-        if self.use_token_prediction_head:
-            gen_params.append(self.threshold)
-            gen_params.append(self.lambda_entropy)
-        
-        # Collect the IDs of log_vars parameters for identity-based exclusion
-        log_vars_ids = set(id(p) for p in self.log_vars.parameters())
-        
-        # Define parameter groups based on the criteria:
-        # - params_with_weight_decay: requires_grad=True, ndim > 1, not in log_vars
-        # - params_without_weight_decay: requires_grad=True, ndim == 1, in log_vars
-        params_with_weight_decay = [
-            param for param in gen_params 
-            if param.requires_grad and param.ndim > 1 and id(param) not in log_vars_ids
-        ]
+            collect_params(self.non_linear_predictor, generator_params)
 
-        params_without_weight_decay = [
-            param for param in gen_params 
-            if param.requires_grad and param.ndim == 1 and id(param) in log_vars_ids
-        ]
-
-        # Define generator optimizer with two parameter groups
         optimizer_gen = torch.optim.AdamW(
             [
-                {
-                    'params': params_with_weight_decay,
-                    'lr': self.lr,
-                    'weight_decay': 1e-4
-                },
-                {
-                    'params': params_without_weight_decay,
-                    'lr': self.lr,
-                    'weight_decay': 0
-                }
+                {'params': adapter_params, 'lr': self.adapter_lr, 'weight_decay': 1e-4},
+                {'params': generator_params, 'lr': self.generator_lr, 'weight_decay': 1e-4},
             ]
         )
 
-        return optimizer_gen  # Only a generator optimizer is required
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer_gen, step_size=2, gamma=0.5
+        )
+
+        return [optimizer_gen], [scheduler]
 
 

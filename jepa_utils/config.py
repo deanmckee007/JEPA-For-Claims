@@ -19,6 +19,8 @@ class Config:
     dropout: float = 0.00
     rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru'
     lr: float = 7e-3            # Default, but overridden by LR finder
+    adapter_lr: float = 1e-4    # LR for encoder adapter layers during Stage 2
+    generator_lr: float = 5e-4  # LR for generator modules during Stage 2
     epochs: int = 25
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
     epsilon: float = 1e-4  
