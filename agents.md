@@ -106,7 +106,9 @@ Additional config flags:
    - Stop when VICReg or SAE loss plateaus.
 
 2. **Stage 2 – Generator Training**
-   - Load `encoder_only.ckpt` and freeze encoders using `freeze_encoder(except_last_n_layers=1)`.
+   - Load the most recent `encoder_only_*.ckpt` (auto-discovered from `checkpoints/` when `representation_pretrain_epochs = 0`).
+   - Override the path with `--encoder_ckpt` or `Config.pretrained_encoder_ckpt` if needed.
+   - Freeze encoders using `freeze_encoder(except_last_n_layers=1)`.
    - Keep only adapter layers trainable at **LR ≈ 1e-4** while token head, TTNC classifier and diffusion use **LR ≈ 5e-4**.
    - Perform a one-time gradient check to verify that frozen layers report `grad == None`.
    - Enable `use_token_prediction_head` and `use_diffusion` with `diffusion_weight ≈ 0.1-0.2`.

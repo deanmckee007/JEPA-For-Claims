@@ -1,6 +1,9 @@
 # scripts/train.py
 import torch
 import pytorch_lightning as pl
+import argparse
+import os
+import datetime
 from pytorch_lightning.callbacks import RichProgressBar, RichModelSummary
 import numpy as np
 from sklearn.manifold import TSNE
@@ -15,12 +18,24 @@ from jepa_models.diffusion import DiffusionModel
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
+from jepa_utils.checkpoints import find_latest_checkpoint
 import copy
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Train JEPA model")
+    parser.add_argument(
+        "--encoder_ckpt",
+        type=str,
+        default="",
+        help="Path to pretrained encoder checkpoint",
+    )
+    args, _ = parser.parse_known_args()
+
     # Initialize configuration
     config = Config()
+    if args.encoder_ckpt:
+        config.pretrained_encoder_ckpt = args.encoder_ckpt
 
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
@@ -41,11 +56,14 @@ def main():
             model = HierarchicalClaimsModel.load_from_checkpoint(
                 ckpt_path, config=cfg, strict=False
             )
+            model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
+            print(
+                f"Loaded encoder from {ckpt_path}; frozen all encoder layers except adapter"
+            )
         else:
             model = HierarchicalClaimsModel(cfg)
-
-        if freeze:
-            model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
+            if freeze:
+                model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
 
         if getattr(cfg, "debug_low_threshold", False):
             model.threshold.data = torch.tensor(0.05)
@@ -89,8 +107,21 @@ def main():
         stage_cfg.use_diffusion = False
         stage_cfg.epochs = config.representation_pretrain_epochs
         model, trainer = train_stage(stage_cfg, "stage1")
-        ckpt_path = "encoder_only.ckpt"
+        os.makedirs("checkpoints", exist_ok=True)
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        ckpt_path = os.path.join("checkpoints", f"encoder_only_{timestamp}.ckpt")
         trainer.save_checkpoint(ckpt_path)
+    else:
+        # Auto-discover pretrained encoder when skipping Stage 1
+        override = getattr(config, "pretrained_encoder_ckpt", "")
+        if override:
+            ckpt_path = override
+        else:
+            ckpt_path = find_latest_checkpoint("encoder_only_*.ckpt", "checkpoints")
+            if not ckpt_path:
+                raise FileNotFoundError(
+                    "No encoder checkpoint found — run Stage 1 or provide --encoder_ckpt"
+                )
 
     if getattr(config, "generator_train_epochs", 0) > 0:
         stage_cfg = copy.deepcopy(config)

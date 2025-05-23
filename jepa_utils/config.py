@@ -72,6 +72,7 @@ class Config:
     representation_pretrain_epochs: int = 0
     generator_train_epochs: int = 0
     joint_train_epochs: int = 0
+    pretrained_encoder_ckpt: str = ""
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
 
