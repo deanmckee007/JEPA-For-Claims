@@ -61,5 +61,4 @@ generator by default.  Disable this by setting `pretrain_diffusion = False` in
 `Config`.  If you are sharing embeddings across modalities, skip this phase to
 avoid interfering with the shared weights.
 
-# Future state
-A diffusion-based generator is planned to replace the removed GAN code. Once implemented, toggle it via `use_diffusion` in the configuration. It'd also be nice to extend the generator to longer sequences of claims.
+Diffusion support has fully replaced the old GAN implementation. Set `use_diffusion = False` if you want to disable claim synthesis.
