@@ -342,11 +342,30 @@ class Level2Encoder(nn.Module):
             cpt_variance_embeds = torch.zeros_like(cpt_mean_embeds)
             icd_variance_embeds = torch.zeros_like(icd_mean_embeds)
 
-        valid_mask = ttnc_padding_mask
-        cpt_agg = self.attention_pooling_on_aggregates(cpt_mean_embeds, cpt_attention_embeds, cpt_variance_embeds, valid_mask )
-        icd_agg = self.attention_pooling_on_aggregates(icd_mean_embeds, icd_attention_embeds, icd_variance_embeds, valid_mask )
+        # A claim is valid if it contains any real content: a non-PAD CPT, ICD,
+        # or TTNC token. This broader check prevents representation collapse
+        # when TTNC happens to be PAD.
+        has_cpt = cpt_padding_mask.any(dim=2)
+        has_icd = icd_padding_mask.any(dim=2)
+        has_ttnc = ttnc_padding_mask
+        valid_mask = has_cpt | has_icd | has_ttnc
 
-        aggregated_embeddings = self.component_attention_pooling(cpt_agg, icd_agg, ttnc_embeds, ttnc_padding_mask)
+        # Guarantee at least one valid claim per patient to avoid all-zero
+        # representations. Force the last claim row to be valid when none are.
+        no_valid = ~valid_mask.any(dim=1)
+        if no_valid.any():
+            valid_mask[no_valid, -1] = True
+
+        cpt_agg = self.attention_pooling_on_aggregates(
+            cpt_mean_embeds, cpt_attention_embeds, cpt_variance_embeds, valid_mask
+        )
+        icd_agg = self.attention_pooling_on_aggregates(
+            icd_mean_embeds, icd_attention_embeds, icd_variance_embeds, valid_mask
+        )
+
+        aggregated_embeddings = self.component_attention_pooling(
+            cpt_agg, icd_agg, ttnc_embeds, valid_mask
+        )
 
         aggregated_embeddings = self.dropout(aggregated_embeddings)
 

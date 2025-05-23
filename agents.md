@@ -96,7 +96,7 @@ Additional config flags:
   - `pretrain_diffusion_epochs`: number of epochs to pretrain diffusion
   - `freeze_transferred_embeddings`: freeze copied embeddings for initial epochs
   - `encoder_unfreeze_layers`: layers left trainable when encoders are frozen
-  - `debug_low_threshold`: sets `threshold` to `0.05` and disables entropy when true
+ - `debug_low_threshold`: sets `threshold` to `0.05` and disables entropy when true
 
 ### 🏋️ Training Schedule
 
@@ -116,4 +116,16 @@ Additional config flags:
 
 3. **Stage 3 – Joint Fine‑Tune (optional)**
    - `unfreeze_encoders()` and train all losses with a lower encoder LR.
+
+### Stage‑1 Guard Rails
+To prevent collapsed embeddings during representation pretraining:
+1. **Valid Claim Mask**
+   - A claim is valid if it contains a non-PAD CPT **or** ICD **or** TTNC token.
+   - If an entire patient batch has no valid claims, the final (non-padding) row is forced valid.
+2. **Embedding Health Check**
+   - After computing the patient representation, a runtime check raises an error when its mean absolute magnitude falls below `1e-6`.
+   - The mean magnitude (`embedding_mag`) is logged every epoch and should stay above ~0.05.
+3. **SAE Hyperparameters**
+   - `sae_k` is set to roughly a quarter of the embedding dimension to enforce sparsity.
+   - The SAE log-variance is initialized to zero so its loss has standard weighting.
 

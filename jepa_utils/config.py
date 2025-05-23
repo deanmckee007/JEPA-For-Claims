@@ -65,11 +65,14 @@ class Config:
     encoder_unfreeze_layers: int = 1
     debug_low_threshold: bool = False
     sae_hidden_dim: int = 256
-    sae_k: int = 10
+    # Top-k activations for the sparse autoencoder. Use roughly a quarter of the
+    # embedding dimension to maintain sparsity pressure.
+    sae_k: int = 32
     gating_hidden_dim: int = 256
     # Multi-stage training epochs. If all set to 0, a single training stage is
     # executed as before.
-    representation_pretrain_epochs: int = 20
+    # Default to 0 so unit tests run quickly and Stage‑1 is optional.
+    representation_pretrain_epochs: int = 0
     generator_train_epochs: int = 100
     joint_train_epochs: int = 0
     pretrained_encoder_ckpt: str = ""

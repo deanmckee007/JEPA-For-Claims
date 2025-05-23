@@ -755,6 +755,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 patient_contrib = torch.norm(patient_part, dim=-1).mean()
                 gating_sae_fraction = sae_contrib / (sae_contrib + patient_contrib + 1e-8)
 
+        # --- Early warning for collapsed representations ---
+        mean_abs_rep = patient_representation.abs().mean()
+        if mean_abs_rep < 1e-6:
+            raise ValueError("Patient representation magnitude below threshold; check claim masking")
+
 
                 # ─── Diffusion loss for the last-claim reconstruction ─────────
         diffusion_loss = torch.tensor(0.0, device=self.device)          # default no-op
@@ -939,6 +944,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
             self.log('Var1', outputs['var_pred_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+
+        embedding_mag = outputs['patient_representation'].abs().mean()
+        self.log('embedding_mag', embedding_mag, on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         self.log('Iloss2', outputs['inv_loss_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         self.log('Var2', outputs['var_pred_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
