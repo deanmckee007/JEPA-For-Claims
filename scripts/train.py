@@ -76,8 +76,13 @@ def main():
     # Train the model
     trainer.fit(model, train_dataloader)
 
-    # === Modified Generation Block Start ===
-    if config.use_generative_save and config.use_token_prediction_head:
+    # === Generation Block Start ===
+    # Generate predictions if either the token prediction head or diffusion
+    # generator is enabled. This allows saving predictions when the model
+    # relies solely on diffusion-based generation.
+    if config.use_generative_save and (
+        config.use_token_prediction_head or config.use_diffusion
+    ):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = model.to(device)
         model.eval()
