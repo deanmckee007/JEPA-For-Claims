@@ -43,6 +43,9 @@ def main():
     except Exception as e:
         print(f"Error during model instantiation: {e}")
 
+    if getattr(config, "freeze_transferred_embeddings", False):
+        model.freeze_encoders(getattr(config, "encoder_unfreeze_layers", 1))
+
     if getattr(config, "debug_low_threshold", False):
         model.threshold.data = torch.tensor(0.05)
         model.lambda_entropy.data = torch.tensor(0.0)

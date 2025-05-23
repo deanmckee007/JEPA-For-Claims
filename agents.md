@@ -95,5 +95,20 @@ Codex agents must respect `use_diffusion` config toggle. Never invoke both gener
 Additional config flags:
   - `pretrain_diffusion_epochs`: number of epochs to pretrain diffusion
   - `freeze_transferred_embeddings`: freeze copied embeddings for initial epochs
+  - `encoder_unfreeze_layers`: layers left trainable when encoders are frozen
   - `debug_low_threshold`: sets `threshold` to `0.05` and disables entropy when true
+
+### 🏋️ Training Schedule
+
+1. **Stage 1 – Representation Pretrain**
+   - `use_token_prediction_head = False`
+   - `use_diffusion = False`
+   - Stop when VICReg or SAE loss plateaus.
+
+2. **Stage 2 – Generator Training**
+   - Load `encoder_only.ckpt`, then call `freeze_encoders()` with `encoder_unfreeze_layers`.
+   - Enable `use_token_prediction_head` and `use_diffusion` with `diffusion_weight ≈ 0.1-0.2`.
+
+3. **Stage 3 – Joint Fine‑Tune (optional)**
+   - `unfreeze_encoders()` and train all losses with a lower encoder LR.
 

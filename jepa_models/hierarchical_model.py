@@ -344,6 +344,38 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         self.initialize_target_encoders()
 
+    def _unfreeze_last_n(self, module, n_layers):
+        """Helper to unfreeze the last ``n_layers`` child modules of ``module``."""
+        for param in module.parameters():
+            param.requires_grad = False
+        if n_layers <= 0:
+            return
+        children = list(module.children())
+        if not children:
+            for param in module.parameters():
+                param.requires_grad = True
+            return
+        for child in children[-n_layers:]:
+            for param in child.parameters():
+                param.requires_grad = True
+
+    def freeze_encoders(self, n_layers: int = 1):
+        """Freeze all encoder weights except the last ``n_layers``."""
+        modules = [self.context_encoder_lvl2, self.target_encoder_lvl2]
+        if self.use_level1:
+            modules.extend([self.context_encoder_lvl1, self.target_encoder_lvl1])
+        for mod in modules:
+            self._unfreeze_last_n(mod, n_layers)
+
+    def unfreeze_encoders(self):
+        """Unfreeze all encoder parameters."""
+        modules = [self.context_encoder_lvl2, self.target_encoder_lvl2]
+        if self.use_level1:
+            modules.extend([self.context_encoder_lvl1, self.target_encoder_lvl1])
+        for mod in modules:
+            for param in mod.parameters():
+                param.requires_grad = True
+
     def initialize_target_encoders(self):
         if self.use_level1:
             for param_q, param_k in zip(self.context_encoder_lvl1.parameters(), self.target_encoder_lvl1.parameters()):
