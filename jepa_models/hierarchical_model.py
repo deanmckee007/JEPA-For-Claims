@@ -719,16 +719,19 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 # ─── Diffusion loss for the last-claim reconstruction ─────────
         diffusion_loss = torch.tensor(0.0, device=self.device)          # default no-op
         if self.use_diffusion:
-            # tokens from the LAST claim in this batch
-            cpt_last  = target_cpt.squeeze(1)[:, 0]           # shape [batch]
-            icd_last  = target_icd.squeeze(1)[:, 0]
-            ttnc_last = target_ttnc.squeeze(1)     # shape [batch]
+            # Tokens from the last claim in the batch. ``target_*`` has shape
+            # ``[batch, 1, num_tokens]`` so we remove the claim dimension but
+            # retain the per-code dimension for CPT/ICD. TTNC is a single code
+            # per claim so it becomes ``[batch]``.
+            cpt_last = target_cpt.squeeze(1)  # [batch, max_cpt_tokens]
+            icd_last = target_icd.squeeze(1)  # [batch, max_icd_tokens]
+            ttnc_last = target_ttnc.squeeze(1)  # [batch]
 
             diffusion_loss = self.diffusion_model.forward(
                 cpt_last,
                 icd_last,
                 ttnc_last,
-                condition=prediction_lvl2,                    # predicted claim rep
+                condition=prediction_lvl2,  # predicted claim rep
             )
 
         # Compute total loss
