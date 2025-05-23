@@ -30,8 +30,12 @@ class DiscreteDiffusionModel(pl.LightningModule):
             nn.Linear(self.embedding_dim * 6, self.embedding_dim * 3),
         )
 
-        self.cpt_proj = nn.Linear(self.embedding_dim, self.cpt_vocab_size)
-        self.icd_proj = nn.Linear(self.embedding_dim, self.icd_vocab_size)
+        self.cpt_proj = nn.Linear(
+            self.embedding_dim, self.cpt_vocab_size * config.max_cpt_tokens
+        )
+        self.icd_proj = nn.Linear(
+            self.embedding_dim, self.icd_vocab_size * config.max_icd_tokens
+        )
         self.ttnc_proj = nn.Linear(self.embedding_dim, self.ttnc_vocab_size)
 
         self.lr = config.lr
@@ -68,16 +72,25 @@ class DiscreteDiffusionModel(pl.LightningModule):
         else:
             cond = 0
         predicted = self.model(x_noisy + t_emb + cond)
+
+        # --- Predict logits for each slot independently ---
         cpt_logits = self.cpt_proj(predicted[:, : self.embedding_dim])
         icd_logits = self.icd_proj(predicted[:, self.embedding_dim : 2 * self.embedding_dim])
         ttnc_logits = self.ttnc_proj(predicted[:, 2 * self.embedding_dim :])
-        cpt_target = cpt_tokens[:, 0]
-        icd_target = icd_tokens[:, 0]
-        loss = (
-            F.cross_entropy(cpt_logits, cpt_target)
-            + F.cross_entropy(icd_logits, icd_target)
-            + F.cross_entropy(ttnc_logits, ttnc_tokens)
+
+        batch_size = cpt_tokens.size(0)
+        cpt_logits = cpt_logits.view(batch_size, self.max_cpt_tokens, self.cpt_vocab_size)
+        icd_logits = icd_logits.view(batch_size, self.max_icd_tokens, self.icd_vocab_size)
+
+        # Flatten to compute cross-entropy across all slots
+        loss_cpt = F.cross_entropy(
+            cpt_logits.reshape(-1, self.cpt_vocab_size), cpt_tokens.reshape(-1)
         )
+        loss_icd = F.cross_entropy(
+            icd_logits.reshape(-1, self.icd_vocab_size), icd_tokens.reshape(-1)
+        )
+        loss_ttnc = F.cross_entropy(ttnc_logits, ttnc_tokens)
+        loss = loss_cpt + loss_icd + loss_ttnc
         return loss
 
     def forward(self, cpt_tokens, icd_tokens, ttnc_tokens, condition=None):
@@ -89,25 +102,55 @@ class DiscreteDiffusionModel(pl.LightningModule):
     @torch.no_grad()
     def sample(self, batch_size, condition=None):
         device = self.betas.device
-        cpt_tokens = torch.randint(0, self.cpt_vocab_size, (batch_size, self.max_cpt_tokens), device=device)
-        icd_tokens = torch.randint(0, self.icd_vocab_size, (batch_size, self.max_icd_tokens), device=device)
+        cpt_tokens = torch.randint(
+            0, self.cpt_vocab_size, (batch_size, self.max_cpt_tokens), device=device
+        )
+        icd_tokens = torch.randint(
+            0, self.icd_vocab_size, (batch_size, self.max_icd_tokens), device=device
+        )
         ttnc_tokens = torch.randint(0, self.ttnc_vocab_size, (batch_size,), device=device)
+
         if condition is not None and self.condition_proj is not None:
             cond = self.condition_proj(condition)
         else:
             cond = 0
+
         for step in reversed(range(self.num_timesteps)):
             t = torch.full((batch_size,), step, device=device, dtype=torch.long)
             x = self.aggregate_tokens(cpt_tokens, icd_tokens, ttnc_tokens)
             t_emb = self.time_embed(t)
             h = self.model(x + t_emb + cond)
+
             cpt_logits = self.cpt_proj(h[:, : self.embedding_dim])
             icd_logits = self.icd_proj(h[:, self.embedding_dim : 2 * self.embedding_dim])
             ttnc_logits = self.ttnc_proj(h[:, 2 * self.embedding_dim :])
-            cpt_tokens = torch.argmax(cpt_logits, dim=-1).unsqueeze(1).repeat(1, self.max_cpt_tokens)
-            icd_tokens = torch.argmax(icd_logits, dim=-1).unsqueeze(1).repeat(1, self.max_icd_tokens)
+
+            batch_size = cpt_tokens.size(0)
+            cpt_logits = cpt_logits.view(batch_size, self.max_cpt_tokens, self.cpt_vocab_size)
+            icd_logits = icd_logits.view(batch_size, self.max_icd_tokens, self.icd_vocab_size)
+
+            cpt_tokens = torch.argmax(cpt_logits, dim=-1)
+            icd_tokens = torch.argmax(icd_logits, dim=-1)
             ttnc_tokens = torch.argmax(ttnc_logits, dim=-1)
-        return cpt_tokens[:, 0], icd_tokens[:, 0], ttnc_tokens
+
+        # Ensure uniqueness of sampled codes within each claim
+        cpt_tokens = self._deduplicate(cpt_tokens)
+        icd_tokens = self._deduplicate(icd_tokens)
+        return cpt_tokens, icd_tokens, ttnc_tokens
+
+    def _deduplicate(self, tokens, pad_value=0):
+        """Remove duplicate codes within each claim and pad the rest."""
+        unique_tokens = []
+        for claim in tokens.tolist():
+            seen = set()
+            filtered = []
+            for tok in claim:
+                if tok not in seen:
+                    filtered.append(tok)
+                    seen.add(tok)
+            filtered += [pad_value] * (len(claim) - len(filtered))
+            unique_tokens.append(filtered)
+        return tokens.new_tensor(unique_tokens)
 
     def training_step(self, batch, batch_idx):
         cpt_tensor, icd_tensor, ttnc_tensor, _ = batch
