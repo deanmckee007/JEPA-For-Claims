@@ -10,6 +10,18 @@ Install the dependencies with:
 pip install -r requirements.txt
 ```
 
+## Quick-start debug
+
+If CPT or ICD predictions look empty, toggle a helper flag:
+
+```python
+config.debug_low_threshold = True
+```
+
+This sets the model's generation threshold to `0.05` and disables the
+entropy term so logits fire during sanity checks. Remember to set it
+back to `False` before real training.
+
 # What can I do with this thing?
 Self-supervised models shine where you have a ton of unlabeled data and you want to maximize value from the labeled data you do have.
 Claims often have missing/incorrect entries.  Commercial directories and downloads from CMS are often wrong or simply outdated.

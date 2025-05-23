@@ -196,8 +196,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_diffusion = getattr(config, 'use_diffusion', False)
         self.diffusion_type = getattr(config, 'diffusion_type', 'continuous')
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
-        self.cpt_vocab_size=config.cpt_vocab_size,
-        self.icd_vocab_size=config.icd_vocab_size,
+        self.cpt_vocab_size = config.cpt_vocab_size
+        self.icd_vocab_size = config.icd_vocab_size
 
         self.accumulated_representations = []
         self.accumulated_targets = []
@@ -685,8 +685,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 cpt_logits, icd_logits, ttnc_logits = self.logits_generator(logit_context)
 
                 # Create multi-hot target vectors
-                target_cpt_multi_hot = self.create_multi_hot_targets(target_cpt, self.cpt_vocab_size[0], padding_idx=0)
-                target_icd_multi_hot = self.create_multi_hot_targets(target_icd, self.icd_vocab_size[0], padding_idx=0)
+                target_cpt_multi_hot = self.create_multi_hot_targets(target_cpt, self.cpt_vocab_size, padding_idx=0)
+                target_icd_multi_hot = self.create_multi_hot_targets(target_icd, self.icd_vocab_size, padding_idx=0)
 
                 # Compute loss using targets
                 criterion_bce = nn.BCEWithLogitsLoss()
