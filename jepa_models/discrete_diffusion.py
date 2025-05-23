@@ -50,12 +50,22 @@ class DiscreteDiffusionModel(pl.LightningModule):
         self.max_icd_tokens = config.max_icd_tokens
 
     def q_sample(self, tokens, vocab_size, t):
-        prob = self.betas[t].unsqueeze(1)
+        """Perform a single diffusion step on the provided tokens."""
+        # ``t`` has shape [batch_size]. Adapt the beta values to match the
+        # dimensionality of ``tokens`` so broadcasting works for both 1-D and
+        # 2-D token tensors.
+        prob = self.betas[t].view(tokens.size(0), *([1] * (tokens.dim() - 1)))
         noise = torch.randint(0, vocab_size, tokens.shape, device=tokens.device)
         mask = torch.bernoulli(prob.expand_as(tokens)).bool()
         return torch.where(mask, noise, tokens)
 
     def aggregate_tokens(self, cpt_tokens, icd_tokens, ttnc_tokens):
+        """Aggregate embeddings for CPT, ICD and TTNC tokens."""
+        if cpt_tokens.dim() == 1:
+            cpt_tokens = cpt_tokens.unsqueeze(1)
+        if icd_tokens.dim() == 1:
+            icd_tokens = icd_tokens.unsqueeze(1)
+
         cpt_emb = self.cpt_embedding(cpt_tokens).sum(dim=1)
         icd_emb = self.icd_embedding(icd_tokens).sum(dim=1)
         ttnc_emb = self.ttnc_embedding(ttnc_tokens)

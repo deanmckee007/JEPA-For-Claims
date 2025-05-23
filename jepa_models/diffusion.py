@@ -68,6 +68,15 @@ class DiffusionModel(pl.LightningModule):
         return F.mse_loss(predicted, noise)
 
     def aggregate_tokens(self, cpt_tokens, icd_tokens, ttnc_tokens):
+        """Aggregate token embeddings into a single representation."""
+        # ``cpt_tokens`` and ``icd_tokens`` may come in as 1D tensors when only
+        # a single code per claim is used. Ensure we always have a sequence
+        # dimension so ``sum(dim=1)`` works for both cases.
+        if cpt_tokens.dim() == 1:
+            cpt_tokens = cpt_tokens.unsqueeze(1)
+        if icd_tokens.dim() == 1:
+            icd_tokens = icd_tokens.unsqueeze(1)
+
         cpt_emb = self.cpt_embedding(cpt_tokens).sum(dim=1)
         icd_emb = self.icd_embedding(icd_tokens).sum(dim=1)
         ttnc_emb = self.ttnc_embedding(ttnc_tokens)
