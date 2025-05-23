@@ -45,7 +45,7 @@ def main():
             model = HierarchicalClaimsModel(cfg)
 
         if freeze:
-            model.freeze_encoders(getattr(cfg, "encoder_unfreeze_layers", 1))
+            model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
 
         if getattr(cfg, "debug_low_threshold", False):
             model.threshold.data = torch.tensor(0.05)
