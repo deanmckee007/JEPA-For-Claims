@@ -307,7 +307,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         self.lr = config.lr
         self.loss_fn = nn.MSELoss()
-        # Adjust the size of log_vars since we're removing the adversarial component
         self.log_vars = nn.ParameterDict({
             'vicreg_lvl1': nn.Parameter(torch.zeros(1)),
             'vicreg_lvl2': nn.Parameter(torch.zeros(1)),
@@ -315,7 +314,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'token_pred': nn.Parameter(torch.zeros(1)),
             'sae': nn.Parameter(torch.zeros(1)),
             'diffusion': nn.Parameter(torch.zeros(1)),
-            #'adversarial': nn.Parameter(torch.zeros(1)),
         })
 
         if self.use_predictor_head:
@@ -496,10 +494,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             total_precision = total_precision + precision_diff
             total_log_var = total_log_var + clamped_log_vars['diffusion']
 
-            # precision_adv = torch.exp(clamped_log_vars['adversarial'])
-            # total_loss += adversarial_loss * precision_adv
-            # total_precision += precision_adv
-            # total_log_var += clamped_log_vars['adversarial']
 
         # Averaging the total loss and adding regularization
         total_loss = total_loss / (total_precision + 1e-8)
@@ -524,17 +518,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         return multi_hot_targets
 
-    # def adversarial_loss(self, y_hat, y):
-    #     # Binary cross-entropy loss
-    #     return nn.functional.binary_cross_entropy(y_hat, y)
-
-    # def reset_generated_sets(self, batch_size):
-    #     """
-    #     Initialize empty generated sets for a new batch.
-    #     """
-    #     self.generated_cpt = torch.zeros(batch_size, self.max_generated_tokens, dtype=torch.long, device=self.device)
-    #     self.generated_icd = torch.zeros(batch_size, self.max_generated_tokens, dtype=torch.long, device=self.device)
-    #     self.generated_ttnc = torch.zeros(batch_size, dtype=torch.long, device=self.device)
 
     def multi_hot_to_indices_tensor(self, multi_hot_tensor):
         indices_list = []
@@ -685,9 +668,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         token_pred_loss = 0  # Initialize token prediction loss
         logit_context = prediction_lvl2
         if self.use_token_prediction_head:
-            # Initialize generated sets
             batch_size = cpt_tensor.size(0)
-            #self.reset_generated_sets(batch_size)
             if teacher_forcing:
                 # Use ground truth initial CPT code
                 initial_cpt = target_cpt.squeeze(1)[:, 0]  # First CPT code
@@ -714,21 +695,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 icd_loss = criterion_bce(icd_logits, target_icd_multi_hot)
                 ttnc_loss = criterion_ce(ttnc_logits, target_ttnc.squeeze(1))
                 token_pred_loss = cpt_loss + icd_loss + ttnc_loss
-
-                # Prepare fake claim tensors
-            # fake_cpt_tensor = self.multi_hot_to_indices_tensor(generated_cpt)
-            # fake_icd_tensor = self.multi_hot_to_indices_tensor(generated_icd)
-            # fake_ttnc_tensor = generated_ttnc.unsqueeze(1)  # [batch_size, 1]
-
-            # Pass generated fake claim through the target encoder
-            # fake_target_lvl2 = self.target_encoder_lvl2(
-            #     fake_cpt_tensor, fake_icd_tensor, fake_ttnc_tensor
-            # ).squeeze(1)
-
-            # fake_preds_for_generator = self.discriminator(fake_target_lvl2)
-            # real_labels_for_generator = torch.ones_like(fake_preds_for_generator)
-            # adversarial_loss = self.adversarial_loss(fake_preds_for_generator, real_labels_for_generator)
-
 
         sae_loss = 0
         gating_weight_mean = torch.tensor(0.0, device=self.device)
@@ -757,7 +723,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             lvl2_weight=self.level_2_weight,
             token_pred_loss=token_pred_loss,
             sae_loss=sae_loss,
-            #adversarial_loss=adversarial_loss
         )
 
         return {
@@ -780,16 +745,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'cpt_logits': cpt_logits if self.use_token_prediction_head else None,
             'icd_logits': icd_logits if self.use_token_prediction_head else None,
             'ttnc_logits': ttnc_logits if self.use_token_prediction_head else None,
-            # 'real_target_lvl2': real_target_lvl2,
-            # 'fake_target_lvl2': fake_target_lvl2, 
-            # 'predicted_cpt_codes': generated_cpt,
-            # 'predicted_icd_codes': generated_icd,
-            # 'predicted_ttnc_code': generated_ttnc
         }
 
     def autoregressive_generation(self, cpt_tensor, icd_tensor, ttnc_tensor):
         batch_size = cpt_tensor.size(0)
-        # self.reset_generated_sets(batch_size)
 
         if self.use_diffusion:
             # Condition sampling on the predicted next-claim representation
