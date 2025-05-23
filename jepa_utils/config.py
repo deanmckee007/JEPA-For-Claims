@@ -60,6 +60,7 @@ class Config:
     diffusion_type: str = "continuous"  # continuous | discrete
     diffusion_steps: int = 100
     freeze_transferred_embeddings: bool = False
+    encoder_unfreeze_layers: int = 1
     debug_low_threshold: bool = False
     sae_hidden_dim: int = 256
     sae_k: int = 10
