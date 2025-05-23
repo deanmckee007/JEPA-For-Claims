@@ -43,6 +43,10 @@ def main():
     except Exception as e:
         print(f"Error during model instantiation: {e}")
 
+    if getattr(config, "debug_low_threshold", False):
+        model.threshold.data = torch.tensor(0.05)
+        model.lambda_entropy.data = torch.tensor(0.0)
+
     # Initialize Trainer
     trainer = pl.Trainer(
         max_epochs=config.epochs,

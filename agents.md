@@ -92,3 +92,8 @@ Codex agents must respect `use_diffusion` config toggle. Never invoke both gener
   - `RichProgressBar`
   - `RichModelSummary`
 
+Additional config flags:
+  - `pretrain_diffusion_epochs`: number of epochs to pretrain diffusion
+  - `freeze_transferred_embeddings`: freeze copied embeddings for initial epochs
+  - `debug_low_threshold`: sets `threshold` to `0.05` and disables entropy when true
+

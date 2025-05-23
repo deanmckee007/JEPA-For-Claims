@@ -55,9 +55,12 @@ class Config:
     # training the main hierarchical model. Kept ``True`` for backwards
     # compatibility.
     pretrain_diffusion: bool = False
+    pretrain_diffusion_epochs: int = 3
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_type: str = "continuous"  # continuous | discrete
     diffusion_steps: int = 100
+    freeze_transferred_embeddings: bool = True
+    debug_low_threshold: bool = False
     sae_hidden_dim: int = 256
     sae_k: int = 10
     gating_hidden_dim: int = 256
