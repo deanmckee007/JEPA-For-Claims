@@ -38,7 +38,9 @@ def main():
     def train_stage(cfg, stage_name, ckpt_path=None, freeze=False):
         print(f'Starting {stage_name} for {cfg.epochs} epochs')
         if ckpt_path:
-            model = HierarchicalClaimsModel.load_from_checkpoint(ckpt_path, config=cfg)
+            model = HierarchicalClaimsModel.load_from_checkpoint(
+                ckpt_path, config=cfg, strict=False
+            )
         else:
             model = HierarchicalClaimsModel(cfg)
 
