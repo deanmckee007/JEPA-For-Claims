@@ -17,7 +17,7 @@ class Config:
     num_heads: int = 4         # For the prediction transformer
     ff_hidden_dim: int = 200   # For the prediction transformer
     dropout: float = 0.00
-    rnn_type: str = 'lstm'       # Options: 'transformer', 'lstm', 'gru'
+    rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru'
     lr: float = 7e-3            # Default, but overridden by LR finder
     epochs: int = 25
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
@@ -46,7 +46,7 @@ class Config:
     use_lr_find = False
     use_plotting = False
     use_zero_target_mask = True # Zeros are bad data in my DS - used with use_na_targets
-    use_token_prediction_head = False
+    use_token_prediction_head = True
     use_generative_save = True
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
@@ -57,7 +57,7 @@ class Config:
     pretrain_diffusion: bool = True
     pretrain_diffusion_epochs: int = 3
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
-    diffusion_type: str = "continuous"  # continuous | discrete
+    diffusion_type: str = "discrete"  # continuous | discrete
     diffusion_steps: int = 100
     freeze_transferred_embeddings: bool = False
     encoder_unfreeze_layers: int = 1
@@ -67,8 +67,8 @@ class Config:
     gating_hidden_dim: int = 256
     # Multi-stage training epochs. If all set to 0, a single training stage is
     # executed as before.
-    representation_pretrain_epochs: int = 0
-    generator_train_epochs: int = 0
+    representation_pretrain_epochs: int = 20
+    generator_train_epochs: int = 20
     joint_train_epochs: int = 0
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
