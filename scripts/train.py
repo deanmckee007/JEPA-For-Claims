@@ -15,6 +15,7 @@ from jepa_models.diffusion import DiffusionModel
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
+import copy
 
 
 def main():
@@ -27,61 +28,91 @@ def main():
     if config.use_diffusion and getattr(config, "pretrain_diffusion", True):
         diffusion_model = DiffusionModel(config)
         diffusion_trainer = pl.Trainer(
-            max_epochs=config.epochs,
+            max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
             accelerator='gpu',
             logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
             callbacks=[RichProgressBar(refresh_rate=1)]
         )
         diffusion_trainer.fit(diffusion_model, train_dataloader)
 
-    # Initialize model
-    print('max claims len', config.max_claims_len)
-    print(f'Using {config.epochs} epochs')
-    try:
-        model = HierarchicalClaimsModel(config)
-        print("Model instantiated successfully")
-    except Exception as e:
-        print(f"Error during model instantiation: {e}")
+    def train_stage(cfg, stage_name, ckpt_path=None, freeze=False):
+        print(f'Starting {stage_name} for {cfg.epochs} epochs')
+        if ckpt_path:
+            model = HierarchicalClaimsModel.load_from_checkpoint(ckpt_path, config=cfg)
+        else:
+            model = HierarchicalClaimsModel(cfg)
 
-    if getattr(config, "freeze_transferred_embeddings", False):
-        model.freeze_encoders(getattr(config, "encoder_unfreeze_layers", 1))
+        if freeze:
+            model.freeze_encoders(getattr(cfg, "encoder_unfreeze_layers", 1))
 
-    if getattr(config, "debug_low_threshold", False):
-        model.threshold.data = torch.tensor(0.05)
-        model.lambda_entropy.data = torch.tensor(0.0)
+        if getattr(cfg, "debug_low_threshold", False):
+            model.threshold.data = torch.tensor(0.05)
+            model.lambda_entropy.data = torch.tensor(0.0)
 
-    # Initialize Trainer
-    trainer = pl.Trainer(
-        max_epochs=config.epochs,
-        accelerator='gpu',
-        # gradient_clip_val=10.0,
-        logger=pl.loggers.TensorBoardLogger("tb_logs", name="jepa"),
-        callbacks=[
-            #pl.callbacks.EarlyStopping(monitor='val_rmse', patience=10, mode='min'),
-            RichProgressBar(refresh_rate=1),# 1 = update every batch
-            RichModelSummary(max_depth=2),
-            pl.callbacks.ModelCheckpoint(
-                monitor='val_rmse',
-                dirpath='checkpoints/',
-                filename='best-checkpoint',
-                save_top_k=1,
-                mode='min'
-            )
-        ]
-    )
+        trainer = pl.Trainer(
+            max_epochs=cfg.epochs,
+            accelerator='gpu',
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name=stage_name),
+            callbacks=[
+                RichProgressBar(refresh_rate=1),
+                RichModelSummary(max_depth=2),
+                pl.callbacks.ModelCheckpoint(
+                    monitor='val_rmse',
+                    dirpath='checkpoints/',
+                    filename=f'{stage_name}-best',
+                    save_top_k=1,
+                    mode='min'
+                )
+            ]
+        )
 
-    if config.use_lr_find:
-        print('Finding learning rate')
-        tuner = pl.tuner.Tuner(trainer)
-        lr_finder = tuner.lr_find(model, train_dataloader)
-        suggested_lr = lr_finder.suggestion()
-        print('Using lr: ', suggested_lr)
-    else:
-        model.lr = config.lr
+        if cfg.use_lr_find:
+            print('Finding learning rate')
+            tuner = pl.tuner.Tuner(trainer)
+            lr_finder = tuner.lr_find(model, train_dataloader)
+            suggested_lr = lr_finder.suggestion()
+            print('Using lr: ', suggested_lr)
+        else:
+            model.lr = cfg.lr
 
-    print('Training')
-    # Train the model
-    trainer.fit(model, train_dataloader)
+        trainer.fit(model, train_dataloader)
+        return model, trainer
+
+    ckpt_path = None
+    model = None
+
+    if getattr(config, "representation_pretrain_epochs", 0) > 0:
+        stage_cfg = copy.deepcopy(config)
+        stage_cfg.use_token_prediction_head = False
+        stage_cfg.use_diffusion = False
+        stage_cfg.epochs = config.representation_pretrain_epochs
+        model, trainer = train_stage(stage_cfg, "stage1")
+        ckpt_path = "encoder_only.ckpt"
+        trainer.save_checkpoint(ckpt_path)
+
+    if getattr(config, "generator_train_epochs", 0) > 0:
+        stage_cfg = copy.deepcopy(config)
+        stage_cfg.use_token_prediction_head = True
+        stage_cfg.use_diffusion = True
+        stage_cfg.epochs = config.generator_train_epochs
+        model, trainer = train_stage(stage_cfg, "stage2", ckpt_path=ckpt_path, freeze=True)
+        ckpt_path = "generator_stage.ckpt"
+        trainer.save_checkpoint(ckpt_path)
+
+    if model is None:
+        # Fallback to single stage training with current config
+        model, trainer = train_stage(config, "jepa")
+        ckpt_path = "final.ckpt"
+        trainer.save_checkpoint(ckpt_path)
+
+    if getattr(config, "joint_train_epochs", 0) > 0:
+        stage_cfg = copy.deepcopy(config)
+        stage_cfg.use_token_prediction_head = True
+        stage_cfg.use_diffusion = True
+        stage_cfg.epochs = config.joint_train_epochs
+        model, trainer = train_stage(stage_cfg, "joint", ckpt_path=ckpt_path)
+        ckpt_path = "joint.ckpt"
+        trainer.save_checkpoint(ckpt_path)
 
     # === Generation Block Start ===
     # Generate predictions if either the token prediction head or diffusion
