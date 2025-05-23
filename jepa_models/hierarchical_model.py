@@ -715,6 +715,22 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 patient_contrib = torch.norm(patient_part, dim=-1).mean()
                 gating_sae_fraction = sae_contrib / (sae_contrib + patient_contrib + 1e-8)
 
+
+                # ─── Diffusion loss for the last-claim reconstruction ─────────
+        diffusion_loss = torch.tensor(0.0, device=self.device)          # default no-op
+        if self.use_diffusion:
+            # tokens from the LAST claim in this batch
+            cpt_last  = target_cpt.squeeze(1)[:, 0]           # shape [batch]
+            icd_last  = target_icd.squeeze(1)[:, 0]
+            ttnc_last = target_ttnc.squeeze(1)     # shape [batch]
+
+            diffusion_loss = self.diffusion_model.forward(
+                cpt_last,
+                icd_last,
+                ttnc_last,
+                condition=prediction_lvl2,                    # predicted claim rep
+            )
+
         # Compute total loss
         total_loss, task_loss = self.calculate_total_loss(
             vicreg_loss_lvl1,
@@ -723,6 +739,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             lvl2_weight=self.level_2_weight,
             token_pred_loss=token_pred_loss,
             sae_loss=sae_loss,
+            diffusion_loss=diffusion_loss,
         )
 
         return {

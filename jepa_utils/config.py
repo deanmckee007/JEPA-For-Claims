@@ -46,7 +46,7 @@ class Config:
     use_lr_find = False
     use_plotting = False
     use_zero_target_mask = True # Zeros are bad data in my DS - used with use_na_targets
-    use_token_prediction_head = True
+    use_token_prediction_head = False
     use_generative_save = True
     use_sparse_autoencoder: bool = True
     use_gated_fusion: bool = True
@@ -54,12 +54,12 @@ class Config:
     # Whether to run a pretraining phase for the diffusion generator before
     # training the main hierarchical model. Kept ``True`` for backwards
     # compatibility.
-    pretrain_diffusion: bool = False
+    pretrain_diffusion: bool = True
     pretrain_diffusion_epochs: int = 3
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_type: str = "continuous"  # continuous | discrete
     diffusion_steps: int = 100
-    freeze_transferred_embeddings: bool = True
+    freeze_transferred_embeddings: bool = False
     debug_low_threshold: bool = False
     sae_hidden_dim: int = 256
     sae_k: int = 10
