@@ -515,28 +515,28 @@ class HierarchicalClaimsModel(pl.LightningModule):
         total_log_var = total_log_var + clamped_log_vars['vicreg_lvl2']
 
         if self.use_predictor_head:
-            precision_task = torch.exp(clamped_log_vars['task'])
+            precision_task = torch.exp(-clamped_log_vars['task'])
             weighted_task_loss = task_loss * precision_task
             total_loss = total_loss + weighted_task_loss
             total_precision = total_precision + precision_task
             total_log_var = total_log_var + clamped_log_vars['task']
 
         if self.use_token_prediction_head:
-            precision_token = torch.exp(clamped_log_vars['token_pred'])
+            precision_token = torch.exp(-clamped_log_vars['token_pred'])
             weighted_token_loss = token_pred_loss * precision_token
             total_loss = total_loss + weighted_token_loss
             total_precision = total_precision + precision_token
             total_log_var = total_log_var + clamped_log_vars['token_pred']
 
         if self.use_sparse_autoencoder:
-            precision_sae = torch.exp(clamped_log_vars['sae'])
+            precision_sae = torch.exp(-clamped_log_vars['sae'])
             weighted_sae_loss = sae_loss * precision_sae
             total_loss = total_loss + weighted_sae_loss
             total_precision = total_precision + precision_sae
             total_log_var = total_log_var + clamped_log_vars['sae']
 
         if self.use_diffusion:
-            precision_diff = torch.exp(clamped_log_vars['diffusion'])
+            precision_diff = torch.exp(-clamped_log_vars['diffusion'])
             weighted_diff_loss = diffusion_loss * precision_diff * self.diffusion_weight
             total_loss = total_loss + weighted_diff_loss
             total_precision = total_precision + precision_diff
