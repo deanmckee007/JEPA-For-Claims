@@ -16,6 +16,7 @@ from jepa_models.diffusion import DiffusionModel
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
+from jepa_utils.prediction_utils import decode_predicted_codes
 import copy
 
 
@@ -177,26 +178,21 @@ def main():
                 predicted_icd_codes = outputs['predicted_icd_codes']
                 predicted_ttnc_code = outputs['predicted_ttnc_code']
 
+                decoded_cpt = decode_predicted_codes(
+                    predicted_cpt_codes, config.cpt_id_to_token
+                )
+                decoded_icd = decode_predicted_codes(
+                    predicted_icd_codes, config.icd_id_to_token
+                )
+
                 for i in range(cpt_tensor.size(0)):
-                    # Process predicted CPT codes
-                    if predicted_cpt_codes.dim() == 2:
-                        pred_cpt_idx = (predicted_cpt_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()
-                        predicted_cpt_codes_list = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in pred_cpt_idx if idx != 0]
-                    else:
-                        pred_cpt_idx = predicted_cpt_codes[i].item()
-                        predicted_cpt_codes_list = [config.cpt_id_to_token.get(pred_cpt_idx, '<UNK>')]
+                    predicted_cpt_codes_list = decoded_cpt[i]
 
                     # Process actual CPT codes (from the last claim)
                     actual_cpt_indices = cpt_tensor[i, -1, :].cpu().numpy()
                     actual_cpt_codes = [config.cpt_id_to_token.get(idx, '<UNK>') for idx in actual_cpt_indices if idx != 0]
 
-                    # Process predicted ICD codes
-                    if predicted_icd_codes.dim() == 2:
-                        pred_icd_idx = (predicted_icd_codes[i] == 1).nonzero(as_tuple=True)[0].cpu().numpy()
-                        predicted_icd_codes_list = [config.icd_id_to_token.get(idx, '<UNK>') for idx in pred_icd_idx if idx != 0]
-                    else:
-                        pred_icd_idx = predicted_icd_codes[i].item()
-                        predicted_icd_codes_list = [config.icd_id_to_token.get(pred_icd_idx, '<UNK>')]
+                    predicted_icd_codes_list = decoded_icd[i]
 
                     # Process actual ICD codes (from the last claim)
                     actual_icd_indices = icd_tensor[i, -1, :].cpu().numpy()

@@ -66,6 +66,7 @@ class Config:
     encoder_unfreeze_layers: int = 1
     current_stage: str = "stage1"
     debug_low_threshold: bool = False
+    debug_generation: bool = False
     out_encoder_ckpt: str = "encoder_only.ckpt"
     pretrained_encoder_ckpt: str = "encoder_only.ckpt"
     sae_hidden_dim: int = 256
