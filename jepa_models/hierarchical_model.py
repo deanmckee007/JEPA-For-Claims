@@ -1044,12 +1044,14 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     # Calculate RMSE on the validation fold
                     val_rmse = calculate_rmse(self.regression_weights, X_val_torch, y_val_torch, scaler_y)
 
-                    rmse_list.append(val_rmse.item())
+                    if val_rmse is not None:
+                        rmse_list.append(val_rmse)
 
                 # Calculate average RMSE across all folds
-                avg_rmse = sum(rmse_list) / len(rmse_list)
-                print(f" Average Validation RMSE: {avg_rmse}")
-                self.log('val_rmse', avg_rmse, on_step=False, on_epoch=True, prog_bar=False, logger=True)
+                if rmse_list:
+                    avg_rmse = sum(rmse_list) / len(rmse_list)
+                    print(f" Average Validation RMSE: {avg_rmse}")
+                    self.log('val_rmse', avg_rmse, on_step=False, on_epoch=True, prog_bar=False, logger=True)
                 for name, param in self.log_vars.items():
                     self.log(name, param.item(), prog_bar=True)
                     print(f"{name}: {param.item()}")
