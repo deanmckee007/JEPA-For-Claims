@@ -348,8 +348,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         self.initialize_target_encoders()
 
-        if (not self.is_stage1_pretrain) and getattr(config, 'freeze_encoder_at_stage2', True):
-            self.freeze_encoder(getattr(config, 'encoder_unfreeze_layers', 1))
+        if (
+            getattr(config, "current_stage", "stage1") == "stage2"
+            and getattr(config, "freeze_encoder_at_stage2", True)
+        ):
+            self.freeze_encoder(getattr(config, "encoder_unfreeze_layers", 1))
 
     def _unfreeze_last_n(self, module, n_layers):
         """Helper to unfreeze the last ``n_layers`` child modules of ``module``."""
