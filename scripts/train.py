@@ -108,7 +108,6 @@ def main():
 
     if getattr(config, "generator_train_epochs", 0) > 0:
         stage_cfg = copy.deepcopy(config)
-        stage_cfg.use_token_prediction_head = True
         stage_cfg.use_diffusion = True
         stage_cfg.epochs = config.generator_train_epochs
         stage_cfg.current_stage = "stage2"
