@@ -103,11 +103,13 @@ Additional config flags:
 1. **Stage 1 – Representation Pretrain**
    - `use_token_prediction_head = False`
    - `use_diffusion = False`
+   - Encoder remains fully trainable.
    - Stop when VICReg or SAE loss plateaus.
 
 2. **Stage 2 – Generator Training**
    - Load `encoder_only.ckpt` and freeze encoders using `freeze_encoder(except_last_n_layers=1)`.
    - Keep only adapter layers trainable at **LR ≈ 1e-4** while token head, TTNC classifier and diffusion use **LR ≈ 5e-4**.
+   - Freeze helper checks `config.current_stage` so this only occurs when `current_stage == "stage2"` and `freeze_encoder_at_stage2` is `True`.
    - Perform a one-time gradient check to verify that frozen layers report `grad == None`.
    - Enable `use_token_prediction_head` and `use_diffusion` with `diffusion_weight ≈ 0.1-0.2`.
    - Apply an LR scheduler (e.g. `StepLR(gamma=0.5, step_size=2)`) during this stage.

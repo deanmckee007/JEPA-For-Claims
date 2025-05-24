@@ -62,7 +62,9 @@ class Config:
     diffusion_type: str = "discrete"  # continuous | discrete
     diffusion_steps: int = 100
     freeze_transferred_embeddings: bool = False
+    freeze_encoder_at_stage2: bool = True
     encoder_unfreeze_layers: int = 1
+    current_stage: str = "stage1"
     debug_low_threshold: bool = False
     sae_hidden_dim: int = 256
     sae_k: int = 10
