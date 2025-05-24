@@ -63,5 +63,39 @@ class TestPredictionBlocks(unittest.TestCase):
         self.assertEqual(patient_representation.shape, (2, embed_dim * 2))
         self.assertEqual(prediction.shape, (2, output_dim))
 
+
+class TestHierarchicalModelVicreg(unittest.TestCase):
+    def test_stage1_uses_vicreg_level2(self):
+        from jepa_models.hierarchical_model import HierarchicalClaimsModel
+        from jepa_utils.config import Config
+
+        config = Config()
+        config.use_diffusion = False
+        config.use_sparse_autoencoder = False
+        config.use_token_prediction_head = False
+        config.use_predictor_head = False
+        config.use_level1 = False
+        config.cpt_rarity_scores = None
+        config.icd_rarity_scores = None
+        config.ttnc_rarity_scores = None
+        config.cpt_vocab_size = 10
+        config.icd_vocab_size = 10
+        config.ttnc_vocab_size = 5
+        config.embedding_dim = 4
+        config.output_dim = config.embedding_dim
+        config.max_cpt_tokens = 3
+        config.max_icd_tokens = 3
+        config.max_claims_len = 4
+
+        model = HierarchicalClaimsModel(config)
+        batch_size = 2
+        cpt_tensor = torch.randint(1, config.cpt_vocab_size, (batch_size, config.max_claims_len, config.max_cpt_tokens))
+        icd_tensor = torch.randint(1, config.icd_vocab_size, (batch_size, config.max_claims_len, config.max_icd_tokens))
+        ttnc_tensor = torch.randint(1, config.ttnc_vocab_size, (batch_size, config.max_claims_len))
+        target = torch.randn(batch_size)
+
+        outputs = model.training_forward(cpt_tensor, icd_tensor, ttnc_tensor, target)
+        self.assertGreater(outputs['vicreg_loss_lvl2'].item(), 0)
+
 if __name__ == '__main__':
     unittest.main()
