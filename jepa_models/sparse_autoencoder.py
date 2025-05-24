@@ -11,10 +11,17 @@ class TopKActivation(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         if self.k >= x.size(1):
             return x
-        # Determine the threshold for top-k (by absolute value)
-        topk_values = torch.topk(x.abs(), self.k, dim=1).values
-        kth_vals = topk_values[:, -1].unsqueeze(1)
-        mask = x.abs() >= kth_vals
+
+        # Indices of the top-k values by absolute magnitude
+        _, topk_indices = torch.topk(x.abs(), self.k, dim=1)
+
+        mask = torch.zeros_like(x, dtype=torch.bool)
+        mask.scatter_(1, topk_indices, True)
+
+        # Verify mask selects exactly k indices per sample during debugging
+        if __debug__:
+            assert torch.all(mask.sum(dim=1) == self.k), "TopKActivation mask incorrect"
+
         return x * mask.float()
 
 
