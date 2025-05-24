@@ -44,7 +44,7 @@ def main():
         else:
             model = HierarchicalClaimsModel(cfg)
 
-        if freeze:
+        if freeze and not model.is_stage1_pretrain and cfg.freeze_encoder_at_stage2:
             model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
 
         if getattr(cfg, "debug_low_threshold", False):
@@ -88,6 +88,7 @@ def main():
         stage_cfg.use_token_prediction_head = False
         stage_cfg.use_diffusion = False
         stage_cfg.epochs = config.representation_pretrain_epochs
+        stage_cfg.current_stage = "stage1"
         model, trainer = train_stage(stage_cfg, "stage1")
         ckpt_path = "encoder_only.ckpt"
         trainer.save_checkpoint(ckpt_path)
@@ -97,12 +98,14 @@ def main():
         stage_cfg.use_token_prediction_head = True
         stage_cfg.use_diffusion = True
         stage_cfg.epochs = config.generator_train_epochs
+        stage_cfg.current_stage = "stage2"
         model, trainer = train_stage(stage_cfg, "stage2", ckpt_path=ckpt_path, freeze=True)
         ckpt_path = "generator_stage.ckpt"
         trainer.save_checkpoint(ckpt_path)
 
     if model is None:
         # Fallback to single stage training with current config
+        config.current_stage = "joint"
         model, trainer = train_stage(config, "jepa")
         ckpt_path = "final.ckpt"
         trainer.save_checkpoint(ckpt_path)
@@ -112,6 +115,7 @@ def main():
         stage_cfg.use_token_prediction_head = True
         stage_cfg.use_diffusion = True
         stage_cfg.epochs = config.joint_train_epochs
+        stage_cfg.current_stage = "joint"
         model, trainer = train_stage(stage_cfg, "joint", ckpt_path=ckpt_path)
         ckpt_path = "joint.ckpt"
         trainer.save_checkpoint(ckpt_path)
