@@ -491,7 +491,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         log_var_denom += 1 if self.use_diffusion else 0
 
 
-        clamped_log_vars = {k: torch.clamp(v, min=-10, max=10) for k, v in self.log_vars.items()}
+        # Clamp precision log-variance to keep scaling factors stable
+        clamped_log_vars = {k: torch.clamp(v, min=-5, max=5) for k, v in self.log_vars.items()}
         precision_vicreg_lvl2 = torch.exp(clamped_log_vars['vicreg_lvl2'])
 
         if self.use_level1:
@@ -705,6 +706,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             target_lvl2[valid_sequences_mask],
             "2"
         )
+        print("vicreg_loss_lvl2 raw", vicreg_loss_lvl2.item())
 
         task_loss = 0
         if self.use_predictor_head and target is not None:
