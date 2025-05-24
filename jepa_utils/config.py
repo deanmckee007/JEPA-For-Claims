@@ -42,7 +42,7 @@ class Config:
     use_aggregate_attention = False  # Whether to use attention pooling on aggregates
     use_component_attention = False  # Whether to use component-level attention pooling
     use_predictor_head = False
-    use_grad_print = False
+    use_grad_print = True
     use_na_targets = False
     use_level1 = False
     use_lr_find = False
@@ -71,8 +71,8 @@ class Config:
     gating_hidden_dim: int = 256
     # Multi-stage training epochs. If all set to 0, a single training stage is
     # executed as before.
-    representation_pretrain_epochs: int = 0
-    generator_train_epochs: int = 0
+    representation_pretrain_epochs: int = 20
+    generator_train_epochs: int = 100
     joint_train_epochs: int = 0
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)

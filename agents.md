@@ -100,20 +100,74 @@ Additional config flags:
 
 ### 🏋️ Training Schedule
 
-1. **Stage 1 – Representation Pretrain**
-   - `use_token_prediction_head = False`
-   - `use_diffusion = False`
-   - Encoder remains fully trainable.
-   - Stop when VICReg or SAE loss plateaus.
+Stage 1 – Representation Pre‑Train
 
-2. **Stage 2 – Generator Training**
-   - Load `encoder_only.ckpt` and freeze encoders using `freeze_encoder(except_last_n_layers=1)`.
-   - Keep only adapter layers trainable at **LR ≈ 1e-4** while token head, TTNC classifier and diffusion use **LR ≈ 5e-4**.
-   - Freeze helper checks `config.current_stage` so this only occurs when `current_stage == "stage2"` and `freeze_encoder_at_stage2` is `True`.
-   - Perform a one-time gradient check to verify that frozen layers report `grad == None`.
-   - Enable `use_token_prediction_head` and `use_diffusion` with `diffusion_weight ≈ 0.1-0.2`.
-   - Apply an LR scheduler (e.g. `StepLR(gamma=0.5, step_size=2)`) during this stage.
+Goal: learn patient/claim embeddings with VICReg‑L2 (next‑claim prediction) and Sparse Auto‑Encoder (top‑K reconstruction).
 
-3. **Stage 3 – Joint Fine‑Tune (optional)**
-   - `unfreeze_encoders()` and train all losses with a lower encoder LR.
+Encoder: unfrozen.
 
+Heads active: VICReg‑L2, SAE.
+
+Config ON: use_level2_vicreg = True, level_2_weight = 1.0, use_sparse_autoencoder = True.
+
+Config OFF: use_token_prediction_head = False, use_diffusion = False.
+
+Stage 2 – Diffusion Generator
+
+Goal: keep encoder fixed; train Diffusion + Token heads to output CPT / ICD / TTNC codes.
+
+Checkpoint: load checkpoints/encoder_only.ckpt (or path from --pretrained_encoder_ckpt).
+
+Encoder freeze: call freeze_encoder(except_last_n_layers = 1); optional adapter layers LR ≈ 1 e‑4.
+
+Heads active: token prediction, diffusion (diffusion_weight ≈ 0.1).
+
+Config overrides: use_token_prediction_head = True, use_diffusion = True, level_2_weight = 0.0.
+
+Stage 3 – Joint Fine‑Tune (optional)
+
+Goal: light co‑adaptation once generator has learned.
+
+Encoder: unfreeze; tiny encoder LR (≈ 2 e‑5) while keeping generator LR higher.
+
+Heads: all losses active.
+
+Checkpoint flow
+
+Stage 1 must save encoder_only.ckpt (path overridable via --out_encoder_ckpt).
+
+Stage 2 refuses to start unless that file—or the path in --pretrained_encoder_ckpt—is found.
+
+⚙️ Freezing & Optimisers
+
+Helper freeze_encoder(except_last_n_layers=1) is only invoked when current_stage == "stage2".
+
+Stage 2 builds two optimiser groups:
+
+adapter_or_last_layers – LR ≈ 1e‑4
+
+generator_params – LR ≈ 5e‑4
+
+📏 Loss Weights & Log‑Vars
+
+Initialise all learnable log‑variances at 0.0 and clamp to [‑5, 5] each forward pass.
+
+Stage‑specific weights:
+
+Stage 1 → level_2_weight = 1.0
+
+Stage 2 → level_2_weight = 0.0
+
+📊 Metrics
+
+Validation RMSE is computed only when use_predictor_head = True; otherwise the metric is skipped to avoid NaNs.
+
+Log both raw and precision‑weighted VICReg‑L2 once per epoch: vicreg_lvl2_raw, vicreg_lvl2_wgt.
+
+✅ Acceptance Checklist for Agents
+
+Stage 1 finishes with non‑zero vicreg_lvl2_wgt & SAE losses and saves encoder_only.ckpt.
+
+Stage 2 loads that checkpoint, freezes encoder, and logs vicreg_lvl2_wgt ≈ 0 (or very small) while diffusion/token losses decrease.
+
+No console spam from one‑off debug prints; logs remain clean.
