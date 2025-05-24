@@ -934,12 +934,21 @@ class HierarchicalClaimsModel(pl.LightningModule):
             sae_loss=outputs['sae_loss'],
             diffusion_loss=diffusion_loss,
         )
-
-        # Track VICReg-L2 metrics for epoch-level logging
-        precision = torch.exp(-torch.clamp(self.log_vars['vicreg_lvl2'], min=-5, max=5))
-        self.vicreg_lvl2_raw_total += outputs['vicreg_loss_lvl2'].detach().item()
-        self.vicreg_lvl2_wgt_total += (outputs['vicreg_loss_lvl2'] * precision).detach().item()
-        self.vicreg_batch_count += 1
+        
+        # Precision-weighted VICReg-L2 for logging
+        clamped = torch.clamp(self.log_vars['vicreg_lvl2'], min=-5, max=5)
+        precision_vicreg_lvl2 = torch.exp(-clamped)
+        weighted_vicreg_lvl2 = (
+            outputs['vicreg_loss_lvl2'] * precision_vicreg_lvl2 * self.level_2_weight
+        )
+        self.log(
+            "vicreg_lvl2",
+            weighted_vicreg_lvl2,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+        )
 
         # --- Logging ---
         self.log('loss', total_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
