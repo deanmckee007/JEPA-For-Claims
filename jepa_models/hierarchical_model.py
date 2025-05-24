@@ -677,6 +677,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 context_lvl2, context_ttnc
             )
 
+        # --- Quick-Look Debug Artifact --------------------------------------
+        if self.current_epoch == 0 and self.global_step == 0:
+            claim_valid_mask = context_ttnc != 0
+            valid_counts = claim_valid_mask.sum(dim=1, keepdim=True).clamp(min=1)
+            mean_abs_embed = patient_representation.abs().mean()
+            print("context_ttnc_tokens[0]", context_ttnc[0].tolist())
+            print("claim_valid_mask[0]", claim_valid_mask[0].tolist())
+            print("valid_counts.min()", valid_counts.min().item())
+            print("mean_abs_embed", mean_abs_embed.item())
+
         context_padding_mask = (context_ttnc != 0).float()
         target_padding_mask = (target_ttnc != 0).float()
 
