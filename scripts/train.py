@@ -36,6 +36,7 @@ def main():
         diffusion_trainer.fit(diffusion_model, train_dataloader)
 
     def train_stage(cfg, stage_name, ckpt_path=None, freeze=False):
+        cfg.current_stage = stage_name
         print(f'Starting {stage_name} for {cfg.epochs} epochs')
         if ckpt_path:
             model = HierarchicalClaimsModel.load_from_checkpoint(
@@ -44,7 +45,16 @@ def main():
         else:
             model = HierarchicalClaimsModel(cfg)
 
-        if freeze and not model.is_stage1_pretrain and cfg.freeze_encoder_at_stage2:
+        if cfg.current_stage == "stage1":
+            try:
+                params = list(model.context_encoder_lvl2.parameters())
+                assert any(p.requires_grad for p in params), (
+                    "Encoder must be trainable in stage1"
+                )
+            except Exception:
+                pass
+
+        if freeze and cfg.current_stage == "stage2" and cfg.freeze_encoder_at_stage2:
             model.freeze_encoder(getattr(cfg, "encoder_unfreeze_layers", 1))
 
         if getattr(cfg, "debug_low_threshold", False):
