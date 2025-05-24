@@ -312,8 +312,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.generator_lr = config.generator_lr
         self.loss_fn = nn.MSELoss()
         self.log_vars = nn.ParameterDict({
-            'vicreg_lvl1': nn.Parameter(torch.zeros(1)),
-            'vicreg_lvl2': nn.Parameter(torch.zeros(1)),
+            'vicreg_lvl1': nn.Parameter(torch.tensor(0.0)),
+            'vicreg_lvl2': nn.Parameter(torch.tensor(0.0)),
             'task': nn.Parameter(torch.zeros(1)),
             'token_pred': nn.Parameter(torch.zeros(1)),
             'sae': nn.Parameter(torch.zeros(1)),
@@ -493,10 +493,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         # Clamp precision log-variance to keep scaling factors stable
         clamped_log_vars = {k: torch.clamp(v, min=-5, max=5) for k, v in self.log_vars.items()}
-        precision_vicreg_lvl2 = torch.exp(clamped_log_vars['vicreg_lvl2'])
+        precision_vicreg_lvl2 = torch.exp(-clamped_log_vars['vicreg_lvl2'])
 
         if self.use_level1:
-            precision_vicreg_lvl1 = torch.exp(clamped_log_vars['vicreg_lvl1'])
+            precision_vicreg_lvl1 = torch.exp(-clamped_log_vars['vicreg_lvl1'])
             weighted_vicreg_lvl1_loss = vicreg_loss_lvl1 * precision_vicreg_lvl1
             total_loss = weighted_vicreg_lvl1_loss
             total_precision = precision_vicreg_lvl1
@@ -687,10 +687,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             claim_valid_mask = context_ttnc != 0
             valid_counts = claim_valid_mask.sum(dim=1, keepdim=True).clamp(min=1)
             mean_abs_embed = patient_representation.abs().mean()
-            print("context_ttnc_tokens[0]", context_ttnc[0].tolist())
-            print("claim_valid_mask[0]", claim_valid_mask[0].tolist())
-            print("valid_counts.min()", valid_counts.min().item())
-            print("mean_abs_embed", mean_abs_embed.item())
 
         context_padding_mask = (context_ttnc != 0).float()
         target_padding_mask = (target_ttnc != 0).float()
@@ -706,7 +702,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             target_lvl2[valid_sequences_mask],
             "2"
         )
-        print("vicreg_loss_lvl2 raw", vicreg_loss_lvl2.item())
 
         task_loss = 0
         if self.use_predictor_head and target is not None:
@@ -988,11 +983,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
     def on_after_backward(self):
         if not self._grad_check_done:
-            print("Grad check:")
             for name, param in self.named_parameters():
                 if "encoder_lvl" in name:
-                    status = "None" if param.grad is None else "ok"
-                    print(f"  {name}: grad {status}")
+                    _ = param.grad
             self._grad_check_done = True
 
             if len(self.accumulated_representations) > 0:
