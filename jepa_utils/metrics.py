@@ -3,22 +3,52 @@ import torch
 import numpy as np
 
 def calculate_rmse(regression_weights, X, y, scaler_y):
-    """Calculate RMSE on the validation data using the trained linear regression model"""
+    """Calculate RMSE on the validation data using the trained linear regression model.
+
+    This helper includes several guards to prevent propagation of NaN/Inf values
+    through the metric pipeline. If no valid samples are present or any tensor
+    contains non-finite values, the metric is skipped and ``None`` is returned.
+    """
+
     if regression_weights is None:
         return None
-    
-    regression_weights = regression_weights.to(X.device)
+
+    print(
+        f"RMSE helper starting: len(y_true)={len(y)}, len(y_pred_features)={len(X)}"
+    )
+
+    # Check for empty tensors
+    if X.numel() == 0 or y.numel() == 0:
+        print("Warning: metric skipped\u2014no valid samples")
+        return None
+
+    # Ensure tensors share dtype and device with the regression weights
+    X = X.to(regression_weights.device, dtype=regression_weights.dtype)
+    y = y.to(regression_weights.device, dtype=regression_weights.dtype)
+
+    # Skip metric if invalid values are detected
+    if not torch.isfinite(X).all() or not torch.isfinite(y).all():
+        print("Warning: metric skipped\u2014non-finite values detected in inputs")
+        return None
 
     # Add bias term to X (since you added it during training)
-    ones = torch.ones(X.size(0), 1, device=X.device)
+    ones = torch.ones(X.size(0), 1, device=X.device, dtype=X.dtype)
     X = torch.cat([X, ones], dim=1)
 
     # Predict using the validation data
     y_pred = X @ regression_weights  # Shape: [batch_size]
 
+    if not torch.isfinite(y_pred).all():
+        print("Warning: metric skipped\u2014non-finite predictions")
+        return None
+
     # Move predictions and true values to CPU and convert to numpy
     y_pred_np = y_pred.cpu().numpy()
     y_true_np = y.cpu().numpy()
+
+    if not (np.isfinite(y_pred_np).all() and np.isfinite(y_true_np).all()):
+        print("Warning: metric skipped\u2014non-finite values after conversion")
+        return None
 
     # Inverse transform the predictions and targets using scaler_y
     y_pred_inv = scaler_y.inverse_transform(y_pred_np.reshape(-1, 1)).flatten()
@@ -30,7 +60,12 @@ def calculate_rmse(regression_weights, X, y, scaler_y):
     y_true_exp = np.exp(y_true_inv)
 
     # Compute RMSE in terms of actual cost
-    mse = np.mean((y_pred_exp - y_true_exp) ** 2)
+    errors = (y_pred_exp - y_true_exp) ** 2
+    if not np.isfinite(errors).all() or errors.size == 0:
+        print("Warning: metric skipped\u2014invalid errors")
+        return None
+
+    mse = np.mean(errors)
     rmse = np.sqrt(mse)
     return rmse
 

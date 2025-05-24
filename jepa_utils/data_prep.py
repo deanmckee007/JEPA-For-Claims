@@ -10,7 +10,7 @@ from jepa_utils.preprocessing import (
     filter_out_na_target
 )
 from data.vocab import create_vocab, calculate_rarity
-from jepa_models.dataset import ClaimsDataset
+from jepa_utils.dataset import ClaimsDataset
 from jepa_utils.config import Config
 
 def prepare_data(config):

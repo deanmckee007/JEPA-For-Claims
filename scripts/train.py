@@ -2,6 +2,7 @@
 import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import RichProgressBar, RichModelSummary
+import os
 import numpy as np
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ import seaborn as sns
 import pandas as pd
 from tqdm import tqdm
 from torch.utils.data import DataLoader
-from jepa_models.data_prep import prepare_data
+from jepa_utils.data_prep import prepare_data
 from jepa_models.hierarchical_model import HierarchicalClaimsModel
 from jepa_models.diffusion import DiffusionModel
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
@@ -100,7 +101,7 @@ def main():
         stage_cfg.epochs = config.representation_pretrain_epochs
         stage_cfg.current_stage = "stage1"
         model, trainer = train_stage(stage_cfg, "stage1")
-        ckpt_path = "encoder_only.ckpt"
+        ckpt_path = stage_cfg.out_encoder_ckpt
         trainer.save_checkpoint(ckpt_path)
 
     if getattr(config, "generator_train_epochs", 0) > 0:
@@ -109,7 +110,12 @@ def main():
         stage_cfg.use_diffusion = True
         stage_cfg.epochs = config.generator_train_epochs
         stage_cfg.current_stage = "stage2"
-        model, trainer = train_stage(stage_cfg, "stage2", ckpt_path=ckpt_path, freeze=True)
+        ckpt_to_load = stage_cfg.pretrained_encoder_ckpt if stage_cfg.pretrained_encoder_ckpt else ckpt_path
+        if not ckpt_to_load or not os.path.exists(ckpt_to_load):
+            raise FileNotFoundError(
+                f"Stage2 requires encoder checkpoint at {ckpt_to_load}"
+            )
+        model, trainer = train_stage(stage_cfg, "stage2", ckpt_path=ckpt_to_load, freeze=True)
         ckpt_path = "generator_stage.ckpt"
         trainer.save_checkpoint(ckpt_path)
 

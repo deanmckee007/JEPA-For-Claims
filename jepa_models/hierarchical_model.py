@@ -208,6 +208,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.sae_loss_total = 0.0
         self.sae_loss_count = 0
         self._grad_check_done = False
+        self.vicreg_lvl2_raw_total = 0.0
+        self.vicreg_lvl2_wgt_total = 0.0
+        self.vicreg_batch_count = 0
 
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
@@ -931,7 +934,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             sae_loss=outputs['sae_loss'],
             diffusion_loss=diffusion_loss,
         )
-
+        
         # Precision-weighted VICReg-L2 for logging
         clamped = torch.clamp(self.log_vars['vicreg_lvl2'], min=-5, max=5)
         precision_vicreg_lvl2 = torch.exp(-clamped)
@@ -1083,6 +1086,15 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.log('avg_sae_loss', avg_sae_loss, prog_bar=True, logger=True)
             self.sae_loss_total = 0.0
             self.sae_loss_count = 0
+
+        if self.vicreg_batch_count > 0:
+            avg_raw = self.vicreg_lvl2_raw_total / self.vicreg_batch_count
+            avg_wgt = self.vicreg_lvl2_wgt_total / self.vicreg_batch_count
+            self.log('vicreg_lvl2_raw', avg_raw, prog_bar=True, logger=True)
+            self.log('vicreg_lvl2_wgt', avg_wgt, prog_bar=True, logger=True)
+            self.vicreg_lvl2_raw_total = 0.0
+            self.vicreg_lvl2_wgt_total = 0.0
+            self.vicreg_batch_count = 0
 
     def configure_optimizers(self):
         # Parameters divided into encoder adapters and generator modules
