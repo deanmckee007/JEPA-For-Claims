@@ -45,6 +45,8 @@ class DiffusionModel(pl.LightningModule):
 
         self.lr = config.lr
 
+        self.debug_generation = getattr(config, 'debug_generation', False)
+
         # Optional conditioning for downstream tasks
         self.condition_dim = condition_dim or getattr(config, 'diffusion_condition_dim', 0)
         if self.condition_dim and self.condition_dim > 0:
@@ -109,6 +111,8 @@ class DiffusionModel(pl.LightningModule):
                 noise = torch.randn_like(x)
                 sigma = torch.sqrt(self.betas[step])
                 x += sigma * noise
+            if self.debug_generation and step % max(self.num_timesteps // 3, 1) == 0:
+                print(f"continuous step {step} x_norm={x.norm():.3f}")
 
         cpt_logits = self.cpt_proj(x[:, :self.embedding_dim])
         icd_logits = self.icd_proj(x[:, self.embedding_dim:2 * self.embedding_dim])
@@ -116,6 +120,10 @@ class DiffusionModel(pl.LightningModule):
         cpt_tokens = torch.argmax(cpt_logits, dim=-1)
         icd_tokens = torch.argmax(icd_logits, dim=-1)
         ttnc_token = torch.argmax(ttnc_logits, dim=-1)
+        if self.debug_generation:
+            print(
+                f"final sample CPT[0]={cpt_tokens[0].item()} ICD[0]={icd_tokens[0].item()} TTNC[0]={ttnc_token[0].item()}"
+            )
         return cpt_tokens, icd_tokens, ttnc_token
 
     def training_step(self, batch, batch_idx):

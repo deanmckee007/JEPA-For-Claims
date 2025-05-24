@@ -74,3 +74,71 @@ generator by default.  Disable this by setting `pretrain_diffusion = False` in
 avoid interfering with the shared weights.
 
 Diffusion support has fully replaced the old GAN implementation. Set `use_diffusion = False` if you want to disable claim synthesis.
+## Multi-Stage Training
+
+### Stage 1 – Self-Supervised Representation Pre-Train
+Learn rich patient embeddings using VICReg-L2 and a sparse auto-encoder.
+
+- **Compute**
+  - **VICReg-L2**: predict the next-claim Level-2 embedding from the current context.
+  - **Sparse Auto-Encoder (SAE)**: reconstruct the same Level-2 embedding via a top-K bottleneck.
+- **Trainable modules**
+  - Context & target Level-2 encoders
+  - SAE encoder/decoder & gating network
+- **Frozen**
+  - Token-prediction head
+  - Diffusion model
+- **Key config**
+  ```yaml
+  use_level2_vicreg: true
+  level_2_weight: 1.0
+  use_sparse_autoencoder: true
+  sae_weight: 1.0
+  use_token_prediction_head: false
+  use_diffusion: false
+  current_stage: "stage1"
+  ```
+- **Checkpoint**: save `encoder_only.ckpt` at epoch end.
+
+### Stage 2 – Diffusion-Based Code Generation
+Keep the learned representations fixed and train the generator to emit CPT/ICD/TTNC codes.
+
+- **Compute**
+  - Encoders & SAE perform a forward pass only to supply representations.
+  - `DiffusionModel.sample()` denoises from Gaussian noise to discrete code embeddings.
+  - Optionally a token head can directly output logits.
+- **Trainable modules**
+  - Diffusion model & its projection layers
+  - Token-prediction head (if enabled)
+  - Gating network adapters
+- **Frozen modules & losses**
+  - Context/target encoders and SAE (`requires_grad=False`)
+  - VICReg-L2 and SAE losses disabled (`level_2_weight=0.0`, `sae_weight=0.0`)
+- **Key config**
+  ```yaml
+  use_sparse_autoencoder: true      # compute but don’t train SAE
+  sae_weight: 0.0
+  use_level2_vicreg: false
+  level_2_weight: 0.0
+  use_token_prediction_head: [true|false]
+  use_diffusion: true
+  diffusion_weight: 0.1
+  current_stage: "stage2"
+  freeze_encoder_at_stage2: true
+  ```
+- **Inference**
+  1. Load `encoder_only.ckpt`.
+  2. Call `freeze_encoder(...)`.
+  3. Run `model.predict()` to produce `predictions.csv`.
+
+### Investigation: Why No CPT/ICD Codes in predictions.csv
+If `predictions.csv` is empty, verify the following:
+
+1. **Stage 2 config** – confirm `use_diffusion=true` and `use_token_prediction_head` is set as intended.
+2. **Predict step logic** – dump raw CPT/ICD and TTNC logits during `predict_step` to ensure they exceed your thresholds.
+3. **Threshold & decoding** – check the multi-label threshold or top-K logic, printing selected indices per sample.
+4. **Diffusion sampling** – instrument `DiscreteDiffusionModel.sample()` to log denoising steps and final token IDs.
+5. **Gating network** – log `gating_sae_fraction` each prediction. Force it to zero temporarily to test diffusion only.
+6. **CSV writer** – trace token IDs to file rows and ensure no default empty token is inserted when none are found.
+7. **Quick experiments** – run with token-only (`use_token_prediction_head=true`, `use_diffusion=false`) or diffusion-only to isolate issues.
+

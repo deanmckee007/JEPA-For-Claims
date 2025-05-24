@@ -165,12 +165,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
         super(HierarchicalClaimsModel, self).__init__()
         self.automatic_optimization = True
         self.save_hyperparameters()
-        print("Initializing HierarchicalClaimsModel")
-        # Check config values
-        print(f"cpt_vocab_size: {config.cpt_vocab_size}")
-        print(f"icd_vocab_size: {config.icd_vocab_size}")
-        print(f"ttnc_vocab_size: {config.ttnc_vocab_size}")
-        print(f"embedding_dim: {config.embedding_dim}")
+        if getattr(config, 'debug_generation', False):
+            print("Initializing HierarchicalClaimsModel")
+            print(f"cpt_vocab_size: {config.cpt_vocab_size}")
+            print(f"icd_vocab_size: {config.icd_vocab_size}")
+            print(f"ttnc_vocab_size: {config.ttnc_vocab_size}")
+            print(f"embedding_dim: {config.embedding_dim}")
 
         # Configuration parameters
         self.ema_decay = config.ema_decay
@@ -196,6 +196,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_diffusion = getattr(config, 'use_diffusion', False)
         self.diffusion_type = getattr(config, 'diffusion_type', 'continuous')
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
+        self.debug_generation = getattr(config, 'debug_generation', False)
         self.cpt_vocab_size = config.cpt_vocab_size
         self.icd_vocab_size = config.icd_vocab_size
         self.is_stage1_pretrain = getattr(config, 'current_stage', 'stage1') == 'stage1'
@@ -775,6 +776,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 sae_contrib = torch.norm(sae_part, dim=-1).mean()
                 patient_contrib = torch.norm(patient_part, dim=-1).mean()
                 gating_sae_fraction = sae_contrib / (sae_contrib + patient_contrib + 1e-8)
+                if self.debug_generation:
+                    print(f"gating_sae_fraction={gating_sae_fraction.item():.3f}")
 
 
                 # ─── Diffusion loss for the last-claim reconstruction ─────────

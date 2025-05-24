@@ -40,6 +40,8 @@ class DiscreteDiffusionModel(pl.LightningModule):
 
         self.lr = config.lr
 
+        self.debug_generation = getattr(config, 'debug_generation', False)
+
         self.condition_dim = condition_dim or getattr(config, "diffusion_condition_dim", 0)
         if self.condition_dim and self.condition_dim > 0:
             self.condition_proj = nn.Linear(self.condition_dim, self.embedding_dim * 3)
@@ -143,9 +145,16 @@ class DiscreteDiffusionModel(pl.LightningModule):
             icd_tokens = torch.argmax(icd_logits, dim=-1)
             ttnc_tokens = torch.argmax(ttnc_logits, dim=-1)
 
+            if self.debug_generation and step % max(self.num_timesteps // 3, 1) == 0:
+                print(f"diffusion step {step}: CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}")
+
         # Ensure uniqueness of sampled codes within each claim
         cpt_tokens = self._deduplicate(cpt_tokens)
         icd_tokens = self._deduplicate(icd_tokens)
+        if self.debug_generation:
+            print(
+                f"final sample CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}"
+            )
         return cpt_tokens, icd_tokens, ttnc_tokens
 
     def _deduplicate(self, tokens, pad_value=0):
