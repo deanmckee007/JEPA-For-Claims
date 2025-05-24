@@ -200,8 +200,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.icd_vocab_size = config.icd_vocab_size
         self.is_stage1_pretrain = getattr(config, 'current_stage', 'stage1') == 'stage1'
 
-        self.accumulated_representations = []
-        self.accumulated_targets = []
+        # Accumulators for patient representations and targets
+        # Used for one-shot cross-validation at epoch end
+        self.repr_accumulator = []
+        self.target_accumulator = []
         self.regression_weights = None
         self.alternate_flag = True
         # Initialize SAE loss tracking
@@ -982,8 +984,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.update_target_encoders()
         
         # Accumulate representations and targets for regression evaluation
-        self.accumulated_representations.append(outputs['patient_representation'].cpu().detach())
-        self.accumulated_targets.append(batch[3].cpu().detach())
+        self.repr_accumulator.append(outputs['patient_representation'].detach().cpu())
+        self.target_accumulator.append(batch[3].detach().cpu())
         
         return total_loss  # Return the total loss for logging purposes
 
@@ -1009,65 +1011,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     _ = param.grad
             self._grad_check_done = True
 
-            if len(self.accumulated_representations) > 0:
-                # Stack accumulated data
-                X_accum = torch.cat(self.accumulated_representations)
-                y_accum = torch.cat(self.accumulated_targets)
-
-                if self.use_zero_target_mask:
-                    # Filter out pairs where target is zero
-                    non_zero_mask = y_accum != 0
-                    X_accum = X_accum[non_zero_mask]
-                    y_accum = y_accum[non_zero_mask]
-
-                # Convert data to numpy arrays if necessary
-                X_accum_np = X_accum.cpu().numpy()
-                y_accum_np = y_accum.cpu().numpy()
-
-                # Initialize KFold with 5 splits
-                kf = KFold(n_splits=5, shuffle=True, random_state=42)
-                rmse_list = []
-
-                for fold, (train_index, val_index) in enumerate(kf.split(X_accum_np)):
-                    # Split data into training and validation sets
-                    X_train, X_val = X_accum_np[train_index], X_accum_np[val_index]
-                    y_train, y_val = y_accum_np[train_index], y_accum_np[val_index]
-
-                    # Before converting to tensors
-                    scaler_X = StandardScaler()
-                    X_train_np = scaler_X.fit_transform(X_train)
-                    X_val_np = scaler_X.transform(X_val)
-                    scaler_y = StandardScaler()
-                    y_train_np = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()
-                    y_val_np = scaler_y.transform(y_val.reshape(-1, 1)).flatten()
-
-                    # Convert back to tensors if needed
-                    X_train_torch = torch.from_numpy(X_train_np).float().to(self.device)
-                    y_train_torch = torch.from_numpy(y_train_np).float().to(self.device)
-                    X_val_torch = torch.from_numpy(X_val_np).float().to(self.device)
-                    y_val_torch = torch.from_numpy(y_val_np).float().to(self.device)
-
-                    # Train linear regression on the training fold
-                    self.train_linear_regression(X_train_torch, y_train_torch)
-
-                    # Calculate RMSE on the validation fold
-                    val_rmse = calculate_rmse(self.regression_weights, X_val_torch, y_val_torch, scaler_y)
-
-                    if val_rmse is not None:
-                        rmse_list.append(val_rmse)
-
-                # Calculate average RMSE across all folds
-                if rmse_list:
-                    avg_rmse = sum(rmse_list) / len(rmse_list)
-                    print(f" Average Validation RMSE: {avg_rmse}")
-                    self.log('val_rmse', avg_rmse, on_step=False, on_epoch=True, prog_bar=False, logger=True)
-                for name, param in self.log_vars.items():
-                    self.log(name, param.item(), prog_bar=True)
-                    print(f"{name}: {param.item()}")
-
-                # Reset the accumulated data
-                self.accumulated_representations = []
-                self.accumulated_targets = []
 
     def train_linear_regression(self, X_sample, y_sample):
         """Train the linear model using sampled representations"""
@@ -1097,6 +1040,55 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.vicreg_lvl2_raw_total = 0.0
             self.vicreg_lvl2_wgt_total = 0.0
             self.vicreg_batch_count = 0
+
+        # ----- End of epoch cross-validation for regression -----
+        if len(self.repr_accumulator) > 0:
+            X_accum = torch.cat(self.repr_accumulator)
+            y_accum = torch.cat(self.target_accumulator)
+
+            if self.use_zero_target_mask:
+                non_zero_mask = y_accum != 0
+                X_accum = X_accum[non_zero_mask]
+                y_accum = y_accum[non_zero_mask]
+
+            X_np = X_accum.cpu().numpy()
+            y_np = y_accum.cpu().numpy()
+
+            kf = KFold(n_splits=5, shuffle=True, random_state=42)
+            rmse_list = []
+            for train_index, val_index in kf.split(X_np):
+                X_train, X_val = X_np[train_index], X_np[val_index]
+                y_train, y_val = y_np[train_index], y_np[val_index]
+
+                scaler_X = StandardScaler()
+                X_train_np = scaler_X.fit_transform(X_train)
+                X_val_np = scaler_X.transform(X_val)
+                scaler_y = StandardScaler()
+                y_train_np = scaler_y.fit_transform(y_train.reshape(-1, 1)).flatten()
+                y_val_np = scaler_y.transform(y_val.reshape(-1, 1)).flatten()
+
+                X_train_torch = torch.from_numpy(X_train_np).float().to(self.device)
+                y_train_torch = torch.from_numpy(y_train_np).float().to(self.device)
+                X_val_torch = torch.from_numpy(X_val_np).float().to(self.device)
+                y_val_torch = torch.from_numpy(y_val_np).float().to(self.device)
+
+                self.train_linear_regression(X_train_torch, y_train_torch)
+                val_rmse = calculate_rmse(
+                    self.regression_weights, X_val_torch, y_val_torch, scaler_y
+                )
+                if val_rmse is not None:
+                    rmse_list.append(val_rmse)
+
+            if rmse_list:
+                avg_rmse = sum(rmse_list) / len(rmse_list)
+                print(f"End of epoch CV-RMSE: {avg_rmse:.4f}")
+                self.log("val_rmse", avg_rmse, on_epoch=True, prog_bar=True, logger=True)
+
+        for name, param in self.log_vars.items():
+            self.log(name, param.item(), prog_bar=True)
+
+        self.repr_accumulator.clear()
+        self.target_accumulator.clear()
 
     def configure_optimizers(self):
         # Parameters divided into encoder adapters and generator modules
