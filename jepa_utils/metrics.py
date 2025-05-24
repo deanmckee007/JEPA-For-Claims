@@ -13,15 +13,6 @@ def calculate_rmse(regression_weights, X, y, scaler_y):
     if regression_weights is None:
         return None
 
-    print(
-        f"RMSE helper starting: len(y_true)={len(y)}, len(y_pred_features)={len(X)}"
-    )
-
-    # Check for empty tensors
-    if X.numel() == 0 or y.numel() == 0:
-        print("Warning: metric skipped\u2014no valid samples")
-        return None
-
     # Ensure tensors share dtype and device with the regression weights
     X = X.to(regression_weights.device, dtype=regression_weights.dtype)
     y = y.to(regression_weights.device, dtype=regression_weights.dtype)
@@ -38,21 +29,15 @@ def calculate_rmse(regression_weights, X, y, scaler_y):
     # Predict using the validation data
     y_pred = X @ regression_weights  # Shape: [batch_size]
 
-    if not torch.isfinite(y_pred).all():
-        print("Warning: metric skipped\u2014non-finite predictions")
-        return None
-
     # Move predictions and true values to CPU and convert to numpy
     y_pred_np = y_pred.cpu().numpy()
     y_true_np = y.cpu().numpy()
 
-    if not (np.isfinite(y_pred_np).all() and np.isfinite(y_true_np).all()):
-        print("Warning: metric skipped\u2014non-finite values after conversion")
-        return None
 
     # Inverse transform the predictions and targets using scaler_y
     y_pred_inv = scaler_y.inverse_transform(y_pred_np.reshape(-1, 1)).flatten()
     y_true_inv = scaler_y.inverse_transform(y_true_np.reshape(-1, 1)).flatten()
+
 
     # Since your target is ln(cost), apply exponential to get back to cost
     y_pred_inv = np.clip(y_pred_inv, a_min=None, a_max=10)

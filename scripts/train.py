@@ -32,7 +32,8 @@ def main():
             max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
             accelerator='gpu',
             logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
-            callbacks=[RichProgressBar(refresh_rate=1)]
+            callbacks=[RichProgressBar(refresh_rate=1)],
+            log_every_n_steps=3
         )
         diffusion_trainer.fit(diffusion_model, train_dataloader)
 
@@ -76,7 +77,8 @@ def main():
                     save_top_k=1,
                     mode='min'
                 )
-            ]
+            ],
+            log_every_n_steps=3
         )
 
         if cfg.use_lr_find:

@@ -84,7 +84,7 @@ def prepare_data(config):
     # Create DataLoaders
     train_dataloader = DataLoader(
         train_dataset,
-        batch_size=128,
+        batch_size=512,
         collate_fn=dataset.collate_fn,
         shuffle=True
     )
