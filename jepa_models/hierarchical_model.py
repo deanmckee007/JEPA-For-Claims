@@ -1003,7 +1003,22 @@ class HierarchicalClaimsModel(pl.LightningModule):
         
         if self.use_predictor_head:
             self.log('task_loss', outputs['task_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        
+
+        # Dynamically print active losses for quick inspection
+        active_losses = [("total", total_loss)]
+        if self.level_2_weight > 0:
+            active_losses.append(("vicreg_lvl2", weighted_vicreg_lvl2))
+        if self.use_sparse_autoencoder and self.sae_weight > 0:
+            active_losses.append(("sae", outputs['sae_loss']))
+        if self.use_token_prediction_head:
+            active_losses.append(("token_pred", outputs['token_pred_loss']))
+        if self.use_diffusion and self.diffusion_weight > 0:
+            active_losses.append(("diffusion", diffusion_loss))
+        if self.use_gated_fusion and self.use_sparse_autoencoder:
+            active_losses.append(("gating_frac", outputs['gating_sae_fraction']))
+        log_items = [f"{name}={value.detach().item():.3f}" for name, value in active_losses]
+        print(" | ".join(log_items))
+
         # Update target encoders after each step
         self.update_target_encoders()
         
