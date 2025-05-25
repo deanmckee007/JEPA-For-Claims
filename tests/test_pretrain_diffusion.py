@@ -26,6 +26,7 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
         cfg.use_plotting = False
         cfg.representation_pretrain_epochs = 0
         cfg.generator_train_epochs = 1
+        cfg.joint_train_epochs = 0
         mock_config.return_value = cfg
         mock_prepare.return_value = (None, self.loader, None, None, cfg, None)
         mock_exists.return_value = True
@@ -54,6 +55,7 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
         cfg.use_plotting = False
         cfg.representation_pretrain_epochs = 0
         cfg.generator_train_epochs = 1
+        cfg.joint_train_epochs = 0
         mock_config.return_value = cfg
         mock_prepare.return_value = (None, self.loader, None, None, cfg, None)
         mock_exists.return_value = True
