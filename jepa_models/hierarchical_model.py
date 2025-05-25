@@ -874,15 +874,28 @@ class HierarchicalClaimsModel(pl.LightningModule):
             # Condition sampling on the predicted next-claim representation
             context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
             _, logit_context = self.prediction_block_lvl2(context_lvl2, ttnc_tensor)
-            cpt_tokens, icd_tokens, ttnc_token = self.diffusion_model.sample(
+            outputs = self.diffusion_model.sample(
                 batch_size,
                 condition=logit_context,
             )
-            return {
-                'predicted_cpt_codes': cpt_tokens,
-                'predicted_icd_codes': icd_tokens,
-                'predicted_ttnc_code': ttnc_token,
-            }
+            if isinstance(outputs, dict):
+                if getattr(self, "_trainer", None) is not None:
+                    self.log("avg_cpt_entropy", outputs['cpt_entropy'].mean(), on_epoch=True)
+                    self.log("avg_cpt_threshold", outputs['cpt_threshold'].mean(), on_epoch=True)
+                    self.log("avg_icd_entropy", outputs['icd_entropy'].mean(), on_epoch=True)
+                    self.log("avg_icd_threshold", outputs['icd_threshold'].mean(), on_epoch=True)
+                return {
+                    'predicted_cpt_codes': outputs['cpt_tokens'],
+                    'predicted_icd_codes': outputs['icd_tokens'],
+                    'predicted_ttnc_code': outputs['ttnc_token'],
+                }
+            else:
+                cpt_tokens, icd_tokens, ttnc_token = outputs
+                return {
+                    'predicted_cpt_codes': cpt_tokens,
+                    'predicted_icd_codes': icd_tokens,
+                    'predicted_ttnc_code': ttnc_token,
+                }
 
         # Obtain initial patient representation
         context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
