@@ -879,15 +879,14 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 condition=logit_context,
             )
             if isinstance(outputs, dict):
-                if getattr(self, "_trainer", None) is not None:
-                    self.log("avg_cpt_entropy", outputs['cpt_entropy'].mean(), on_epoch=True)
-                    self.log("avg_cpt_threshold", outputs['cpt_threshold'].mean(), on_epoch=True)
-                    self.log("avg_icd_entropy", outputs['icd_entropy'].mean(), on_epoch=True)
-                    self.log("avg_icd_threshold", outputs['icd_threshold'].mean(), on_epoch=True)
                 return {
                     'predicted_cpt_codes': outputs['cpt_tokens'],
                     'predicted_icd_codes': outputs['icd_tokens'],
                     'predicted_ttnc_code': outputs['ttnc_token'],
+                    'cpt_entropy': outputs['cpt_entropy'],
+                    'cpt_threshold': outputs['cpt_threshold'],
+                    'icd_entropy': outputs['icd_entropy'],
+                    'icd_threshold': outputs['icd_threshold'],
                 }
             else:
                 cpt_tokens, icd_tokens, ttnc_token = outputs
@@ -941,12 +940,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             dynamic_cpt_threshold = dynamic_cpt_threshold.clamp(min=min_thresh)
             dynamic_icd_threshold = dynamic_icd_threshold.clamp(min=min_thresh)
 
-        # Log average entropy and threshold for monitoring
-        self.log("avg_cpt_entropy", cpt_entropy.mean(), on_step=False, on_epoch=True)
-        self.log("avg_cpt_threshold", dynamic_cpt_threshold.mean(), on_step=False, on_epoch=True)
-        self.log("avg_icd_entropy", icd_entropy.mean(), on_step=False, on_epoch=True)
-        self.log("avg_icd_threshold", dynamic_icd_threshold.mean(), on_step=False, on_epoch=True)
-
         # Apply dynamic threshold to select codes
         cpt_predicted = (cpt_probs > dynamic_cpt_threshold.unsqueeze(-1)).long()
         # Add initial cpt
@@ -966,6 +959,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'predicted_cpt_codes': generated_cpt,
             'predicted_icd_codes': generated_icd,
             'predicted_ttnc_code': generated_ttnc,
+            'cpt_entropy': cpt_entropy,
+            'cpt_threshold': dynamic_cpt_threshold,
+            'icd_entropy': icd_entropy,
+            'icd_threshold': dynamic_icd_threshold,
         }
 
     def training_step(self, batch, batch_idx):
@@ -1055,6 +1052,32 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_diffusion and self.diffusion_weight > 0:
             active_losses.append(("diffusion", diffusion_loss))
         # Active losses are logged via PyTorch Lightning at epoch end
+
+        with torch.no_grad():
+            gen_metrics = self.autoregressive_generation(
+                batch[0], batch[1], batch[2]
+            )
+            if isinstance(gen_metrics, dict) and 'cpt_entropy' in gen_metrics:
+                self.log(
+                    "avg_cpt_entropy",
+                    gen_metrics["cpt_entropy"].mean(),
+                    on_epoch=True,
+                )
+                self.log(
+                    "avg_cpt_threshold",
+                    gen_metrics["cpt_threshold"].mean(),
+                    on_epoch=True,
+                )
+                self.log(
+                    "avg_icd_entropy",
+                    gen_metrics["icd_entropy"].mean(),
+                    on_epoch=True,
+                )
+                self.log(
+                    "avg_icd_threshold",
+                    gen_metrics["icd_threshold"].mean(),
+                    on_epoch=True,
+                )
 
         # Update target encoders after each step
         self.update_target_encoders()
