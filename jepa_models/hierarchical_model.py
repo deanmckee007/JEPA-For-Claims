@@ -548,8 +548,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             total_precision = total_precision + precision_task
             total_log_var = total_log_var + clamped_log_vars['task']
 
-        print("DEBUG ▶ use_token_prediction_head =", self.use_token_prediction_head)
-
         if self.use_token_prediction_head:
             precision_token = torch.exp(-clamped_log_vars['token_pred'])
             weighted_token_loss = token_pred_loss * precision_token

@@ -112,6 +112,8 @@ def main():
         stage_cfg.use_diffusion = True
         stage_cfg.epochs = config.generator_train_epochs
         stage_cfg.current_stage = "stage2"
+        stage_cfg.sae_weight = 0
+        stage_cfg.level_2_weight = 0
         ckpt_to_load = stage_cfg.pretrained_encoder_ckpt if stage_cfg.pretrained_encoder_ckpt else ckpt_path
         if not ckpt_to_load or not os.path.exists(ckpt_to_load):
             raise FileNotFoundError(
