@@ -369,6 +369,18 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     self.diffusion_model.ttnc_embedding.weight,
                 ]:
                     p.requires_grad = requires_grad
+                assert torch.allclose(
+                    self.diffusion_model.cpt_embedding.weight,
+                    self.target_encoder_lvl2.cpt_embedding.weight,
+                )
+                assert torch.allclose(
+                    self.diffusion_model.icd_embedding.weight,
+                    self.target_encoder_lvl2.icd_embedding.weight,
+                )
+                assert torch.allclose(
+                    self.diffusion_model.ttnc_embedding.weight,
+                    self.target_encoder_lvl2.ttnc_embedding.weight,
+                )
             else:
                 self.diffusion_model = DiffusionModel(
                     config,

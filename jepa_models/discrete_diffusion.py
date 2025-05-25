@@ -27,6 +27,8 @@ class DiscreteDiffusionModel(pl.LightningModule):
 
         self.cpt_threshold = getattr(config, "base_cpt_threshold", 0.5)
         self.icd_threshold = getattr(config, "base_icd_threshold", 0.5)
+        self.cpt_prob_agg = getattr(config, "cpt_prob_agg", "max")
+        self.ttnc_temperature = getattr(config, "ttnc_temperature", 1.0)
 
         self.model = nn.Sequential(
             nn.Linear(self.embedding_dim * 3, self.embedding_dim * 6),
@@ -162,15 +164,26 @@ class DiscreteDiffusionModel(pl.LightningModule):
                 cpt_tokens = torch.argmax(cpt_logits, dim=-1)
                 icd_tokens = torch.argmax(icd_logits, dim=-1)
                 ttnc_tokens = torch.argmax(ttnc_logits, dim=-1)
+                cpt_tokens = self._deduplicate(cpt_tokens)
+                icd_tokens = self._deduplicate(icd_tokens)
 
                 if self.debug_generation and step % max(self.num_timesteps // 3, 1) == 0:
                     print(
                         f"diffusion step {step}: CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}"
                     )
             else:
-                cpt_probs = torch.sigmoid(cpt_logits).max(dim=1).values
-                icd_probs = torch.sigmoid(icd_logits).max(dim=1).values
-                ttnc_probs = torch.softmax(ttnc_logits, dim=-1)
+                cpt_probs_raw = torch.sigmoid(cpt_logits)
+                icd_probs_raw = torch.sigmoid(icd_logits)
+                if self.cpt_prob_agg == "mean":
+                    cpt_probs = cpt_probs_raw.mean(dim=1)
+                    icd_probs = icd_probs_raw.mean(dim=1)
+                elif self.cpt_prob_agg == "sum":
+                    cpt_probs = cpt_probs_raw.sum(dim=1)
+                    icd_probs = icd_probs_raw.sum(dim=1)
+                else:
+                    cpt_probs = cpt_probs_raw.max(dim=1).values
+                    icd_probs = icd_probs_raw.max(dim=1).values
+                ttnc_probs = torch.softmax(ttnc_logits / self.ttnc_temperature, dim=-1)
 
                 cpt_entropy = -torch.sum(
                     cpt_probs.clamp(1e-8, 1 - 1e-8)
@@ -189,11 +202,13 @@ class DiscreteDiffusionModel(pl.LightningModule):
 
                 cpt_tokens = (cpt_probs > cpt_thresh.unsqueeze(-1)).long()
                 icd_tokens = (icd_probs > icd_thresh.unsqueeze(-1)).long()
+                cpt_tokens = self._deduplicate(cpt_tokens)
+                icd_tokens = self._deduplicate(icd_tokens)
                 self.log("avg_cpt_entropy", cpt_entropy.mean(), on_step=False, on_epoch=True)
                 self.log("avg_cpt_threshold", cpt_thresh.mean(), on_step=False, on_epoch=True)
                 self.log("avg_icd_entropy", icd_entropy.mean(), on_step=False, on_epoch=True)
                 self.log("avg_icd_threshold", icd_thresh.mean(), on_step=False, on_epoch=True)
-                ttnc_tokens = torch.argmax(ttnc_probs, dim=-1)
+                ttnc_tokens = torch.multinomial(ttnc_probs, 1).squeeze(1)
 
                 if self.debug_generation:
                     print(
@@ -206,6 +221,10 @@ class DiscreteDiffusionModel(pl.LightningModule):
                     print(
                         f"denoised emb var={h.var().item():.3f} min={h.min().item():.3f} max={h.max().item():.3f}"
                     )
+                inter = (cpt_tokens.bool() & icd_tokens.bool()).sum(dim=1).float()
+                union = (cpt_tokens.bool() | icd_tokens.bool()).sum(dim=1).float()
+                jaccard = inter / (union + 1e-8)
+                self.log("code_jaccard", jaccard.mean(), on_step=False, on_epoch=True)
 
         return cpt_tokens, icd_tokens, ttnc_tokens
 

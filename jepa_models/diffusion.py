@@ -46,6 +46,7 @@ class DiffusionModel(pl.LightningModule):
         self.lr = config.lr
 
         self.debug_generation = getattr(config, 'debug_generation', False)
+        self.ttnc_temperature = getattr(config, 'ttnc_temperature', 1.0)
 
         # Optional conditioning for downstream tasks
         self.condition_dim = condition_dim or getattr(config, 'diffusion_condition_dim', 0)
@@ -119,11 +120,14 @@ class DiffusionModel(pl.LightningModule):
         ttnc_logits = self.ttnc_proj(x[:, 2 * self.embedding_dim:])
         cpt_tokens = torch.argmax(cpt_logits, dim=-1)
         icd_tokens = torch.argmax(icd_logits, dim=-1)
-        ttnc_token = torch.argmax(ttnc_logits, dim=-1)
+        ttnc_probs = torch.softmax(ttnc_logits / self.ttnc_temperature, dim=-1)
+        ttnc_token = torch.multinomial(ttnc_probs, 1).squeeze(1)
         if self.debug_generation:
             print(
                 f"final sample CPT[0]={cpt_tokens[0].item()} ICD[0]={icd_tokens[0].item()} TTNC[0]={ttnc_token[0].item()}"
             )
+        jaccard = (cpt_tokens == icd_tokens).float().mean()
+        self.log("code_jaccard", jaccard, on_step=False, on_epoch=True)
         return cpt_tokens, icd_tokens, ttnc_token
 
     def training_step(self, batch, batch_idx):
