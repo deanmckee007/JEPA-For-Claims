@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
 import numpy as np
+import math
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
 from jepa_models.diffusion import DiffusionModel
@@ -200,6 +201,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.cpt_vocab_size = config.cpt_vocab_size
         self.icd_vocab_size = config.icd_vocab_size
         self.is_stage1_pretrain = getattr(config, 'current_stage', 'stage1') == 'stage1'
+
+        self.cpt_base_threshold = getattr(config, 'base_cpt_threshold', getattr(config, 'cpt_threshold', 0.5))
+        self.icd_base_threshold = getattr(config, 'base_icd_threshold', getattr(config, 'icd_threshold', 0.5))
+        self.debug_low_threshold = getattr(config, 'debug_low_threshold', False)
 
         # Accumulators for patient representations and targets
         # Used for one-shot cross-validation at epoch end
@@ -893,18 +898,29 @@ class HierarchicalClaimsModel(pl.LightningModule):
         cpt_probs = torch.sigmoid(cpt_logits)
         icd_probs = torch.sigmoid(icd_logits)
 
-        # Calculate entropy of the CPT and ICD probabilities
+        # Calculate normalized entropy and derive per-example thresholds
         cpt_entropy = calculate_entropy(cpt_probs)
         icd_entropy = calculate_entropy(icd_probs)
+        cpt_norm_entropy = cpt_entropy / math.log(cpt_probs.size(-1))
+        icd_norm_entropy = icd_entropy / math.log(icd_probs.size(-1))
 
-       # Adjust threshold based on entropy (lower threshold where entropy is lower)
-        # You can fine-tune this logic as needed
-        dynamic_cpt_threshold = self.threshold - self.lambda_entropy * (1 - cpt_entropy / torch.log(torch.tensor(cpt_probs.size(-1))))
-        dynamic_icd_threshold = self.threshold - self.lambda_entropy * (1 - icd_entropy / torch.log(torch.tensor(icd_probs.size(-1))))
+        if self.debug_low_threshold:
+            dynamic_cpt_threshold = self.threshold
+            dynamic_icd_threshold = self.threshold
+        else:
+            shrink_cpt = 1.0 - cpt_norm_entropy
+            shrink_icd = 1.0 - icd_norm_entropy
+            dynamic_cpt_threshold = self.cpt_base_threshold * shrink_cpt
+            dynamic_icd_threshold = self.icd_base_threshold * shrink_icd
+            min_thresh = 0.1
+            dynamic_cpt_threshold = dynamic_cpt_threshold.clamp(min=min_thresh)
+            dynamic_icd_threshold = dynamic_icd_threshold.clamp(min=min_thresh)
 
-        # Clamp thresholds to ensure they remain in a valid range
-        dynamic_cpt_threshold = dynamic_cpt_threshold.clamp(min=0.01, max=0.9)
-        dynamic_icd_threshold = dynamic_icd_threshold.clamp(min=0.01, max=0.9)
+        # Log average entropy and threshold for monitoring
+        self.log("avg_cpt_entropy", cpt_entropy.mean(), on_step=False, on_epoch=True)
+        self.log("avg_cpt_threshold", dynamic_cpt_threshold.mean(), on_step=False, on_epoch=True)
+        self.log("avg_icd_entropy", icd_entropy.mean(), on_step=False, on_epoch=True)
+        self.log("avg_icd_threshold", dynamic_icd_threshold.mean(), on_step=False, on_epoch=True)
 
         # Apply dynamic threshold to select codes
         cpt_predicted = (cpt_probs > dynamic_cpt_threshold.unsqueeze(-1)).long()
