@@ -967,39 +967,38 @@ class HierarchicalClaimsModel(pl.LightningModule):
         weighted_vicreg_lvl2 = (
             outputs['vicreg_loss_lvl2'] * precision_vicreg_lvl2 * self.level_2_weight
         )
-        self.log(
-            "vicreg_lvl2",
-            weighted_vicreg_lvl2,
-            on_step=False,
-            on_epoch=True,
-            prog_bar=True,
-            logger=True,
-        )
+        if self.level_2_weight > 0:
+            self.log(
+                "vicreg_lvl2",
+                weighted_vicreg_lvl2,
+                on_step=False,
+                on_epoch=True,
+                prog_bar=True,
+                logger=True,
+            )
 
         # --- Logging ---
         self.log('loss', total_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
 
-        if self.use_diffusion:
+        if self.use_diffusion and self.diffusion_weight > 0:
             self.log('diffusion_loss', diffusion_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
 
         # Preserve existing logging
         if self.use_token_prediction_head:
             self.log('token_pred_loss', outputs['token_pred_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        if self.use_sparse_autoencoder:
+        if self.use_sparse_autoencoder and self.sae_weight > 0:
             self.log('sae_loss', outputs['sae_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
             # Track SAE loss for epoch-level logging
             self.sae_loss_total += outputs['sae_loss'].item()
             self.sae_loss_count += 1
-            if self.use_gated_fusion:
-                self.log('gating_weight_mean', outputs['gating_weight_mean'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
-                self.log('gating_sae_fraction', outputs['gating_sae_fraction'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         if self.use_level1:
             self.log('Iloss1', outputs['inv_loss_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
             self.log('Var1', outputs['var_pred_lvl1'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
-        self.log('Iloss2', outputs['inv_loss_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
-        self.log('Var2', outputs['var_pred_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        if self.level_2_weight > 0:
+            self.log('Iloss2', outputs['inv_loss_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
+            self.log('Var2', outputs['var_pred_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         if self.use_predictor_head:
             self.log('task_loss', outputs['task_loss'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
@@ -1014,10 +1013,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             active_losses.append(("token_pred", outputs['token_pred_loss']))
         if self.use_diffusion and self.diffusion_weight > 0:
             active_losses.append(("diffusion", diffusion_loss))
-        if self.use_gated_fusion and self.use_sparse_autoencoder:
-            active_losses.append(("gating_frac", outputs['gating_sae_fraction']))
-        log_items = [f"{name}={value.detach().item():.3f}" for name, value in active_losses]
-        print(" | ".join(log_items))
+        # Active losses are logged via PyTorch Lightning at epoch end
 
         # Update target encoders after each step
         self.update_target_encoders()
@@ -1065,13 +1061,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
     def on_train_epoch_end(self):
         """Log average SAE loss at the end of each epoch."""
-        if self.use_sparse_autoencoder and self.sae_loss_count > 0:
+        if self.use_sparse_autoencoder and self.sae_weight > 0 and self.sae_loss_count > 0:
             avg_sae_loss = self.sae_loss_total / self.sae_loss_count
             self.log('avg_sae_loss', avg_sae_loss, prog_bar=True, logger=True)
             self.sae_loss_total = 0.0
             self.sae_loss_count = 0
 
-        if self.vicreg_batch_count > 0:
+        if self.vicreg_batch_count > 0 and self.level_2_weight > 0:
             avg_raw = self.vicreg_lvl2_raw_total / self.vicreg_batch_count
             avg_wgt = self.vicreg_lvl2_wgt_total / self.vicreg_batch_count
             self.log('vicreg_lvl2_raw', avg_raw, prog_bar=True, logger=True)
@@ -1120,7 +1116,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
             if rmse_list:
                 avg_rmse = sum(rmse_list) / len(rmse_list)
-                print(f"End of epoch CV-RMSE: {avg_rmse:.4f}")
                 self.log("val_rmse", avg_rmse, on_epoch=True, prog_bar=True, logger=True)
 
         for name, param in self.log_vars.items():
