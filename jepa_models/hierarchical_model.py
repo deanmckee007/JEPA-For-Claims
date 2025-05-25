@@ -1118,8 +1118,22 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 avg_rmse = sum(rmse_list) / len(rmse_list)
                 self.log("val_rmse", avg_rmse, on_epoch=True, prog_bar=True, logger=True)
 
-        for name, param in self.log_vars.items():
-            self.log(name, param.item(), prog_bar=True)
+        active_logvars = {}
+        if self.use_level1:
+            active_logvars['vicreg_lvl1'] = self.log_vars['vicreg_lvl1']
+        if self.level_2_weight > 0:
+            active_logvars['vicreg_lvl2'] = self.log_vars['vicreg_lvl2']
+        if self.use_predictor_head:
+            active_logvars['task'] = self.log_vars['task']
+        if self.use_token_prediction_head:
+            active_logvars['token_pred'] = self.log_vars['token_pred']
+        if self.use_sparse_autoencoder and self.sae_weight > 0:
+            active_logvars['sae'] = self.log_vars['sae']
+        if self.use_diffusion and self.diffusion_weight > 0:
+            active_logvars['diffusion'] = self.log_vars['diffusion']
+
+        for name, param in active_logvars.items():
+            self.log(f"logvar_{name}", param.item(), prog_bar=True, logger=True)
 
         self.repr_accumulator.clear()
         self.target_accumulator.clear()
