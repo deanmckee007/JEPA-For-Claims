@@ -63,8 +63,8 @@ class TestDiffusionIntegration(unittest.TestCase):
         ttnc_tensor = torch.randint(1, config.ttnc_vocab_size, (batch_size, config.max_claims_len))
 
         outputs = model.autoregressive_generation(cpt_tensor, icd_tensor, ttnc_tensor)
-        self.assertEqual(outputs['predicted_cpt_codes'].shape, (batch_size, config.max_cpt_tokens))
-        self.assertEqual(outputs['predicted_icd_codes'].shape, (batch_size, config.max_icd_tokens))
+        self.assertEqual(outputs['predicted_cpt_codes'].shape, (batch_size, config.cpt_vocab_size))
+        self.assertEqual(outputs['predicted_icd_codes'].shape, (batch_size, config.icd_vocab_size))
         self.assertEqual(outputs['predicted_ttnc_code'].shape, (batch_size,))
 
     def test_training_step_with_diffusion_loss(self):

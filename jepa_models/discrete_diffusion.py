@@ -24,6 +24,9 @@ class DiscreteDiffusionModel(pl.LightningModule):
         self.icd_embedding = nn.Embedding(self.icd_vocab_size, self.embedding_dim)
         self.ttnc_embedding = nn.Embedding(self.ttnc_vocab_size, self.embedding_dim)
 
+        self.cpt_threshold = getattr(config, "cpt_threshold", 0.5)
+        self.icd_threshold = getattr(config, "icd_threshold", 0.5)
+
         self.model = nn.Sequential(
             nn.Linear(self.embedding_dim * 3, self.embedding_dim * 6),
             nn.ReLU(),
@@ -52,13 +55,15 @@ class DiscreteDiffusionModel(pl.LightningModule):
         self.max_icd_tokens = config.max_icd_tokens
 
     def q_sample(self, tokens, vocab_size, t):
-        """Perform a single diffusion step on the provided tokens."""
-        # ``t`` has shape [batch_size]. Adapt the beta values to match the
-        # dimensionality of ``tokens`` so broadcasting works for both 1-D and
-        # 2-D token tensors.
+        """Perform a single diffusion step on the provided tokens.
+
+        Padding positions (token==0) are left unchanged to avoid
+        learning dynamics dominated by PAD slots.
+        """
         prob = self.betas[t].view(tokens.size(0), *([1] * (tokens.dim() - 1)))
         noise = torch.randint(0, vocab_size, tokens.shape, device=tokens.device)
         mask = torch.bernoulli(prob.expand_as(tokens)).bool()
+        mask &= tokens != 0
         return torch.where(mask, noise, tokens)
 
     def aggregate_tokens(self, cpt_tokens, icd_tokens, ttnc_tokens):
@@ -94,14 +99,25 @@ class DiscreteDiffusionModel(pl.LightningModule):
         cpt_logits = cpt_logits.view(batch_size, self.max_cpt_tokens, self.cpt_vocab_size)
         icd_logits = icd_logits.view(batch_size, self.max_icd_tokens, self.icd_vocab_size)
 
-        # Flatten to compute cross-entropy across all slots
         loss_cpt = F.cross_entropy(
-            cpt_logits.reshape(-1, self.cpt_vocab_size), cpt_tokens.reshape(-1)
+            cpt_logits.reshape(-1, self.cpt_vocab_size),
+            cpt_tokens.reshape(-1),
+            reduction="none",
         )
         loss_icd = F.cross_entropy(
-            icd_logits.reshape(-1, self.icd_vocab_size), icd_tokens.reshape(-1)
+            icd_logits.reshape(-1, self.icd_vocab_size),
+            icd_tokens.reshape(-1),
+            reduction="none",
         )
-        loss_ttnc = F.cross_entropy(ttnc_logits, ttnc_tokens)
+        loss_ttnc = F.cross_entropy(ttnc_logits, ttnc_tokens, reduction="none")
+
+        cpt_mask = cpt_tokens.reshape(-1) != 0
+        icd_mask = icd_tokens.reshape(-1) != 0
+        ttnc_mask = ttnc_tokens != 0
+
+        loss_cpt = (loss_cpt * cpt_mask).sum() / (cpt_mask.sum() + 1e-8)
+        loss_icd = (loss_icd * icd_mask).sum() / (icd_mask.sum() + 1e-8)
+        loss_ttnc = (loss_ttnc * ttnc_mask).sum() / (ttnc_mask.sum() + 1e-8)
         loss = loss_cpt + loss_icd + loss_ttnc
         return loss
 
@@ -141,20 +157,36 @@ class DiscreteDiffusionModel(pl.LightningModule):
             cpt_logits = cpt_logits.view(batch_size, self.max_cpt_tokens, self.cpt_vocab_size)
             icd_logits = icd_logits.view(batch_size, self.max_icd_tokens, self.icd_vocab_size)
 
-            cpt_tokens = torch.argmax(cpt_logits, dim=-1)
-            icd_tokens = torch.argmax(icd_logits, dim=-1)
-            ttnc_tokens = torch.argmax(ttnc_logits, dim=-1)
+            if step > 0:
+                cpt_tokens = torch.argmax(cpt_logits, dim=-1)
+                icd_tokens = torch.argmax(icd_logits, dim=-1)
+                ttnc_tokens = torch.argmax(ttnc_logits, dim=-1)
 
-            if self.debug_generation and step % max(self.num_timesteps // 3, 1) == 0:
-                print(f"diffusion step {step}: CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}")
+                if self.debug_generation and step % max(self.num_timesteps // 3, 1) == 0:
+                    print(
+                        f"diffusion step {step}: CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}"
+                    )
+            else:
+                cpt_probs = torch.sigmoid(cpt_logits).max(dim=1).values
+                icd_probs = torch.sigmoid(icd_logits).max(dim=1).values
+                ttnc_probs = torch.softmax(ttnc_logits, dim=-1)
 
-        # Ensure uniqueness of sampled codes within each claim
-        cpt_tokens = self._deduplicate(cpt_tokens)
-        icd_tokens = self._deduplicate(icd_tokens)
-        if self.debug_generation:
-            print(
-                f"final sample CPT[0]={cpt_tokens[0].tolist()} ICD[0]={icd_tokens[0].tolist()} TTNC[0]={ttnc_tokens[0].item()}"
-            )
+                cpt_tokens = (cpt_probs > self.cpt_threshold).long()
+                icd_tokens = (icd_probs > self.icd_threshold).long()
+                ttnc_tokens = torch.argmax(ttnc_probs, dim=-1)
+
+                if self.debug_generation:
+                    print(
+                        f"final stats CPT p[min={cpt_probs.min():.3f} max={cpt_probs.max():.3f} mean={cpt_probs.mean():.3f}]"
+                    )
+                    print(
+                        f"final stats ICD p[min={icd_probs.min():.3f} max={icd_probs.max():.3f} mean={icd_probs.mean():.3f}]"
+                    )
+                    print(f"TTNC softmax[0]={ttnc_probs[0].tolist()}")
+                    print(
+                        f"denoised emb var={h.var().item():.3f} min={h.min().item():.3f} max={h.max().item():.3f}"
+                    )
+
         return cpt_tokens, icd_tokens, ttnc_tokens
 
     def _deduplicate(self, tokens, pad_value=0):

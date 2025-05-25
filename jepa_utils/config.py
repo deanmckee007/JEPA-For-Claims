@@ -61,6 +61,10 @@ class Config:
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_type: str = "discrete"  # continuous | discrete
     diffusion_steps: int = 100
+    cpt_threshold: float = 0.5
+    icd_threshold: float = 0.5
+    fine_tune_embeddings: bool = False
+    sae_weight: float = 1.0
     freeze_transferred_embeddings: bool = False
     freeze_encoder_at_stage2: bool = True
     encoder_unfreeze_layers: int = 1
