@@ -78,9 +78,9 @@ class Config:
     gating_hidden_dim: int = 256
     # Multi-stage training epochs. If all set to 0, a single training stage is
     # executed as before.
-    representation_pretrain_epochs: int = 0
+    representation_pretrain_epochs: int = 20
     generator_train_epochs: int = 20
-    joint_train_epochs: int = 20
+    joint_train_epochs: int = 0
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
 
