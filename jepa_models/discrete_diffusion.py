@@ -122,6 +122,8 @@ class DiscreteDiffusionModel(pl.LightningModule):
         loss_icd = (loss_icd * icd_mask).sum() / (icd_mask.sum() + 1e-8)
         loss_ttnc = (loss_ttnc * ttnc_mask).sum() / (ttnc_mask.sum() + 1e-8)
         loss = loss_cpt + loss_icd + loss_ttnc
+        if self.debug_generation and t.numel() == 1:
+            print(f"t={t.item()}  loss_mean={loss.item():.4f}")
         return loss
 
     def forward(self, cpt_tokens, icd_tokens, ttnc_tokens, condition=None):

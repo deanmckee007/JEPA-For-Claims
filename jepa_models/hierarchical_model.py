@@ -1199,6 +1199,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
         for name, param in active_logvars.items():
             self.log(f"logvar_{name}", param.item(), prog_bar=True, logger=True)
 
+        if self.use_diffusion and self.diffusion_weight > 0:
+            clamped = torch.clamp(self.log_vars['diffusion'], min=-5, max=5)
+            lr_mult = torch.exp(-clamped)
+            self.log("diff_lr_mult", lr_mult.item(), prog_bar=True, logger=True)
+
         self.repr_accumulator.clear()
         self.target_accumulator.clear()
 
