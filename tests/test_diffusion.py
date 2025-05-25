@@ -36,10 +36,15 @@ class TestDiffusionModel(unittest.TestCase):
         ttnc_tokens = torch.randint(0, 5, (2,))
         loss = model(cpt_tokens, icd_tokens, ttnc_tokens)
         self.assertTrue(loss.dim() == 0)
-        cpt_pred, icd_pred, ttnc_pred = model.sample(2)
-        self.assertEqual(cpt_pred.shape, (2, config.cpt_vocab_size))
-        self.assertEqual(icd_pred.shape, (2, config.icd_vocab_size))
-        self.assertEqual(ttnc_pred.shape, (2,))
+        outputs = model.sample(2)
+        self.assertEqual(outputs['cpt_tokens'].shape, (2, config.cpt_vocab_size))
+        self.assertEqual(outputs['icd_tokens'].shape, (2, config.icd_vocab_size))
+        self.assertEqual(outputs['ttnc_token'].shape, (2,))
+        # ensure diagnostics are present
+        self.assertIn('cpt_entropy', outputs)
+        self.assertIn('cpt_threshold', outputs)
+        self.assertIn('icd_entropy', outputs)
+        self.assertIn('icd_threshold', outputs)
 
     def test_conditioned_sample(self):
         config = Config()

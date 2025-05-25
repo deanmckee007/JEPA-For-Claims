@@ -141,6 +141,12 @@ class DiscreteDiffusionModel(pl.LightningModule):
         )
         ttnc_tokens = torch.randint(0, self.ttnc_vocab_size, (batch_size,), device=device)
 
+        # Tensors to hold diagnostics from the final denoising step
+        cpt_entropy = torch.zeros(batch_size, device=device)
+        icd_entropy = torch.zeros(batch_size, device=device)
+        dynamic_cpt_threshold = torch.zeros(batch_size, device=device)
+        dynamic_icd_threshold = torch.zeros(batch_size, device=device)
+
         if condition is not None and self.condition_proj is not None:
             cond = self.condition_proj(condition)
         else:
@@ -200,14 +206,14 @@ class DiscreteDiffusionModel(pl.LightningModule):
                 cpt_thresh = (self.cpt_threshold * (1.0 - cpt_norm)).clamp(min=0.1)
                 icd_thresh = (self.icd_threshold * (1.0 - icd_norm)).clamp(min=0.1)
 
+                # store diagnostics
+                dynamic_cpt_threshold = cpt_thresh
+                dynamic_icd_threshold = icd_thresh
+
                 cpt_tokens = (cpt_probs > cpt_thresh.unsqueeze(-1)).long()
                 icd_tokens = (icd_probs > icd_thresh.unsqueeze(-1)).long()
                 cpt_tokens = self._deduplicate(cpt_tokens)
                 icd_tokens = self._deduplicate(icd_tokens)
-                self.log("avg_cpt_entropy", cpt_entropy.mean(), on_step=False, on_epoch=True)
-                self.log("avg_cpt_threshold", cpt_thresh.mean(), on_step=False, on_epoch=True)
-                self.log("avg_icd_entropy", icd_entropy.mean(), on_step=False, on_epoch=True)
-                self.log("avg_icd_threshold", icd_thresh.mean(), on_step=False, on_epoch=True)
                 ttnc_tokens = torch.multinomial(ttnc_probs, 1).squeeze(1)
 
                 if self.debug_generation:
@@ -221,12 +227,17 @@ class DiscreteDiffusionModel(pl.LightningModule):
                     print(
                         f"denoised emb var={h.var().item():.3f} min={h.min().item():.3f} max={h.max().item():.3f}"
                     )
-                inter = (cpt_tokens.bool() & icd_tokens.bool()).sum(dim=1).float()
-                union = (cpt_tokens.bool() | icd_tokens.bool()).sum(dim=1).float()
-                jaccard = inter / (union + 1e-8)
-                self.log("code_jaccard", jaccard.mean(), on_step=False, on_epoch=True)
 
-        return cpt_tokens, icd_tokens, ttnc_tokens
+
+        return {
+            'cpt_tokens': cpt_tokens,
+            'icd_tokens': icd_tokens,
+            'ttnc_token': ttnc_tokens,
+            'cpt_entropy': cpt_entropy,
+            'cpt_threshold': dynamic_cpt_threshold,
+            'icd_entropy': icd_entropy,
+            'icd_threshold': dynamic_icd_threshold,
+        }
 
     def _deduplicate(self, tokens, pad_value=0):
         """Remove duplicate codes within each claim and pad the rest."""
