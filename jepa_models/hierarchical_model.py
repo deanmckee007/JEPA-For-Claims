@@ -1054,30 +1054,31 @@ class HierarchicalClaimsModel(pl.LightningModule):
         # Active losses are logged via PyTorch Lightning at epoch end
 
         with torch.no_grad():
-            gen_metrics = self.autoregressive_generation(
-                batch[0], batch[1], batch[2]
-            )
-            if isinstance(gen_metrics, dict) and 'cpt_entropy' in gen_metrics:
-                self.log(
-                    "avg_cpt_entropy",
-                    gen_metrics["cpt_entropy"].mean(),
-                    on_epoch=True,
+            if self.use_token_prediction_head:
+                gen_metrics = self.autoregressive_generation(
+                    batch[0], batch[1], batch[2]
                 )
-                self.log(
-                    "avg_cpt_threshold",
-                    gen_metrics["cpt_threshold"].mean(),
-                    on_epoch=True,
-                )
-                self.log(
-                    "avg_icd_entropy",
-                    gen_metrics["icd_entropy"].mean(),
-                    on_epoch=True,
-                )
-                self.log(
-                    "avg_icd_threshold",
-                    gen_metrics["icd_threshold"].mean(),
-                    on_epoch=True,
-                )
+                if isinstance(gen_metrics, dict) and 'cpt_entropy' in gen_metrics:
+                    self.log(
+                        "avg_cpt_entropy",
+                        gen_metrics["cpt_entropy"].mean(),
+                        on_epoch=True,
+                    )
+                    self.log(
+                        "avg_cpt_threshold",
+                        gen_metrics["cpt_threshold"].mean(),
+                        on_epoch=True,
+                    )
+                    self.log(
+                        "avg_icd_entropy",
+                        gen_metrics["icd_entropy"].mean(),
+                        on_epoch=True,
+                    )
+                    self.log(
+                        "avg_icd_threshold",
+                        gen_metrics["icd_threshold"].mean(),
+                        on_epoch=True,
+                    )
 
         # Update target encoders after each step
         self.update_target_encoders()
