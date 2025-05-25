@@ -37,8 +37,8 @@ class TestDiffusionModel(unittest.TestCase):
         loss = model(cpt_tokens, icd_tokens, ttnc_tokens)
         self.assertTrue(loss.dim() == 0)
         cpt_pred, icd_pred, ttnc_pred = model.sample(2)
-        self.assertEqual(cpt_pred.shape, (2, config.max_cpt_tokens))
-        self.assertEqual(icd_pred.shape, (2, config.max_icd_tokens))
+        self.assertEqual(cpt_pred.shape, (2, config.cpt_vocab_size))
+        self.assertEqual(icd_pred.shape, (2, config.icd_vocab_size))
         self.assertEqual(ttnc_pred.shape, (2,))
 
     def test_conditioned_sample(self):

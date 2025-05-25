@@ -316,6 +316,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.lr = config.lr
         self.adapter_lr = config.adapter_lr
         self.generator_lr = config.generator_lr
+        self.sae_weight = getattr(config, "sae_weight", 1.0)
         self.loss_fn = nn.MSELoss()
         self.log_vars = nn.ParameterDict({
             'vicreg_lvl1': nn.Parameter(torch.tensor(0.0)),
@@ -346,6 +347,23 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     config,
                     condition_dim=config.output_dim,
                 )
+                # Inherit Stage-1 embeddings for CPT/ICD/TTNC
+                self.diffusion_model.cpt_embedding.weight.data.copy_(
+                    self.target_encoder_lvl2.cpt_embedding.weight.data
+                )
+                self.diffusion_model.icd_embedding.weight.data.copy_(
+                    self.target_encoder_lvl2.icd_embedding.weight.data
+                )
+                self.diffusion_model.ttnc_embedding.weight.data.copy_(
+                    self.target_encoder_lvl2.ttnc_embedding.weight.data
+                )
+                requires_grad = getattr(config, "fine_tune_embeddings", False)
+                for p in [
+                    self.diffusion_model.cpt_embedding.weight,
+                    self.diffusion_model.icd_embedding.weight,
+                    self.diffusion_model.ttnc_embedding.weight,
+                ]:
+                    p.requires_grad = requires_grad
             else:
                 self.diffusion_model = DiffusionModel(
                     config,
@@ -359,6 +377,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
             and getattr(config, "freeze_encoder_at_stage2", True)
         ):
             self.freeze_encoder(getattr(config, "encoder_unfreeze_layers", 1))
+            if self.use_sparse_autoencoder:
+                for p in self.sparse_autoencoder.parameters():
+                    p.requires_grad = False
 
     def _unfreeze_last_n(self, module, n_layers):
         """Helper to unfreeze the last ``n_layers`` child modules of ``module``."""
@@ -538,7 +559,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         if self.use_sparse_autoencoder:
             precision_sae = torch.exp(-clamped_log_vars['sae'])
-            weighted_sae_loss = sae_loss * precision_sae
+            weighted_sae_loss = sae_loss * precision_sae * self.sae_weight
             total_loss = total_loss + weighted_sae_loss
             total_precision = total_precision + precision_sae
             total_log_var = total_log_var + clamped_log_vars['sae']
