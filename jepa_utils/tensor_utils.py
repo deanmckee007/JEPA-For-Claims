@@ -1,6 +1,7 @@
 # utils/tensor_utils.py
 import torch
 import random
+import math
 
 def masked_mean(tensor, mask, dim):
     """
@@ -53,12 +54,18 @@ def masked_variance(tensor, mask, dim):
     return variance
 
 def calculate_entropy(probs):
-    # probs: [batch_size, vocab_size]
-    # Add a small epsilon to prevent log(0)
-    epsilon = 1e-12
-    log_probs = torch.log(probs + epsilon)
-    entropy = -torch.sum(probs * log_probs, dim=-1)  # Shape: [batch_size]
+    """Compute the Shannon entropy for a probability distribution."""
+    # Clamp to avoid log(0)
+    p = probs.clamp(min=1e-8, max=1 - 1e-8)
+    log_p = torch.log(p)
+    entropy = -torch.sum(p * log_p, dim=-1)
     return entropy
+
+def normalized_entropy(probs):
+    """Entropy normalised by the maximum possible entropy for the vocabulary."""
+    entropy = calculate_entropy(probs)
+    vocab_size = probs.size(-1)
+    return entropy / math.log(vocab_size)
 
 def adaptive_sampling(probs, entropy, base_temp=1.0, base_top_p=0.9, entropy_adjustment_factor=0.5):
     random.seed()

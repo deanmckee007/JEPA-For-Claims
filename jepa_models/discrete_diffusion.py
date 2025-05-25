@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
+import math
 
 class DiscreteDiffusionModel(pl.LightningModule):
     """Simplified discrete diffusion model for token generation."""
@@ -24,8 +25,8 @@ class DiscreteDiffusionModel(pl.LightningModule):
         self.icd_embedding = nn.Embedding(self.icd_vocab_size, self.embedding_dim)
         self.ttnc_embedding = nn.Embedding(self.ttnc_vocab_size, self.embedding_dim)
 
-        self.cpt_threshold = getattr(config, "cpt_threshold", 0.5)
-        self.icd_threshold = getattr(config, "icd_threshold", 0.5)
+        self.cpt_threshold = getattr(config, "base_cpt_threshold", 0.5)
+        self.icd_threshold = getattr(config, "base_icd_threshold", 0.5)
 
         self.model = nn.Sequential(
             nn.Linear(self.embedding_dim * 3, self.embedding_dim * 6),
@@ -171,8 +172,27 @@ class DiscreteDiffusionModel(pl.LightningModule):
                 icd_probs = torch.sigmoid(icd_logits).max(dim=1).values
                 ttnc_probs = torch.softmax(ttnc_logits, dim=-1)
 
-                cpt_tokens = (cpt_probs > self.cpt_threshold).long()
-                icd_tokens = (icd_probs > self.icd_threshold).long()
+                cpt_entropy = -torch.sum(
+                    cpt_probs.clamp(1e-8, 1 - 1e-8)
+                    * torch.log(cpt_probs.clamp(1e-8, 1 - 1e-8)),
+                    dim=1,
+                )
+                icd_entropy = -torch.sum(
+                    icd_probs.clamp(1e-8, 1 - 1e-8)
+                    * torch.log(icd_probs.clamp(1e-8, 1 - 1e-8)),
+                    dim=1,
+                )
+                cpt_norm = cpt_entropy / math.log(cpt_probs.size(-1))
+                icd_norm = icd_entropy / math.log(icd_probs.size(-1))
+                cpt_thresh = (self.cpt_threshold * (1.0 - cpt_norm)).clamp(min=0.1)
+                icd_thresh = (self.icd_threshold * (1.0 - icd_norm)).clamp(min=0.1)
+
+                cpt_tokens = (cpt_probs > cpt_thresh.unsqueeze(-1)).long()
+                icd_tokens = (icd_probs > icd_thresh.unsqueeze(-1)).long()
+                self.log("avg_cpt_entropy", cpt_entropy.mean(), on_step=False, on_epoch=True)
+                self.log("avg_cpt_threshold", cpt_thresh.mean(), on_step=False, on_epoch=True)
+                self.log("avg_icd_entropy", icd_entropy.mean(), on_step=False, on_epoch=True)
+                self.log("avg_icd_threshold", icd_thresh.mean(), on_step=False, on_epoch=True)
                 ttnc_tokens = torch.argmax(ttnc_probs, dim=-1)
 
                 if self.debug_generation:
