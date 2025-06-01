@@ -148,7 +148,8 @@ def main():
     # generator is enabled. This allows saving predictions when the model
     # relies solely on diffusion-based generation.
     if config.use_generative_save and (
-        config.use_token_prediction_head or config.use_diffusion
+        getattr(model, "use_token_prediction_head", False)
+        or getattr(model, "use_diffusion", False)
     ):
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = model.to(device)
