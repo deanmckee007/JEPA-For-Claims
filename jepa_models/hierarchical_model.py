@@ -161,7 +161,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
     configure_optimizers():
         Configures the optimizer for the generator with different learning rates and weight decay for specific parameters.
     """
-    def __init__(self, config):
+    def __init__(self, config, diffusion=None):
         super(HierarchicalClaimsModel, self).__init__()
         self.automatic_optimization = True
         self.save_hyperparameters()
@@ -343,7 +343,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_token_prediction_head:
             self.logits_generator = LogitsGenerator(config)
 
-        if self.use_diffusion:
+        if diffusion is not None:
+            self.diffusion_model = diffusion
+            self.use_diffusion = True
+        elif self.use_diffusion:
             vocab_size = (
                 config.cpt_vocab_size
                 + config.icd_vocab_size
@@ -936,7 +939,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         )
 
         diffusion_loss = 0
-        if self.use_diffusion:
+        if self.use_diffusion and hasattr(self, 'diffusion_model'):
             cpt_tokens = batch[0][:, -1, :]
             icd_tokens = batch[1][:, -1, :]
             ttnc_tokens = batch[2][:, -1]
