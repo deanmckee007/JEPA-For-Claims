@@ -1,5 +1,7 @@
 # utils/config.py
 from dataclasses import dataclass, field
+from typing import Optional, Dict
+import torch
 
 @dataclass
 class Config:
@@ -86,6 +88,20 @@ class Config:
     joint_train_epochs: int = 0
     use_context_pooled_patient_representation: bool = True
     patient_representation_dim: int = field(init=False)
+    # Vocabulary sizes. These are set after data preparation but default to 0 so
+    # that older checkpoints without these fields can still be loaded without
+    # attribute errors.
+    cpt_vocab_size: int = 0
+    icd_vocab_size: int = 0
+    ttnc_vocab_size: int = 0
+    # Optional rarity score tensors and token id mappings. These are populated
+    # during data preparation when available.
+    cpt_rarity_scores: Optional[torch.Tensor] = None
+    icd_rarity_scores: Optional[torch.Tensor] = None
+    ttnc_rarity_scores: Optional[torch.Tensor] = None
+    cpt_id_to_token: Optional[Dict[int, str]] = None
+    icd_id_to_token: Optional[Dict[int, str]] = None
+    ttnc_id_to_token: Optional[Dict[int, str]] = None
 
     def __post_init__(self):
         self.patient_representation_dim = self.embedding_dim * (
