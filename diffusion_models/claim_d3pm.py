@@ -29,6 +29,7 @@ class ClaimD3PM(pl.LightningModule):
             nhead=4,
             dim_feedforward=config.embedding_dim * 4,
             dropout=0.0,
+            batch_first=True,
         )
         self.denoiser = nn.TransformerEncoder(encoder_layer, num_layers=4)
         self.film_fc = nn.Linear(condition_dim, config.embedding_dim * 2)
@@ -50,7 +51,10 @@ class ClaimD3PM(pl.LightningModule):
         return torch.where(keep_mask, x0, noise)
 
     def denoise(self, x_t, t, condition=None):
-        emb = self.token_embed(x_t) + self.time_embed(t)
+        token_emb = self.token_embed(x_t)
+        time_emb = self.time_embed(t).unsqueeze(1)
+        time_emb = time_emb.expand(-1, x_t.size(1), -1)
+        emb = token_emb + time_emb
         if condition is not None:
             gamma, beta = self.film_fc(condition).chunk(2, dim=-1)
             emb = emb * (1 + gamma.unsqueeze(1)) + beta.unsqueeze(1)
