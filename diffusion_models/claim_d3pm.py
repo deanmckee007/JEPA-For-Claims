@@ -71,7 +71,6 @@ class ClaimD3PM(pl.LightningModule):
         b = tokens.size(0)
         t = torch.randint(0, self.num_timesteps, (b,), device=tokens.device)
         loss = self.p_losses(tokens, t, condition)
-        self.log("diffusion_ce", loss)
         return loss
 
     @torch.no_grad()
@@ -98,4 +97,6 @@ class ClaimD3PM(pl.LightningModule):
         tokens = torch.cat([cpt_tokens, icd_tokens, ttnc_tokens.unsqueeze(1)], dim=1)
         loss = self.forward(tokens)
         self.log("loss", loss, on_step=True, on_epoch=True, prog_bar=True)
+        # Explicitly log diffusion cross-entropy for monitoring
+        self.log("diffusion_ce", loss, on_step=True, on_epoch=True, prog_bar=True)
         return loss
