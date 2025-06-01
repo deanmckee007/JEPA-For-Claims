@@ -63,6 +63,24 @@ class TestPredictionBlocks(unittest.TestCase):
         self.assertEqual(patient_representation.shape, (2, embed_dim * 2))
         self.assertEqual(prediction.shape, (2, output_dim))
 
+    def test_level2_prediction_block_zero_vocab(self):
+        """Ensure initialization succeeds when vocab sizes are zero."""
+        embed_dim = 8
+        output_dim = 4
+        block = Level2PredictionBlock(
+            embed_dim,
+            output_dim,
+            cpt_vocab_size=0,
+            icd_vocab_size=0,
+            ttnc_vocab_size=0,
+            max_seq_length=10,
+        )
+        context_embeddings = torch.randn(1, 3, embed_dim)
+        ttnc_tokens = torch.zeros(1, 3, dtype=torch.long)
+        patient_rep, pred = block(context_embeddings, ttnc_tokens)
+        self.assertEqual(patient_rep.shape, (1, embed_dim))
+        self.assertEqual(pred.shape, (1, output_dim))
+
 
 class TestHierarchicalModelVicreg(unittest.TestCase):
     def test_stage1_uses_vicreg_level2(self):
