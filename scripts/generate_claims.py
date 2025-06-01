@@ -32,6 +32,36 @@ def main():
     if isinstance(config_dict, dict):
         for k, v in config_dict.items():
             setattr(config, k, v)
+    else:
+        # ``config`` may be stored as a dataclass instance. Populate the
+        # default ``Config`` with any attributes found in the checkpoint
+        # object to maintain backwards compatibility.
+        for k in getattr(config_dict, "__dict__", {}):
+            setattr(config, k, getattr(config_dict, k))
+
+    state_dict = ckpt.get("state_dict", {})
+
+    def _update_size(attr, keys):
+        current = getattr(config, attr, 0)
+        if current in (0, 1):
+            for key in keys:
+                tensor = state_dict.get(key)
+                if isinstance(tensor, torch.Tensor):
+                    setattr(config, attr, tensor.size(0))
+                    break
+
+    _update_size("cpt_vocab_size", [
+        "context_encoder_lvl2.cpt_embedding.weight",
+        "target_encoder_lvl2.cpt_embedding.weight",
+    ])
+    _update_size("icd_vocab_size", [
+        "context_encoder_lvl2.icd_embedding.weight",
+        "target_encoder_lvl2.icd_embedding.weight",
+    ])
+    _update_size("ttnc_vocab_size", [
+        "context_encoder_lvl2.ttnc_embedding.weight",
+        "target_encoder_lvl2.ttnc_embedding.weight",
+    ])
 
     try:
         model = HierarchicalClaimsModel.load_from_checkpoint(
