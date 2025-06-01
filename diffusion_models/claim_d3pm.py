@@ -16,7 +16,11 @@ class ClaimD3PM(pl.LightningModule):
         self.num_timesteps = getattr(config, "diffusion_steps", 100)
         self.guidance_scale = getattr(config, "guidance_scale", 4.0)
 
-        self.log_q = nn.Parameter(torch.zeros(self.num_timesteps, vocab_size, vocab_size))
+        # Transition noise schedule (flatten-to-uniform). ``alphas`` controls
+        # the probability of replacing a token with uniform noise at each time
+        # step. Using a 1-D tensor drastically reduces memory usage compared to
+        # the previous pre-computed transition tensor of shape ``(T, V, V)``.
+        self.alphas = nn.Parameter(torch.linspace(0.001, 0.25, self.num_timesteps))
 
         self.token_embed = nn.Embedding(vocab_size, config.embedding_dim)
         self.time_embed = nn.Embedding(self.num_timesteps, config.embedding_dim)
@@ -31,10 +35,19 @@ class ClaimD3PM(pl.LightningModule):
         self.output_proj = nn.Linear(config.embedding_dim, vocab_size)
         self.lr = getattr(config, "lr", 1e-3)
 
+    def load_state_dict(self, state_dict, strict=True):
+        # Old checkpoints stored a large ``log_q`` tensor which has been
+        # removed. Guard against loading it so older checkpoints remain usable.
+        state_dict.pop('log_q', None)
+        return super().load_state_dict(state_dict, strict)
+
     def q_sample(self, x0, t):
-        log_probs = self.log_q[t]
-        dist = Categorical(logits=log_probs[x0])
-        return dist.sample()
+        """Corrupt tokens according to D3PM flatten-to-uniform channel."""
+        # ``t`` is a tensor of timesteps for each example in the batch.
+        alpha_t = self.alphas[t].to(x0.device).unsqueeze(1)  # (batch, 1)
+        keep_mask = torch.bernoulli((1 - alpha_t) * torch.ones_like(x0, dtype=torch.float32)).bool()
+        noise = torch.randint_like(x0, low=0, high=self.vocab_size)
+        return torch.where(keep_mask, x0, noise)
 
     def denoise(self, x_t, t, condition=None):
         emb = self.token_embed(x_t) + self.time_embed(t)
