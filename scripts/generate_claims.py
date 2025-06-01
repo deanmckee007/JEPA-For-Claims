@@ -27,7 +27,16 @@ def main():
             for k, v in config_dict.items():
                 setattr(config, k, v)
         vocab_size = args.vocab_size if args.vocab_size is not None else hparams.get("vocab_size")
+        if vocab_size is None:
+            vocab_size = (
+                getattr(config, "cpt_vocab_size", 0)
+                + getattr(config, "icd_vocab_size", 0)
+                + getattr(config, "ttnc_vocab_size", 0)
+                + 3
+            )
         condition_dim = args.condition_dim if args.condition_dim is not None else hparams.get("condition_dim")
+        if condition_dim is None:
+            condition_dim = getattr(config, "output_dim", getattr(config, "embedding_dim", 128))
         model = ClaimD3PM.load_from_checkpoint(
             args.checkpoint,
             config=config,
