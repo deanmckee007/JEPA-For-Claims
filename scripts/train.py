@@ -22,8 +22,10 @@ import copy
 
 
 def main(argv=None):
+    if argv is None:
+        argv = []
     parser = argparse.ArgumentParser(description="JEPA training")
-    parser.add_argument("--phase", choices=["pretrain", "joint"], default="pretrain")
+    parser.add_argument("--phase", choices=["pretrain", "joint"], default=None)
     parser.add_argument("--resume", type=str, default=None, help="checkpoint to resume for joint phase")
     args = parser.parse_args(argv)
 
@@ -79,6 +81,21 @@ def main(argv=None):
         trainer.fit(model, train_dataloader)
         trainer.save_checkpoint("joint.ckpt")
         return
+
+    if args.phase is None and config.use_diffusion and getattr(config, "pretrain_diffusion", True):
+        vocab_size = (
+            config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+        )
+        diffusion_model = ClaimD3PM(config, vocab_size, config.output_dim)
+        diffusion_trainer = pl.Trainer(
+            max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
+            accelerator='gpu',
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
+            callbacks=[RichProgressBar(refresh_rate=1)],
+            log_every_n_steps=3
+        )
+        diffusion_trainer.fit(diffusion_model, train_dataloader)
+        diffusion_trainer.save_checkpoint("diffusion_only.ckpt")
 
     def train_stage(cfg, stage_name, ckpt_path=None, freeze=False):
         cfg.current_stage = stage_name
@@ -322,4 +339,5 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+    main(sys.argv[1:])
