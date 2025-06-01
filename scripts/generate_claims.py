@@ -2,7 +2,7 @@
 
 import torch
 import argparse
-from jepa_models.diffusion_models.claim_d3pm import ClaimD3PM
+from models.diffusion import ClaimD3PM
 
 
 def main():
