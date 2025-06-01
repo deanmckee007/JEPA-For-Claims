@@ -8,7 +8,7 @@ import numpy as np
 import math
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
-from models.diffusion import ClaimD3PM
+from diffusion_models import ClaimD3PM
 from jepa_models.sparse_autoencoder import SparseAutoencoder
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.tensor_utils import calculate_entropy

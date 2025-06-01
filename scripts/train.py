@@ -12,7 +12,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from jepa_utils.data_prep import prepare_data
 from jepa_models.hierarchical_model import HierarchicalClaimsModel
-from models.diffusion import ClaimD3PM
+from diffusion_models import ClaimD3PM
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
