@@ -120,6 +120,14 @@ class Level2Encoder(nn.Module):
         self.icd_rarity_scores = icd_rarity_scores
         self.ttnc_rarity_scores = ttnc_rarity_scores
 
+        # Older checkpoints may lack vocabulary size information which
+        # results in zero-sized embeddings and an IndexError when the
+        # padding index is applied.  Ensure the embeddings have at least
+        # one entry so that model loading succeeds in those cases.
+        cpt_vocab_size = max(1, cpt_vocab_size)
+        icd_vocab_size = max(1, icd_vocab_size)
+        ttnc_vocab_size = max(1, ttnc_vocab_size)
+
         self.cpt_embedding = nn.Embedding(cpt_vocab_size, embedding_dim, padding_idx=padding_idx)
         self.icd_embedding = nn.Embedding(icd_vocab_size, embedding_dim, padding_idx=padding_idx)
         self.ttnc_embedding = nn.Embedding(ttnc_vocab_size, embedding_dim, padding_idx=padding_idx)
