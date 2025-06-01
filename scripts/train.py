@@ -1,4 +1,5 @@
 # scripts/train.py
+import argparse
 import torch
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import RichProgressBar, RichModelSummary
@@ -20,26 +21,64 @@ from jepa_utils.prediction_utils import decode_predicted_codes
 import copy
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="JEPA training")
+    parser.add_argument("--phase", choices=["pretrain", "joint"], default="pretrain")
+    parser.add_argument("--resume", type=str, default=None, help="checkpoint to resume for joint phase")
+    args = parser.parse_args(argv)
+
     # Initialize configuration
     config = Config()
 
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
 
-    if config.use_diffusion and getattr(config, "pretrain_diffusion", True):
+    if args.phase == "pretrain":
+        if config.use_diffusion:
+            vocab_size = (
+                config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+            )
+            diffusion_model = ClaimD3PM(config, vocab_size, config.output_dim)
+            diffusion_trainer = pl.Trainer(
+                max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
+                accelerator='gpu',
+                logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
+                callbacks=[RichProgressBar(refresh_rate=1)],
+                log_every_n_steps=3
+            )
+            diffusion_trainer.fit(diffusion_model, train_dataloader)
+            diffusion_trainer.save_checkpoint("diffusion_only.ckpt")
+        return
+
+    if args.phase == "joint":
+        ckpt = args.resume or "diffusion_only.ckpt"
+        if not os.path.exists(ckpt):
+            raise FileNotFoundError(f"Diffusion checkpoint {ckpt} not found")
         vocab_size = (
-            config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+            config.cpt_vocab_size
+            + config.icd_vocab_size
+            + config.ttnc_vocab_size
+            + 3
         )
-        diffusion_model = ClaimD3PM(config, vocab_size, config.output_dim)
-        diffusion_trainer = pl.Trainer(
-            max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
+        diffusion_model = ClaimD3PM.load_from_checkpoint(
+            ckpt,
+            config=config,
+            vocab_size=vocab_size,
+            condition_dim=config.output_dim,
+        )
+        config.use_diffusion = True
+        config.current_stage = "joint"
+        model = HierarchicalClaimsModel(config, diffusion=diffusion_model)
+        trainer = pl.Trainer(
+            max_epochs=config.epochs,
             accelerator='gpu',
-            logger=pl.loggers.TensorBoardLogger("tb_logs", name="diffusion"),
-            callbacks=[RichProgressBar(refresh_rate=1)],
-            log_every_n_steps=3
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name="joint"),
+            callbacks=[RichProgressBar(refresh_rate=1), RichModelSummary(max_depth=2)],
+            log_every_n_steps=3,
         )
-        diffusion_trainer.fit(diffusion_model, train_dataloader)
+        trainer.fit(model, train_dataloader)
+        trainer.save_checkpoint("joint.ckpt")
+        return
 
     def train_stage(cfg, stage_name, ckpt_path=None, freeze=False):
         cfg.current_stage = stage_name
