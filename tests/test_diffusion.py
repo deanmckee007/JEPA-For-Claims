@@ -22,6 +22,19 @@ class TestClaimD3PM(unittest.TestCase):
             samples = model.generate_claim(condition, seq_len=5)
         self.assertEqual(samples.shape, (2, 5))
 
+    def test_forward_loss_is_finite(self):
+        cfg = Config()
+        cfg.cpt_vocab_size = 8
+        cfg.icd_vocab_size = 8
+        cfg.ttnc_vocab_size = 5
+        cfg.embedding_dim = 4
+        cfg.diffusion_steps = 5
+        vocab_size = cfg.cpt_vocab_size + cfg.icd_vocab_size + cfg.ttnc_vocab_size + 3
+        model = ClaimD3PM(cfg, vocab_size, condition_dim=cfg.embedding_dim)
+        tokens = torch.randint(0, vocab_size, (2, 11))
+        loss = model(tokens)
+        self.assertTrue(torch.isfinite(loss))
+
 
 if __name__ == "__main__":
     unittest.main()
