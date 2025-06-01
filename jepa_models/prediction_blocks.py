@@ -101,6 +101,12 @@ class Level2PredictionBlock(nn.Module):
         super(Level2PredictionBlock, self).__init__()
 
         self.padding_idx = padding_idx
+        # Older checkpoints may lack vocabulary sizes which can result in
+        # zero-sized embeddings and linear layers. Guard against that by
+        # ensuring each vocabulary has at least one entry.
+        cpt_vocab_size = max(1, cpt_vocab_size)
+        icd_vocab_size = max(1, icd_vocab_size)
+        ttnc_vocab_size = max(1, ttnc_vocab_size)
         # Positional Embedding Layer
         self.position_embedding = nn.Embedding(max_seq_length, embed_dim)
         self.rnn_type = rnn_type
@@ -258,11 +264,11 @@ class LogitsGenerator(nn.Module):
         self.fc1 = nn.Linear(config.embedding_dim, config.hidden_dim)
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(config.dropout)
-        
+
         # Separate output layers for each token type
-        self.fc_cpt = nn.Linear(config.hidden_dim, config.cpt_vocab_size)
-        self.fc_icd = nn.Linear(config.hidden_dim, config.icd_vocab_size)
-        self.fc_ttnc = nn.Linear(config.hidden_dim, config.ttnc_vocab_size)
+        self.fc_cpt = nn.Linear(config.hidden_dim, max(1, config.cpt_vocab_size))
+        self.fc_icd = nn.Linear(config.hidden_dim, max(1, config.icd_vocab_size))
+        self.fc_ttnc = nn.Linear(config.hidden_dim, max(1, config.ttnc_vocab_size))
     
     def forward(self, combined_representation):
         """
