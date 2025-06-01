@@ -1,6 +1,6 @@
 import torch
 from jepa_utils.config import Config
-from jepa_models.discrete_diffusion import DiscreteDiffusionModel
+from models.diffusion import ClaimD3PM
 
 
 def main():
@@ -12,14 +12,15 @@ def main():
     cfg.max_cpt_tokens = 2
     cfg.max_icd_tokens = 2
     cfg.diffusion_steps = 5
-    model = DiscreteDiffusionModel(cfg)
+    vocab_size = cfg.cpt_vocab_size + cfg.icd_vocab_size + cfg.ttnc_vocab_size + 3
+    seq_len = cfg.max_cpt_tokens + cfg.max_icd_tokens + 1
+    model = ClaimD3PM(cfg, vocab_size, cfg.embedding_dim)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     for step in range(5):
-        cpt = torch.randint(0, cfg.cpt_vocab_size, (4, cfg.max_cpt_tokens))
-        icd = torch.randint(0, cfg.icd_vocab_size, (4, cfg.max_icd_tokens))
-        ttnc = torch.randint(0, cfg.ttnc_vocab_size, (4,))
-        loss = model.p_losses(cpt, icd, ttnc, torch.zeros(4, dtype=torch.long))
+        tokens = torch.randint(0, vocab_size, (4, seq_len))
+        t = torch.zeros(4, dtype=torch.long)
+        loss = model(tokens)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()

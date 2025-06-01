@@ -8,8 +8,7 @@ import numpy as np
 import math
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
-from jepa_models.diffusion import DiffusionModel
-from jepa_models.discrete_diffusion import DiscreteDiffusionModel
+from models.diffusion import ClaimD3PM
 from jepa_models.sparse_autoencoder import SparseAutoencoder
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.tensor_utils import calculate_entropy
@@ -166,6 +165,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         super(HierarchicalClaimsModel, self).__init__()
         self.automatic_optimization = True
         self.save_hyperparameters()
+        self.config = config
         if getattr(config, 'debug_generation', False):
             print("Initializing HierarchicalClaimsModel")
             print(f"cpt_vocab_size: {config.cpt_vocab_size}")
@@ -195,7 +195,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
         self.use_gated_fusion = config.use_gated_fusion
         self.use_diffusion = getattr(config, 'use_diffusion', False)
-        self.diffusion_type = getattr(config, 'diffusion_type', 'continuous')
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
         self.debug_generation = getattr(config, 'debug_generation', False)
         self.cpt_vocab_size = config.cpt_vocab_size
@@ -345,47 +344,17 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.logits_generator = LogitsGenerator(config)
 
         if self.use_diffusion:
-            # Condition the diffusion generator on the predicted claim
-            # representation from the Level 2 prediction block
-            if self.diffusion_type == 'discrete':
-                self.diffusion_model = DiscreteDiffusionModel(
-                    config,
-                    condition_dim=config.output_dim,
-                )
-                # Inherit Stage-1 embeddings for CPT/ICD/TTNC
-                self.diffusion_model.cpt_embedding.weight.data.copy_(
-                    self.target_encoder_lvl2.cpt_embedding.weight.data
-                )
-                self.diffusion_model.icd_embedding.weight.data.copy_(
-                    self.target_encoder_lvl2.icd_embedding.weight.data
-                )
-                self.diffusion_model.ttnc_embedding.weight.data.copy_(
-                    self.target_encoder_lvl2.ttnc_embedding.weight.data
-                )
-                requires_grad = getattr(config, "fine_tune_embeddings", False)
-                for p in [
-                    self.diffusion_model.cpt_embedding.weight,
-                    self.diffusion_model.icd_embedding.weight,
-                    self.diffusion_model.ttnc_embedding.weight,
-                ]:
-                    p.requires_grad = requires_grad
-                assert torch.allclose(
-                    self.diffusion_model.cpt_embedding.weight,
-                    self.target_encoder_lvl2.cpt_embedding.weight,
-                )
-                assert torch.allclose(
-                    self.diffusion_model.icd_embedding.weight,
-                    self.target_encoder_lvl2.icd_embedding.weight,
-                )
-                assert torch.allclose(
-                    self.diffusion_model.ttnc_embedding.weight,
-                    self.target_encoder_lvl2.ttnc_embedding.weight,
-                )
-            else:
-                self.diffusion_model = DiffusionModel(
-                    config,
-                    condition_dim=config.output_dim,
-                )
+            vocab_size = (
+                config.cpt_vocab_size
+                + config.icd_vocab_size
+                + config.ttnc_vocab_size
+                + 3
+            )
+            self.diffusion_model = ClaimD3PM(
+                config,
+                vocab_size,
+                condition_dim=config.output_dim,
+            )
 
         self.initialize_target_encoders()
 
@@ -827,11 +796,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             icd_last = target_icd.squeeze(1)  # [batch, max_icd_tokens]
             ttnc_last = target_ttnc.squeeze(1)  # [batch]
 
+            tokens = torch.cat([cpt_last, icd_last, ttnc_last.unsqueeze(1)], dim=1)
             diffusion_loss = self.diffusion_model.forward(
-                cpt_last,
-                icd_last,
-                ttnc_last,
-                condition=prediction_lvl2,  # predicted claim rep
+                tokens,
+                condition=prediction_lvl2,
             )
 
         # Compute total loss
@@ -874,27 +842,18 @@ class HierarchicalClaimsModel(pl.LightningModule):
             # Condition sampling on the predicted next-claim representation
             context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
             _, logit_context = self.prediction_block_lvl2(context_lvl2, ttnc_tensor)
-            outputs = self.diffusion_model.sample(
-                batch_size,
-                condition=logit_context,
-            )
-            if isinstance(outputs, dict):
-                return {
-                    'predicted_cpt_codes': outputs['cpt_tokens'],
-                    'predicted_icd_codes': outputs['icd_tokens'],
-                    'predicted_ttnc_code': outputs['ttnc_token'],
-                    'cpt_entropy': outputs['cpt_entropy'],
-                    'cpt_threshold': outputs['cpt_threshold'],
-                    'icd_entropy': outputs['icd_entropy'],
-                    'icd_threshold': outputs['icd_threshold'],
-                }
-            else:
-                cpt_tokens, icd_tokens, ttnc_token = outputs
-                return {
-                    'predicted_cpt_codes': cpt_tokens,
-                    'predicted_icd_codes': icd_tokens,
-                    'predicted_ttnc_code': ttnc_token,
-                }
+            seq_len = self.config.max_cpt_tokens + self.config.max_icd_tokens + 1
+            tokens = self.diffusion_model.generate_claim(logit_context, seq_len)
+            cpt_tokens = tokens[:, : self.config.max_cpt_tokens]
+            icd_tokens = tokens[
+                :, self.config.max_cpt_tokens : self.config.max_cpt_tokens + self.config.max_icd_tokens
+            ]
+            ttnc_token = tokens[:, -1]
+            return {
+                'predicted_cpt_codes': cpt_tokens,
+                'predicted_icd_codes': icd_tokens,
+                'predicted_ttnc_code': ttnc_token,
+            }
 
         # Obtain initial patient representation
         context_lvl2 = self.context_encoder_lvl2(cpt_tensor, icd_tensor, ttnc_tensor)
@@ -981,10 +940,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
             cpt_tokens = batch[0][:, -1, :]
             icd_tokens = batch[1][:, -1, :]
             ttnc_tokens = batch[2][:, -1]
+            tokens = torch.cat([cpt_tokens, icd_tokens, ttnc_tokens.unsqueeze(1)], dim=1)
             diffusion_loss = self.diffusion_model.forward(
-                cpt_tokens,
-                icd_tokens,
-                ttnc_tokens,
+                tokens,
                 condition=outputs['logit_context'],
             )
 

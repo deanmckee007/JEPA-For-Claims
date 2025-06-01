@@ -105,7 +105,7 @@ Keep the learned representations fixed and train the generator to emit CPT/ICD/T
 
 - **Compute**
   - Encoders & SAE perform a forward pass only to supply representations.
-  - `DiffusionModel.sample()` denoises from Gaussian noise to discrete code embeddings.
+  - `ClaimD3PM.generate_claim()` denoises from uniform tokens to discrete codes.
   - Optionally a token head can directly output logits.
 - **Trainable modules**
   - Diffusion model & its projection layers
@@ -137,7 +137,7 @@ If `predictions.csv` is empty, verify the following:
 1. **Stage 2 config** – confirm `use_diffusion=true` and `use_token_prediction_head` is set as intended.
 2. **Predict step logic** – dump raw CPT/ICD and TTNC logits during `predict_step` to ensure they exceed your thresholds.
 3. **Threshold & decoding** – check the multi-label threshold or top-K logic, printing selected indices per sample.
-4. **Diffusion sampling** – instrument `DiscreteDiffusionModel.sample()` to log denoising steps and final token IDs.
+4. **Diffusion sampling** – instrument `ClaimD3PM.generate_claim()` to log denoising steps and final token IDs.
 5. **Gating network** – log `gating_sae_fraction` each prediction. Force it to zero temporarily to test diffusion only.
 6. **CSV writer** – trace token IDs to file rows and ensure no default empty token is inserted when none are found.
 7. **Quick experiments** – run with token-only (`use_token_prediction_head=true`, `use_diffusion=false`) or diffusion-only to isolate issues.

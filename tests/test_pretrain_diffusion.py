@@ -14,7 +14,7 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
     @patch('scripts.train.pl.Trainer')
     @patch('scripts.train.prepare_data')
     @patch('scripts.train.HierarchicalClaimsModel')
-    @patch('scripts.train.DiffusionModel')
+    @patch('scripts.train.ClaimD3PM')
     @patch('scripts.train.Config')
     def test_pretrain_enabled(self, mock_config, mock_diffusion, mock_hier, mock_prepare, mock_trainer, mock_exists):
         cfg = Config()
@@ -27,6 +27,11 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
         cfg.representation_pretrain_epochs = 0
         cfg.generator_train_epochs = 1
         cfg.joint_train_epochs = 0
+        cfg.cpt_vocab_size = 10
+        cfg.icd_vocab_size = 10
+        cfg.ttnc_vocab_size = 5
+        cfg.embedding_dim = 4
+        cfg.output_dim = cfg.embedding_dim
         mock_config.return_value = cfg
         mock_prepare.return_value = (None, self.loader, None, None, cfg, None)
         mock_exists.return_value = True
@@ -43,7 +48,7 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
     @patch('scripts.train.pl.Trainer')
     @patch('scripts.train.prepare_data')
     @patch('scripts.train.HierarchicalClaimsModel')
-    @patch('scripts.train.DiffusionModel')
+    @patch('scripts.train.ClaimD3PM')
     @patch('scripts.train.Config')
     def test_pretrain_disabled(self, mock_config, mock_diffusion, mock_hier, mock_prepare, mock_trainer, mock_exists):
         cfg = Config()
@@ -56,6 +61,11 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
         cfg.representation_pretrain_epochs = 0
         cfg.generator_train_epochs = 1
         cfg.joint_train_epochs = 0
+        cfg.cpt_vocab_size = 10
+        cfg.icd_vocab_size = 10
+        cfg.ttnc_vocab_size = 5
+        cfg.embedding_dim = 4
+        cfg.output_dim = cfg.embedding_dim
         mock_config.return_value = cfg
         mock_prepare.return_value = (None, self.loader, None, None, cfg, None)
         mock_exists.return_value = True

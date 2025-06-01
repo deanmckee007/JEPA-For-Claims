@@ -12,7 +12,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 from jepa_utils.data_prep import prepare_data
 from jepa_models.hierarchical_model import HierarchicalClaimsModel
-from jepa_models.diffusion import DiffusionModel
+from models.diffusion import ClaimD3PM
 from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
@@ -28,7 +28,10 @@ def main():
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
 
     if config.use_diffusion and getattr(config, "pretrain_diffusion", True):
-        diffusion_model = DiffusionModel(config)
+        vocab_size = (
+            config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+        )
+        diffusion_model = ClaimD3PM(config, vocab_size, config.output_dim)
         diffusion_trainer = pl.Trainer(
             max_epochs=getattr(config, "pretrain_diffusion_epochs", config.epochs),
             accelerator='gpu',

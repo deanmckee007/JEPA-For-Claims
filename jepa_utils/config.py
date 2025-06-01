@@ -59,7 +59,6 @@ class Config:
     pretrain_diffusion: bool = True
     pretrain_diffusion_epochs: int = 20
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
-    diffusion_type: str = "discrete"  # continuous | discrete
     diffusion_steps: int = 100
     guidance_scale: float = 4.0
     freeze_denoiser_core: bool = False
