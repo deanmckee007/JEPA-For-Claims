@@ -106,7 +106,31 @@ def main():
     seq_len = getattr(config, "max_cpt_tokens", 0) + getattr(config, "max_icd_tokens", 0) + 1
     condition = torch.zeros(args.num, cond_dim, device=device)
     samples = diffusion_model.generate_claim(condition, seq_len=seq_len)
-    print(samples.tolist())
+
+    cpt_tokens = samples[:, : getattr(config, "max_cpt_tokens", 0)]
+    icd_tokens = samples[:, getattr(config, "max_cpt_tokens", 0) : getattr(config, "max_cpt_tokens", 0) + getattr(config, "max_icd_tokens", 0)]
+    ttnc_tokens = samples[:, -1]
+
+    if (
+        getattr(config, "cpt_id_to_token", None) is not None
+        and getattr(config, "icd_id_to_token", None) is not None
+        and getattr(config, "ttnc_id_to_token", None) is not None
+    ):
+        from jepa_utils.prediction_utils import decode_predicted_codes
+
+        decoded_cpt = decode_predicted_codes(cpt_tokens, config.cpt_id_to_token)
+        decoded_icd = decode_predicted_codes(icd_tokens, config.icd_id_to_token)
+        decoded_ttnc = decode_predicted_codes(ttnc_tokens, config.ttnc_id_to_token)
+
+        for cpt, icd, ttnc in zip(decoded_cpt, decoded_icd, decoded_ttnc):
+            print({
+                "predicted_cpt": cpt,
+                "predicted_icd": icd,
+                "predicted_ttnc": ttnc,
+            })
+    else:
+        # Fallback to printing raw token ids if token maps are unavailable
+        print(samples.tolist())
 
 
 if __name__ == "__main__":
