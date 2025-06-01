@@ -74,6 +74,21 @@ generator by default.  Disable this by setting `pretrain_diffusion = False` in
 avoid interfering with the shared weights.
 
 Diffusion support has fully replaced the old GAN implementation. Set `use_diffusion = False` if you want to disable claim synthesis.
+
+### Command‑line Quick Start
+
+Run the diffusion pretrain and joint phases sequentially:
+
+```bash
+python scripts/train.py --phase pretrain
+python scripts/train.py --phase joint --resume diffusion_only.ckpt
+```
+
+Once training completes you can sample synthetic claims with:
+
+```bash
+python scripts/generate_claims.py joint.ckpt --num 10
+```
 ## Multi-Stage Training
 
 ### Stage 1 – Self-Supervised Representation Pre-Train

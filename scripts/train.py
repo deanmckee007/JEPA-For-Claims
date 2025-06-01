@@ -54,7 +54,18 @@ def main(argv=None):
         ckpt = args.resume or "diffusion_only.ckpt"
         if not os.path.exists(ckpt):
             raise FileNotFoundError(f"Diffusion checkpoint {ckpt} not found")
-        diffusion_model = ClaimD3PM.load_from_checkpoint(ckpt)
+        vocab_size = (
+            config.cpt_vocab_size
+            + config.icd_vocab_size
+            + config.ttnc_vocab_size
+            + 3
+        )
+        diffusion_model = ClaimD3PM.load_from_checkpoint(
+            ckpt,
+            config=config,
+            vocab_size=vocab_size,
+            condition_dim=config.output_dim,
+        )
         config.use_diffusion = True
         config.current_stage = "joint"
         model = HierarchicalClaimsModel(config, diffusion=diffusion_model)
