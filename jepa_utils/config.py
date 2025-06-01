@@ -56,7 +56,7 @@ class Config:
     # Whether to run a pretraining phase for the diffusion generator before
     # training the main hierarchical model. Kept ``True`` for backwards
     # compatibility.
-    pretrain_diffusion: bool = False
+    pretrain_diffusion: bool = True
     pretrain_diffusion_epochs: int = 20
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_type: str = "discrete"  # continuous | discrete
@@ -82,7 +82,7 @@ class Config:
     gating_hidden_dim: int = 256
     # Multi-stage training epochs. If all set to 0, a single training stage is
     # executed as before.
-    representation_pretrain_epochs: int = 100
+    representation_pretrain_epochs: int = 20
     generator_train_epochs: int = 0
     joint_train_epochs: int = 0
     use_context_pooled_patient_representation: bool = True
