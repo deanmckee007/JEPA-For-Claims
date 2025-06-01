@@ -71,3 +71,14 @@ class ClaimD3PM(pl.LightningModule):
 
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.lr)
+
+    def training_step(self, batch, batch_idx):
+        """Standard Lightning training step for diffusion pretraining."""
+        cpt, icd, ttnc, _ = batch
+        cpt_tokens = cpt[:, -1, :]
+        icd_tokens = icd[:, -1, :]
+        ttnc_tokens = ttnc[:, -1]
+        tokens = torch.cat([cpt_tokens, icd_tokens, ttnc_tokens.unsqueeze(1)], dim=1)
+        loss = self.forward(tokens)
+        self.log("loss", loss, on_step=True, on_epoch=True, prog_bar=True)
+        return loss
