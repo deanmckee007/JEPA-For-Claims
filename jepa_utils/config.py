@@ -64,6 +64,10 @@ class Config:
     diffusion_steps: int = 100
     guidance_scale: float = 4.0
     freeze_denoiser_core: bool = False
+    # Kickstart plan hyperparameters
+    teacher_forcing_epochs: int = 0
+    diffusion_label_smoothing: float = 0.0
+    kickstart_lr_scale: float = 1.0
     warmup_logvar_epochs: int = 3
     cpt_prob_agg: str = "max"  # max | mean | sum
     ttnc_temperature: float = 1.0

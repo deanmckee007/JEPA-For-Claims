@@ -78,4 +78,11 @@ for implementing, refactoring, and unifying discrete‑diffusion with JEPA.
     G. Version bump
        • Update `__version__` to `0.4.0` (minor feature + cleanup).
 
+10.  **Denoiser Kickstart Plan**
+    • Backbone LR ×20 param‑group for layers 0‑1 and token/time embeddings.
+    • 5‑epoch teacher‑forcing window — concat code‑embedding oracle into FiLM.
+    • Temporary noise‑schedule reset: α₁ = 0.02 for epochs 100‑110, then linear ramp.
+    • Cross‑entropy label‑smoothing 0.1.
+    • Monitor `diff_ppl_improve`; if < 1.05 over 20 epochs → early‑exit.
+
 """
