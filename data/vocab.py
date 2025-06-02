@@ -30,7 +30,10 @@ def create_vocab(df, min_freq=5):
 
     cpt_vocab = build_vocab(cpt_counter, reserved_tokens=['<PAD>', '<UNK>'], min_freq=min_freq)
     icd_vocab = build_vocab(icd_counter, reserved_tokens=['<PAD>', '<UNK>'], min_freq=min_freq)
-    ttnc_vocab = build_vocab(ttnc_counter, reserved_tokens=['<PAD>', '<UNK>'], min_freq=min_freq)
+    # Time-to-next-claim tokens do not use an ``<UNK>`` entry. Any gap not
+    # present in the vocabulary will be clamped to the nearest valid bin during
+    # preprocessing, so the reserved tokens only include ``<PAD>``.
+    ttnc_vocab = build_vocab(ttnc_counter, reserved_tokens=['<PAD>'], min_freq=min_freq)
 
     # Reverse mapping for unified vocabulary (if needed)
     unified_vocab_reverse = {idx: token for token, idx in {**cpt_vocab, **icd_vocab, **ttnc_vocab}.items()}
