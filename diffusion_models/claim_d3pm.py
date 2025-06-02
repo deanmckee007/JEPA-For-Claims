@@ -36,6 +36,14 @@ class ClaimD3PM(pl.LightningModule):
             batch_first=True,
         )
         self.denoiser = nn.TransformerEncoder(encoder_layer, num_layers=4)
+        # Causal inter-slot attention layer used to suppress duplicates
+        self.slot_attn = nn.TransformerEncoderLayer(
+            d_model=config.embedding_dim,
+            nhead=4,
+            dim_feedforward=config.embedding_dim * 4,
+            dropout=0.0,
+            batch_first=True,
+        )
         self.film_fc = nn.Linear(condition_dim, config.embedding_dim * 2)
         self.output_proj = nn.Linear(config.embedding_dim, vocab_size)
         # Learnable default condition used during diffusion pretrain
@@ -65,6 +73,10 @@ class ClaimD3PM(pl.LightningModule):
             gamma, beta = self.film_fc(condition).chunk(2, dim=-1)
             emb = emb * (1 + gamma.unsqueeze(1)) + beta.unsqueeze(1)
         h = self.denoiser(emb)
+        # Causal mask so slot j attends only to slots < j
+        seq_len = h.size(1)
+        mask = torch.triu(torch.ones(seq_len, seq_len, device=h.device), diagonal=1).bool()
+        h = self.slot_attn(h, mask)
         return self.output_proj(h)
 
     def p_losses(self, x0, t, condition):
@@ -95,6 +107,19 @@ class ClaimD3PM(pl.LightningModule):
             cond = self.denoise(x, t, condition)
             logits = uncond + self.guidance_scale * (cond - uncond)
             x = Categorical(logits=logits).sample()
+
+        dup_rates = []
+        for i in range(x.size(0)):
+            tokens = x[i].tolist()
+            if 0 in tokens:
+                tokens = tokens[: tokens.index(0)]
+            dup_count = len(tokens) - len(set(tokens))
+            dup_rates.append(dup_count / max(len(tokens), 1))
+            tokens = list(dict.fromkeys(tokens))
+            padded = tokens + [0] * (seq_len - len(tokens))
+            x[i] = torch.tensor(padded, device=x.device)
+
+        self.last_dup_rate = float(sum(dup_rates) / len(dup_rates)) if dup_rates else 0.0
         return x
 
     def configure_optimizers(self):
@@ -112,4 +137,7 @@ class ClaimD3PM(pl.LightningModule):
         # Explicitly log diffusion cross-entropy and perplexity for monitoring
         self.log("diffusion_ce", loss, on_step=True, on_epoch=True, prog_bar=True)
         self.log("diff_ppl", torch.exp(loss), on_step=True, on_epoch=True, prog_bar=True)
+        with torch.no_grad():
+            _ = self.generate_claim(self.default_condition.expand(tokens.size(0), -1), seq_len=tokens.size(1))
+            self.log("dup_rate", getattr(self, "last_dup_rate", 0.0), on_step=True, on_epoch=True, prog_bar=True)
         return loss

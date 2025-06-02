@@ -10,6 +10,9 @@ class ClaimsDataset(Dataset):
         self.cpt_vocab = cpt_vocab
         self.icd_vocab = icd_vocab
         self.ttnc_vocab = ttnc_vocab
+        self.ttnc_bins = sorted(
+            int(tok.split('_')[1]) for tok in ttnc_vocab if tok.startswith('ttnc_')
+        )
 
         # Store config parameters
         self.max_claims_len = config.max_claims_len
@@ -118,8 +121,16 @@ class ClaimsDataset(Dataset):
                     icd_claim = random.sample(icd_claim, max_icd_tokens)
                 icd_tokens.append([self.icd_vocab.get(token, self.icd_vocab.get('<UNK>', 0)) for token in icd_claim] + [self.icd_vocab.get('<PAD>', 0)] * (max_icd_tokens - len(icd_claim)))
 
-                # Handle TTNC tokens
-                ttnc_tokens.append(self.ttnc_vocab.get(claim['ttnc'], self.ttnc_vocab.get('<PAD>', 0)))
+                # Handle TTNC tokens with clamping of out-of-range gaps
+                ttoken = self.ttnc_vocab.get(claim['ttnc'])
+                if ttoken is None:
+                    try:
+                        gap = int(claim['ttnc'].split('_')[1])
+                        nearest = min(self.ttnc_bins, key=lambda x: abs(x - gap))
+                        ttoken = self.ttnc_vocab.get(f'ttnc_{nearest}', self.ttnc_vocab.get('<PAD>', 0))
+                    except Exception:
+                        ttoken = self.ttnc_vocab.get('<PAD>', 0)
+                ttnc_tokens.append(ttoken)
 
             # Pad claims to max_claims_len if they are shorter
             num_padding = max_claims_len - len(cpt_tokens)
