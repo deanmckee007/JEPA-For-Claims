@@ -197,6 +197,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_gated_fusion = config.use_gated_fusion
         self.use_diffusion = getattr(config, 'use_diffusion', False)
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
+        self.warmup_logvar_epochs = getattr(config, 'warmup_logvar_epochs', 3)
         self.debug_generation = getattr(config, 'debug_generation', False)
         self.cpt_vocab_size = config.cpt_vocab_size
         self.icd_vocab_size = config.icd_vocab_size
@@ -1069,6 +1070,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
             self.prediction_block_lvl2.on_epoch_end()
 
+    def on_train_epoch_start(self):
+        """Freeze or unfreeze log variance parameters based on epoch."""
+        frozen = self.current_epoch < self.warmup_logvar_epochs
+        for p in self.log_vars.parameters():
+            p.requires_grad = not frozen
+        self.log("logvar_frozen", float(frozen), prog_bar=True, logger=True)
+
     def on_after_backward(self):
         if not self._grad_check_done:
             for name, param in self.named_parameters():
@@ -1224,30 +1232,33 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_diffusion and hasattr(self, "diffusion_model"):
             collect_params(self.diffusion_model, diffusion_params)
 
-        optimizer_gen = torch.optim.AdamW(
-            [
-                {
-                    'params': adapter_params,
-                    'lr': self.adapter_lr,
-                    'weight_decay': 1e-4,
-                },
-                {
-                    'params': generator_params,
-                    'lr': self.generator_lr,
-                    'weight_decay': 1e-4,
-                },
-                {
-                    'params': logvar_params,
-                    'lr': self.generator_lr,
-                    'weight_decay': 1e-3,
-                },
-                {
-                    'params': diffusion_params,
-                    'lr': self.generator_lr * 10,
-                    'weight_decay': 1e-4,
-                },
-            ]
-        )
+        param_groups = []
+        if adapter_params:
+            param_groups.append({
+                'params': adapter_params,
+                'lr': self.adapter_lr,
+                'weight_decay': 1e-4,
+            })
+        if generator_params:
+            param_groups.append({
+                'params': generator_params,
+                'lr': self.generator_lr,
+                'weight_decay': 1e-4,
+            })
+        if logvar_params:
+            param_groups.append({
+                'params': logvar_params,
+                'lr': self.generator_lr,
+                'weight_decay': 1e-3,
+            })
+        if diffusion_params:
+            param_groups.append({
+                'params': diffusion_params,
+                'lr': self.generator_lr * 10,
+                'weight_decay': 1e-4,
+            })
+
+        optimizer_gen = torch.optim.AdamW(param_groups)
 
         scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer_gen, step_size=2, gamma=0.5
