@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import pytorch_lightning as pl
 import numpy as np
 import math
+import warnings
 from jepa_models.encoders import Level1Encoder, Level2Encoder
 from jepa_models.prediction_blocks import Level1PredictionBlock, Level2PredictionBlock, LogitsGenerator
 from diffusion_models import ClaimD3PM
@@ -323,13 +324,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.sae_weight = getattr(config, "sae_weight", 1.0)
         self.loss_fn = nn.MSELoss()
         self.log_vars = nn.ParameterDict({
-            'vicreg_lvl1': nn.Parameter(torch.tensor(0.0)),
-            'vicreg_lvl2': nn.Parameter(torch.tensor(0.0)),
-            'task': nn.Parameter(torch.zeros(1)),
-            'token_pred': nn.Parameter(torch.zeros(1)),
-            'sae': nn.Parameter(torch.zeros(1)),
-            'diffusion': nn.Parameter(torch.tensor(3.0)),
+            'vicreg_lvl1': nn.Parameter(torch.tensor(0.5)),
+            'vicreg_lvl2': nn.Parameter(torch.tensor(0.5)),
+            'task': nn.Parameter(torch.tensor(0.5)),
+            'token_pred': nn.Parameter(torch.tensor(0.5)),
+            'sae': nn.Parameter(torch.tensor(0.5)),
+            'diffusion': nn.Parameter(torch.tensor(0.5)),
         })
+
+        # Track how long each precision stays at a clamp edge
+        self.edge_streaks = {k: 0 for k in self.log_vars.keys()}
 
         if self.use_predictor_head:
             self.non_linear_predictor = nn.Sequential(
@@ -511,7 +515,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
 
         # Clamp precision log-variance to keep scaling factors stable
-        clamped_log_vars = {k: torch.clamp(v, min=-5, max=5) for k, v in self.log_vars.items()}
+        clamped_log_vars = {k: torch.clamp(v, min=-3, max=1) for k, v in self.log_vars.items()}
         precision_vicreg_lvl2 = torch.exp(-clamped_log_vars['vicreg_lvl2'])
 
         if self.use_level1:
@@ -961,7 +965,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         )
         
         # Precision-weighted VICReg-L2 for logging
-        clamped = torch.clamp(self.log_vars['vicreg_lvl2'], min=-5, max=5)
+        clamped = torch.clamp(self.log_vars['vicreg_lvl2'], min=-3, max=1)
         precision_vicreg_lvl2 = torch.exp(-clamped)
         weighted_vicreg_lvl2 = (
             outputs['vicreg_loss_lvl2'] * precision_vicreg_lvl2 * self.level_2_weight
@@ -1159,10 +1163,22 @@ class HierarchicalClaimsModel(pl.LightningModule):
             active_logvars['diffusion'] = self.log_vars['diffusion']
 
         for name, param in active_logvars.items():
+            clamped = torch.clamp(param, min=-3, max=1)
+            precision = torch.exp(-clamped).item()
             self.log(f"logvar_{name}", param.item(), prog_bar=True, logger=True)
+            self.log(f"prec_{name}", precision, prog_bar=True, logger=True)
+
+            if clamped.item() in (-3.0, 1.0):
+                self.edge_streaks[name] += 1
+                if self.edge_streaks[name] >= 3:
+                    warnings.warn(
+                        f"precision for {name} stuck at clamp edge for {self.edge_streaks[name]} epochs"
+                    )
+            else:
+                self.edge_streaks[name] = 0
 
         if self.use_diffusion and self.diffusion_weight > 0:
-            clamped = torch.clamp(self.log_vars['diffusion'], min=-5, max=5)
+            clamped = torch.clamp(self.log_vars['diffusion'], min=-3, max=1)
             lr_mult = torch.exp(-clamped)
             self.log("diff_lr_mult", lr_mult.item(), prog_bar=True, logger=True)
 
@@ -1173,6 +1189,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         # Parameters divided into encoder adapters and generator modules
         adapter_params = []
         generator_params = []
+        logvar_params = []
 
         def collect_params(module, into_list):
             for p in module.parameters():
@@ -1194,7 +1211,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 collect_params(self.sae_to_embed, generator_params)
                 collect_params(self.gating_network, generator_params)
 
-        collect_params(self.log_vars, generator_params)
+        collect_params(self.log_vars, logvar_params)
         if self.use_token_prediction_head:
             collect_params(self.logits_generator, generator_params)
             generator_params.append(self.threshold)
@@ -1209,8 +1226,21 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         optimizer_gen = torch.optim.AdamW(
             [
-                {'params': adapter_params, 'lr': self.adapter_lr, 'weight_decay': 1e-4},
-                {'params': generator_params, 'lr': self.generator_lr, 'weight_decay': 1e-4},
+                {
+                    'params': adapter_params,
+                    'lr': self.adapter_lr,
+                    'weight_decay': 1e-4,
+                },
+                {
+                    'params': generator_params,
+                    'lr': self.generator_lr,
+                    'weight_decay': 1e-4,
+                },
+                {
+                    'params': logvar_params,
+                    'lr': self.generator_lr,
+                    'weight_decay': 1e-3,
+                },
                 {
                     'params': diffusion_params,
                     'lr': self.generator_lr * 10,
