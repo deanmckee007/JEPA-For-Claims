@@ -225,6 +225,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.diff_ppl_total = 0.0
         self.diff_ppl_count = 0
         self.diff_ppl_history = []
+        self.force_jepa_freeze = False
 
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
@@ -416,6 +417,24 @@ class HierarchicalClaimsModel(pl.LightningModule):
         for mod in modules:
             for param in mod.parameters():
                 param.requires_grad = True
+
+    def _set_jepa_requires_grad(self, requires_grad: bool):
+        """Enable/disable gradients for JEPA modules (encoders and prediction blocks)."""
+        modules = [self.context_encoder_lvl2, self.target_encoder_lvl2,
+                   self.prediction_block_lvl2]
+        if self.use_level1:
+            modules.extend([
+                self.context_encoder_lvl1,
+                self.target_encoder_lvl1,
+                self.prediction_block_lvl1,
+            ])
+        if self.use_sparse_autoencoder:
+            modules.append(self.sparse_autoencoder)
+            if self.use_gated_fusion:
+                modules.extend([self.sae_to_embed, self.gating_network])
+        for mod in modules:
+            for param in mod.parameters():
+                param.requires_grad = requires_grad
 
     def initialize_target_encoders(self):
         if self.use_level1:
@@ -954,9 +973,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
             icd_tokens = batch[1][:, -1, :]
             ttnc_tokens = batch[2][:, -1]
             tokens = torch.cat([cpt_tokens, icd_tokens, ttnc_tokens.unsqueeze(1)], dim=1)
+            cond = outputs['logit_context']
+            if getattr(self.config, "current_stage", "") == "joint":
+                cond = cond + 0.01 * torch.randn_like(cond)
             diffusion_loss = self.diffusion_model.forward(
                 tokens,
-                condition=outputs['logit_context'],
+                condition=cond,
             )
 
         # Total loss calculation
@@ -1080,11 +1102,17 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.prediction_block_lvl2.on_epoch_end()
 
     def on_train_epoch_start(self):
-        """Freeze or unfreeze log variance parameters based on epoch."""
+        """Handle logvar warmup and scheduled JEPA freezing."""
         frozen = self.current_epoch < self.warmup_logvar_epochs
         for p in self.log_vars.parameters():
             p.requires_grad = not frozen
         self.log("logvar_frozen", float(frozen), prog_bar=True, logger=True)
+
+        freeze_jepa = False
+        if self.use_diffusion:
+            freeze_jepa = (self.current_epoch % 20) < 5 or self.force_jepa_freeze
+        self._set_jepa_requires_grad(not freeze_jepa)
+        self.log("jepa_frozen", float(freeze_jepa), prog_bar=True, logger=True)
 
     def on_after_backward(self):
         if not self._grad_check_done:
@@ -1152,9 +1180,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_diffusion and self.diffusion_weight > 0 and self.diff_ppl_count > 0:
             avg_ppl = self.diff_ppl_total / self.diff_ppl_count
             if self.diff_ppl_history:
-                prev = self.diff_ppl_history[-1]
-                if avg_ppl > 100 and abs(prev - avg_ppl) / (prev + 1e-8) < 0.01:
-                    warnings.warn("diffusion_ppl plateaued above 100")
+                prev_avg = sum(self.diff_ppl_history[-15:]) / len(self.diff_ppl_history[-15:])
+                diff_ppl_improve = prev_avg / avg_ppl
+                self.log("diff_ppl_improve", diff_ppl_improve, prog_bar=True, logger=True)
+                if diff_ppl_improve < 1.05:
+                    warnings.warn("diffusion perplexity not improving")
+                    self.force_jepa_freeze = True
             self.diff_ppl_history.append(avg_ppl)
             self.diff_ppl_total = 0.0
             self.diff_ppl_count = 0
@@ -1216,7 +1247,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             active_logvars['diffusion'] = self.log_vars['diffusion']
 
         for name, param in active_logvars.items():
-            clamped = torch.clamp(param, min=-3, max=1)
+            max_val = 0.0 if name == 'diffusion' else 1.0
+            if name == 'diffusion' and param.item() > max_val:
+                param.data.clamp_(max=max_val)
+            clamped = torch.clamp(param, min=-3, max=max_val)
             precision = torch.exp(-clamped).item()
             self.log(f"logvar_{name}", param.item(), prog_bar=True, logger=True)
             self.log(f"prec_{name}", precision, prog_bar=True, logger=True)
