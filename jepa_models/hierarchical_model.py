@@ -221,6 +221,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.vicreg_lvl2_wgt_total = 0.0
         self.vicreg_batch_count = 0
 
+        # Track diffusion perplexity for plateau warnings
+        self.diff_ppl_total = 0.0
+        self.diff_ppl_count = 0
+        self.diff_ppl_history = []
+
         self.threshold = nn.Parameter(torch.tensor(0.1))
         self.lambda_entropy = nn.Parameter(torch.tensor(config.lambda_entropy))
 
@@ -986,6 +991,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         if self.use_diffusion and self.diffusion_weight > 0:
             self.log('diffusion_loss', diffusion_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
+            diff_ppl = torch.exp(diffusion_loss)
+            self.log('diffusion_ppl', diff_ppl, on_step=False, on_epoch=True, prog_bar=True, logger=True)
+            self.diff_ppl_total += diff_ppl.item()
+            self.diff_ppl_count += 1
 
         # Preserve existing logging
         if self.use_token_prediction_head:
@@ -1084,6 +1093,32 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     _ = param.grad
             self._grad_check_done = True
 
+        backbone_modules = [self.context_encoder_lvl2, self.target_encoder_lvl2]
+        if self.use_level1:
+            backbone_modules.extend([self.context_encoder_lvl1, self.target_encoder_lvl1])
+
+        backbone_ids = {id(p) for m in backbone_modules for p in m.parameters()}
+        bb_norm_sq = 0.0
+        head_norm_sq = 0.0
+        for p in self.parameters():
+            if p.grad is None:
+                continue
+            n = p.grad.norm().item() ** 2
+            if id(p) in backbone_ids:
+                bb_norm_sq += n
+            else:
+                head_norm_sq += n
+
+        bb_norm = bb_norm_sq ** 0.5
+        head_norm = head_norm_sq ** 0.5
+        if bb_norm < 1e-3:
+            for m in backbone_modules:
+                for p in m.parameters():
+                    if p.grad is not None:
+                        p.grad.mul_(10.0)
+        ratio = head_norm / (bb_norm + 1e-8)
+        self.log("grad_ratio", ratio, on_step=False, on_epoch=True, logger=True)
+
 
     def train_linear_regression(self, X_sample, y_sample):
         """Train the linear model using sampled representations"""
@@ -1113,6 +1148,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
             self.vicreg_lvl2_raw_total = 0.0
             self.vicreg_lvl2_wgt_total = 0.0
             self.vicreg_batch_count = 0
+
+        if self.use_diffusion and self.diffusion_weight > 0 and self.diff_ppl_count > 0:
+            avg_ppl = self.diff_ppl_total / self.diff_ppl_count
+            if self.diff_ppl_history:
+                prev = self.diff_ppl_history[-1]
+                if avg_ppl > 100 and abs(prev - avg_ppl) / (prev + 1e-8) < 0.01:
+                    warnings.warn("diffusion_ppl plateaued above 100")
+            self.diff_ppl_history.append(avg_ppl)
+            self.diff_ppl_total = 0.0
+            self.diff_ppl_count = 0
 
         # ----- End of epoch cross-validation for regression -----
         if len(self.repr_accumulator) > 0:
@@ -1185,11 +1230,6 @@ class HierarchicalClaimsModel(pl.LightningModule):
             else:
                 self.edge_streaks[name] = 0
 
-        if self.use_diffusion and self.diffusion_weight > 0:
-            clamped = torch.clamp(self.log_vars['diffusion'], min=-3, max=1)
-            lr_mult = torch.exp(-clamped)
-            self.log("diff_lr_mult", lr_mult.item(), prog_bar=True, logger=True)
-
         self.repr_accumulator.clear()
         self.target_accumulator.clear()
 
@@ -1254,7 +1294,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if diffusion_params:
             param_groups.append({
                 'params': diffusion_params,
-                'lr': self.generator_lr * 10,
+                'lr': self.generator_lr * 3.0,
                 'weight_decay': 1e-4,
             })
 
