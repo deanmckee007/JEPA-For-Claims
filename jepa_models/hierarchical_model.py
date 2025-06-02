@@ -328,7 +328,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'task': nn.Parameter(torch.zeros(1)),
             'token_pred': nn.Parameter(torch.zeros(1)),
             'sae': nn.Parameter(torch.zeros(1)),
-            'diffusion': nn.Parameter(torch.zeros(1)),
+            'diffusion': nn.Parameter(torch.tensor(3.0)),
         })
 
         if self.use_predictor_head:
@@ -1203,10 +1203,19 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_predictor_head:
             collect_params(self.non_linear_predictor, generator_params)
 
+        diffusion_params = []
+        if self.use_diffusion and hasattr(self, "diffusion_model"):
+            collect_params(self.diffusion_model, diffusion_params)
+
         optimizer_gen = torch.optim.AdamW(
             [
                 {'params': adapter_params, 'lr': self.adapter_lr, 'weight_decay': 1e-4},
                 {'params': generator_params, 'lr': self.generator_lr, 'weight_decay': 1e-4},
+                {
+                    'params': diffusion_params,
+                    'lr': self.generator_lr * 10,
+                    'weight_decay': 1e-4,
+                },
             ]
         )
 

@@ -20,7 +20,11 @@ class ClaimD3PM(pl.LightningModule):
         # the probability of replacing a token with uniform noise at each time
         # step. Using a 1-D tensor drastically reduces memory usage compared to
         # the previous pre-computed transition tensor of shape ``(T, V, V)``.
-        self.alphas = nn.Parameter(torch.linspace(0.001, 0.25, self.num_timesteps))
+        # Cosine noise schedule starting at ~0.05 and rising to ~0.25
+        t = torch.arange(self.num_timesteps, dtype=torch.float32)
+        self.alphas = nn.Parameter(
+            0.25 - 0.20 * torch.cos(0.5 * torch.pi * t / (self.num_timesteps - 1))
+        )
 
         self.token_embed = nn.Embedding(vocab_size, config.embedding_dim)
         self.time_embed = nn.Embedding(self.num_timesteps, config.embedding_dim)
@@ -34,6 +38,8 @@ class ClaimD3PM(pl.LightningModule):
         self.denoiser = nn.TransformerEncoder(encoder_layer, num_layers=4)
         self.film_fc = nn.Linear(condition_dim, config.embedding_dim * 2)
         self.output_proj = nn.Linear(config.embedding_dim, vocab_size)
+        # Learnable default condition used during diffusion pretrain
+        self.default_condition = nn.Parameter(torch.zeros(condition_dim))
         self.lr = getattr(config, "lr", 1e-3)
 
     def load_state_dict(self, state_dict, strict=True):
@@ -64,12 +70,18 @@ class ClaimD3PM(pl.LightningModule):
     def p_losses(self, x0, t, condition):
         x_t = self.q_sample(x0, t)
         logits = self.denoise(x_t, t, condition)
-        loss = F.cross_entropy(logits.view(-1, self.vocab_size), x0.view(-1))
+        loss = F.cross_entropy(
+            logits.view(-1, self.vocab_size),
+            x0.view(-1),
+            ignore_index=0,
+        )
         return loss
 
     def forward(self, tokens, condition=None):
         b = tokens.size(0)
         t = torch.randint(0, self.num_timesteps, (b,), device=tokens.device)
+        if condition is None:
+            condition = self.default_condition.expand(b, -1)
         loss = self.p_losses(tokens, t, condition)
         return loss
 
@@ -97,6 +109,7 @@ class ClaimD3PM(pl.LightningModule):
         tokens = torch.cat([cpt_tokens, icd_tokens, ttnc_tokens.unsqueeze(1)], dim=1)
         loss = self.forward(tokens)
         self.log("loss", loss, on_step=True, on_epoch=True, prog_bar=True)
-        # Explicitly log diffusion cross-entropy for monitoring
+        # Explicitly log diffusion cross-entropy and perplexity for monitoring
         self.log("diffusion_ce", loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log("diff_ppl", torch.exp(loss), on_step=True, on_epoch=True, prog_bar=True)
         return loss
