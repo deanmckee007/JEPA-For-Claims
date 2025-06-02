@@ -130,6 +130,7 @@ Keep the learned representations fixed and train the generator to emit CPT/ICD/T
   1. Load `encoder_only.ckpt`.
   2. Call `freeze_encoder(...)`.
   3. Run `model.predict()` to produce `predictions.csv`.
+  4. Alternatively run `python scripts/generate_claims.py <ckpt>` to export predictions with actual codes.
 
 ### Investigation: Why No CPT/ICD Codes in predictions.csv
 If `predictions.csv` is empty, verify the following:
