@@ -197,6 +197,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.use_diffusion = getattr(config, 'use_diffusion', False)
         self.diffusion_type = getattr(config, 'diffusion_type', 'continuous')
         self.diffusion_weight = getattr(config, 'diffusion_weight', 1.0)
+        self.warmup_logvar_epochs = getattr(config, 'warmup_logvar_epochs', 3)
         self.debug_generation = getattr(config, 'debug_generation', False)
         self.cpt_vocab_size = config.cpt_vocab_size
         self.icd_vocab_size = config.icd_vocab_size
@@ -1111,6 +1112,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     _ = param.grad
             self._grad_check_done = True
 
+    def on_train_epoch_start(self):
+        """Freeze or unfreeze log-variance parameters based on epoch."""
+        freeze = self.current_epoch < self.warmup_logvar_epochs
+        for p in self.log_vars.parameters():
+            p.requires_grad = not freeze
+        self.log("logvar_frozen", float(freeze), prog_bar=True, logger=True)
+
 
     def train_linear_regression(self, X_sample, y_sample):
         """Train the linear model using sampled representations"""
@@ -1236,11 +1244,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
         collect_params(self.log_vars, generator_params)
         if self.use_token_prediction_head:
             collect_params(self.logits_generator, generator_params)
-            generator_params.append(self.threshold)
-            generator_params.append(self.lambda_entropy)
+            if self.threshold.requires_grad:
+                generator_params.append(self.threshold)
+            if self.lambda_entropy.requires_grad:
+                generator_params.append(self.lambda_entropy)
 
         if self.use_predictor_head:
             collect_params(self.non_linear_predictor, generator_params)
+
+        adapter_params = [p for p in adapter_params if p.requires_grad]
+        generator_params = [p for p in generator_params if p.requires_grad]
 
         optimizer_gen = torch.optim.AdamW(
             [

@@ -61,6 +61,7 @@ class Config:
     diffusion_weight: float = 1.0  # Weight for diffusion loss when joint training
     diffusion_type: str = "discrete"  # continuous | discrete
     diffusion_steps: int = 100
+    warmup_logvar_epochs: int = 3
     cpt_prob_agg: str = "max"  # max | mean | sum
     ttnc_temperature: float = 1.0
     base_cpt_threshold: float = 0.5
