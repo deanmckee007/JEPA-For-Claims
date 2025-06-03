@@ -64,6 +64,9 @@ class Config:
     diffusion_steps: int = 100
     guidance_scale: float = 4.0
     freeze_denoiser_core: bool = False
+    freeze_diffusion: bool = False
+    freeze_jepa: bool = False
+    lr_backbone_mult: float = 1.0
     # Kickstart plan hyperparameters
     teacher_forcing_epochs: int = 0
     diffusion_label_smoothing: float = 0.0
