@@ -47,6 +47,7 @@ def main(argv=None):
     config.freeze_diffusion = args.freeze_diffusion
     config.freeze_jepa = args.freeze_jepa
     config.lr_backbone_mult = args.lr_backbone_mult
+    config.disable_early_stop = args.disable_early_stop
 
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
@@ -87,7 +88,7 @@ def main(argv=None):
             )
             model = HierarchicalClaimsModel(config=config, diffusion=diffusion)
 
-        freeze_jepa(model)
+        freeze_non_diffusion(model)
         model.freeze_jepa = True
         model.freeze_diffusion = False
 
@@ -106,7 +107,7 @@ def main(argv=None):
         model.configure_optimizers = _cfg_optim.__get__(model)
 
         callbacks = [RichProgressBar(refresh_rate=1)]
-        if not args.disable_early_stop:
+        if not config.disable_early_stop:
             callbacks.append(
                 pl.callbacks.EarlyStopping(
                     monitor="diff_ppl_improve_10",
@@ -175,7 +176,7 @@ def main(argv=None):
         )
         model = HierarchicalClaimsModel(config, diffusion=diffusion_model)
 
-        freeze_non_diffusion(model)
+        freeze_jepa(model)
         model.freeze_diffusion = True
         model.freeze_jepa = False
 
@@ -194,7 +195,7 @@ def main(argv=None):
         model.configure_optimizers = _cfg_optim.__get__(model)
 
         callbacks = [RichProgressBar(refresh_rate=1)]
-        if not args.disable_early_stop:
+        if not config.disable_early_stop:
             callbacks.append(
                 pl.callbacks.EarlyStopping(
                     monitor="diff_ppl_improve_10",

@@ -24,6 +24,7 @@ class Config:
     adapter_lr: float = 1e-4    # LR for encoder adapter layers during Stage 2
     generator_lr: float = 5e-4  # LR for generator modules during Stage 2
     epochs: int = 25
+    weight_decay: float = 0.0
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
@@ -67,6 +68,7 @@ class Config:
     freeze_diffusion: bool = False
     freeze_jepa: bool = False
     lr_backbone_mult: float = 1.0
+    disable_early_stop: bool = False
     # Kickstart plan hyperparameters
     teacher_forcing_epochs: int = 0
     diffusion_label_smoothing: float = 0.0
