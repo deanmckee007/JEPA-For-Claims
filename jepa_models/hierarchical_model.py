@@ -205,6 +205,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.freeze_diffusion = getattr(config, 'freeze_diffusion', False)
         self.freeze_jepa = getattr(config, 'freeze_jepa', False)
         self.lr_backbone_mult = getattr(config, 'lr_backbone_mult', 1.0)
+        self.disable_early_stop = getattr(config, 'disable_early_stop', False)
 
         self.cpt_base_threshold = getattr(config, 'base_cpt_threshold', getattr(config, 'cpt_threshold', 0.5))
         self.icd_base_threshold = getattr(config, 'base_icd_threshold', getattr(config, 'icd_threshold', 0.5))
@@ -1206,7 +1207,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 prev_avg = sum(self.diff_ppl_history[-window:]) / window
                 diff_ppl_improve = prev_avg / avg_ppl
                 self.log("diff_ppl_improve_10", diff_ppl_improve, prog_bar=True, logger=True)
-                if diff_ppl_improve < 1.03 and hasattr(self, "trainer"):
+                if diff_ppl_improve < 1.03 and hasattr(self, "trainer") and not self.disable_early_stop:
                     self.trainer.should_stop = True
             self.diff_ppl_history.append(avg_ppl)
             self.diff_ppl_total = 0.0

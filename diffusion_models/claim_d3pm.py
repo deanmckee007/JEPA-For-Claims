@@ -18,6 +18,7 @@ class ClaimD3PM(pl.LightningModule):
         self.teacher_forcing_epochs = getattr(config, "teacher_forcing_epochs", 0)
         self.label_smoothing = getattr(config, "diffusion_label_smoothing", 0.0)
         self.kickstart_lr_scale = getattr(config, "lr_backbone_mult", getattr(config, "kickstart_lr_scale", 1.0))
+        self.disable_early_stop = getattr(config, "disable_early_stop", False)
 
         # Transition noise schedule (flatten-to-uniform). ``alphas`` controls
         # the probability of replacing a token with uniform noise at each time
@@ -192,6 +193,6 @@ class ClaimD3PM(pl.LightningModule):
             if len(self.ppl_history) >= 10:
                 improve = self.ppl_history[-10] / current_ppl
                 self.log("diff_ppl_improve_10", improve, prog_bar=True, logger=True)
-                if improve < 1.03 and self.trainer is not None:
+                if improve < 1.03 and self.trainer is not None and not self.disable_early_stop:
                     self.trainer.should_stop = True
         self.epoch_losses = []
