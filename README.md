@@ -89,6 +89,9 @@ Once training completes you can sample synthetic claims with:
 ```bash
 python scripts/generate_claims.py joint.ckpt --num 10
 ```
+During `--phase diffusion_only_finetune`, if the `--resume` checkpoint is a joint
+file the loader automatically freezes JEPA parameters and fine-tunes the
+diffusion module in place.
 ## Multi-Stage Training
 
 ### Stage 1 – Self-Supervised Representation Pre-Train
