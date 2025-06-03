@@ -17,7 +17,7 @@ class ClaimD3PM(pl.LightningModule):
         self.guidance_scale = getattr(config, "guidance_scale", 4.0)
         self.teacher_forcing_epochs = getattr(config, "teacher_forcing_epochs", 0)
         self.label_smoothing = getattr(config, "diffusion_label_smoothing", 0.0)
-        self.kickstart_lr_scale = getattr(config, "kickstart_lr_scale", 1.0)
+        self.kickstart_lr_scale = getattr(config, "lr_backbone_mult", getattr(config, "kickstart_lr_scale", 1.0))
 
         # Transition noise schedule (flatten-to-uniform). ``alphas`` controls
         # the probability of replacing a token with uniform noise at each time
@@ -173,25 +173,25 @@ class ClaimD3PM(pl.LightningModule):
         return loss
 
     def on_train_epoch_start(self):
-        if 100 <= self.current_epoch < 110:
+        if self.current_epoch < 10:
             self.alphas.data.copy_(self.reset_alphas)
-        elif self.current_epoch >= 110:
+        elif self.current_epoch < 20:
+            ratio = (self.current_epoch - 10) / 10.0
+            schedule = self.reset_alphas * (1 - ratio) + self.base_alphas * ratio
+            self.alphas.data.copy_(schedule)
+        else:
             self.alphas.data.copy_(self.base_alphas)
 
     def on_train_epoch_end(self):
         if hasattr(self, "epoch_losses") and self.epoch_losses:
             avg_loss = torch.stack(self.epoch_losses).mean()
             current_ppl = float(torch.exp(avg_loss))
-            if not hasattr(self, "last_ppl"):
-                self.last_ppl = current_ppl
-                self.no_improve_epochs = 0
-            else:
-                improve = self.last_ppl / current_ppl
-                if improve < 1.05:
-                    self.no_improve_epochs += 1
-                else:
-                    self.no_improve_epochs = 0
-                self.last_ppl = current_ppl
-            if getattr(self, "no_improve_epochs", 0) >= 20 and self.trainer is not None:
-                self.trainer.should_stop = True
+            if not hasattr(self, "ppl_history"):
+                self.ppl_history = []
+            self.ppl_history.append(current_ppl)
+            if len(self.ppl_history) >= 10:
+                improve = self.ppl_history[-10] / current_ppl
+                self.log("diff_ppl_improve_10", improve, prog_bar=True, logger=True)
+                if improve < 1.03 and self.trainer is not None:
+                    self.trainer.should_stop = True
         self.epoch_losses = []

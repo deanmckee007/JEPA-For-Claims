@@ -25,12 +25,25 @@ def main(argv=None):
     if argv is None:
         argv = []
     parser = argparse.ArgumentParser(description="JEPA training")
-    parser.add_argument("--phase", choices=["pretrain", "joint"], default=None)
+    parser.add_argument(
+        "--phase",
+        choices=["pretrain", "joint", "diffusion_only_finetune", "jepa_only"],
+        default=None,
+    )
     parser.add_argument("--resume", type=str, default=None, help="checkpoint to resume for joint phase")
+    parser.add_argument("--freeze_diffusion", action="store_true")
+    parser.add_argument("--freeze_jepa", action="store_true")
+    parser.add_argument("--lr_backbone_mult", type=float, default=1.0)
     args = parser.parse_args(argv)
+
+    if args.freeze_diffusion and args.freeze_jepa:
+        raise SystemExit("freeze flags are mutually exclusive")
 
     # Initialize configuration
     config = Config()
+    config.freeze_diffusion = args.freeze_diffusion
+    config.freeze_jepa = args.freeze_jepa
+    config.lr_backbone_mult = args.lr_backbone_mult
 
     print('Preparing Data')
     train_dataset, train_dataloader, eval_dataset, eval_dataloader, config, dataset = prepare_data(config)
@@ -50,6 +63,31 @@ def main(argv=None):
             )
             diffusion_trainer.fit(diffusion_model, train_dataloader)
             diffusion_trainer.save_checkpoint("diffusion_only.ckpt")
+        return
+
+    if args.phase == "diffusion_only_finetune":
+        config.freeze_jepa = True
+        vocab_size = (
+            config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+        )
+        ckpt = args.resume or "diffusion_only.ckpt"
+        if not os.path.exists(ckpt):
+            raise FileNotFoundError(f"Checkpoint {ckpt} not found")
+        diffusion_model = ClaimD3PM.load_from_checkpoint(
+            ckpt,
+            config=config,
+            vocab_size=vocab_size,
+            condition_dim=config.output_dim,
+        )
+        trainer = pl.Trainer(
+            max_epochs=config.epochs,
+            accelerator="gpu",
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name="phase_a"),
+            callbacks=[RichProgressBar(refresh_rate=1)],
+            log_every_n_steps=3,
+        )
+        trainer.fit(diffusion_model, train_dataloader)
+        trainer.save_checkpoint("after_phase_A.ckpt")
         return
 
     if args.phase == "joint":
@@ -80,6 +118,35 @@ def main(argv=None):
         )
         trainer.fit(model, train_dataloader)
         trainer.save_checkpoint("joint.ckpt")
+        return
+
+    if args.phase == "jepa_only":
+        config.freeze_diffusion = True
+        ckpt = args.resume or "after_phase_A.ckpt"
+        if not os.path.exists(ckpt):
+            raise FileNotFoundError(f"Checkpoint {ckpt} not found")
+        vocab_size = (
+            config.cpt_vocab_size
+            + config.icd_vocab_size
+            + config.ttnc_vocab_size
+            + 3
+        )
+        diffusion_model = ClaimD3PM.load_from_checkpoint(
+            ckpt,
+            config=config,
+            vocab_size=vocab_size,
+            condition_dim=config.output_dim,
+        )
+        model = HierarchicalClaimsModel(config, diffusion=diffusion_model)
+        trainer = pl.Trainer(
+            max_epochs=config.epochs,
+            accelerator="gpu",
+            logger=pl.loggers.TensorBoardLogger("tb_logs", name="phase_b"),
+            callbacks=[RichProgressBar(refresh_rate=1), RichModelSummary(max_depth=2)],
+            log_every_n_steps=3,
+        )
+        trainer.fit(model, train_dataloader)
+        trainer.save_checkpoint("after_phase_B.ckpt")
         return
 
     if args.phase is None and config.use_diffusion and getattr(config, "pretrain_diffusion", True):

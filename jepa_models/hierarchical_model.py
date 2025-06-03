@@ -202,6 +202,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.cpt_vocab_size = config.cpt_vocab_size
         self.icd_vocab_size = config.icd_vocab_size
         self.is_stage1_pretrain = getattr(config, 'current_stage', 'stage1') == 'stage1'
+        self.freeze_diffusion = getattr(config, 'freeze_diffusion', False)
+        self.freeze_jepa = getattr(config, 'freeze_jepa', False)
+        self.lr_backbone_mult = getattr(config, 'lr_backbone_mult', 1.0)
 
         self.cpt_base_threshold = getattr(config, 'base_cpt_threshold', getattr(config, 'cpt_threshold', 0.5))
         self.icd_base_threshold = getattr(config, 'base_icd_threshold', getattr(config, 'icd_threshold', 0.5))
@@ -370,6 +373,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 condition_dim=config.output_dim,
             )
 
+        if self.freeze_diffusion:
+            self._set_diffusion_requires_grad(False)
+        if self.freeze_jepa:
+            self._set_jepa_requires_grad(False)
+
         self.initialize_target_encoders()
 
         if (
@@ -434,6 +442,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 modules.extend([self.sae_to_embed, self.gating_network])
         for mod in modules:
             for param in mod.parameters():
+                param.requires_grad = requires_grad
+
+    def _set_diffusion_requires_grad(self, requires_grad: bool):
+        """Enable/disable gradients for the diffusion model."""
+        if hasattr(self, "diffusion_model"):
+            for param in self.diffusion_model.parameters():
                 param.requires_grad = requires_grad
 
     def initialize_target_encoders(self):
@@ -1114,6 +1128,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self._set_jepa_requires_grad(not freeze_jepa)
         self.log("jepa_frozen", float(freeze_jepa), prog_bar=True, logger=True)
 
+        freeze_diffusion = self.freeze_diffusion
+        self._set_diffusion_requires_grad(not freeze_diffusion)
+        self.log("diffusion_frozen", float(freeze_diffusion), prog_bar=True, logger=True)
+
     def on_after_backward(self):
         if not self._grad_check_done:
             for name, param in self.named_parameters():
@@ -1180,12 +1198,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.use_diffusion and self.diffusion_weight > 0 and self.diff_ppl_count > 0:
             avg_ppl = self.diff_ppl_total / self.diff_ppl_count
             if self.diff_ppl_history:
-                prev_avg = sum(self.diff_ppl_history[-15:]) / len(self.diff_ppl_history[-15:])
+                window = 10 if len(self.diff_ppl_history) >= 10 else len(self.diff_ppl_history)
+                prev_avg = sum(self.diff_ppl_history[-window:]) / window
                 diff_ppl_improve = prev_avg / avg_ppl
-                self.log("diff_ppl_improve", diff_ppl_improve, prog_bar=True, logger=True)
-                if diff_ppl_improve < 1.05:
-                    warnings.warn("diffusion perplexity not improving")
-                    self.force_jepa_freeze = True
+                self.log("diff_ppl_improve_10", diff_ppl_improve, prog_bar=True, logger=True)
+                if diff_ppl_improve < 1.03 and hasattr(self, "trainer"):
+                    self.trainer.should_stop = True
             self.diff_ppl_history.append(avg_ppl)
             self.diff_ppl_total = 0.0
             self.diff_ppl_count = 0
@@ -1310,7 +1328,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if adapter_params:
             param_groups.append({
                 'params': adapter_params,
-                'lr': self.adapter_lr,
+                'lr': self.adapter_lr * self.lr_backbone_mult,
                 'weight_decay': 1e-4,
             })
         if generator_params:
