@@ -1122,8 +1122,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
             p.requires_grad = not frozen
         self.log("logvar_frozen", float(frozen), prog_bar=True, logger=True)
 
-        freeze_jepa = False
-        if self.use_diffusion:
+        freeze_jepa = self.freeze_jepa
+        if (
+            self.use_diffusion
+            and not self.freeze_diffusion
+            and not freeze_jepa
+        ):
             freeze_jepa = (self.current_epoch % 20) < 5 or self.force_jepa_freeze
         self._set_jepa_requires_grad(not freeze_jepa)
         self.log("jepa_frozen", float(freeze_jepa), prog_bar=True, logger=True)
