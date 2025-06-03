@@ -18,7 +18,8 @@ from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
 from jepa_utils.prediction_utils import decode_predicted_codes
-from jepa_utils import checkpoint_has_prefixed_keys, freeze_non_diffusion, freeze_jepa
+from jepa_utils import checkpoint_has_prefixed_keys
+from jepa_utils.freezing import freeze_non_diffusion, freeze_jepa
 import copy
 
 
@@ -35,6 +36,7 @@ def main(argv=None):
     parser.add_argument("--freeze_diffusion", action="store_true")
     parser.add_argument("--freeze_jepa", action="store_true")
     parser.add_argument("--lr_backbone_mult", type=float, default=1.0)
+    parser.add_argument("--disable_early_stop", action="store_true")
     args = parser.parse_args(argv)
 
     if args.freeze_diffusion and args.freeze_jepa:
@@ -72,9 +74,7 @@ def main(argv=None):
             raise FileNotFoundError(f"Checkpoint {ckpt} not found")
 
         if checkpoint_has_prefixed_keys(ckpt):
-            # Resume from a joint checkpoint
             model = HierarchicalClaimsModel.load_from_checkpoint(ckpt, config=config)
-            freeze_non_diffusion(model)
         else:
             vocab_size = (
                 config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
@@ -86,32 +86,44 @@ def main(argv=None):
                 condition_dim=config.output_dim,
             )
             model = HierarchicalClaimsModel(config=config, diffusion=diffusion)
-            freeze_jepa(model)
 
-        model.log(
-            "jepa_frozen",
-            int(
-                all(
-                    not p.requires_grad
-                    for n, p in model.named_parameters()
-                    if not n.startswith("diffusion_model")
+        freeze_jepa(model)
+        model.freeze_jepa = True
+        model.freeze_diffusion = False
+
+        trainable = [n for n, p in model.named_parameters() if p.requires_grad]
+        print(f"{len(trainable)} trainable tensors:")
+        print("\n  ".join(trainable[:10]))
+
+        def _cfg_optim(self):
+            lr = config.lr * args.lr_backbone_mult
+            return torch.optim.AdamW(
+                (p for p in self.parameters() if p.requires_grad),
+                lr=lr,
+                weight_decay=config.weight_decay,
+            )
+
+        model.configure_optimizers = _cfg_optim.__get__(model)
+
+        callbacks = [RichProgressBar(refresh_rate=1)]
+        if not args.disable_early_stop:
+            callbacks.append(
+                pl.callbacks.EarlyStopping(
+                    monitor="diff_ppl_improve_10",
+                    mode="max",
+                    patience=2,
+                    min_delta=0.0,
                 )
-            ),
-        )
-        model.log("diffusion_frozen", 0)
+            )
 
-        optim = torch.optim.AdamW(
-            filter(lambda p: p.requires_grad, model.parameters()),
-            lr=config.lr * args.lr_backbone_mult,
-        )
         trainer = pl.Trainer(
             max_epochs=config.epochs,
             accelerator="gpu",
             logger=pl.loggers.TensorBoardLogger("tb_logs", name="phase_a"),
-            callbacks=[RichProgressBar(refresh_rate=1)],
+            callbacks=callbacks,
             log_every_n_steps=3,
         )
-        trainer.fit(model, train_dataloader, optimizers=optim)
+        trainer.fit(model, train_dataloader)
         trainer.save_checkpoint("after_phase_A.ckpt")
         return
 
@@ -146,7 +158,6 @@ def main(argv=None):
         return
 
     if args.phase == "jepa_only":
-        config.freeze_diffusion = True
         ckpt = args.resume or "after_phase_A.ckpt"
         if not os.path.exists(ckpt):
             raise FileNotFoundError(f"Checkpoint {ckpt} not found")
@@ -163,11 +174,41 @@ def main(argv=None):
             condition_dim=config.output_dim,
         )
         model = HierarchicalClaimsModel(config, diffusion=diffusion_model)
+
+        freeze_non_diffusion(model)
+        model.freeze_diffusion = True
+        model.freeze_jepa = False
+
+        trainable = [n for n, p in model.named_parameters() if p.requires_grad]
+        print(f"{len(trainable)} trainable tensors:")
+        print("\n  ".join(trainable[:10]))
+
+        def _cfg_optim(self):
+            lr = config.lr * args.lr_backbone_mult
+            return torch.optim.AdamW(
+                (p for p in self.parameters() if p.requires_grad),
+                lr=lr,
+                weight_decay=config.weight_decay,
+            )
+
+        model.configure_optimizers = _cfg_optim.__get__(model)
+
+        callbacks = [RichProgressBar(refresh_rate=1)]
+        if not args.disable_early_stop:
+            callbacks.append(
+                pl.callbacks.EarlyStopping(
+                    monitor="diff_ppl_improve_10",
+                    mode="max",
+                    patience=2,
+                    min_delta=0.0,
+                )
+            )
+
         trainer = pl.Trainer(
             max_epochs=config.epochs,
             accelerator="gpu",
             logger=pl.loggers.TensorBoardLogger("tb_logs", name="phase_b"),
-            callbacks=[RichProgressBar(refresh_rate=1), RichModelSummary(max_depth=2)],
+            callbacks=callbacks,
             log_every_n_steps=3,
         )
         trainer.fit(model, train_dataloader)
