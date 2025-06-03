@@ -18,6 +18,7 @@ from jepa_utils.tensor_utils import calculate_entropy, adaptive_sampling
 from jepa_utils.metrics import calculate_rmse
 from jepa_utils.config import Config
 from jepa_utils.prediction_utils import decode_predicted_codes
+from jepa_utils import checkpoint_has_prefixed_keys, freeze_non_diffusion, freeze_jepa
 import copy
 
 
@@ -66,18 +67,42 @@ def main(argv=None):
         return
 
     if args.phase == "diffusion_only_finetune":
-        config.freeze_jepa = True
-        vocab_size = (
-            config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
-        )
         ckpt = args.resume or "diffusion_only.ckpt"
         if not os.path.exists(ckpt):
             raise FileNotFoundError(f"Checkpoint {ckpt} not found")
-        diffusion_model = ClaimD3PM.load_from_checkpoint(
-            ckpt,
-            config=config,
-            vocab_size=vocab_size,
-            condition_dim=config.output_dim,
+
+        if checkpoint_has_prefixed_keys(ckpt):
+            # Resume from a joint checkpoint
+            model = HierarchicalClaimsModel.load_from_checkpoint(ckpt, config=config)
+            freeze_non_diffusion(model)
+        else:
+            vocab_size = (
+                config.cpt_vocab_size + config.icd_vocab_size + config.ttnc_vocab_size + 3
+            )
+            diffusion = ClaimD3PM.load_from_checkpoint(
+                ckpt,
+                config=config,
+                vocab_size=vocab_size,
+                condition_dim=config.output_dim,
+            )
+            model = HierarchicalClaimsModel(config=config, diffusion=diffusion)
+            freeze_jepa(model)
+
+        model.log(
+            "jepa_frozen",
+            int(
+                all(
+                    not p.requires_grad
+                    for n, p in model.named_parameters()
+                    if not n.startswith("diffusion_model")
+                )
+            ),
+        )
+        model.log("diffusion_frozen", 0)
+
+        optim = torch.optim.AdamW(
+            filter(lambda p: p.requires_grad, model.parameters()),
+            lr=config.lr * args.lr_backbone_mult,
         )
         trainer = pl.Trainer(
             max_epochs=config.epochs,
@@ -86,7 +111,7 @@ def main(argv=None):
             callbacks=[RichProgressBar(refresh_rate=1)],
             log_every_n_steps=3,
         )
-        trainer.fit(diffusion_model, train_dataloader)
+        trainer.fit(model, train_dataloader, optimizers=optim)
         trainer.save_checkpoint("after_phase_A.ckpt")
         return
 
