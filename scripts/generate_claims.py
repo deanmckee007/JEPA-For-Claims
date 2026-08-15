@@ -6,20 +6,39 @@ from tqdm import tqdm
 
 from jepa_utils.config import Config
 from jepa_utils.data_prep import prepare_data
+from jepa_utils.checkpointing import load_claims_model_checkpoint
 from jepa_models.hierarchical_model import HierarchicalClaimsModel
 from jepa_utils.prediction_utils import decode_predicted_codes
 
 
-def generate_predictions(ckpt_path: str) -> None:
+def generate_predictions(
+    ckpt_path: str,
+    *,
+    data_path: str | None = None,
+    data_contract: str | None = None,
+    split: str = "test",
+) -> None:
     cfg = Config()
     # ensure dataset split for evaluation
     cfg.use_generative_save = True
     cfg.use_lr_find = False
     cfg.use_plotting = False
+    if data_path:
+        cfg.data_path = data_path
+    cfg.data_contract_path = data_contract
+    cfg.evaluation_split = split
 
-    _, _, eval_dataset, _, cfg, dataset = prepare_data(cfg)
+    _, _, eval_dataset, _, cfg, dataset = prepare_data(
+        cfg,
+        requested_eval_split=split,
+    )
 
-    model = HierarchicalClaimsModel.load_from_checkpoint(ckpt_path, config=cfg, strict=False)
+    model = load_claims_model_checkpoint(
+        HierarchicalClaimsModel,
+        ckpt_path,
+        config=cfg,
+        allow_legacy=cfg.allow_legacy_checkpoint_loading,
+    )
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
     model.eval()
@@ -27,7 +46,7 @@ def generate_predictions(ckpt_path: str) -> None:
     dataloader = DataLoader(
         eval_dataset,
         batch_size=128,
-        collate_fn=dataset.collate_fn,
+        collate_fn=dataset.collate_eval_fn,
         shuffle=False
     )
 
@@ -77,8 +96,16 @@ def generate_predictions(ckpt_path: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate claims predictions")
     parser.add_argument('ckpt', help='Path to checkpoint file')
+    parser.add_argument('--data-path', default=None)
+    parser.add_argument('--data-contract', required=True)
+    parser.add_argument('--split', choices=['val', 'test'], default='test')
     args = parser.parse_args()
-    generate_predictions(args.ckpt)
+    generate_predictions(
+        args.ckpt,
+        data_path=args.data_path,
+        data_contract=args.data_contract,
+        split=args.split,
+    )
 
 
 if __name__ == '__main__':

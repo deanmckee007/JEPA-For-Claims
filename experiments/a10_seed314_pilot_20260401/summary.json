@@ -1,0 +1,42 @@
+[
+  {
+    "name": "A10pilot314_baseline",
+    "best_overall_checkpoint": "stage1-epochepoch=07.ckpt",
+    "best_overall_mae": 2053.089599609375,
+    "best_overall_wape": 44.68193054199219,
+    "best_overall_rmse": 3193.09326171875,
+    "best_overall_q4_rmse": 3521.620361328125,
+    "best_q4_checkpoint": "stage1-epochepoch=11.ckpt",
+    "best_q4_rmse": 3484.739501953125
+  },
+  {
+    "name": "A10pilot314_cpc_w005",
+    "best_overall_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_overall_mae": 2073.72265625,
+    "best_overall_wape": 45.1309700012207,
+    "best_overall_rmse": 3209.11279296875,
+    "best_overall_q4_rmse": 3480.115478515625,
+    "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_q4_rmse": 3480.115478515625
+  },
+  {
+    "name": "A10pilot314_ts2vec_w005",
+    "best_overall_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_overall_mae": 2074.448974609375,
+    "best_overall_wape": 45.14677810668945,
+    "best_overall_rmse": 3209.494873046875,
+    "best_overall_q4_rmse": 3478.936767578125,
+    "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_q4_rmse": 3478.936767578125
+  },
+  {
+    "name": "A10pilot314_cpc_w010",
+    "best_overall_checkpoint": "stage1-epochepoch=15.ckpt",
+    "best_overall_mae": 2078.509521484375,
+    "best_overall_wape": 45.23515319824219,
+    "best_overall_rmse": 3216.51806640625,
+    "best_overall_q4_rmse": 3491.17236328125,
+    "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_q4_rmse": 3486.46435546875
+  }
+]

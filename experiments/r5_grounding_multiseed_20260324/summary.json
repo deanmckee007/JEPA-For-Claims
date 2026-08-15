@@ -1,0 +1,99 @@
+{
+    "generated_at":  "2026-03-24T08:42:54",
+    "runs":  [
+                 {
+                     "variant":  "cpt_icd_mask070",
+                     "seed":  42,
+                     "mae_dollars":  2041.5577392578125,
+                     "wape_percent":  44.057071685791016,
+                     "rmse_dollars":  3116.9287109375,
+                     "q4_rmse_dollars":  3446.925048828125,
+                     "q4_mae_dollars":  2291.34033203125,
+                     "q4_wape_percent":  26.203548431396484
+                 },
+                 {
+                     "variant":  "cpt_icd_mask070",
+                     "seed":  7,
+                     "mae_dollars":  2086.5625,
+                     "wape_percent":  45.322212219238281,
+                     "rmse_dollars":  3172.90771484375,
+                     "q4_rmse_dollars":  3394.27587890625,
+                     "q4_mae_dollars":  2252.23583984375,
+                     "q4_wape_percent":  25.526700973510746
+                 },
+                 {
+                     "variant":  "cpt_icd_mask070",
+                     "seed":  123,
+                     "mae_dollars":  2098.662353515625,
+                     "wape_percent":  45.110134124755859,
+                     "rmse_dollars":  3195.26904296875,
+                     "q4_rmse_dollars":  3535.65673828125,
+                     "q4_mae_dollars":  2318.431396484375,
+                     "q4_wape_percent":  25.724269866943359
+                 },
+                 {
+                     "variant":  "icd_only_mask070",
+                     "seed":  42,
+                     "mae_dollars":  2054.26806640625,
+                     "wape_percent":  44.33135986328125,
+                     "rmse_dollars":  3133.9501953125,
+                     "q4_rmse_dollars":  3413.095458984375,
+                     "q4_mae_dollars":  2270.256103515625,
+                     "q4_wape_percent":  25.962430953979492
+                 },
+                 {
+                     "variant":  "icd_only_mask070",
+                     "seed":  7,
+                     "mae_dollars":  2087.976806640625,
+                     "wape_percent":  45.352928161621094,
+                     "rmse_dollars":  3173.2861328125,
+                     "q4_rmse_dollars":  3400.5068359375,
+                     "q4_mae_dollars":  2259.27099609375,
+                     "q4_wape_percent":  25.606435775756836
+                 },
+                 {
+                     "variant":  "icd_only_mask070",
+                     "seed":  123,
+                     "mae_dollars":  2096.58642578125,
+                     "wape_percent":  45.065509796142578,
+                     "rmse_dollars":  3198.980224609375,
+                     "q4_rmse_dollars":  3540.30078125,
+                     "q4_mae_dollars":  2322.305908203125,
+                     "q4_wape_percent":  25.767261505126953
+                 }
+             ],
+    "summary":  [
+                    {
+                        "variant":  "cpt_icd_mask070",
+                        "seeds":  "7,42,123",
+                        "mae_mean":  2075.59,
+                        "mae_std":  24.57,
+                        "wape_mean":  44.83,
+                        "wape_std":  0.55,
+                        "rmse_mean":  3161.7,
+                        "rmse_std":  32.95,
+                        "q4_rmse_mean":  3458.95,
+                        "q4_rmse_std":  58.34,
+                        "q4_mae_mean":  2287.34,
+                        "q4_mae_std":  27.17,
+                        "q4_wape_mean":  25.82,
+                        "q4_wape_std":  0.28
+                    },
+                    {
+                        "variant":  "icd_only_mask070",
+                        "seeds":  "7,42,123",
+                        "mae_mean":  2079.61,
+                        "mae_std":  18.26,
+                        "wape_mean":  44.92,
+                        "wape_std":  0.43,
+                        "rmse_mean":  3168.74,
+                        "rmse_std":  26.74,
+                        "q4_rmse_mean":  3451.3,
+                        "q4_rmse_std":  63.14,
+                        "q4_mae_mean":  2283.94,
+                        "q4_mae_std":  27.49,
+                        "q4_wape_mean":  25.78,
+                        "q4_wape_std":  0.15
+                    }
+                ]
+}

@@ -1,0 +1,74 @@
+[
+    {
+        "run":  "baseline",
+        "mae_dollars":  2041.56,
+        "wape_percent":  44.06,
+        "rmse_dollars":  3116.93,
+        "q4_rmse_dollars":  3446.93,
+        "delta_mae":  0,
+        "delta_wape":  0,
+        "delta_rmse":  0,
+        "delta_q4_rmse":  0,
+        "notes":  "AdamW, StepLR, batch 512, adapter_lr=1e-4, generator_lr=5e-4"
+    },
+    {
+        "run":  "adam",
+        "mae_dollars":  2043.46,
+        "wape_percent":  44.1,
+        "rmse_dollars":  3118.85,
+        "q4_rmse_dollars":  3451,
+        "delta_mae":  1.9,
+        "delta_wape":  0.04,
+        "delta_rmse":  1.92,
+        "delta_q4_rmse":  4.07,
+        "notes":  "optimizer_type=adam"
+    },
+    {
+        "run":  "cosine",
+        "mae_dollars":  2053.27,
+        "wape_percent":  44.31,
+        "rmse_dollars":  3133.74,
+        "q4_rmse_dollars":  3437.37,
+        "delta_mae":  11.71,
+        "delta_wape":  0.25,
+        "delta_rmse":  16.82,
+        "delta_q4_rmse":  -9.56,
+        "notes":  "cosine + 1 epoch warmup"
+    },
+    {
+        "run":  "batch256",
+        "mae_dollars":  2053.41,
+        "wape_percent":  44.31,
+        "rmse_dollars":  3133.77,
+        "q4_rmse_dollars":  3418.17,
+        "delta_mae":  11.85,
+        "delta_wape":  0.26,
+        "delta_rmse":  16.84,
+        "delta_q4_rmse":  -28.76,
+        "notes":  "train_batch_size=256"
+    },
+    {
+        "run":  "lr_low",
+        "mae_dollars":  2062.42,
+        "wape_percent":  44.51,
+        "rmse_dollars":  3136.46,
+        "q4_rmse_dollars":  3458.57,
+        "delta_mae":  20.87,
+        "delta_wape":  0.45,
+        "delta_rmse":  19.53,
+        "delta_q4_rmse":  11.65,
+        "notes":  "adapter_lr=5e-5, generator_lr=2.5e-4"
+    },
+    {
+        "run":  "lr_high",
+        "mae_dollars":  2061.9,
+        "wape_percent":  44.5,
+        "rmse_dollars":  3151.09,
+        "q4_rmse_dollars":  3387.31,
+        "delta_mae":  20.34,
+        "delta_wape":  0.44,
+        "delta_rmse":  34.16,
+        "delta_q4_rmse":  -59.62,
+        "notes":  "adapter_lr=2e-4, generator_lr=1e-3"
+    }
+]

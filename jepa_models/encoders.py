@@ -23,11 +23,98 @@ class Level1Encoder(nn.Module):
         Tuple[Tensor, Tensor]: Aggregated embeddings (mean, max, min) for each claim, shape [batch_size, num_claims, embedding_dim * 3].
                                Per-claim mask, shape [batch_size, num_claims], indicating which claims are valid (non-padding).
     """
-    def __init__(self, cpt_vocab_size, icd_vocab_size, embedding_dim, padding_idx=0):
+    def __init__(
+        self,
+        cpt_vocab_size,
+        icd_vocab_size,
+        embedding_dim,
+        padding_idx=0,
+        pooling_type="moments",
+        num_heads=4,
+        use_rarity=False,
+        cpt_rarity_scores=None,
+        icd_rarity_scores=None,
+    ):
         super(Level1Encoder, self).__init__()
         self.padding_idx = padding_idx
+        self.pooling_type = pooling_type
+        self.use_rarity = use_rarity
         self.cpt_embedding = nn.Embedding(cpt_vocab_size, embedding_dim, padding_idx=padding_idx)
         self.icd_embedding = nn.Embedding(icd_vocab_size, embedding_dim, padding_idx=padding_idx)
+        if pooling_type == "query_attention":
+            self.cpt_attention_score = nn.Linear(embedding_dim, 1, bias=False)
+            self.icd_attention_score = nn.Linear(embedding_dim, 1, bias=False)
+        else:
+            self.cpt_attention_score = None
+            self.icd_attention_score = None
+        if pooling_type == "self_attention":
+            self.cpt_self_attention = nn.MultiheadAttention(
+                embedding_dim, num_heads, batch_first=True
+            )
+            self.icd_self_attention = nn.MultiheadAttention(
+                embedding_dim, num_heads, batch_first=True
+            )
+            self.cpt_self_norm = nn.LayerNorm(embedding_dim)
+            self.icd_self_norm = nn.LayerNorm(embedding_dim)
+        else:
+            self.cpt_self_attention = None
+            self.icd_self_attention = None
+        self.rarity_scale = nn.Parameter(torch.tensor(0.0))
+        self.register_buffer(
+            "cpt_rarity_scores",
+            self._normalize_rarity(cpt_rarity_scores, cpt_vocab_size),
+        )
+        self.register_buffer(
+            "icd_rarity_scores",
+            self._normalize_rarity(icd_rarity_scores, icd_vocab_size),
+        )
+
+    @staticmethod
+    def _normalize_rarity(scores, vocab_size):
+        if scores is None:
+            return torch.zeros(vocab_size)
+        values = torch.as_tensor(scores, dtype=torch.float32).clone()
+        if values.numel() != vocab_size:
+            return torch.zeros(vocab_size)
+        values = torch.log1p(values.clamp(min=0))
+        valid = values[2:] if values.numel() > 2 else values
+        if valid.numel() > 1:
+            values = (values - valid.mean()) / valid.std().clamp(min=1e-6)
+        values[: min(2, values.numel())] = 0
+        return values
+
+    def _contextualize(self, embeds, padding_mask, token_type):
+        if self.pooling_type != "self_attention":
+            return embeds
+        batch_size, num_claims, num_tokens, embed_dim = embeds.shape
+        flat = embeds.reshape(batch_size * num_claims, num_tokens, embed_dim)
+        flat_padding = ~padding_mask.reshape(batch_size * num_claims, num_tokens)
+        all_padding = flat_padding.all(dim=1)
+        safe_padding = flat_padding.clone()
+        safe_padding[all_padding, 0] = False
+        attention = (
+            self.cpt_self_attention if token_type == "cpt" else self.icd_self_attention
+        )
+        norm = self.cpt_self_norm if token_type == "cpt" else self.icd_self_norm
+        attended, _ = attention(flat, flat, flat, key_padding_mask=safe_padding)
+        flat = norm(flat + attended)
+        flat[all_padding] = 0
+        return flat.reshape(batch_size, num_claims, num_tokens, embed_dim)
+
+    def _attention_pool(self, embeds, tokens, padding_mask, token_type):
+        score_layer = (
+            self.cpt_attention_score if token_type == "cpt" else self.icd_attention_score
+        )
+        scores = score_layer(embeds).squeeze(-1)
+        if self.use_rarity:
+            rarity = self.cpt_rarity_scores if token_type == "cpt" else self.icd_rarity_scores
+            scores = scores + self.rarity_scale * rarity[tokens]
+        scores = scores.masked_fill(~padding_mask, float("-inf"))
+        all_padding = ~padding_mask.any(dim=2)
+        scores = torch.where(all_padding.unsqueeze(-1), torch.zeros_like(scores), scores)
+        weights = torch.softmax(scores, dim=2)
+        weights = torch.where(all_padding.unsqueeze(-1), torch.zeros_like(weights), weights)
+        return torch.sum(embeds * weights.unsqueeze(-1), dim=2)
 
     def forward(self, tokens, token_type):
         if token_type == 'cpt':
@@ -37,6 +124,7 @@ class Level1Encoder(nn.Module):
         
         # Mask padding tokens
         padding_mask = tokens != self.padding_idx
+        embeds = self._contextualize(embeds, padding_mask, token_type)
         
         # Aggregation ignoring padding tokens
         sum_embeds = torch.sum(embeds * padding_mask.unsqueeze(-1), dim=2)
@@ -57,12 +145,123 @@ class Level1Encoder(nn.Module):
             torch.min(embeds.masked_fill(~padding_mask.unsqueeze(-1), float('inf')), dim=2).values
         )
         
-        aggregated = torch.cat([mean_embeds, max_embeds, min_embeds], dim=2) 
+        if self.pooling_type == "query_attention":
+            attention_embeds = self._attention_pool(
+                embeds, tokens, padding_mask, token_type
+            )
+            aggregated = torch.cat([mean_embeds, max_embeds, attention_embeds], dim=2)
+        else:
+            aggregated = torch.cat([mean_embeds, max_embeds, min_embeds], dim=2)
         # Compute claim-level mask
         per_claim_mask = padding_mask.any(dim=2)  # Shape: [batch_size, num_claims]
  
         
         return aggregated, per_claim_mask
+
+
+class ComposableClaimEncoder(nn.Module):
+    """Compose typed Level-1 claim marginals into a Level-2 claim state.
+
+    CPT and ICD retain separate residual paths.  A third path models their
+    shared signal through explicit interactions, but is only active when both
+    modalities are observed.  This lets marginal distribution regularizers be
+    applied to the typed projections without incorrectly demanding that the
+    dependent joint ``[CPT, ICD]`` representation factorize.
+    """
+
+    def __init__(
+        self,
+        embedding_dim,
+        ttnc_vocab_size,
+        padding_idx=0,
+        dropout=0.0,
+        use_ttnc=True,
+    ):
+        super().__init__()
+        level1_dim = embedding_dim * 3
+        self.padding_idx = padding_idx
+        self.use_ttnc = use_ttnc
+        self.cpt_projection = nn.Sequential(
+            nn.Linear(level1_dim, embedding_dim),
+            nn.LayerNorm(embedding_dim),
+            nn.GELU(),
+        )
+        self.icd_projection = nn.Sequential(
+            nn.Linear(level1_dim, embedding_dim),
+            nn.LayerNorm(embedding_dim),
+            nn.GELU(),
+        )
+        self.cpt_residual = nn.Linear(embedding_dim, embedding_dim, bias=False)
+        self.icd_residual = nn.Linear(embedding_dim, embedding_dim, bias=False)
+        self.shared_interaction = nn.Sequential(
+            nn.Linear(embedding_dim * 4, embedding_dim),
+            nn.GELU(),
+            nn.Linear(embedding_dim, embedding_dim),
+        )
+        self.ttnc_embedding = nn.Embedding(
+            ttnc_vocab_size,
+            embedding_dim,
+            padding_idx=padding_idx,
+        )
+        self.missing_cpt = nn.Parameter(torch.zeros(embedding_dim))
+        self.missing_icd = nn.Parameter(torch.zeros(embedding_dim))
+        self.output_norm = nn.LayerNorm(embedding_dim)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(
+        self,
+        cpt_level1,
+        icd_level1,
+        cpt_mask,
+        icd_mask,
+        ttnc_tokens,
+        return_components=False,
+    ):
+        cpt_marginal = self.cpt_projection(cpt_level1)
+        icd_marginal = self.icd_projection(icd_level1)
+
+        cpt_present = cpt_mask.unsqueeze(-1)
+        icd_present = icd_mask.unsqueeze(-1)
+        claim_present = ttnc_tokens.ne(self.padding_idx).unsqueeze(-1)
+        both_present = cpt_present & icd_present & claim_present
+
+        cpt_path = torch.where(
+            cpt_present,
+            self.cpt_residual(cpt_marginal),
+            self.missing_cpt.view(1, 1, -1),
+        )
+        icd_path = torch.where(
+            icd_present,
+            self.icd_residual(icd_marginal),
+            self.missing_icd.view(1, 1, -1),
+        )
+        interaction_input = torch.cat(
+            [
+                cpt_marginal,
+                icd_marginal,
+                cpt_marginal * icd_marginal,
+                torch.abs(cpt_marginal - icd_marginal),
+            ],
+            dim=-1,
+        )
+        shared = self.shared_interaction(interaction_input)
+        shared = torch.where(both_present, shared, torch.zeros_like(shared))
+
+        ttnc_state = self.ttnc_embedding(ttnc_tokens.long()) if self.use_ttnc else 0.0
+        composed = self.output_norm(ttnc_state + cpt_path + icd_path + shared)
+        composed = self.dropout(composed)
+        composed = torch.where(claim_present, composed, torch.zeros_like(composed))
+
+        if not return_components:
+            return composed
+        return composed, {
+            "cpt_marginal": cpt_marginal,
+            "icd_marginal": icd_marginal,
+            "cpt_mask": cpt_mask & ttnc_tokens.ne(self.padding_idx),
+            "icd_mask": icd_mask & ttnc_tokens.ne(self.padding_idx),
+            "shared_interaction": shared,
+            "both_present_mask": both_present.squeeze(-1),
+        }
 
 
 class Level2Encoder(nn.Module):

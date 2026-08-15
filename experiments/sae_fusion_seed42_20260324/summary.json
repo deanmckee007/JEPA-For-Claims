@@ -1,0 +1,50 @@
+[
+  {
+    "name": "baseline_obs000_mask070",
+    "note": "current masked-grounding baseline",
+    "mae": 2050.02,
+    "wape": 44.24,
+    "rmse": 3119.47,
+    "q4_rmse": 3414.66
+  },
+  {
+    "name": "no_gated_fusion",
+    "note": "disable patient fusion gate",
+    "mae": 2054.28,
+    "wape": 44.33,
+    "rmse": 3118.23,
+    "q4_rmse": 3444.90
+  },
+  {
+    "name": "sae_weight_0.5",
+    "note": "lighter SAE pressure",
+    "mae": 2052.48,
+    "wape": 44.29,
+    "rmse": 3119.31,
+    "q4_rmse": 3400.80
+  },
+  {
+    "name": "sae_weight_2.0",
+    "note": "stronger SAE pressure",
+    "mae": 2044.42,
+    "wape": 44.12,
+    "rmse": 3110.49,
+    "q4_rmse": 3438.46
+  },
+  {
+    "name": "sae_k_5",
+    "note": "sparser SAE activations",
+    "mae": 2047.25,
+    "wape": 44.18,
+    "rmse": 3116.05,
+    "q4_rmse": 3413.63
+  },
+  {
+    "name": "sae_k_20",
+    "note": "less sparse SAE activations",
+    "mae": 2048.52,
+    "wape": 44.21,
+    "rmse": 3117.22,
+    "q4_rmse": 3414.90
+  }
+]

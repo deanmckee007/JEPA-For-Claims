@@ -1,0 +1,421 @@
+{
+  "protocol": {
+    "selection_split": "frozen_validation",
+    "test_accessed": false,
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\selected_lejepa_anycode_seed42_e20\\encoder.ckpt",
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "representation_source": "patient_representation_pre_sae",
+    "target_normalization": "fixed_labeled_train_mean_and_std"
+  },
+  "conditions": {
+    "frozen_ssl": {
+      "condition": "frozen_ssl",
+      "protocol": "SSL encoder frozen; identical MLP fit on labeled train representations",
+      "label_efficiency": {
+        "0.01": {
+          "num_labels": 150,
+          "metrics": {
+            "target_probe_rmse_log1p": 0.9048053026199341,
+            "target_probe_mae_dollars": 1976.41064453125,
+            "target_probe_rmse_dollars": 2940.723876953125,
+            "target_probe_wape_percent": 42.50919723510742,
+            "pairwise_accuracy": 0.6497192882101048,
+            "pairwise_pairs_evaluated": 499979,
+            "pairwise_pairs_available": 5080078,
+            "spearman_correlation": 0.43655731605004766,
+            "top_decile_recall": 0.1755485893416928
+          },
+          "training_loss_first": 0.9981126189231873,
+          "training_loss_last": 0.45417460799217224
+        },
+        "0.05": {
+          "num_labels": 750,
+          "metrics": {
+            "target_probe_rmse_log1p": 0.903536856174469,
+            "target_probe_mae_dollars": 1818.1702880859375,
+            "target_probe_rmse_dollars": 2777.15576171875,
+            "target_probe_wape_percent": 39.10572052001953,
+            "pairwise_accuracy": 0.6732302756715782,
+            "pairwise_pairs_evaluated": 499979,
+            "pairwise_pairs_available": 5080078,
+            "spearman_correlation": 0.4894589336618802,
+            "top_decile_recall": 0.34796238244514105
+          },
+          "training_loss_first": 0.9826048612594604,
+          "training_loss_last": 0.3893611530462901
+        },
+        "0.1": {
+          "num_labels": 1500,
+          "metrics": {
+            "target_probe_rmse_log1p": 0.8810517191886902,
+            "target_probe_mae_dollars": 1706.88232421875,
+            "target_probe_rmse_dollars": 2769.826416015625,
+            "target_probe_wape_percent": 36.71210861206055,
+            "pairwise_accuracy": 0.6817026315105235,
+            "pairwise_pairs_evaluated": 499979,
+            "pairwise_pairs_available": 5080078,
+            "spearman_correlation": 0.5059189188367441,
+            "top_decile_recall": 0.3385579937304075
+          },
+          "training_loss_first": 0.9382635752360026,
+          "training_loss_last": 0.3923460642496745
+        },
+        "0.25": {
+          "num_labels": 3760,
+          "metrics": {
+            "target_probe_rmse_log1p": 0.8514454364776611,
+            "target_probe_mae_dollars": 1536.5523681640625,
+            "target_probe_rmse_dollars": 2556.00048828125,
+            "target_probe_wape_percent": 33.04860305786133,
+            "pairwise_accuracy": 0.7107878530898297,
+            "pairwise_pairs_evaluated": 499979,
+            "pairwise_pairs_available": 5080078,
+            "spearman_correlation": 0.5759549626024756,
+            "top_decile_recall": 0.46394984326018807
+          },
+          "training_loss_first": 0.9274654865264893,
+          "training_loss_last": 0.4066671669483185
+        },
+        "1.0": {
+          "num_labels": 15050,
+          "metrics": {
+            "target_probe_rmse_log1p": 0.8215132355690002,
+            "target_probe_mae_dollars": 1526.8109130859375,
+            "target_probe_rmse_dollars": 2566.1005859375,
+            "target_probe_wape_percent": 32.83907699584961,
+            "pairwise_accuracy": 0.7097318087359669,
+            "pairwise_pairs_evaluated": 499979,
+            "pairwise_pairs_available": 5080078,
+            "spearman_correlation": 0.5756521660702292,
+            "top_decile_recall": 0.4231974921630094
+          },
+          "training_loss_first": 0.8384569166070324,
+          "training_loss_last": 0.5499505451170065
+        }
+      },
+      "full_representation_linear_probe": {
+        "target_probe_rmse_log1p": 0.8373095989227295,
+        "target_probe_mae_dollars": 1628.2716064453125,
+        "target_probe_rmse_dollars": 2618.4990234375,
+        "target_probe_wape_percent": 35.021324157714844
+      },
+      "representation_geometry": {
+        "num_samples": 3188,
+        "embedding_dim": 256,
+        "std_mean": 0.2237212061882019,
+        "std_min": 0.11439641565084457,
+        "std_median": 0.22388680279254913,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.010222839596879,
+        "participation_ratio_fraction": 0.023477432967175308,
+        "explained_variance_top1_share": 0.27694557516880064,
+        "explained_variance_top5_share": 0.8181467564610763,
+        "explained_variance_top10_share": 0.8978162265827638,
+        "mean_pairwise_cosine": 0.35905173420906067,
+        "median_pairwise_cosine": 0.34154212474823,
+        "cosine_sample_size": 2048,
+        "ttnc_proxy_label_cluster_ari": 0.1355767732976992,
+        "cluster_silhouette": 0.22912371158599854
+      },
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.7543914680050188
+    },
+    "ssl_finetune": {
+      "direct_cost_head": {
+        "target_probe_rmse_log1p": 0.8125845193862915,
+        "target_probe_mae_dollars": 1525.13671875,
+        "target_probe_rmse_dollars": 2575.3232421875,
+        "target_probe_wape_percent": 32.80307388305664,
+        "pairwise_accuracy": 0.7171421199690386,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.59357666269984,
+        "top_decile_recall": 0.45768025078369906
+      },
+      "frozen_linear_probe": {
+        "target_probe_rmse_log1p": 0.8256791830062866,
+        "target_probe_mae_dollars": 1598.8177490234375,
+        "target_probe_rmse_dollars": 2577.404541015625,
+        "target_probe_wape_percent": 34.38782501220703
+      },
+      "representation_geometry": {
+        "num_samples": 3188,
+        "embedding_dim": 256,
+        "std_mean": 0.2246396839618683,
+        "std_min": 0.11313419044017792,
+        "std_median": 0.22019971907138824,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.046073556240528,
+        "participation_ratio_fraction": 0.023617474829064563,
+        "explained_variance_top1_share": 0.26217075596293554,
+        "explained_variance_top5_share": 0.8140833366269224,
+        "explained_variance_top10_share": 0.898163750908374,
+        "mean_pairwise_cosine": 0.3534415066242218,
+        "median_pairwise_cosine": 0.33134081959724426,
+        "cosine_sample_size": 2048,
+        "ttnc_proxy_label_cluster_ari": 0.13306565811995366,
+        "cluster_silhouette": 0.2281758189201355
+      },
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.7528230865746549,
+      "condition": "ssl_finetune",
+      "epochs": 5,
+      "task_weight": 1.0,
+      "encoder_lr": 2e-05,
+      "head_lr": 0.001,
+      "loss_history": {
+        "total": [
+          0.8655222694079081,
+          0.7649332334597906,
+          0.7297468314568202,
+          0.6982314358154933,
+          0.693013455470403
+        ],
+        "task": [
+          0.8655222694079081,
+          0.7649332334597906,
+          0.7297468314568202,
+          0.6982314358154933,
+          0.693013455470403
+        ],
+        "ssl_diagnostic": [
+          0.7586816549301147,
+          0.7693425436814626,
+          0.7792442172765732,
+          0.7832345892985662,
+          0.7792548517386119
+        ]
+      },
+      "evaluation_split": "frozen_validation",
+      "test_accessed": false
+    },
+    "joint_ssl_cost": {
+      "direct_cost_head": {
+        "target_probe_rmse_log1p": 0.8276031017303467,
+        "target_probe_mae_dollars": 1530.61767578125,
+        "target_probe_rmse_dollars": 2483.848388671875,
+        "target_probe_wape_percent": 32.920955657958984,
+        "pairwise_accuracy": 0.7107678522497944,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.5763927062401091,
+        "top_decile_recall": 0.49216300940438873
+      },
+      "frozen_linear_probe": {
+        "target_probe_rmse_log1p": 0.83966463804245,
+        "target_probe_mae_dollars": 1811.3399658203125,
+        "target_probe_rmse_dollars": 2770.26904296875,
+        "target_probe_wape_percent": 38.95881652832031
+      },
+      "representation_geometry": {
+        "num_samples": 3188,
+        "embedding_dim": 256,
+        "std_mean": 0.1727706789970398,
+        "std_min": 0.10712794214487076,
+        "std_median": 0.17042957246303558,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 12.701693303305984,
+        "participation_ratio_fraction": 0.049615989466039,
+        "explained_variance_top1_share": 0.15390624609907377,
+        "explained_variance_top5_share": 0.5716513312502884,
+        "explained_variance_top10_share": 0.7767638475690379,
+        "mean_pairwise_cosine": 0.4059099853038788,
+        "median_pairwise_cosine": 0.40369826555252075,
+        "cosine_sample_size": 2048,
+        "ttnc_proxy_label_cluster_ari": 0.12170646107780693,
+        "cluster_silhouette": 0.1764988750219345
+      },
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.7456085319949812,
+      "condition": "joint_ssl_cost",
+      "epochs": 20,
+      "task_weight": 1.0,
+      "encoder_lr": 0.0001,
+      "head_lr": 0.001,
+      "loss_history": {
+        "total": [
+          5.130685496330261,
+          3.16826491355896,
+          2.6371527194976805,
+          2.3193131486574807,
+          2.1282238960266113,
+          1.9737754662831624,
+          1.882871389389038,
+          1.7876761078834533,
+          1.705477031071981,
+          1.6661393761634826,
+          1.5974638064702351,
+          1.5526175300280254,
+          1.5101186792055765,
+          1.4677625179290772,
+          1.433364216486613,
+          1.3952194531758626,
+          1.3553206702073415,
+          1.3331477562586467,
+          1.298196546236674,
+          1.2689748267332712
+        ],
+        "task": [
+          0.8862773299217224,
+          0.7494246910015742,
+          0.7096903731425603,
+          0.6804213901360829,
+          0.6728409787019094,
+          0.650841165582339,
+          0.647453303138415,
+          0.6336649268865585,
+          0.6148043761650721,
+          0.6222334235906601,
+          0.5914786199728648,
+          0.5836477190256119,
+          0.5586783587932587,
+          0.5493969917297363,
+          0.5290152211983998,
+          0.5080536514520645,
+          0.48957920422156653,
+          0.4763682226339976,
+          0.45557380417982735,
+          0.4382316663861275
+        ],
+        "ssl_diagnostic": [
+          4.244408122698466,
+          2.418840185801188,
+          1.927462343374888,
+          1.6388917565345764,
+          1.4553829252719879,
+          1.3229342937469482,
+          1.2354180991649628,
+          1.154011199871699,
+          1.0906726618607838,
+          1.0439059495925904,
+          1.005985188484192,
+          0.9689698159694672,
+          0.9514403184254964,
+          0.9183655222256978,
+          0.9043489933013916,
+          0.8871658007303874,
+          0.8657414595286052,
+          0.8567795356114706,
+          0.8426227509975434,
+          0.8307431618372599
+        ]
+      },
+      "evaluation_split": "frozen_validation",
+      "test_accessed": false
+    },
+    "supervised_scratch": {
+      "direct_cost_head": {
+        "target_probe_rmse_log1p": 0.8390510678291321,
+        "target_probe_mae_dollars": 1548.553955078125,
+        "target_probe_rmse_dollars": 2550.822509765625,
+        "target_probe_wape_percent": 33.30673599243164,
+        "pairwise_accuracy": 0.7273685494790781,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.6160731170996775,
+        "top_decile_recall": 0.4827586206896552
+      },
+      "frozen_linear_probe": {
+        "target_probe_rmse_log1p": 0.8311286568641663,
+        "target_probe_mae_dollars": 1766.154052734375,
+        "target_probe_rmse_dollars": 2724.828857421875,
+        "target_probe_wape_percent": 37.986942291259766
+      },
+      "representation_geometry": {
+        "num_samples": 3188,
+        "embedding_dim": 256,
+        "std_mean": 0.15764546394348145,
+        "std_min": 0.07562998682260513,
+        "std_median": 0.14528630673885345,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 3.437640163607544,
+        "participation_ratio_fraction": 0.013428281889091969,
+        "explained_variance_top1_share": 0.5189461176751522,
+        "explained_variance_top5_share": 0.7733373644173276,
+        "explained_variance_top10_share": 0.8535887952532484,
+        "mean_pairwise_cosine": 0.47486019134521484,
+        "median_pairwise_cosine": 0.49814891815185547,
+        "cosine_sample_size": 2048,
+        "ttnc_proxy_label_cluster_ari": 0.15643357913823844,
+        "cluster_silhouette": 0.13920943439006805
+      },
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.7619196988707654,
+      "condition": "supervised_scratch",
+      "epochs": 20,
+      "task_weight": 1.0,
+      "encoder_lr": 0.0001,
+      "head_lr": 0.001,
+      "loss_history": {
+        "total": [
+          0.8494881371657054,
+          0.7209756245215734,
+          0.7003470957279205,
+          0.6760241250197093,
+          0.668317953745524,
+          0.6433886955181758,
+          0.6358195354541143,
+          0.6170425673325857,
+          0.598112948735555,
+          0.5933855722347895,
+          0.5688899328311284,
+          0.5640208731094997,
+          0.5353425016005834,
+          0.5184078246355057,
+          0.49472608665625256,
+          0.48110134800275167,
+          0.45647338082393013,
+          0.4481380542119344,
+          0.43726997772852577,
+          0.42578705499569575
+        ],
+        "task": [
+          0.8494881371657054,
+          0.7209756245215734,
+          0.7003470957279205,
+          0.6760241250197093,
+          0.668317953745524,
+          0.6433886955181758,
+          0.6358195354541143,
+          0.6170425673325857,
+          0.598112948735555,
+          0.5933855722347895,
+          0.5688899328311284,
+          0.5640208731094997,
+          0.5353425016005834,
+          0.5184078246355057,
+          0.49472608665625256,
+          0.48110134800275167,
+          0.45647338082393013,
+          0.4481380542119344,
+          0.43726997772852577,
+          0.42578705499569575
+        ],
+        "ssl_diagnostic": [
+          5.09086127281189,
+          5.036958463986715,
+          5.021446061134339,
+          4.995356965065002,
+          4.9757873058319095,
+          4.989682618776957,
+          4.960133306185404,
+          4.9406264146169026,
+          4.905462646484375,
+          4.903796521822612,
+          4.8998463948567705,
+          4.9209644873936975,
+          4.877409235636393,
+          4.903661775588989,
+          4.858395703633627,
+          4.885225335756938,
+          4.863182934125264,
+          4.864725478490194,
+          4.880891299247741,
+          4.826963512102763
+        ]
+      },
+      "evaluation_split": "frozen_validation",
+      "test_accessed": false
+    }
+  }
+}

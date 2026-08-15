@@ -1,0 +1,15 @@
+{
+  "name": "H2_observed_k1",
+  "recipe": "sigreg_dense",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "accelerator": "auto",
+  "devices": 1,
+  "representation_pretrain_epochs": 20,
+  "max_samples": 2000,
+  "retrieval_k": 5,
+  "config_overrides": [
+    "observed_claim_k=1"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H2_observed_k1\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H2_observed_k1\\representation_eval.json"
+}

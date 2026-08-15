@@ -1,0 +1,76 @@
+{
+  "protocol": {
+    "ranking_head_fit_split": "train",
+    "calibration_fit_split": "stratified_5_fold_out_of_fold_val",
+    "reported_evaluation_split": "full_frozen_val",
+    "test_accessed": false
+  },
+  "num_train": 15050,
+  "num_calibration": 3188,
+  "num_reported": 3188,
+  "variants": {
+    "rolled_ranknet_pointwise": {
+      "pairwise_accuracy": 0.7185021770914378,
+      "pairwise_pairs_evaluated": 499979,
+      "pairwise_pairs_available": 5080078,
+      "spearman_correlation": 0.5985937353906555,
+      "top_decile_recall": 0.47962382445141066,
+      "monotonic_dollar_calibration": {
+        "mae_dollars": 1513.9547375466025,
+        "rmse_dollars": 2434.734177983549,
+        "wape_percent": 32.56256615195824
+      },
+      "training_loss_first": 0.6140624557511282,
+      "training_loss_last": 0.5186390002905312,
+      "training_pairs_per_epoch_first": 15050,
+      "training_pairs_total": 451500
+    },
+    "tail_ranknet": {
+      "pairwise_accuracy": 0.692331077905272,
+      "pairwise_pairs_evaluated": 499979,
+      "pairwise_pairs_available": 5080078,
+      "spearman_correlation": 0.5355687047373241,
+      "top_decile_recall": 0.47962382445141066,
+      "monotonic_dollar_calibration": {
+        "mae_dollars": 1606.4730847088276,
+        "rmse_dollars": 2457.5540191682767,
+        "wape_percent": 34.55247689699268
+      },
+      "training_loss_first": 0.5403897085432279,
+      "training_loss_last": 0.4194286490901042,
+      "training_pairs_per_epoch_first": 15050,
+      "training_pairs_total": 451500
+    },
+    "tail_ranknet_pointwise": {
+      "pairwise_accuracy": 0.6944711677890472,
+      "pairwise_pairs_evaluated": 499979,
+      "pairwise_pairs_available": 5080078,
+      "spearman_correlation": 0.539885482579492,
+      "top_decile_recall": 0.4670846394984326,
+      "monotonic_dollar_calibration": {
+        "mae_dollars": 1592.6361959180988,
+        "rmse_dollars": 2451.9982800633484,
+        "wape_percent": 34.25486918428421
+      },
+      "training_loss_first": 0.5729111246133255,
+      "training_loss_last": 0.45256608623569294,
+      "training_pairs_per_epoch_first": 15050,
+      "training_pairs_total": 451500
+    }
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\composable_level1_followup_20260805\\composable_sigreg_anycode_seed42_e10\\encoder.ckpt",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "claim_inclusion_policy": "any_code",
+  "seed": 42,
+  "hyperparameters": {
+    "epochs": 30,
+    "group_size": 64,
+    "legacy_batch_size": 256,
+    "num_strata": 10,
+    "pointwise_weight": 0.1,
+    "tail_pair_weight": 4.0,
+    "lambda_gain_scale": 4.0,
+    "calibration_folds": 5
+  }
+}

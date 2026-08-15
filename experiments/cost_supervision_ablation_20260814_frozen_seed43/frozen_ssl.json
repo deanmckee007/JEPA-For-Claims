@@ -1,0 +1,48 @@
+{
+  "condition": "frozen_ssl",
+  "protocol": "SSL encoder frozen; identical MLP fit on labeled train representations",
+  "label_efficiency": {
+    "1.0": {
+      "num_labels": 15050,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.8137750625610352,
+        "target_probe_mae_dollars": 1515.4691162109375,
+        "target_probe_rmse_dollars": 2455.162841796875,
+        "target_probe_wape_percent": 32.59513854980469,
+        "pairwise_accuracy": 0.7108372768401809,
+        "pairwise_pairs_evaluated": 499978,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.5802417892952407,
+        "top_decile_recall": 0.49216300940438873
+      },
+      "training_loss_first": 0.8341621226173336,
+      "training_loss_last": 0.5442912351276915
+    }
+  },
+  "full_representation_linear_probe": {
+    "target_probe_rmse_log1p": 0.8373095989227295,
+    "target_probe_mae_dollars": 1628.2716064453125,
+    "target_probe_rmse_dollars": 2618.4990234375,
+    "target_probe_wape_percent": 35.021324157714844
+  },
+  "representation_geometry": {
+    "num_samples": 3188,
+    "embedding_dim": 256,
+    "std_mean": 0.2237212061882019,
+    "std_min": 0.11439641565084457,
+    "std_median": 0.22388680279254913,
+    "low_var_frac_lt_1e-3": 0.0,
+    "low_var_frac_lt_1e-2": 0.0,
+    "participation_ratio": 6.010222839596879,
+    "participation_ratio_fraction": 0.023477432967175308,
+    "explained_variance_top1_share": 0.27694557516880064,
+    "explained_variance_top5_share": 0.8181467564610763,
+    "explained_variance_top10_share": 0.8978162265827638,
+    "mean_pairwise_cosine": 0.35905173420906067,
+    "median_pairwise_cosine": 0.34154212474823,
+    "cosine_sample_size": 2048,
+    "ttnc_proxy_label_cluster_ari": 0.13198748117432074,
+    "cluster_silhouette": 0.23097854852676392
+  },
+  "ttnc_proxy_retrieval_hit_rate_at_5": 0.7543914680050188
+}

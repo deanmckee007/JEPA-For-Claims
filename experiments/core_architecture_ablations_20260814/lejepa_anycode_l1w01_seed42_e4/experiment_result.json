@@ -1,0 +1,719 @@
+{
+  "name": "lejepa_anycode_l1w01_seed42_e4",
+  "recipe": "composable_level1_lejepa",
+  "config_overrides": [
+    "claim_inclusion_policy=any_code",
+    "data_split_seed=42",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=false",
+    "level1_predictive_weight=0.1"
+  ],
+  "artifact_dir": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4",
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4\\representation_eval.json",
+  "seed": 42,
+  "representation_source": "patient_representation_pre_sae",
+  "num_samples": 3188,
+  "embedding_dim": 256,
+  "num_ttnc_proxy_labels": 17,
+  "ttnc_proxy_label_source": "last_valid_ttnc",
+  "selection_metric_priority": {
+    "primary": [
+      "target_probe_mae_dollars",
+      "target_probe_wape_percent",
+      "target_probe_rmse_dollars",
+      "val_rmse_improvement_vs_mean_baseline",
+      "val_rmse_improvement_pct_vs_mean_baseline",
+      "cluster_silhouette"
+    ],
+    "secondary": [
+      "ttnc_proxy_retrieval_hit_rate_at_5",
+      "ttnc_proxy_label_cluster_ari",
+      "ttnc_proxy_probe_accuracy",
+      "ttnc_proxy_probe_macro_f1"
+    ]
+  },
+  "ttnc_proxy_retrieval_hit_rate_at_5": 0.7590966122961104,
+  "ttnc_proxy_label_cluster_ari": 0.16531644341305465,
+  "cluster_silhouette": 0.24448734521865845,
+  "target_probe_rmse_log1p": 0.8362089395523071,
+  "target_probe_mae_dollars": 1634.737548828125,
+  "target_probe_rmse_dollars": 2629.323486328125,
+  "target_probe_wape_percent": 35.160396575927734,
+  "slices": {
+    "target_cost_bucket": {
+      "q1_low_cost": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 16,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7716436637390214,
+        "ttnc_proxy_label_cluster_ari": 0.06728592172957504,
+        "cluster_silhouette": 0.26546674966812134,
+        "target_probe_rmse_log1p": 1.4147868156433105,
+        "target_probe_mae_dollars": 1271.5074462890625,
+        "target_probe_rmse_dollars": 2101.622802734375,
+        "target_probe_wape_percent": 82.48544311523438,
+        "target_dollars_min": 1.0,
+        "target_dollars_median": 1629.0657958984375,
+        "target_dollars_max": 2782.337158203125
+      },
+      "q2_mid_low_cost": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 14,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7904642409033877,
+        "ttnc_proxy_label_cluster_ari": 0.1915687825501316,
+        "cluster_silhouette": 0.27455946803092957,
+        "target_probe_rmse_log1p": 0.1594318002462387,
+        "target_probe_mae_dollars": 485.4815673828125,
+        "target_probe_rmse_dollars": 592.2605590820312,
+        "target_probe_wape_percent": 12.807311058044434,
+        "target_dollars_min": 2783.448974609375,
+        "target_dollars_median": 3822.916015625,
+        "target_dollars_max": 4620.8173828125
+      },
+      "q3_mid_high_cost": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 14,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7578419071518193,
+        "ttnc_proxy_label_cluster_ari": 0.2169967538197658,
+        "cluster_silhouette": 0.20640867948532104,
+        "target_probe_rmse_log1p": 0.07106051594018936,
+        "target_probe_mae_dollars": 307.6011047363281,
+        "target_probe_rmse_dollars": 366.7908630371094,
+        "target_probe_wape_percent": 5.926775932312012,
+        "target_dollars_min": 4620.826171875,
+        "target_dollars_median": 5158.6611328125,
+        "target_dollars_max": 5664.978515625
+      },
+      "q4_high_cost": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 13,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7026348808030113,
+        "ttnc_proxy_label_cluster_ari": 0.12617202675263564,
+        "cluster_silhouette": 0.1955690085887909,
+        "target_probe_rmse_log1p": 0.33435672521591187,
+        "target_probe_mae_dollars": 2259.645263671875,
+        "target_probe_rmse_dollars": 3332.933349609375,
+        "target_probe_wape_percent": 28.396333694458008,
+        "target_dollars_min": 5666.01025390625,
+        "target_dollars_median": 6691.45751953125,
+        "target_dollars_max": 22026.466796875
+      }
+    },
+    "sequence_length_bucket_basis": "raw_claims",
+    "sequence_length_bucket": {
+      "q1_shortest_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 17,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7829360100376411,
+        "ttnc_proxy_label_cluster_ari": 0.0703323034334928,
+        "cluster_silhouette": 0.15842744708061218,
+        "target_probe_rmse_log1p": 1.2850056886672974,
+        "target_probe_mae_dollars": 3255.62841796875,
+        "target_probe_rmse_dollars": 5050.72265625,
+        "target_probe_wape_percent": 74.57378387451172,
+        "sequence_length_claims_min": 2.0,
+        "sequence_length_claims_median": 10.0,
+        "sequence_length_claims_max": 12.0
+      },
+      "q2_short_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 13,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.644918444165621,
+        "ttnc_proxy_label_cluster_ari": 0.1201294432696181,
+        "cluster_silhouette": 0.1433591991662979,
+        "ttnc_proxy_probe_accuracy": 0.38,
+        "ttnc_proxy_probe_macro_f1": 0.23066319504304,
+        "target_probe_rmse_log1p": 0.9742662906646729,
+        "target_probe_mae_dollars": 2378.916015625,
+        "target_probe_rmse_dollars": 3127.373291015625,
+        "target_probe_wape_percent": 52.08850860595703,
+        "sequence_length_claims_min": 12.0,
+        "sequence_length_claims_median": 20.0,
+        "sequence_length_claims_max": 47.0
+      },
+      "q3_long_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 11,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.6737766624843162,
+        "ttnc_proxy_label_cluster_ari": 0.054190355143493,
+        "cluster_silhouette": 0.25402751564979553,
+        "ttnc_proxy_probe_accuracy": 0.425,
+        "ttnc_proxy_probe_macro_f1": 0.23661059563670347,
+        "target_probe_rmse_log1p": 0.9805991053581238,
+        "target_probe_mae_dollars": 2422.760498046875,
+        "target_probe_rmse_dollars": 3534.9208984375,
+        "target_probe_wape_percent": 51.4941291809082,
+        "sequence_length_claims_min": 47.0,
+        "sequence_length_claims_median": 112.0,
+        "sequence_length_claims_max": 228.0
+      },
+      "q4_longest_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 11,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.903387703889586,
+        "ttnc_proxy_label_cluster_ari": -0.001161921605279476,
+        "cluster_silhouette": 0.25405287742614746,
+        "target_probe_rmse_log1p": 0.8534426689147949,
+        "target_probe_mae_dollars": 2182.489990234375,
+        "target_probe_rmse_dollars": 3377.880126953125,
+        "target_probe_wape_percent": 51.37141036987305,
+        "sequence_length_claims_min": 228.0,
+        "sequence_length_claims_median": 307.0,
+        "sequence_length_claims_max": 364.0
+      }
+    },
+    "ttnc_proxy_frequency_bucket": {
+      "q1_rarest_specialties": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 13,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.6750313676286073,
+        "ttnc_proxy_label_cluster_ari": 0.0797260451823089,
+        "cluster_silhouette": 0.2258952558040619,
+        "target_probe_rmse_log1p": 1.185054898262024,
+        "target_probe_mae_dollars": 3076.623046875,
+        "target_probe_rmse_dollars": 4406.6142578125,
+        "target_probe_wape_percent": 66.56951904296875,
+        "ttnc_proxy_frequency_min": 1.0,
+        "ttnc_proxy_frequency_median": 177.0,
+        "ttnc_proxy_frequency_max": 208.0
+      },
+      "q2_less_common_specialties": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 4,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.8883312421580929,
+        "ttnc_proxy_label_cluster_ari": 0.2809736749180045,
+        "cluster_silhouette": 0.3079983592033386,
+        "ttnc_proxy_probe_accuracy": 0.645,
+        "ttnc_proxy_probe_macro_f1": 0.6434551078972885,
+        "target_probe_rmse_log1p": 0.9490160346031189,
+        "target_probe_mae_dollars": 2807.767822265625,
+        "target_probe_rmse_dollars": 4069.61767578125,
+        "target_probe_wape_percent": 57.72466278076172,
+        "ttnc_proxy_frequency_min": 208.0,
+        "ttnc_proxy_frequency_median": 227.0,
+        "ttnc_proxy_frequency_max": 806.0
+      },
+      "q3_more_common_specialties": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 2,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.9912170639899623,
+        "ttnc_proxy_label_cluster_ari": 0.8196751844977713,
+        "cluster_silhouette": 0.360385537147522,
+        "ttnc_proxy_probe_accuracy": 0.955,
+        "ttnc_proxy_probe_macro_f1": 0.9466808850973074,
+        "target_probe_rmse_log1p": 0.8463703393936157,
+        "target_probe_mae_dollars": 2622.771240234375,
+        "target_probe_rmse_dollars": 3943.720947265625,
+        "target_probe_wape_percent": 51.07769012451172,
+        "ttnc_proxy_frequency_min": 806.0,
+        "ttnc_proxy_frequency_median": 806.0,
+        "ttnc_proxy_frequency_max": 1034.0
+      },
+      "q4_most_common_specialties": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 1,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 1.0,
+        "target_probe_rmse_log1p": 0.9369529485702515,
+        "target_probe_mae_dollars": 2130.75048828125,
+        "target_probe_rmse_dollars": 3359.180419921875,
+        "target_probe_wape_percent": 49.43327713012695,
+        "ttnc_proxy_frequency_min": 1034.0,
+        "ttnc_proxy_frequency_median": 1034.0,
+        "ttnc_proxy_frequency_max": 1034.0
+      }
+    },
+    "effective_sequence_length_bucket": {
+      "q1_shortest_effective_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 17,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7829360100376411,
+        "ttnc_proxy_label_cluster_ari": 0.0703323034334928,
+        "cluster_silhouette": 0.15842744708061218,
+        "target_probe_rmse_log1p": 1.2850056886672974,
+        "target_probe_mae_dollars": 3255.62841796875,
+        "target_probe_rmse_dollars": 5050.72265625,
+        "target_probe_wape_percent": 74.57378387451172,
+        "effective_sequence_length_claims_min": 1.0,
+        "effective_sequence_length_claims_median": 10.0,
+        "effective_sequence_length_claims_max": 12.0
+      },
+      "q2_short_effective_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 13,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.644918444165621,
+        "ttnc_proxy_label_cluster_ari": 0.1201294432696181,
+        "cluster_silhouette": 0.1433591991662979,
+        "ttnc_proxy_probe_accuracy": 0.38,
+        "ttnc_proxy_probe_macro_f1": 0.23066319504304,
+        "target_probe_rmse_log1p": 0.9742662906646729,
+        "target_probe_mae_dollars": 2378.916015625,
+        "target_probe_rmse_dollars": 3127.373291015625,
+        "target_probe_wape_percent": 52.08850860595703,
+        "effective_sequence_length_claims_min": 12.0,
+        "effective_sequence_length_claims_median": 20.0,
+        "effective_sequence_length_claims_max": 47.0
+      },
+      "q3_long_effective_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 11,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.8419071518193224,
+        "ttnc_proxy_label_cluster_ari": 0.06140805533416667,
+        "cluster_silhouette": 0.27646178007125854,
+        "ttnc_proxy_probe_accuracy": 0.7,
+        "ttnc_proxy_probe_macro_f1": 0.2508457049076005,
+        "target_probe_rmse_log1p": 0.7934973239898682,
+        "target_probe_mae_dollars": 2564.395263671875,
+        "target_probe_rmse_dollars": 3879.732666015625,
+        "target_probe_wape_percent": 56.09775924682617,
+        "effective_sequence_length_claims_min": 47.0,
+        "effective_sequence_length_claims_median": 50.0,
+        "effective_sequence_length_claims_max": 50.0
+      },
+      "q4_longest_effective_sequences": {
+        "num_samples": 797,
+        "embedding_dim": 256,
+        "num_ttnc_proxy_labels": 11,
+        "ttnc_proxy_label_source": "last_valid_ttnc",
+        "selection_metric_priority": {
+          "primary": [
+            "target_probe_mae_dollars",
+            "target_probe_wape_percent",
+            "target_probe_rmse_dollars",
+            "val_rmse_improvement_vs_mean_baseline",
+            "val_rmse_improvement_pct_vs_mean_baseline",
+            "cluster_silhouette"
+          ],
+          "secondary": [
+            "ttnc_proxy_retrieval_hit_rate_at_5",
+            "ttnc_proxy_label_cluster_ari",
+            "ttnc_proxy_probe_accuracy",
+            "ttnc_proxy_probe_macro_f1"
+          ]
+        },
+        "ttnc_proxy_retrieval_hit_rate_at_5": 0.7703889585947302,
+        "ttnc_proxy_label_cluster_ari": 0.07086884978166469,
+        "cluster_silhouette": 0.27081388235092163,
+        "ttnc_proxy_probe_accuracy": 0.56,
+        "ttnc_proxy_probe_macro_f1": 0.19901845850120026,
+        "target_probe_rmse_log1p": 0.954349935054779,
+        "target_probe_mae_dollars": 2616.6064453125,
+        "target_probe_rmse_dollars": 3991.9736328125,
+        "target_probe_wape_percent": 54.30793380737305,
+        "effective_sequence_length_claims_min": 50.0,
+        "effective_sequence_length_claims_median": 50.0,
+        "effective_sequence_length_claims_max": 50.0
+      }
+    }
+  },
+  "target_probe_protocol": "frozen_train_fit_to_heldout_eval",
+  "missing_modality": {
+    "missing_cpt": {
+      "target_probe_rmse_log1p": 0.9876188635826111,
+      "target_probe_mae_dollars": 2107.940673828125,
+      "target_probe_rmse_dollars": 2887.037353515625,
+      "target_probe_wape_percent": 45.33818054199219,
+      "full_to_missing_cosine_mean": 0.8952560424804688,
+      "full_to_missing_cosine_median": 0.9393274784088135,
+      "full_to_missing_relative_l2_mean": 0.3493712842464447,
+      "probe_training_protocol": "full_train_fit_applied_without_refit"
+    },
+    "missing_icd": {
+      "target_probe_rmse_log1p": 0.9196213483810425,
+      "target_probe_mae_dollars": 1864.5009765625,
+      "target_probe_rmse_dollars": 2652.1376953125,
+      "target_probe_wape_percent": 40.102210998535156,
+      "full_to_missing_cosine_mean": 0.8868947625160217,
+      "full_to_missing_cosine_median": 0.9264141321182251,
+      "full_to_missing_relative_l2_mean": 0.4357054829597473,
+      "probe_training_protocol": "full_train_fit_applied_without_refit"
+    }
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "device": "cuda",
+  "evaluation_split": "val",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "representation_sharing": {
+    "level2_claim_input": "composed_level1_claim_state",
+    "level1_task_and_level2_input_encoder_shared": true,
+    "context_target_level1_encoder_mode": "shared",
+    "context_target_claim_composer_mode": "shared",
+    "legacy_level2_token_encoder_mode": "inactive",
+    "level2_sequence_predictor_parameters": "online_shared",
+    "claim_prototype_target": "inactive"
+  },
+  "sigreg_formulation": "lejepa_convex",
+  "sigreg_weight_lvl1": 0.0,
+  "sigreg_weight_lvl2": 0.05,
+  "claim_prototype_weight": 0.0,
+  "claim_level": {
+    "num_claims": 4096,
+    "cpt_to_icd": {
+      "hit_rate_at_1": 0.2646484375,
+      "hit_rate_at_5": 0.269287109375,
+      "mean_reciprocal_rank": 0.2683282196521759,
+      "median_rank": 929.0,
+      "paired_cosine": 0.49943462014198303
+    },
+    "icd_to_cpt": {
+      "hit_rate_at_1": 0.044189453125,
+      "hit_rate_at_5": 0.048583984375,
+      "mean_reciprocal_rank": 0.050653524696826935,
+      "median_rank": 1056.0,
+      "paired_cosine": 0.5033918619155884
+    },
+    "strata": {
+      "singleton_or_pair": {
+        "cpt_to_icd": {
+          "hit_rate_at_1": 0.4281867145421903,
+          "hit_rate_at_5": 0.42908438061041293,
+          "mean_reciprocal_rank": 0.42916759848594666,
+          "median_rank": 995.0,
+          "paired_cosine": 0.41627222299575806,
+          "num_claims": 2228
+        },
+        "icd_to_cpt": {
+          "hit_rate_at_1": 0.3595152603231598,
+          "hit_rate_at_5": 0.3595152603231598,
+          "mean_reciprocal_rank": 0.36039531230926514,
+          "median_rank": 753.0,
+          "paired_cosine": 0.4849124252796173,
+          "num_claims": 2228
+        }
+      },
+      "multi_code": {
+        "cpt_to_icd": {
+          "hit_rate_at_1": 0.07173447537473233,
+          "hit_rate_at_5": 0.08190578158458243,
+          "mean_reciprocal_rank": 0.07989636808633804,
+          "median_rank": 607.0,
+          "paired_cosine": 0.598624050617218,
+          "num_claims": 1868
+        },
+        "icd_to_cpt": {
+          "hit_rate_at_1": 0.03693790149892934,
+          "hit_rate_at_5": 0.061027837259100645,
+          "mean_reciprocal_rank": 0.05400834232568741,
+          "median_rank": 448.0,
+          "paired_cosine": 0.5254327654838562,
+          "num_claims": 1868
+        }
+      },
+      "common_half": {
+        "cpt_to_icd": {
+          "hit_rate_at_1": 0.4948805460750853,
+          "hit_rate_at_5": 0.4953681131155534,
+          "mean_reciprocal_rank": 0.4967461824417114,
+          "median_rank": 9.0,
+          "paired_cosine": 0.517303466796875,
+          "num_claims": 2051
+        },
+        "icd_to_cpt": {
+          "hit_rate_at_1": 0.04388103364212579,
+          "hit_rate_at_5": 0.04388103364212579,
+          "mean_reciprocal_rank": 0.05262047424912453,
+          "median_rank": 761.0,
+          "paired_cosine": 0.5332558751106262,
+          "num_claims": 2051
+        }
+      },
+      "rare_half": {
+        "cpt_to_icd": {
+          "hit_rate_at_1": 0.03569682151589242,
+          "hit_rate_at_5": 0.044009779951100246,
+          "mean_reciprocal_rank": 0.04331083223223686,
+          "median_rank": 734.0,
+          "paired_cosine": 0.4815133213996887,
+          "num_claims": 2045
+        },
+        "icd_to_cpt": {
+          "hit_rate_at_1": 0.05134474327628362,
+          "hit_rate_at_5": 0.060146699266503664,
+          "mean_reciprocal_rank": 0.060030508786439896,
+          "median_rank": 527.0,
+          "paired_cosine": 0.47344037890434265,
+          "num_claims": 2045
+        }
+      }
+    },
+    "missing_modality": {
+      "full_vs_missing_cpt_cosine": 0.7188857197761536,
+      "full_vs_missing_icd_cosine": 0.7812548875808716
+    },
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4\\encoder.ckpt",
+    "evaluation_split": "val",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  }
+}

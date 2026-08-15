@@ -1,0 +1,14 @@
+{
+  "patient_representation_pre_sae": {
+    "target_probe_rmse_log1p": 0.8854885697364807,
+    "target_probe_mae_dollars": 2057.231201171875,
+    "target_probe_rmse_dollars": 3134.77490234375,
+    "target_probe_wape_percent": 44.39530944824219
+  },
+  "patient_representation": {
+    "target_probe_rmse_log1p": 0.8851549029350281,
+    "target_probe_mae_dollars": 2059.201904296875,
+    "target_probe_rmse_dollars": 3136.903564453125,
+    "target_probe_wape_percent": 44.437835693359375
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "candidate": "sigreg_dense_hybrid_dollar",
+    "overall_mae_dollars": 2051.723876953125,
+    "overall_wape_percent": 44.276458740234375,
+    "overall_rmse_dollars": 3133.948486328125,
+    "q4_high_cost_mae_dollars": 2393.839111328125,
+    "q4_high_cost_wape_percent": 26.286357879638672,
+    "q4_high_cost_rmse_dollars": 3764.979248046875,
+    "val_rmse_improvement_vs_mean_baseline": 557.8421
+  },
+  {
+    "candidate": "sigreg_dense_control",
+    "overall_mae_dollars": 2058.3515625,
+    "overall_wape_percent": 44.41947937011719,
+    "overall_rmse_dollars": 3138.23193359375,
+    "q4_high_cost_mae_dollars": 2398.464111328125,
+    "q4_high_cost_wape_percent": 26.337142944335938,
+    "q4_high_cost_rmse_dollars": 3728.035888671875,
+    "val_rmse_improvement_vs_mean_baseline": 570.8875
+  },
+  {
+    "candidate": "sigreg_dense_hybrid_repr_a5",
+    "overall_mae_dollars": 2060.525146484375,
+    "overall_wape_percent": 44.466392517089844,
+    "overall_rmse_dollars": 3138.885498046875,
+    "q4_high_cost_mae_dollars": 2432.517333984375,
+    "q4_high_cost_wape_percent": 26.711076736450195,
+    "q4_high_cost_rmse_dollars": 3769.41943359375,
+    "val_rmse_improvement_vs_mean_baseline": 559.9201
+  }
+]

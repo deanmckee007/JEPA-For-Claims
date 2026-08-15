@@ -1,0 +1,24 @@
+{
+  "name": "composable_sigreg_anycode_moddrop_seed42_e10",
+  "recipe": "composable_level1_sigreg",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 42,
+  "representation_pretrain_epochs": 10,
+  "max_samples": 4000,
+  "retrieval_k": 5,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [
+    "claim_inclusion_policy=any_code",
+    "context_cpt_dropout_prob=0.07",
+    "context_icd_dropout_prob=0.03",
+    "checkpoint_dirpath=experiments/composable_level1_followup_20260805/composable_sigreg_anycode_moddrop_seed42_e10/checkpoints",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=False",
+    "checkpoint_every_n_epochs=2"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\composable_level1_followup_20260805\\composable_sigreg_anycode_moddrop_seed42_e10\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\composable_level1_followup_20260805\\composable_sigreg_anycode_moddrop_seed42_e10\\representation_eval.json"
+}

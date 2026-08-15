@@ -1,0 +1,16 @@
+{
+  "num_samples": 2000,
+  "embedding_dim": 256,
+  "num_specialty_labels": 14,
+  "specialty_retrieval_hit_rate_at_5": 0.787,
+  "cluster_ari": 0.015789829363583058,
+  "cluster_silhouette": 0.2326858788728714,
+  "target_probe_rmse_log1p": 0.7515541315078735,
+  "target_probe_mae_dollars": 2857.6552734375,
+  "target_probe_rmse_dollars": 4391.609375,
+  "target_probe_wape_percent": 49.83937454223633,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\real_sweep_20260323\\sigreg_dense\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense",
+  "device": "cuda"
+}

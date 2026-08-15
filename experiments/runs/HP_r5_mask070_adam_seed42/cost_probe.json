@@ -1,0 +1,58 @@
+{
+  "target_probe_rmse_log1p": 0.8842618465423584,
+  "target_probe_mae_dollars": 2043.4569091796875,
+  "target_probe_rmse_dollars": 3118.847412109375,
+  "target_probe_wape_percent": 44.09805679321289,
+  "target_cost_bucket": {
+    "q1_low_cost": {
+      "target_probe_rmse_log1p": 1.0607552528381348,
+      "target_probe_mae_dollars": 509.15472412109375,
+      "target_probe_rmse_dollars": 635.1958618164062,
+      "target_probe_wape_percent": 41.177642822265625,
+      "target_dollars_min": 1.0,
+      "target_dollars_median": 1247.9398193359375,
+      "target_dollars_max": 2258.676025390625
+    },
+    "q2_mid_low_cost": {
+      "target_probe_rmse_log1p": 0.18186014890670776,
+      "target_probe_mae_dollars": 474.08154296875,
+      "target_probe_rmse_dollars": 566.2637329101562,
+      "target_probe_wape_percent": 15.028067588806152,
+      "target_dollars_min": 2258.8388671875,
+      "target_dollars_median": 3167.172607421875,
+      "target_dollars_max": 4195.94580078125
+    },
+    "q3_mid_high_cost": {
+      "target_probe_rmse_log1p": 0.09660997986793518,
+      "target_probe_mae_dollars": 402.4289855957031,
+      "target_probe_rmse_dollars": 480.6960144042969,
+      "target_probe_wape_percent": 8.023591041564941,
+      "target_dollars_min": 4196.21044921875,
+      "target_dollars_median": 5052.82275390625,
+      "target_dollars_max": 5863.048828125
+    },
+    "q4_high_cost": {
+      "target_probe_rmse_log1p": 0.3147992491722107,
+      "target_probe_mae_dollars": 2286.219970703125,
+      "target_probe_rmse_dollars": 3450.9990234375,
+      "target_probe_wape_percent": 26.144994735717773,
+      "target_dollars_min": 5864.30126953125,
+      "target_dollars_median": 7462.6826171875,
+      "target_dollars_max": 22026.466796875
+    }
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\HP_r5_mask070_adam_seed42\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+  "device": "cuda",
+  "seed": 42,
+  "representation_source": "patient_representation_pre_sae",
+  "num_samples": 15374,
+  "embedding_dim": 256,
+  "selection_metric_priority": [
+    "target_probe_mae_dollars",
+    "target_probe_wape_percent",
+    "target_probe_rmse_dollars",
+    "target_cost_bucket.q4_high_cost.target_probe_rmse_dollars"
+  ]
+}

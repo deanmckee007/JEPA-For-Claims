@@ -1,0 +1,16 @@
+{
+  "num_samples": 15374,
+  "embedding_dim": 256,
+  "num_specialty_labels": 19,
+  "specialty_retrieval_hit_rate_at_5": 0.6477169246780279,
+  "cluster_ari": -0.030156161963806577,
+  "cluster_silhouette": 0.4493544101715088,
+  "target_probe_rmse_log1p": 0.8888238072395325,
+  "target_probe_mae_dollars": 2077.562255859375,
+  "target_probe_rmse_dollars": 3167.955810546875,
+  "target_probe_wape_percent": 44.83405303955078,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H2_observed_k3\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense",
+  "device": "cuda"
+}

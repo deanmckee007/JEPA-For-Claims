@@ -11,6 +11,13 @@ __pycache__/
 *~
 .DS_Store
 
+# Generated training artifacts
+*.ckpt
+*.pt
+tb_logs/
+tmp_smoke/
+tmp_sweep/
+
 # Virtual environments
 venv/
 ENV/

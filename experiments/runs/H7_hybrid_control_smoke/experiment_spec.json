@@ -1,0 +1,13 @@
+{
+  "name": "H7_hybrid_control_smoke",
+  "recipe": "sigreg_dense_hybrid",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "accelerator": "auto",
+  "devices": 1,
+  "representation_pretrain_epochs": 5,
+  "max_samples": 2000,
+  "retrieval_k": 5,
+  "config_overrides": [],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_control_smoke\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_control_smoke\\representation_eval.json"
+}

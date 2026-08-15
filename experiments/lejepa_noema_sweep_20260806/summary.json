@@ -1,0 +1,94 @@
+{
+  "experiment": "lejepa_noema_sweep_20260806",
+  "question": "Does reference-style Level-2 SIGReg remove the need for an EMA target claim composer?",
+  "protocol": {
+    "evaluation_split": "val",
+    "test_split_accessed": false,
+    "claim_inclusion_policy": "complete_only",
+    "epochs": 4,
+    "data_split_seed": 42,
+    "training_seeds": [42, 43, 44],
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+    "sigreg_formulation": "lejepa_convex",
+    "level1_target_mode": "shared",
+    "level1_marginal_regularizer": "sigreg"
+  },
+  "seed42_shared_lambda_sweep": [
+    {
+      "lambda": 0.005,
+      "mae_dollars": 1846.2737,
+      "rmse_dollars": 2931.6853,
+      "wape_percent": 40.3527,
+      "retrieval_hit_rate_at_5": 0.704389,
+      "silhouette": 0.187032,
+      "missing_cpt_rmse_dollars": 3135.4597,
+      "missing_icd_rmse_dollars": 3040.4585
+    },
+    {
+      "lambda": 0.02,
+      "mae_dollars": 1836.8601,
+      "rmse_dollars": 2912.1877,
+      "wape_percent": 40.1469,
+      "retrieval_hit_rate_at_5": 0.686747,
+      "silhouette": 0.210672,
+      "missing_cpt_rmse_dollars": 3094.9551,
+      "missing_icd_rmse_dollars": 3077.5571
+    },
+    {
+      "lambda": 0.05,
+      "mae_dollars": 1830.1995,
+      "rmse_dollars": 2903.5090,
+      "wape_percent": 40.0014,
+      "retrieval_hit_rate_at_5": 0.686747,
+      "silhouette": 0.223506,
+      "missing_cpt_rmse_dollars": 3110.1580,
+      "missing_icd_rmse_dollars": 3129.8127
+    }
+  ],
+  "paired_lambda_0p05_seed_means": {
+    "shared_no_ema": {
+      "mae_dollars": 1851.3313,
+      "rmse_dollars": 2932.4286,
+      "wape_percent": 40.4632,
+      "retrieval_hit_rate_at_5": 0.689616,
+      "silhouette": 0.218624,
+      "missing_cpt_rmse_dollars": 3224.1047,
+      "missing_icd_rmse_dollars": 3130.3671
+    },
+    "ema_composer": {
+      "mae_dollars": 1868.7556,
+      "rmse_dollars": 2971.6326,
+      "wape_percent": 40.8441,
+      "retrieval_hit_rate_at_5": 0.695496,
+      "silhouette": 0.196770,
+      "missing_cpt_rmse_dollars": 3241.8781,
+      "missing_icd_rmse_dollars": 3284.5616
+    },
+    "shared_minus_ema": {
+      "mae_dollars": -17.4243,
+      "rmse_dollars": -39.2040,
+      "wape_percent": -0.3808,
+      "retrieval_hit_rate_at_5": -0.005881,
+      "silhouette": 0.021853,
+      "missing_cpt_rmse_dollars": -17.7734,
+      "missing_icd_rmse_dollars": -154.1945
+    }
+  },
+  "legacy_unregularized_ema_seed_mean": {
+    "mae_dollars": 1866.4060,
+    "rmse_dollars": 2960.0501,
+    "wape_percent": 40.7927,
+    "retrieval_hit_rate_at_5": 0.702524,
+    "silhouette": 0.117484,
+    "missing_cpt_rmse_dollars": 3313.3086,
+    "missing_icd_rmse_dollars": 3252.7548
+  },
+  "decision": {
+    "ema_necessary": false,
+    "selected_candidate_recipe": "composable_level1_lejepa",
+    "selected_lambda": 0.05,
+    "qualification": "Best tested compact-anchor configuration; lambda 0.05 was the upper tested boundary, not a demonstrated global optimum.",
+    "tradeoff": "Shared no-EMA improved cost, geometry, and averaged missing-modality metrics, while EMA retained a small retrieval-at-5 advantage."
+  }
+}

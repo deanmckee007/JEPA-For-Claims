@@ -1,0 +1,24 @@
+{
+  "name": "screen_ttnc_sequence_only_seed42_e2",
+  "recipe": "composable_level1_lejepa",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 42,
+  "representation_pretrain_epochs": 2,
+  "max_samples": 2000,
+  "retrieval_k": 5,
+  "max_claims": 2048,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [
+    "claim_inclusion_policy=any_code",
+    "data_split_seed=42",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=false",
+    "ttnc_in_composer=false"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\screen_ttnc_sequence_only_seed42_e2\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\screen_ttnc_sequence_only_seed42_e2\\representation_eval.json",
+  "claim_eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\screen_ttnc_sequence_only_seed42_e2\\claim_representation_eval.json"
+}

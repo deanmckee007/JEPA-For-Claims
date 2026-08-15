@@ -1,0 +1,26 @@
+[
+  {
+    "name": "baseline_obs000_mask070",
+    "note": "current grounded baseline",
+    "mae": 2050.02,
+    "wape": 44.24,
+    "rmse": 3119.47,
+    "q4_rmse": 3414.66
+  },
+  {
+    "name": "grounding_weight_0.1",
+    "note": "lower masked token grounding weight",
+    "mae": 2052.09,
+    "wape": 44.28,
+    "rmse": 3121.38,
+    "q4_rmse": 3428.35
+  },
+  {
+    "name": "grounding_weight_0.4",
+    "note": "higher masked token grounding weight",
+    "mae": 2049.46,
+    "wape": 44.23,
+    "rmse": 3122.30,
+    "q4_rmse": 3429.06
+  }
+]

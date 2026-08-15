@@ -1,0 +1,99 @@
+{
+  "num_claims": 4096,
+  "cpt_to_icd": {
+    "hit_rate_at_1": 0.2119140625,
+    "hit_rate_at_5": 0.21484375,
+    "mean_reciprocal_rank": 0.21528351306915283,
+    "median_rank": 1000.0,
+    "paired_cosine": 0.47755610942840576
+  },
+  "icd_to_cpt": {
+    "hit_rate_at_1": 0.04248046875,
+    "hit_rate_at_5": 0.21875,
+    "mean_reciprocal_rank": 0.13253924250602722,
+    "median_rank": 823.0,
+    "paired_cosine": 0.5273577570915222
+  },
+  "strata": {
+    "singleton_or_pair": {
+      "cpt_to_icd": {
+        "hit_rate_at_1": 0.32950191570881227,
+        "hit_rate_at_5": 0.32950191570881227,
+        "mean_reciprocal_rank": 0.3301640748977661,
+        "median_rank": 1007.0,
+        "paired_cosine": 0.3567010164260864,
+        "num_claims": 2088
+      },
+      "icd_to_cpt": {
+        "hit_rate_at_1": 0.5095785440613027,
+        "hit_rate_at_5": 0.5095785440613027,
+        "mean_reciprocal_rank": 0.5100347995758057,
+        "median_rank": 1.0,
+        "paired_cosine": 0.5063615441322327,
+        "num_claims": 2088
+      }
+    },
+    "multi_code": {
+      "cpt_to_icd": {
+        "hit_rate_at_1": 0.09163346613545817,
+        "hit_rate_at_5": 0.09760956175298804,
+        "mean_reciprocal_rank": 0.09847792983055115,
+        "median_rank": 530.0,
+        "paired_cosine": 0.6032261252403259,
+        "num_claims": 2008
+      },
+      "icd_to_cpt": {
+        "hit_rate_at_1": 0.00249003984063745,
+        "hit_rate_at_5": 0.1459163346613546,
+        "mean_reciprocal_rank": 0.06615272909402847,
+        "median_rank": 483.0,
+        "paired_cosine": 0.5491902828216553,
+        "num_claims": 2008
+      }
+    },
+    "common_half": {
+      "cpt_to_icd": {
+        "hit_rate_at_1": 0.4122137404580153,
+        "hit_rate_at_5": 0.4169847328244275,
+        "mean_reciprocal_rank": 0.41552385687828064,
+        "median_rank": 934.0,
+        "paired_cosine": 0.4866936504840851,
+        "num_claims": 2096
+      },
+      "icd_to_cpt": {
+        "hit_rate_at_1": 0.04389312977099236,
+        "hit_rate_at_5": 0.3568702290076336,
+        "mean_reciprocal_rank": 0.20129698514938354,
+        "median_rank": 734.0,
+        "paired_cosine": 0.5245816111564636,
+        "num_claims": 2096
+      }
+    },
+    "rare_half": {
+      "cpt_to_icd": {
+        "hit_rate_at_1": 0.0025,
+        "hit_rate_at_5": 0.009,
+        "mean_reciprocal_rank": 0.011093862354755402,
+        "median_rank": 694.0,
+        "paired_cosine": 0.4679799973964691,
+        "num_claims": 2000
+      },
+      "icd_to_cpt": {
+        "hit_rate_at_1": 0.0715,
+        "hit_rate_at_5": 0.075,
+        "mean_reciprocal_rank": 0.07806272059679031,
+        "median_rank": 467.0,
+        "paired_cosine": 0.5302671194076538,
+        "num_claims": 2000
+      }
+    }
+  },
+  "missing_modality": {
+    "full_vs_missing_cpt_cosine": 0.7064489126205444,
+    "full_vs_missing_icd_cosine": 0.7840665578842163
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\promote_history100_l1w1_seed43_e4\\encoder.ckpt",
+  "evaluation_split": "val",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+}

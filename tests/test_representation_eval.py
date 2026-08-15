@@ -1,0 +1,192 @@
+import unittest
+
+import numpy as np
+import torch
+from torch.utils.data import Subset
+
+from jepa_utils.representation_eval import (
+    compute_claim_prototype_metrics,
+    compute_claim_prototype_stability,
+    compute_representation_geometry_metrics,
+    evaluate_representation_quality,
+    extract_raw_sequence_lengths,
+    extract_last_valid_ttnc,
+    get_representation_source_names,
+    select_representation_tensor,
+)
+
+
+class TestRepresentationEval(unittest.TestCase):
+    def test_claim_prototype_metrics_and_missing_modality_stability(self):
+        assignments = np.eye(4, dtype=np.float32)
+        probabilities = assignments * 0.9 + 0.1 / 4
+
+        metrics = compute_claim_prototype_metrics(assignments, probabilities)
+        stability = compute_claim_prototype_stability(
+            probabilities,
+            probabilities.copy(),
+        )
+
+        self.assertEqual(metrics["prototype_count"], 4)
+        self.assertEqual(metrics["prediction_top1_accuracy"], 1.0)
+        self.assertEqual(metrics["prediction_top5_accuracy"], 1.0)
+        self.assertAlmostEqual(metrics["effective_prototype_fraction"], 1.0)
+        self.assertEqual(stability["top1_agreement"], 1.0)
+        self.assertAlmostEqual(stability["jensen_shannon_divergence"], 0.0)
+
+    def test_compute_representation_geometry_metrics_reports_effective_rank(self):
+        embeddings = np.array(
+            [
+                [1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+                [-1.0, 0.0, 0.0],
+                [0.0, -1.0, 0.0],
+            ],
+            dtype=np.float32,
+        )
+
+        metrics = compute_representation_geometry_metrics(embeddings, cosine_sample_size=4)
+
+        self.assertEqual(metrics["num_samples"], 4)
+        self.assertEqual(metrics["embedding_dim"], 3)
+        self.assertGreater(metrics["participation_ratio"], 1.0)
+        self.assertLess(metrics["participation_ratio"], 3.1)
+        self.assertGreaterEqual(metrics["explained_variance_top1_share"], 0.0)
+        self.assertLessEqual(metrics["explained_variance_top1_share"], 1.0)
+        self.assertEqual(metrics["low_var_frac_lt_1e-3"], 1.0 / 3.0)
+
+    def test_extract_last_valid_ttnc_with_left_padding(self):
+        ttnc_tensor = torch.tensor(
+            [
+                [0, 0, 5, 6],
+                [0, 0, 3, 4],
+                [0, 0, 0, 0],
+            ],
+            dtype=torch.long,
+        )
+
+        labels = extract_last_valid_ttnc(ttnc_tensor)
+
+        self.assertEqual(labels.tolist(), [6, 4, 0])
+
+    def test_evaluate_representation_quality_on_separable_embeddings(self):
+        embeddings = np.array(
+            [
+                [1.0, 1.0],
+                [1.1, 0.9],
+                [0.9, 1.2],
+                [1.2, 1.1],
+                [-1.0, -1.0],
+                [-1.1, -0.9],
+                [-0.9, -1.2],
+                [-1.2, -1.1],
+            ],
+            dtype=np.float32,
+        )
+        specialty_labels = np.array([0, 0, 0, 0, 1, 1, 1, 1], dtype=np.int64)
+        targets = np.array([1.0, 1.1, 0.9, 1.2, -1.0, -1.1, -0.9, -1.2], dtype=np.float32)
+        raw_sequence_lengths = np.array([2, 2, 3, 3, 8, 9, 10, 12], dtype=np.int64)
+        effective_sequence_lengths = np.array([2, 2, 3, 3, 4, 4, 4, 4], dtype=np.int64)
+
+        results = evaluate_representation_quality(
+            embeddings,
+            specialty_labels,
+            targets,
+            sequence_lengths=raw_sequence_lengths,
+            effective_sequence_lengths=effective_sequence_lengths,
+            retrieval_k=3,
+        )
+
+        self.assertEqual(results["num_samples"], 8)
+        self.assertEqual(results["embedding_dim"], 2)
+        self.assertEqual(results["ttnc_proxy_label_source"], "last_valid_ttnc")
+        self.assertGreater(results["ttnc_proxy_retrieval_hit_rate_at_3"], 0.99)
+        self.assertGreater(results["ttnc_proxy_label_cluster_ari"], 0.99)
+        self.assertGreater(results["ttnc_proxy_probe_accuracy"], 0.99)
+        self.assertLess(results["target_probe_rmse_log1p"], 0.5)
+        self.assertGreater(results["target_probe_rmse_dollars"], 0.0)
+        self.assertGreater(results["target_probe_mae_dollars"], 0.0)
+        self.assertGreater(results["target_probe_wape_percent"], 0.0)
+        self.assertIn("slices", results)
+        self.assertIn("target_cost_bucket", results["slices"])
+        self.assertIn("sequence_length_bucket", results["slices"])
+        self.assertIn("effective_sequence_length_bucket", results["slices"])
+        self.assertIn("ttnc_proxy_frequency_bucket", results["slices"])
+        self.assertEqual(results["slices"]["sequence_length_bucket_basis"], "raw_claims")
+
+        cost_buckets = results["slices"]["target_cost_bucket"]
+        length_buckets = results["slices"]["sequence_length_bucket"]
+        effective_length_buckets = results["slices"]["effective_sequence_length_bucket"]
+        frequency_buckets = results["slices"]["ttnc_proxy_frequency_bucket"]
+
+        self.assertEqual(sum(bucket["num_samples"] for bucket in cost_buckets.values()), 8)
+        self.assertEqual(sum(bucket["num_samples"] for bucket in length_buckets.values()), 8)
+        self.assertEqual(sum(bucket["num_samples"] for bucket in effective_length_buckets.values()), 8)
+        self.assertEqual(sum(bucket["num_samples"] for bucket in frequency_buckets.values()), 8)
+        self.assertLess(
+            cost_buckets["q1_low_cost"]["target_dollars_max"],
+            cost_buckets["q4_high_cost"]["target_dollars_min"],
+        )
+        self.assertLessEqual(
+            length_buckets["q1_shortest_sequences"]["sequence_length_claims_max"],
+            length_buckets["q4_longest_sequences"]["sequence_length_claims_min"],
+        )
+        self.assertLessEqual(
+            effective_length_buckets["q1_shortest_effective_sequences"]["effective_sequence_length_claims_max"],
+            effective_length_buckets["q4_longest_effective_sequences"]["effective_sequence_length_claims_min"],
+        )
+        self.assertLess(
+            effective_length_buckets["q4_longest_effective_sequences"]["effective_sequence_length_claims_max"],
+            length_buckets["q4_longest_sequences"]["sequence_length_claims_max"],
+        )
+
+    def test_extract_raw_sequence_lengths_from_subset(self):
+        class TinyDataset:
+            def __init__(self):
+                self.processed_data = [["a", "b"], ["a", "b", "c", "d"], ["a", "b", "c"]]
+
+            def __len__(self):
+                return len(self.processed_data)
+
+            def __getitem__(self, idx):
+                return self.processed_data[idx], float(idx)
+
+        subset = Subset(TinyDataset(), [2, 0])
+        lengths = extract_raw_sequence_lengths(subset)
+
+        self.assertEqual(lengths.tolist(), [3, 2])
+
+    def test_select_representation_tensor_supports_probe_sources(self):
+        outputs = {
+            "patient_representation": torch.tensor([[1.0, 2.0]]),
+            "patient_representation_pre_sae": torch.tensor([[3.0, 4.0]]),
+            "prediction_lvl2": torch.tensor([[[5.0, 6.0], [7.0, 8.0]]]),
+            "sequence_aux": {
+                "context_mean_pool": torch.tensor([[9.0, 10.0]]),
+                "context_max_pool": torch.tensor([[11.0, 12.0]]),
+                "context_pooled": torch.tensor([[13.0, 14.0, 15.0, 16.0]]),
+                "dense_decoder_latent": torch.tensor([[17.0, 18.0]]),
+            },
+        }
+
+        self.assertEqual(
+            select_representation_tensor(outputs, "patient_representation").tolist(),
+            [[1.0, 2.0]],
+        )
+        self.assertEqual(
+            select_representation_tensor(outputs, "patient_representation_pre_sae").tolist(),
+            [[3.0, 4.0]],
+        )
+        self.assertEqual(
+            select_representation_tensor(outputs, "next_claim_prediction").tolist(),
+            [[7.0, 8.0]],
+        )
+        self.assertEqual(
+            select_representation_tensor(outputs, "context_mean_pool").tolist(),
+            [[9.0, 10.0]],
+        )
+        self.assertIn("dense_decoder_latent", get_representation_source_names())
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -1,0 +1,28 @@
+{
+  "name": "core_arch_complex_smoke_v2_seed42",
+  "recipe": "composable_level1_lejepa",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 42,
+  "representation_pretrain_epochs": 1,
+  "max_samples": 256,
+  "retrieval_k": 5,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [
+    "claim_inclusion_policy=any_code",
+    "max_cpt_tokens=10",
+    "max_icd_tokens=10",
+    "claim_pooling_type=query_attention",
+    "claim_pooling_use_rarity=true",
+    "level2_decoder_type=cross_attention",
+    "use_masked_claim_jepa=true",
+    "use_multi_hypothesis_future=true",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=false"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\core_arch_complex_smoke_v2_seed42\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\core_arch_complex_smoke_v2_seed42\\representation_eval.json",
+  "claim_eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\core_arch_complex_smoke_v2_seed42\\claim_representation_eval.json"
+}

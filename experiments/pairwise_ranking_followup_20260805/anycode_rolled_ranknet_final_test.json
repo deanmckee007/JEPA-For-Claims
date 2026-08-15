@@ -1,0 +1,45 @@
+{
+  "protocol": {
+    "ranking_head_fit_split": "train",
+    "calibration_fit_split": "val",
+    "reported_evaluation_split": "test",
+    "test_accessed": true,
+    "test_access_explicitly_authorized": true
+  },
+  "num_train": 15050,
+  "num_calibration": 3188,
+  "num_reported": 3274,
+  "variants": {
+    "rolled_ranknet": {
+      "pairwise_accuracy": 0.7100539048514366,
+      "pairwise_pairs_evaluated": 499955,
+      "pairwise_pairs_available": 5357901,
+      "spearman_correlation": 0.5788047530066102,
+      "top_decile_recall": 0.43902439024390244,
+      "monotonic_dollar_calibration": {
+        "mae_dollars": 1595.0594482421875,
+        "rmse_dollars": 2597.912109375,
+        "wape_percent": 33.95071792602539
+      },
+      "training_loss_first": 0.5863638368703551,
+      "training_loss_last": 0.489861081717378,
+      "training_pairs_per_epoch_first": 15050,
+      "training_pairs_total": 451500
+    }
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\composable_level1_followup_20260805\\composable_sigreg_anycode_seed42_e10\\encoder.ckpt",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "claim_inclusion_policy": "any_code",
+  "seed": 42,
+  "hyperparameters": {
+    "epochs": 30,
+    "group_size": 64,
+    "legacy_batch_size": 256,
+    "num_strata": 10,
+    "pointwise_weight": 0.1,
+    "tail_pair_weight": 4.0,
+    "lambda_gain_scale": 4.0,
+    "calibration_folds": 5
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "H7_hybrid_ema_decay_0p9995_smoke",
+  "recipe": "sigreg_dense_hybrid",
+  "config_overrides": [
+    "ema_decay=0.9995"
+  ],
+  "artifact_dir": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_ema_decay_0p9995_smoke",
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_ema_decay_0p9995_smoke\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_ema_decay_0p9995_smoke\\representation_eval.json",
+  "num_samples": 2000,
+  "embedding_dim": 256,
+  "num_specialty_labels": 14,
+  "specialty_retrieval_hit_rate_at_5": 0.78,
+  "cluster_ari": 0.015291879283516241,
+  "cluster_silhouette": 0.24747265875339508,
+  "target_probe_rmse_log1p": 0.7268948554992676,
+  "target_probe_mae_dollars": 2787.088134765625,
+  "target_probe_rmse_dollars": 4239.466796875,
+  "target_probe_wape_percent": 48.608638763427734,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H7_hybrid_ema_decay_0p9995_smoke\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "device": "cuda"
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "name": "sae_weight_2_0",
+    "mae_mean": 2067.38,
+    "mae_std": 19.19,
+    "wape_mean": 44.65,
+    "wape_std": 0.38,
+    "rmse_mean": 3150.27,
+    "rmse_std": 34.34,
+    "q4_rmse_mean": 3449.41,
+    "q4_rmse_std": 44.92
+  },
+  {
+    "name": "sae_k_5",
+    "mae_mean": 2068.81,
+    "mae_std": 20.93,
+    "wape_mean": 44.68,
+    "wape_std": 0.37,
+    "rmse_mean": 3153.09,
+    "rmse_std": 36.95,
+    "q4_rmse_mean": 3448.79,
+    "q4_rmse_std": 47.2
+  },
+  {
+    "name": "baseline_obs000_mask070",
+    "mae_mean": 2069.22,
+    "mae_std": 19.28,
+    "wape_mean": 44.69,
+    "wape_std": 0.34,
+    "rmse_mean": 3152.26,
+    "rmse_std": 34.06,
+    "q4_rmse_mean": 3450.24,
+    "q4_rmse_std": 46.9
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "data_contract": "artifacts/data_contracts/claims_seed42_v1.json",
+  "patient_rows": 35976,
+  "patient_claim_count": {
+    "p50": 15.0,
+    "p90": 271.5,
+    "p99": 363.0,
+    "max": 364,
+    "patients_over_50": 11851,
+    "fraction_over_50": 0.3294140538147654
+  },
+  "codes_per_claim": {
+    "cpt": {
+      "p50": 1.0,
+      "p90": 2.0,
+      "p99": 8.0,
+      "max": 64,
+      "claims_over_5": 59488,
+      "token_fraction_dropped_at_cap_5": 0.0688165
+    },
+    "icd": {
+      "p50": 1.0,
+      "p90": 6.0,
+      "p99": 10.0,
+      "max": 37,
+      "claims_over_5": 312947,
+      "token_fraction_dropped_at_cap_5": 0.1471895
+    }
+  },
+  "decision": {
+    "canonical_max_claims_len": 50,
+    "canonical_max_cpt_tokens": 5,
+    "canonical_max_icd_tokens": 5,
+    "rationale": "History 100 produced a small average cost gain but consistently reduced silhouette and made missing-CPT performance highly seed-unstable. Token cap 10 did not improve the two-epoch screen enough to justify its added compute and changed geometry."
+  }
+}

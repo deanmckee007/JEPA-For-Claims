@@ -1,0 +1,68 @@
+{
+  "best_overall_checkpoint": "stage1-epochepoch=19.ckpt",
+  "best_overall_mae": 2071.0166015625,
+  "best_overall_wape": 44.69279479980469,
+  "best_overall_rmse": 3158.333740234375,
+  "best_overall_q4_rmse": 3515.006591796875,
+  "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+  "best_q4_rmse": 3489.172119140625,
+  "run_name": "A11mix050_seed42",
+  "base_recipe": "sigreg_dense_hybrid_dollar_masked_grounding_sigreg0",
+  "transfer_recipe": "a11_graph_ssl_transfer",
+  "graph_embedding_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed42\\graph_embeddings.pt",
+  "graph_stats": {
+    "num_nodes": 3179,
+    "num_edges": 633190,
+    "cpt_vocab_size": 1910,
+    "icd_vocab_size": 1245,
+    "ttnc_vocab_size": 24
+  },
+  "graph_epochs": 120,
+  "graph_history_tail": [
+    {
+      "epoch": 116,
+      "loss": 2.307145118713379,
+      "pos_loss": 0.455628901720047,
+      "neg_loss": 0.6989932656288147,
+      "reconstruction_loss": 1.1525229215621948
+    },
+    {
+      "epoch": 117,
+      "loss": 2.334271192550659,
+      "pos_loss": 0.45571228861808777,
+      "neg_loss": 0.7002481818199158,
+      "reconstruction_loss": 1.178310751914978
+    },
+    {
+      "epoch": 118,
+      "loss": 2.3294858932495117,
+      "pos_loss": 0.45906591415405273,
+      "neg_loss": 0.6945026516914368,
+      "reconstruction_loss": 1.1759172677993774
+    },
+    {
+      "epoch": 119,
+      "loss": 2.324331283569336,
+      "pos_loss": 0.4612405598163605,
+      "neg_loss": 0.6920720338821411,
+      "reconstruction_loss": 1.1710187196731567
+    },
+    {
+      "epoch": 120,
+      "loss": 2.3040599822998047,
+      "pos_loss": 0.464284211397171,
+      "neg_loss": 0.6940991282463074,
+      "reconstruction_loss": 1.1456767320632935
+    }
+  ],
+  "compare_report": "C:/Users/tmcke/code/JEPA-For-Claims/experiments/runs/A9_compare_baseline_seed42/checkpoint_series_cost_probe.json",
+  "baseline_compare": {
+    "best_overall_checkpoint": "stage1-epochepoch=19.ckpt",
+    "best_overall_mae": 2045.178466796875,
+    "best_overall_wape": 44.13520812988281,
+    "best_overall_rmse": 3116.1064453125,
+    "best_overall_q4_rmse": 3417.41552734375,
+    "best_q4_checkpoint": "stage1-epochepoch=11.ckpt",
+    "best_q4_rmse": 3403.356201171875
+  }
+}

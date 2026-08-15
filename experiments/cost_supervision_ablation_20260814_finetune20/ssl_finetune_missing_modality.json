@@ -1,0 +1,69 @@
+{
+  "condition": "ssl_finetune",
+  "full": {
+    "target_probe_rmse_log1p": 0.7997661828994751,
+    "target_probe_mae_dollars": 1464.7647705078125,
+    "target_probe_rmse_dollars": 2431.755859375,
+    "target_probe_wape_percent": 31.504573822021484,
+    "pairwise_accuracy": 0.7250744531270313,
+    "pairwise_pairs_evaluated": 499979,
+    "pairwise_pairs_available": 5080078,
+    "spearman_correlation": 0.6123534216420689,
+    "top_decile_recall": 0.47335423197492166
+  },
+  "missing_modality": {
+    "missing_cpt": {
+      "direct_cost_head": {
+        "target_probe_rmse_log1p": 0.9617254137992859,
+        "target_probe_mae_dollars": 1923.8310546875,
+        "target_probe_rmse_dollars": 2781.0234375,
+        "target_probe_wape_percent": 41.37830352783203,
+        "pairwise_accuracy": 0.5887227263545068,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.25797841881793204,
+        "top_decile_recall": 0.30407523510971785,
+        "full_to_missing_cosine_mean": 0.8648667931556702,
+        "full_to_missing_cosine_median": 0.8843259215354919
+      },
+      "frozen_linear_probe": {
+        "target_probe_rmse_log1p": 1.0867514610290527,
+        "target_probe_mae_dollars": 2767.507568359375,
+        "target_probe_rmse_dollars": 3656.95166015625,
+        "target_probe_wape_percent": 59.52433395385742,
+        "full_to_missing_cosine_mean": 0.8648667931556702,
+        "full_to_missing_cosine_median": 0.8843259215354919,
+        "full_to_missing_relative_l2_mean": 0.4178377687931061,
+        "probe_training_protocol": "full_train_fit_applied_without_refit"
+      }
+    },
+    "missing_icd": {
+      "direct_cost_head": {
+        "target_probe_rmse_log1p": 0.8941835165023804,
+        "target_probe_mae_dollars": 1663.529541015625,
+        "target_probe_rmse_dollars": 2523.2939453125,
+        "target_probe_wape_percent": 35.779659271240234,
+        "pairwise_accuracy": 0.6723922404741,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.4859541227494501,
+        "top_decile_recall": 0.4608150470219436,
+        "full_to_missing_cosine_mean": 0.8646422624588013,
+        "full_to_missing_cosine_median": 0.8972852230072021
+      },
+      "frozen_linear_probe": {
+        "target_probe_rmse_log1p": 0.9968859553337097,
+        "target_probe_mae_dollars": 2499.61474609375,
+        "target_probe_rmse_dollars": 3381.447021484375,
+        "target_probe_wape_percent": 53.762420654296875,
+        "full_to_missing_cosine_mean": 0.8646422624588013,
+        "full_to_missing_cosine_median": 0.8972852230072021,
+        "full_to_missing_relative_l2_mean": 0.48461636900901794,
+        "probe_training_protocol": "full_train_fit_applied_without_refit"
+      }
+    }
+  },
+  "evaluation_split": "frozen_validation",
+  "test_accessed": false,
+  "artifact": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\cost_supervision_ablation_20260814_finetune20\\ssl_finetune.pt"
+}

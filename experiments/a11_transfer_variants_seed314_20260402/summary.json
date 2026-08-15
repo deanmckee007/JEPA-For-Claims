@@ -1,0 +1,61 @@
+[
+  {
+    "name": "A11variant314_cpt_icd_only_mix050",
+    "recipe": "a11_graph_ssl_transfer",
+    "overrides": [
+      "graph_transfer_ttnc=False",
+      "graph_embedding_mix=0.5"
+    ],
+    "best_overall_checkpoint": "stage1-epochepoch=23.ckpt",
+    "best_overall_mae": 2047.249267578125,
+    "best_overall_wape": 44.55482482910156,
+    "best_overall_rmse": 3174.032470703125,
+    "best_overall_q4_rmse": 3511.20849609375,
+    "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_q4_rmse": 3496.103271484375
+  },
+  {
+    "name": "A11variant314_cpt_icd_only_mix025",
+    "recipe": "a11_graph_ssl_transfer",
+    "overrides": [
+      "graph_transfer_ttnc=False",
+      "graph_embedding_mix=0.25"
+    ],
+    "best_overall_checkpoint": "stage1-epochepoch=23.ckpt",
+    "best_overall_mae": 2051.459716796875,
+    "best_overall_wape": 44.64645767211914,
+    "best_overall_rmse": 3189.328369140625,
+    "best_overall_q4_rmse": 3511.001953125,
+    "best_q4_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_q4_rmse": 3487.835205078125
+  },
+  {
+    "name": "A11variant314_all_streams_mix025",
+    "recipe": "a11_graph_ssl_transfer",
+    "overrides": [
+      "graph_embedding_mix=0.25"
+    ],
+    "best_overall_checkpoint": "stage1-epochepoch=03.ckpt",
+    "best_overall_mae": 2058.450927734375,
+    "best_overall_wape": 44.798606872558594,
+    "best_overall_rmse": 3204.2646484375,
+    "best_overall_q4_rmse": 3489.047607421875,
+    "best_q4_checkpoint": "stage1-epochepoch=11.ckpt",
+    "best_q4_rmse": 3475.205810546875
+  },
+  {
+    "name": "A11variant314_cpt_icd_only_hard",
+    "recipe": "a11_graph_ssl_transfer",
+    "overrides": [
+      "graph_transfer_ttnc=False",
+      "graph_embedding_mix=1.0"
+    ],
+    "best_overall_checkpoint": "stage1-epochepoch=15.ckpt",
+    "best_overall_mae": 2196.033203125,
+    "best_overall_wape": 47.792850494384766,
+    "best_overall_rmse": 3370.056884765625,
+    "best_overall_q4_rmse": 3619.312744140625,
+    "best_q4_checkpoint": "stage1-epochepoch=11.ckpt",
+    "best_q4_rmse": 3615.967041015625
+  }
+]

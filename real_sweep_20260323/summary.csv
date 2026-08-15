@@ -1,0 +1,4 @@
+recipe,checkpoint,specialty_retrieval_hit_rate_at_5,cluster_ari,specialty_probe_accuracy,specialty_probe_macro_f1,target_probe_rmse_log1p,num_samples,embedding_dim,device
+vicreg_baseline,C:\Users\tmcke\code\JEPA-For-Claims\real_sweep_20260323\vicreg_baseline\encoder.ckpt,0.789,0.01759074888687423,,,0.7620282173156738,2000,256,cuda
+sigreg_core,C:\Users\tmcke\code\JEPA-For-Claims\real_sweep_20260323\sigreg_core\encoder.ckpt,0.7935,0.016805223801635755,,,0.744258463382721,2000,256,cuda
+sigreg_dense,C:\Users\tmcke\code\JEPA-For-Claims\real_sweep_20260323\sigreg_dense\encoder.ckpt,0.794,0.018816420674090065,,,0.7573944330215454,2000,256,cuda
