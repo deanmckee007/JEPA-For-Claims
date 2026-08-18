@@ -1,0 +1,27 @@
+{
+  "protocol": {
+    "selection_split": "val",
+    "test_accessed": false,
+    "seed": 42,
+    "epochs": 4,
+    "claim_inclusion_policy": "complete_only",
+    "representation_source": "patient_representation_pre_sae",
+    "num_train": 10659,
+    "num_validation": 2324
+  },
+  "results": [
+    {"treatment": "none", "mae_dollars": 1877.15, "rmse_dollars": 2983.71, "wape_percent": 41.027, "retrieval_at_5": 0.6988, "silhouette": 0.1126, "missing_cpt_rmse_dollars": 3315.93, "missing_cpt_cosine": 0.8893, "missing_icd_rmse_dollars": 3105.51, "missing_icd_cosine": 0.8991},
+    {"treatment": "sigreg", "mae_dollars": 1859.77, "rmse_dollars": 2959.49, "wape_percent": 40.648, "retrieval_at_5": 0.6984, "silhouette": 0.1250, "missing_cpt_rmse_dollars": 3372.41, "missing_cpt_cosine": 0.8872, "missing_icd_rmse_dollars": 3073.69, "missing_icd_cosine": 0.9032},
+    {"treatment": "wristband_0.005", "mae_dollars": 1920.52, "rmse_dollars": 3025.75, "wape_percent": 41.975, "retrieval_at_5": 0.7104, "silhouette": 0.1013, "missing_cpt_rmse_dollars": 3478.41, "missing_cpt_cosine": 0.9139, "missing_icd_rmse_dollars": 3046.05, "missing_icd_cosine": 0.9169},
+    {"treatment": "wristband_0.01", "mae_dollars": 1926.63, "rmse_dollars": 3029.50, "wape_percent": 42.109, "retrieval_at_5": 0.7070, "silhouette": 0.1022, "missing_cpt_rmse_dollars": 3482.81, "missing_cpt_cosine": 0.9173, "missing_icd_rmse_dollars": 3043.29, "missing_icd_cosine": 0.9182},
+    {"treatment": "wristband_0.025", "mae_dollars": 1930.77, "rmse_dollars": 3032.71, "wape_percent": 42.200, "retrieval_at_5": 0.7057, "silhouette": 0.0875, "missing_cpt_rmse_dollars": 3496.76, "missing_cpt_cosine": 0.9197, "missing_icd_rmse_dollars": 3034.43, "missing_icd_cosine": 0.9191},
+    {"treatment": "wristband_0.05", "mae_dollars": 1932.16, "rmse_dollars": 3033.40, "wape_percent": 42.230, "retrieval_at_5": 0.7057, "silhouette": 0.0881, "missing_cpt_rmse_dollars": 3502.48, "missing_cpt_cosine": 0.9203, "missing_icd_rmse_dollars": 3033.38, "missing_icd_cosine": 0.9188},
+    {"treatment": "wristband_0.1", "mae_dollars": 1934.66, "rmse_dollars": 3035.36, "wape_percent": 42.285, "retrieval_at_5": 0.7083, "silhouette": 0.0953, "missing_cpt_rmse_dollars": 3506.21, "missing_cpt_cosine": 0.9207, "missing_icd_rmse_dollars": 3034.62, "missing_icd_cosine": 0.9189}
+  ],
+  "decision": {
+    "selected_primary_treatment": "sigreg",
+    "best_wristband_weight": 0.005,
+    "promote_wristband": false,
+    "reason": "Every tested Wristband weight lost to both SIGReg and no marginal regularizer on MAE, RMSE, and WAPE. Wristband improved retrieval and missing-ICD invariance while degrading missing-CPT cost signal."
+  }
+}

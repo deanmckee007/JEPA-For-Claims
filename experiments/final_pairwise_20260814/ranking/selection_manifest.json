@@ -1,0 +1,45 @@
+{
+  "selection_protocol": {
+    "candidate_variants": [
+      "rolled_ranknet",
+      "rolled_ranknet_pointwise",
+      "tail_ranknet",
+      "tail_ranknet_pointwise",
+      "all_ranknet",
+      "lambdarank",
+      "lambdarank_pointwise"
+    ],
+    "selection_split": "frozen_validation",
+    "primary_metric": "pairwise_accuracy",
+    "tie_breaker": "spearman_correlation",
+    "selected_variant": "rolled_ranknet_pointwise",
+    "test_used_for_selection": false
+  },
+  "locked_artifacts": {
+    "encoder_checkpoint": {
+      "path": "experiments/final_pairwise_20260814/selected_lejepa_anycode_seed42_e20/encoder.ckpt",
+      "sha256": "1039ce30c051502929f5777c3f4eed50263e1b42df203816e16f764033cd7623"
+    },
+    "ranking_heads": {
+      "path": "experiments/final_pairwise_20260814/ranking/heads.pt",
+      "sha256": "e1df10a53a71e3d056c89c22931324a2f344ca3b233ab0c6b5baac63dad62228"
+    }
+  },
+  "validation_selection_metrics": {
+    "pairwise_accuracy": 0.7242044165854966,
+    "spearman_correlation": 0.6131657173611701,
+    "top_decile_recall": 0.4827586206896552,
+    "monotonic_dollar_calibration": {
+      "mae_dollars": 1507.3934881259388,
+      "rmse_dollars": 2449.7599623494907,
+      "wape_percent": 32.421444946019086
+    }
+  },
+  "sealed_test_protocol": {
+    "ranking_head_retrained": false,
+    "ranking_variant_reselected": false,
+    "calibrator_refit": false,
+    "reported_test_evaluations": 1,
+    "note": "The first test invocation loaded representations but failed on a CPU/GPU head-device mismatch before producing scores or metrics. The identical locked protocol was retried after moving the saved head to the evaluation device."
+  }
+}

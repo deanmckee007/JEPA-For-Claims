@@ -1,0 +1,24 @@
+{
+  "name": "promote_history100_l1w1_seed44_e4",
+  "recipe": "composable_level1_lejepa",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 44,
+  "representation_pretrain_epochs": 4,
+  "max_samples": 3188,
+  "retrieval_k": 5,
+  "max_claims": 4096,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [
+    "claim_inclusion_policy=any_code",
+    "data_split_seed=42",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=false",
+    "max_claims_len=100"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\promote_history100_l1w1_seed44_e4\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\promote_history100_l1w1_seed44_e4\\representation_eval.json",
+  "claim_eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\promote_history100_l1w1_seed44_e4\\claim_representation_eval.json"
+}

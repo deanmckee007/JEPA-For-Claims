@@ -1,0 +1,311 @@
+{
+  "baseline_seed42": {
+    "cost_probe": {
+      "patient_representation_pre_sae": {
+        "target_probe_rmse_log1p": 0.8854885697364807,
+        "target_probe_mae_dollars": 2057.231201171875,
+        "target_probe_rmse_dollars": 3134.77490234375,
+        "target_probe_wape_percent": 44.39530944824219
+      },
+      "patient_representation": {
+        "target_probe_rmse_log1p": 0.8851549029350281,
+        "target_probe_mae_dollars": 2059.201904296875,
+        "target_probe_rmse_dollars": 3136.903564453125,
+        "target_probe_wape_percent": 44.437835693359375
+      }
+    },
+    "patient_path_geometry": {
+      "context_mean_pool": {
+        "num_samples": 15374,
+        "embedding_dim": 128,
+        "std_mean": 0.12759432196617126,
+        "std_min": 0.06900832056999207,
+        "std_median": 0.1221647784113884,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 8.21581099085356,
+        "participation_ratio_fraction": 0.06418602336604344,
+        "explained_variance_top1_share": 0.2911182740277411,
+        "explained_variance_top5_share": 0.6125222037976266,
+        "explained_variance_top10_share": 0.795159051672108,
+        "mean_pairwise_cosine": 0.355744332075119,
+        "median_pairwise_cosine": 0.3467940092086792,
+        "cosine_sample_size": 2048
+      },
+      "context_pooled": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.14403240382671356,
+        "std_min": 0.06900832056999207,
+        "std_median": 0.13647404313087463,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.7798275253222995,
+        "participation_ratio_fraction": 0.026483701270790232,
+        "explained_variance_top1_share": 0.3302618808159465,
+        "explained_variance_top5_share": 0.6473517293326515,
+        "explained_variance_top10_share": 0.7855774512702137,
+        "mean_pairwise_cosine": 0.48207592964172363,
+        "median_pairwise_cosine": 0.5131984949111938,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation_pre_sae": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.14403240382671356,
+        "std_min": 0.06900832056999207,
+        "std_median": 0.13647404313087463,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.7798275253222995,
+        "participation_ratio_fraction": 0.026483701270790232,
+        "explained_variance_top1_share": 0.3302618808159465,
+        "explained_variance_top5_share": 0.6473517293326515,
+        "explained_variance_top10_share": 0.7855774512702137,
+        "mean_pairwise_cosine": 0.48207592964172363,
+        "median_pairwise_cosine": 0.5131984949111938,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.0850829929113388,
+        "std_min": 0.03782147914171219,
+        "std_median": 0.0791463553905487,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 5.057182380924697,
+        "participation_ratio_fraction": 0.0197546186754871,
+        "explained_variance_top1_share": 0.4006194384908634,
+        "explained_variance_top5_share": 0.7175369042836269,
+        "explained_variance_top10_share": 0.8346317648884591,
+        "mean_pairwise_cosine": 0.5932028889656067,
+        "median_pairwise_cosine": 0.609194815158844,
+        "cosine_sample_size": 2048
+      },
+      "predictive_state": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.14403240382671356,
+        "std_min": 0.06900832056999207,
+        "std_median": 0.13647404313087463,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.7798275253222995,
+        "participation_ratio_fraction": 0.026483701270790232,
+        "explained_variance_top1_share": 0.3302618808159465,
+        "explained_variance_top5_share": 0.6473517293326515,
+        "explained_variance_top10_share": 0.7855774512702137,
+        "mean_pairwise_cosine": 0.48207592964172363,
+        "median_pairwise_cosine": 0.5131984949111938,
+        "cosine_sample_size": 2048
+      }
+    }
+  },
+  "a8_seed42": {
+    "cost_probe": {
+      "patient_representation_pre_sae": {
+        "target_probe_rmse_log1p": 0.888221025466919,
+        "target_probe_mae_dollars": 2055.8935546875,
+        "target_probe_rmse_dollars": 3130.694091796875,
+        "target_probe_wape_percent": 44.3664436340332
+      },
+      "patient_representation": {
+        "target_probe_rmse_log1p": 0.8873102068901062,
+        "target_probe_mae_dollars": 2048.22705078125,
+        "target_probe_rmse_dollars": 3123.632568359375,
+        "target_probe_wape_percent": 44.200992584228516
+      }
+    },
+    "patient_path_geometry": {
+      "context_mean_pool": {
+        "num_samples": 15374,
+        "embedding_dim": 128,
+        "std_mean": 0.12451115250587463,
+        "std_min": 0.0694308876991272,
+        "std_median": 0.1208522617816925,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 8.452617325809738,
+        "participation_ratio_fraction": 0.06603607285788858,
+        "explained_variance_top1_share": 0.2516312635863381,
+        "explained_variance_top5_share": 0.6541778108587196,
+        "explained_variance_top10_share": 0.7952612277144436,
+        "mean_pairwise_cosine": 0.3760998845100403,
+        "median_pairwise_cosine": 0.38814300298690796,
+        "cosine_sample_size": 2048
+      },
+      "context_pooled": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.13968481123447418,
+        "std_min": 0.06796270608901978,
+        "std_median": 0.13402318954467773,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.464349091376207,
+        "participation_ratio_fraction": 0.02525136363818831,
+        "explained_variance_top1_share": 0.34140800871734117,
+        "explained_variance_top5_share": 0.680922322701686,
+        "explained_variance_top10_share": 0.7920241027063513,
+        "mean_pairwise_cosine": 0.5065993070602417,
+        "median_pairwise_cosine": 0.5519559979438782,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation_pre_sae": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.13968481123447418,
+        "std_min": 0.06796270608901978,
+        "std_median": 0.13402318954467773,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 6.464349091376207,
+        "participation_ratio_fraction": 0.02525136363818831,
+        "explained_variance_top1_share": 0.34140800871734117,
+        "explained_variance_top5_share": 0.680922322701686,
+        "explained_variance_top10_share": 0.7920241027063513,
+        "mean_pairwise_cosine": 0.5065993070602417,
+        "median_pairwise_cosine": 0.5519559979438782,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.08094462752342224,
+        "std_min": 0.03485710918903351,
+        "std_median": 0.08040326833724976,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 5.343516301852621,
+        "participation_ratio_fraction": 0.020873110554111802,
+        "explained_variance_top1_share": 0.3803941085057932,
+        "explained_variance_top5_share": 0.7350946940658826,
+        "explained_variance_top10_share": 0.8319403632635989,
+        "mean_pairwise_cosine": 0.590282678604126,
+        "median_pairwise_cosine": 0.6203901767730713,
+        "cosine_sample_size": 2048
+      },
+      "predictive_state": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.30677902698516846,
+        "std_min": 0.0017684089252725244,
+        "std_median": 0.2978339195251465,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0078125,
+        "participation_ratio": 5.432604768833018,
+        "participation_ratio_fraction": 0.021221112378253977,
+        "explained_variance_top1_share": 0.3890560088565982,
+        "explained_variance_top5_share": 0.6870347624085176,
+        "explained_variance_top10_share": 0.8033039756417988,
+        "mean_pairwise_cosine": 0.615496039390564,
+        "median_pairwise_cosine": 0.608722448348999,
+        "cosine_sample_size": 2048
+      }
+    }
+  },
+  "a8p2_seed42": {
+    "cost_probe": {
+      "patient_representation_pre_sae": {
+        "target_probe_rmse_log1p": 0.8910959959030151,
+        "target_probe_mae_dollars": 2067.9150390625,
+        "target_probe_rmse_dollars": 3134.36572265625,
+        "target_probe_wape_percent": 44.62586212158203
+      },
+      "patient_representation": {
+        "target_probe_rmse_log1p": 0.8921560645103455,
+        "target_probe_mae_dollars": 2072.374267578125,
+        "target_probe_rmse_dollars": 3140.565673828125,
+        "target_probe_wape_percent": 44.72209548950195
+      }
+    },
+    "patient_path_geometry": {
+      "context_mean_pool": {
+        "num_samples": 15374,
+        "embedding_dim": 128,
+        "std_mean": 0.11726900190114975,
+        "std_min": 0.07209882885217667,
+        "std_median": 0.1146894097328186,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 8.467878245315465,
+        "participation_ratio_fraction": 0.06615529879152707,
+        "explained_variance_top1_share": 0.2411286139070107,
+        "explained_variance_top5_share": 0.6655076390538726,
+        "explained_variance_top10_share": 0.792119971163013,
+        "mean_pairwise_cosine": 0.3789184093475342,
+        "median_pairwise_cosine": 0.3920426368713379,
+        "cosine_sample_size": 2048
+      },
+      "context_pooled": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.128109872341156,
+        "std_min": 0.07209882885217667,
+        "std_median": 0.12283806502819061,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 7.433150980361073,
+        "participation_ratio_fraction": 0.02903574601703544,
+        "explained_variance_top1_share": 0.30182789405055843,
+        "explained_variance_top5_share": 0.6721077313825001,
+        "explained_variance_top10_share": 0.7781009945972525,
+        "mean_pairwise_cosine": 0.48412102460861206,
+        "median_pairwise_cosine": 0.5259498953819275,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation_pre_sae": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.128109872341156,
+        "std_min": 0.07209882885217667,
+        "std_median": 0.12283806502819061,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 7.433150980361073,
+        "participation_ratio_fraction": 0.02903574601703544,
+        "explained_variance_top1_share": 0.30182789405055843,
+        "explained_variance_top5_share": 0.6721077313825001,
+        "explained_variance_top10_share": 0.7781009945972525,
+        "mean_pairwise_cosine": 0.48412102460861206,
+        "median_pairwise_cosine": 0.5259498953819275,
+        "cosine_sample_size": 2048
+      },
+      "patient_representation": {
+        "num_samples": 15374,
+        "embedding_dim": 256,
+        "std_mean": 0.07615101337432861,
+        "std_min": 0.03429631516337395,
+        "std_median": 0.07303766906261444,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0,
+        "participation_ratio": 5.57350650701039,
+        "participation_ratio_fraction": 0.021771509793009337,
+        "explained_variance_top1_share": 0.36712535913928207,
+        "explained_variance_top5_share": 0.7382078368909245,
+        "explained_variance_top10_share": 0.8290415390966827,
+        "mean_pairwise_cosine": 0.5999875664710999,
+        "median_pairwise_cosine": 0.6270160675048828,
+        "cosine_sample_size": 2048
+      },
+      "predictive_state": {
+        "num_samples": 15374,
+        "embedding_dim": 128,
+        "std_mean": 0.46376946568489075,
+        "std_min": 0.00317532941699028,
+        "std_median": 0.4583244323730469,
+        "low_var_frac_lt_1e-3": 0.0,
+        "low_var_frac_lt_1e-2": 0.0078125,
+        "participation_ratio": 3.038447107950884,
+        "participation_ratio_fraction": 0.02373786803086628,
+        "explained_variance_top1_share": 0.5550632878107232,
+        "explained_variance_top5_share": 0.8118794321848829,
+        "explained_variance_top10_share": 0.9032450979714749,
+        "mean_pairwise_cosine": 0.6543830633163452,
+        "median_pairwise_cosine": 0.6584508419036865,
+        "cosine_sample_size": 2048
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "label": "obs000_mask070",
+    "target_probe_mae_dollars_mean": 2069.2224934895835,
+    "target_probe_mae_dollars_std": 19.282751253000885,
+    "target_probe_wape_percent_mean": 44.69124094645182,
+    "target_probe_wape_percent_std": 0.3357245370855508,
+    "target_probe_rmse_dollars_mean": 3152.2626139322915,
+    "target_probe_rmse_dollars_std": 34.063420586195676,
+    "q4_high_cost_rmse_dollars_mean": 3450.2384440104165,
+    "q4_high_cost_rmse_dollars_std": 46.90221127963801,
+    "delta_rmse_vs_baseline": -9.439208984375,
+    "delta_q4_rmse_vs_baseline": -8.714111328125
+  },
+  {
+    "label": "baseline_mask070",
+    "target_probe_mae_dollars_mean": 2075.594197591146,
+    "target_probe_mae_dollars_std": 24.569113207201813,
+    "target_probe_wape_percent_mean": 44.82980600992838,
+    "target_probe_wape_percent_std": 0.5532226985671334,
+    "target_probe_rmse_dollars_mean": 3161.7018229166665,
+    "target_probe_rmse_dollars_std": 32.94926317944735,
+    "q4_high_cost_rmse_dollars_mean": 3458.9525553385415,
+    "q4_high_cost_rmse_dollars_std": 58.341709117045745,
+    "delta_rmse_vs_baseline": 0.0,
+    "delta_q4_rmse_vs_baseline": 0.0
+  },
+  {
+    "label": "obs010_mask070",
+    "target_probe_mae_dollars_mean": 2074.754597981771,
+    "target_probe_mae_dollars_std": 23.42815937926887,
+    "target_probe_wape_percent_mean": 44.81125513712565,
+    "target_probe_wape_percent_std": 0.4926401124205849,
+    "target_probe_rmse_dollars_mean": 3164.4462076822915,
+    "target_probe_rmse_dollars_std": 36.829319049042205,
+    "q4_high_cost_rmse_dollars_mean": 3447.1193033854165,
+    "q4_high_cost_rmse_dollars_std": 44.39356704353294,
+    "delta_rmse_vs_baseline": 2.744384765625,
+    "delta_q4_rmse_vs_baseline": -11.833251953125
+  }
+]

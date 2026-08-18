@@ -1,0 +1,16 @@
+{
+  "name": "A2_bottleneck_dense_decoder_smoke_b64",
+  "recipe": "sigreg_dense",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "accelerator": "auto",
+  "devices": 1,
+  "representation_pretrain_epochs": 5,
+  "max_samples": 2000,
+  "retrieval_k": 5,
+  "config_overrides": [
+    "use_dense_decoder_bottleneck=True",
+    "dense_decoder_bottleneck_dim=64"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder_smoke_b64\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder_smoke_b64\\representation_eval.json"
+}

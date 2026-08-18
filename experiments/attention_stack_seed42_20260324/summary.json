@@ -1,0 +1,32 @@
+[
+  {
+    "label": "obs000_baseline",
+    "run_name": "OBS_mask070_obs000_seed42",
+    "mae_dollars": 2050.02197265625,
+    "wape_percent": 44.23973083496094,
+    "rmse_dollars": 3119.467041015625,
+    "q4_rmse_dollars": 3414.6630859375,
+    "delta_rmse_vs_baseline": 0.0,
+    "delta_q4_vs_baseline": 0.0
+  },
+  {
+    "label": "code_attention",
+    "run_name": "ATTN_obs000_code_seed42",
+    "mae_dollars": 2054.907470703125,
+    "wape_percent": 44.34516143798828,
+    "rmse_dollars": 3118.60888671875,
+    "q4_rmse_dollars": 3438.003173828125,
+    "delta_rmse_vs_baseline": -0.858154296875,
+    "delta_q4_vs_baseline": 23.340087890625
+  },
+  {
+    "label": "code_plus_component",
+    "run_name": "ATTN_obs000_code_component_seed42",
+    "mae_dollars": 2091.837646484375,
+    "wape_percent": 45.142120361328125,
+    "rmse_dollars": 3181.94482421875,
+    "q4_rmse_dollars": 3439.2333984375,
+    "delta_rmse_vs_baseline": 62.477783203125,
+    "delta_q4_vs_baseline": 24.5703125
+  }
+]

@@ -1,0 +1,93 @@
+[
+  {
+    "label": "baseline_mask070",
+    "run_name": "R5_mask070_cpt_icd_seed42",
+    "masked_next_claim_token_weight": 0.2,
+    "observed_claim_loss_weight": 0.25,
+    "target_probe_mae_dollars": 2041.5577392578125,
+    "target_probe_wape_percent": 44.057071685791016,
+    "target_probe_rmse_dollars": 3116.9287109375,
+    "q4_high_cost_rmse_dollars": 3446.925048828125,
+    "q4_high_cost_mae_dollars": 2291.34033203125,
+    "delta_rmse_vs_baseline": 0.0,
+    "delta_q4_rmse_vs_baseline": 0.0
+  },
+  {
+    "label": "tokw020_obs000",
+    "run_name": "OBS_mask070_obs000_seed42",
+    "masked_next_claim_token_weight": 0.2,
+    "observed_claim_loss_weight": 0.0,
+    "target_probe_mae_dollars": 2050.02197265625,
+    "target_probe_wape_percent": 44.23973083496094,
+    "target_probe_rmse_dollars": 3119.467041015625,
+    "q4_high_cost_rmse_dollars": 3414.6630859375,
+    "q4_high_cost_mae_dollars": 2265.822509765625,
+    "delta_rmse_vs_baseline": 2.538330078125,
+    "delta_q4_rmse_vs_baseline": -32.261962890625
+  },
+  {
+    "label": "tokw040_obs010",
+    "run_name": "GWOBS_mask070_tokw040_obs010_seed42",
+    "masked_next_claim_token_weight": 0.4,
+    "observed_claim_loss_weight": 0.1,
+    "target_probe_mae_dollars": 2044.4376220703125,
+    "target_probe_wape_percent": 44.11922073364258,
+    "target_probe_rmse_dollars": 3119.469482421875,
+    "q4_high_cost_rmse_dollars": 3431.09228515625,
+    "q4_high_cost_mae_dollars": 2272.712890625,
+    "delta_rmse_vs_baseline": 2.540771484375,
+    "delta_q4_rmse_vs_baseline": -15.832763671875
+  },
+  {
+    "label": "tokw020_obs010",
+    "run_name": "OBS_mask070_obs010_seed42",
+    "masked_next_claim_token_weight": 0.2,
+    "observed_claim_loss_weight": 0.1,
+    "target_probe_mae_dollars": 2044.2222900390625,
+    "target_probe_wape_percent": 44.11457443237305,
+    "target_probe_rmse_dollars": 3119.667236328125,
+    "q4_high_cost_rmse_dollars": 3421.799560546875,
+    "q4_high_cost_mae_dollars": 2269.656494140625,
+    "delta_rmse_vs_baseline": 2.738525390625,
+    "delta_q4_rmse_vs_baseline": -25.12548828125
+  },
+  {
+    "label": "tokw040_obs000",
+    "run_name": "GWOBS_mask070_tokw040_obs000_seed42",
+    "masked_next_claim_token_weight": 0.4,
+    "observed_claim_loss_weight": 0.0,
+    "target_probe_mae_dollars": 2049.45751953125,
+    "target_probe_wape_percent": 44.22755432128906,
+    "target_probe_rmse_dollars": 3122.29638671875,
+    "q4_high_cost_rmse_dollars": 3429.058837890625,
+    "q4_high_cost_mae_dollars": 2275.642578125,
+    "delta_rmse_vs_baseline": 5.36767578125,
+    "delta_q4_rmse_vs_baseline": -17.8662109375
+  },
+  {
+    "label": "tokw010_obs025",
+    "run_name": "GW_mask070_tokw010_seed42",
+    "masked_next_claim_token_weight": 0.1,
+    "observed_claim_loss_weight": 0.25,
+    "target_probe_mae_dollars": 2049.872314453125,
+    "target_probe_wape_percent": 44.23649978637695,
+    "target_probe_rmse_dollars": 3124.971923828125,
+    "q4_high_cost_rmse_dollars": 3436.9345703125,
+    "q4_high_cost_mae_dollars": 2276.18359375,
+    "delta_rmse_vs_baseline": 8.043212890625,
+    "delta_q4_rmse_vs_baseline": -9.990478515625
+  },
+  {
+    "label": "tokw040_obs025",
+    "run_name": "GW_mask070_tokw040_seed42",
+    "masked_next_claim_token_weight": 0.4,
+    "observed_claim_loss_weight": 0.25,
+    "target_probe_mae_dollars": 2057.190185546875,
+    "target_probe_wape_percent": 44.3944206237793,
+    "target_probe_rmse_dollars": 3131.08203125,
+    "q4_high_cost_rmse_dollars": 3450.52783203125,
+    "q4_high_cost_mae_dollars": 2289.036865234375,
+    "delta_rmse_vs_baseline": 14.1533203125,
+    "delta_q4_rmse_vs_baseline": 3.602783203125
+  }
+]

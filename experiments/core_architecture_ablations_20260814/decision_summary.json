@@ -1,0 +1,37 @@
+{
+  "selected_recipe": "composable_level1_lejepa_any_code",
+  "selection": {
+    "claim_inclusion_policy": "any_code",
+    "level1_predictive_weight": 0.1,
+    "max_claims_len": 50,
+    "max_cpt_tokens": 5,
+    "max_icd_tokens": 5,
+    "claim_pooling_type": "moments",
+    "level2_decoder_type": "dense",
+    "ttnc_in_composer": true,
+    "ttnc_in_sequence": true,
+    "share_ttnc_embeddings": false,
+    "use_ttnc_ordinal_embedding": false,
+    "use_masked_claim_jepa": false,
+    "use_multi_hypothesis_future": false
+  },
+  "three_seed_mean_plus_or_minus_sample_sd": {
+    "rmse_dollars": [2634.718018, 5.335369],
+    "mae_dollars": [1650.359456, 14.592746],
+    "wape_percent": [35.496396, 0.313865],
+    "retrieval_at_5": [0.757424, 0.003455],
+    "silhouette": [0.238114, 0.010148],
+    "missing_cpt_rmse": [3810.177979, 801.662283],
+    "missing_icd_rmse": [2858.472249, 201.842708],
+    "cpt_to_icd_hit5": [0.269206, 0.001832],
+    "icd_to_cpt_hit5": [0.048828, 0.000423],
+    "rare_cpt_to_icd_hit5": [0.043358, 0.002036]
+  },
+  "key_findings": [
+    "A Level-1 predictive weight of zero preserves patient-cost metrics but collapses bidirectional CPT/ICD claim retrieval.",
+    "A weight of 0.1 recovers all claim alignment measured at weight 1.0 with indistinguishable patient-cost and missing-modality metrics.",
+    "Learned query pooling, token self-attention, TTNC variants, a cross-attention Level-2 decoder, masked-claim JEPA, and multi-hypothesis prediction did not clear the joint cost/geometry/robustness gate.",
+    "History 100 improved three-seed mean RMSE by 13.249 dollars but reduced silhouette by 0.0231 and worsened mean missing-CPT RMSE by 519.354 dollars with high variance."
+  ],
+  "evaluation_policy": "Frozen validation split only; the test split was not used for selection."
+}

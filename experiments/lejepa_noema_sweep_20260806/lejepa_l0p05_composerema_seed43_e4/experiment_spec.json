@@ -1,0 +1,27 @@
+{
+  "name": "lejepa_l0p05_composerema_seed43_e4",
+  "recipe": "composable_level1_sigreg",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 43,
+  "representation_pretrain_epochs": 4,
+  "max_samples": 2324,
+  "retrieval_k": 5,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [
+    "data_split_seed=42",
+    "sigreg_formulation=lejepa_convex",
+    "sigreg_weight_lvl1=0.0",
+    "sigreg_weight_lvl2=0.05",
+    "target_encoder_mode=hybrid",
+    "target_encoder_mode_lvl1=shared",
+    "target_encoder_mode_lvl2=ema",
+    "checkpoint_dirpath=experiments/lejepa_noema_sweep_20260806/lejepa_l0p05_composerema_seed43_e4/checkpoints",
+    "checkpoint_save_top_k=0",
+    "checkpoint_save_last=False"
+  ],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lejepa_noema_sweep_20260806\\lejepa_l0p05_composerema_seed43_e4\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lejepa_noema_sweep_20260806\\lejepa_l0p05_composerema_seed43_e4\\representation_eval.json"
+}

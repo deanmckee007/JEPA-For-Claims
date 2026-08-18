@@ -1,0 +1,49 @@
+{
+  "baseline": {
+    "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+    "overrides": {
+      "observed_claim_loss_weight": 0.0,
+      "masked_next_claim_mask_ratio": 0.7
+    },
+    "mae_dollars": {
+      "mean": 2075.59,
+      "std": 24.57
+    },
+    "wape_percent": {
+      "mean": 44.83,
+      "std": 0.55
+    },
+    "rmse_dollars": {
+      "mean": 3161.7,
+      "std": 32.95
+    },
+    "q4_rmse_dollars": {
+      "mean": 3458.95,
+      "std": 58.34
+    }
+  },
+  "sigreg0": {
+    "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+    "overrides": {
+      "observed_claim_loss_weight": 0.0,
+      "masked_next_claim_mask_ratio": 0.7,
+      "sigreg_weight_lvl2": 0.0
+    },
+    "mae_dollars": {
+      "mean": 2068.73,
+      "std": 19.4
+    },
+    "wape_percent": {
+      "mean": 44.68,
+      "std": 0.34
+    },
+    "rmse_dollars": {
+      "mean": 3152.15,
+      "std": 34.55
+    },
+    "q4_rmse_dollars": {
+      "mean": 3449.2,
+      "std": 45.82
+    }
+  }
+}

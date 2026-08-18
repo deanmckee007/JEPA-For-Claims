@@ -1,0 +1,112 @@
+{
+  "condition": "frozen_ssl",
+  "protocol": "SSL encoder frozen; identical MLP fit on labeled train representations",
+  "label_efficiency": {
+    "0.01": {
+      "num_labels": 150,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.9048053026199341,
+        "target_probe_mae_dollars": 1976.41064453125,
+        "target_probe_rmse_dollars": 2940.723876953125,
+        "target_probe_wape_percent": 42.50919723510742,
+        "pairwise_accuracy": 0.6497192882101048,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.43655731605004766,
+        "top_decile_recall": 0.1755485893416928
+      },
+      "training_loss_first": 0.9981126189231873,
+      "training_loss_last": 0.45417460799217224
+    },
+    "0.05": {
+      "num_labels": 750,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.903536856174469,
+        "target_probe_mae_dollars": 1818.1702880859375,
+        "target_probe_rmse_dollars": 2777.15576171875,
+        "target_probe_wape_percent": 39.10572052001953,
+        "pairwise_accuracy": 0.6732302756715782,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.4894589336618802,
+        "top_decile_recall": 0.34796238244514105
+      },
+      "training_loss_first": 0.9826048612594604,
+      "training_loss_last": 0.3893611530462901
+    },
+    "0.1": {
+      "num_labels": 1500,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.8810517191886902,
+        "target_probe_mae_dollars": 1706.88232421875,
+        "target_probe_rmse_dollars": 2769.826416015625,
+        "target_probe_wape_percent": 36.71210861206055,
+        "pairwise_accuracy": 0.6817026315105235,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.5059189188367441,
+        "top_decile_recall": 0.3385579937304075
+      },
+      "training_loss_first": 0.9382635752360026,
+      "training_loss_last": 0.3923460642496745
+    },
+    "0.25": {
+      "num_labels": 3760,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.8514454364776611,
+        "target_probe_mae_dollars": 1536.5523681640625,
+        "target_probe_rmse_dollars": 2556.00048828125,
+        "target_probe_wape_percent": 33.04860305786133,
+        "pairwise_accuracy": 0.7107878530898297,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.5759549626024756,
+        "top_decile_recall": 0.46394984326018807
+      },
+      "training_loss_first": 0.9274654865264893,
+      "training_loss_last": 0.4066671669483185
+    },
+    "1.0": {
+      "num_labels": 15050,
+      "metrics": {
+        "target_probe_rmse_log1p": 0.8215132355690002,
+        "target_probe_mae_dollars": 1526.8109130859375,
+        "target_probe_rmse_dollars": 2566.1005859375,
+        "target_probe_wape_percent": 32.83907699584961,
+        "pairwise_accuracy": 0.7097318087359669,
+        "pairwise_pairs_evaluated": 499979,
+        "pairwise_pairs_available": 5080078,
+        "spearman_correlation": 0.5756521660702292,
+        "top_decile_recall": 0.4231974921630094
+      },
+      "training_loss_first": 0.8384569166070324,
+      "training_loss_last": 0.5499505451170065
+    }
+  },
+  "full_representation_linear_probe": {
+    "target_probe_rmse_log1p": 0.8373095989227295,
+    "target_probe_mae_dollars": 1628.2716064453125,
+    "target_probe_rmse_dollars": 2618.4990234375,
+    "target_probe_wape_percent": 35.021324157714844
+  },
+  "representation_geometry": {
+    "num_samples": 3188,
+    "embedding_dim": 256,
+    "std_mean": 0.2237212061882019,
+    "std_min": 0.11439641565084457,
+    "std_median": 0.22388680279254913,
+    "low_var_frac_lt_1e-3": 0.0,
+    "low_var_frac_lt_1e-2": 0.0,
+    "participation_ratio": 6.010222839596879,
+    "participation_ratio_fraction": 0.023477432967175308,
+    "explained_variance_top1_share": 0.27694557516880064,
+    "explained_variance_top5_share": 0.8181467564610763,
+    "explained_variance_top10_share": 0.8978162265827638,
+    "mean_pairwise_cosine": 0.35905173420906067,
+    "median_pairwise_cosine": 0.34154212474823,
+    "cosine_sample_size": 2048,
+    "ttnc_proxy_label_cluster_ari": 0.1355767732976992,
+    "cluster_silhouette": 0.22912371158599854
+  },
+  "ttnc_proxy_retrieval_hit_rate_at_5": 0.7543914680050188
+}

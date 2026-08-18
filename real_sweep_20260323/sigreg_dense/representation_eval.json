@@ -1,0 +1,13 @@
+{
+  "num_samples": 2000,
+  "embedding_dim": 256,
+  "num_specialty_labels": 14,
+  "specialty_retrieval_hit_rate_at_5": 0.794,
+  "cluster_ari": 0.018816420674090065,
+  "cluster_silhouette": 0.2321264147758484,
+  "target_probe_rmse_log1p": 0.7573944330215454,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\real_sweep_20260323\\sigreg_dense\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense",
+  "device": "cuda"
+}

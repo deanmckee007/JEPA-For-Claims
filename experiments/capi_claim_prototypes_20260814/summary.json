@@ -1,0 +1,105 @@
+{
+  "experiment": "capi_claim_prototypes_20260814",
+  "question": "Does a no-EMA CAPI-style composed future-claim prototype auxiliary improve the corrected composable LeJEPA anchor?",
+  "protocol": {
+    "evaluation_split": "val",
+    "test_split_accessed": false,
+    "claim_inclusion_policy": "complete_only",
+    "epochs": 4,
+    "training_seed": 42,
+    "data_split_seed": 42,
+    "max_eval_samples": 2324,
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+    "target_encoder_mode_lvl1": "shared",
+    "target_encoder_mode_lvl2": "shared",
+    "sigreg_formulation": "lejepa_convex",
+    "sigreg_weight_lvl2": 0.05,
+    "prototype_target": "detached_shared_composed_future_claim",
+    "prototype_balancing": "positionwise_sinkhorn",
+    "ema_used": false
+  },
+  "paired_k16_weight_sweep": [
+    {
+      "weight": 0.0,
+      "mae_dollars": 1841.1377,
+      "rmse_dollars": 2914.6929,
+      "wape_percent": 40.2404,
+      "retrieval_hit_rate_at_5": 0.688468,
+      "silhouette": 0.208106,
+      "prototype_top1_accuracy": 0.101549,
+      "prototype_top5_accuracy": 0.410929,
+      "effective_prototype_count": 15.3128,
+      "missing_cpt_rmse_dollars": 3104.4514,
+      "missing_icd_rmse_dollars": 3058.1201
+    },
+    {
+      "weight": 0.05,
+      "mae_dollars": 1840.7678,
+      "rmse_dollars": 2913.9609,
+      "wape_percent": 40.2324,
+      "retrieval_hit_rate_at_5": 0.688038,
+      "silhouette": 0.206856,
+      "prototype_top1_accuracy": 0.229776,
+      "prototype_top5_accuracy": 0.609725,
+      "effective_prototype_count": 15.1614,
+      "missing_cpt_rmse_dollars": 3105.3535,
+      "missing_icd_rmse_dollars": 3059.3159
+    },
+    {
+      "weight": 0.1,
+      "mae_dollars": 1840.5748,
+      "rmse_dollars": 2913.7036,
+      "wape_percent": 40.2281,
+      "retrieval_hit_rate_at_5": 0.686747,
+      "silhouette": 0.208461,
+      "prototype_top1_accuracy": 0.232358,
+      "prototype_top5_accuracy": 0.610155,
+      "effective_prototype_count": 15.1611,
+      "missing_cpt_rmse_dollars": 3106.4763,
+      "missing_icd_rmse_dollars": 3060.8013
+    }
+  ],
+  "weight_0p10_minus_control": {
+    "mae_dollars": -0.5629,
+    "rmse_dollars": -0.9893,
+    "wape_percent": -0.0123,
+    "retrieval_hit_rate_at_5": -0.001721,
+    "silhouette": 0.000354,
+    "missing_cpt_rmse_dollars": 2.0249,
+    "missing_icd_rmse_dollars": 2.6812
+  },
+  "prototype_count_pilots": [
+    {
+      "prototype_count": 16,
+      "effective_prototype_count": 15.0973,
+      "prototype_top1_accuracy": 0.254733,
+      "rmse_dollars": 2909.1897,
+      "silhouette": 0.228026
+    },
+    {
+      "prototype_count": 64,
+      "effective_prototype_count": 59.1075,
+      "prototype_top1_accuracy": 0.089501,
+      "rmse_dollars": 2904.5012,
+      "silhouette": 0.220013
+    },
+    {
+      "prototype_count": 256,
+      "effective_prototype_count": 239.6342,
+      "prototype_top1_accuracy": 0.039587,
+      "rmse_dollars": 2904.7915,
+      "silhouette": 0.209038
+    }
+  ],
+  "prototype_count_pilot_qualification": "Downstream deltas are non-causal because these pilots preceded RNG-isolated prototype initialization; utilization and fragmentation diagnostics remain valid.",
+  "decision": {
+    "promote_to_canonical_recipe": false,
+    "run_multiseed_confirmation": false,
+    "reason": "The prototype task learned and remained non-collapsed, but paired downstream deltas were immaterial and slightly worsened retrieval and missing-modality robustness.",
+    "status": "retain_as_opt_in_research_branch"
+  },
+  "verification": {
+    "unit_tests_passed": 140
+  }
+}

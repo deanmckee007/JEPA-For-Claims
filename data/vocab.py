@@ -22,7 +22,9 @@ def create_vocab(df, min_freq=5):
         for token in reserved_tokens:
             vocab[token] = index
             index += 1
-        for token, freq in counter.items():
+        # Stable lexical ordering prevents row-order changes from silently
+        # remapping embedding-table indices.
+        for token, freq in sorted(counter.items()):
             if freq >= min_freq and token not in vocab:
                 vocab[token] = index
                 index += 1

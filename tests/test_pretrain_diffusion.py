@@ -13,10 +13,11 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
     @patch('scripts.train.os.path.exists')
     @patch('scripts.train.pl.Trainer')
     @patch('scripts.train.prepare_data')
+    @patch('scripts.train.load_claims_model_checkpoint')
     @patch('scripts.train.HierarchicalClaimsModel')
     @patch('scripts.train.DiffusionModel')
     @patch('scripts.train.Config')
-    def test_pretrain_enabled(self, mock_config, mock_diffusion, mock_hier, mock_prepare, mock_trainer, mock_exists):
+    def test_pretrain_enabled(self, mock_config, mock_diffusion, mock_hier, mock_load, mock_prepare, mock_trainer, mock_exists):
         cfg = Config()
         cfg.use_diffusion = True
         cfg.pretrain_diffusion = True
@@ -42,10 +43,11 @@ class TestPretrainDiffusionFlag(unittest.TestCase):
     @patch('scripts.train.os.path.exists')
     @patch('scripts.train.pl.Trainer')
     @patch('scripts.train.prepare_data')
+    @patch('scripts.train.load_claims_model_checkpoint')
     @patch('scripts.train.HierarchicalClaimsModel')
     @patch('scripts.train.DiffusionModel')
     @patch('scripts.train.Config')
-    def test_pretrain_disabled(self, mock_config, mock_diffusion, mock_hier, mock_prepare, mock_trainer, mock_exists):
+    def test_pretrain_disabled(self, mock_config, mock_diffusion, mock_hier, mock_load, mock_prepare, mock_trainer, mock_exists):
         cfg = Config()
         cfg.use_diffusion = True
         cfg.pretrain_diffusion = False

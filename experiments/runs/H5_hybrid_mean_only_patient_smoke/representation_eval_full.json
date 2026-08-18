@@ -1,0 +1,16 @@
+{
+  "num_samples": 15374,
+  "embedding_dim": 128,
+  "num_specialty_labels": 19,
+  "specialty_retrieval_hit_rate_at_5": 0.6634577858722519,
+  "cluster_ari": -0.05120824380316835,
+  "cluster_silhouette": 0.47253328561782837,
+  "target_probe_rmse_log1p": 0.8891639113426208,
+  "target_probe_mae_dollars": 2079.044677734375,
+  "target_probe_rmse_dollars": 3164.667236328125,
+  "target_probe_wape_percent": 44.86604309082031,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H5_hybrid_mean_only_patient_smoke\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense_hybrid",
+  "device": "cuda"
+}

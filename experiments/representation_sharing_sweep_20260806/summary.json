@@ -1,0 +1,104 @@
+{
+  "experiment": "representation_sharing_sweep_20260806",
+  "evaluation_split": "val",
+  "claim_inclusion_policy": "complete_only",
+  "epochs": 4,
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "effective_architecture": {
+    "level2_claim_input": "composed_level1_claim_state",
+    "level1_task_and_level2_input_encoder_shared": true,
+    "current_context_target_level1_encoder_mode": "shared",
+    "current_context_target_claim_composer_mode": "ema",
+    "legacy_level2_token_encoder_mode": "inactive",
+    "level2_sequence_predictor_parameters": "online_shared"
+  },
+  "seed42_sharing_matrix": [
+    {
+      "level1_target": "shared",
+      "composer_target": "ema",
+      "mae_dollars": 1859.77,
+      "rmse_dollars": 2959.49,
+      "wape_percent": 40.648,
+      "retrieval_hit_rate_at_5": 0.6984,
+      "silhouette": 0.1250,
+      "missing_cpt_rmse_dollars": 3372.41,
+      "missing_icd_rmse_dollars": 3073.69
+    },
+    {
+      "level1_target": "ema",
+      "composer_target": "ema",
+      "mae_dollars": 1859.73,
+      "rmse_dollars": 2959.14,
+      "wape_percent": 40.647,
+      "retrieval_hit_rate_at_5": 0.6992,
+      "silhouette": 0.1232,
+      "missing_cpt_rmse_dollars": 3370.23,
+      "missing_icd_rmse_dollars": 3075.33
+    },
+    {
+      "level1_target": "shared",
+      "composer_target": "shared",
+      "mae_dollars": 1873.91,
+      "rmse_dollars": 2986.79,
+      "wape_percent": 40.957,
+      "retrieval_hit_rate_at_5": 0.7126,
+      "silhouette": 0.1071,
+      "missing_cpt_rmse_dollars": 3534.48,
+      "missing_icd_rmse_dollars": 4060.83
+    },
+    {
+      "level1_target": "ema",
+      "composer_target": "shared",
+      "mae_dollars": 1873.12,
+      "rmse_dollars": 2985.67,
+      "wape_percent": 40.940,
+      "retrieval_hit_rate_at_5": 0.7143,
+      "silhouette": 0.1080,
+      "missing_cpt_rmse_dollars": 3544.28,
+      "missing_icd_rmse_dollars": 4094.46
+    }
+  ],
+  "seed42_ema_decay_sweep": [
+    {"ema_decay": 0.9, "mae_dollars": 1855.88, "rmse_dollars": 2954.77, "retrieval_hit_rate_at_5": 0.7001, "silhouette": 0.1312},
+    {"ema_decay": 0.99, "mae_dollars": 1858.55, "rmse_dollars": 2957.80, "retrieval_hit_rate_at_5": 0.6992, "silhouette": 0.1162},
+    {"ema_decay": 0.999, "mae_dollars": 1859.77, "rmse_dollars": 2959.49, "retrieval_hit_rate_at_5": 0.6984, "silhouette": 0.1250},
+    {"ema_decay": 0.9999, "mae_dollars": 1859.75, "rmse_dollars": 2959.69, "retrieval_hit_rate_at_5": 0.6984, "silhouette": 0.1230}
+  ],
+  "paired_seed_means": [
+    {
+      "ema_decay": 0.9,
+      "seeds": [42, 43, 44],
+      "mae_dollars": 1866.8109,
+      "rmse_dollars": 2962.5832,
+      "wape_percent": 40.8016,
+      "retrieval_hit_rate_at_5": 0.701520,
+      "silhouette": 0.126460,
+      "missing_cpt_rmse_dollars": 3315.4690,
+      "missing_icd_rmse_dollars": 3253.9369
+    },
+    {
+      "ema_decay": 0.999,
+      "seeds": [42, 43, 44],
+      "mae_dollars": 1866.4060,
+      "rmse_dollars": 2960.0501,
+      "wape_percent": 40.7927,
+      "retrieval_hit_rate_at_5": 0.702524,
+      "silhouette": 0.117484,
+      "missing_cpt_rmse_dollars": 3313.3086,
+      "missing_icd_rmse_dollars": 3252.7548
+    }
+  ],
+  "decision": {
+    "level1_target_mode": "shared",
+    "claim_composer_target_mode": "ema",
+    "ema_decay": 0.999,
+    "reason": "Level1 shared versus EMA was neutral. A shared claim-composer target traded a small retrieval gain for worse cost probes and substantially worse missing-ICD robustness. The apparent seed42 gain at EMA decay 0.9 did not replicate across three paired seeds."
+  },
+  "implementation_repairs": [
+    "Separated training seed from the frozen split seed with data_split_seed.",
+    "Recorded the effective representation-sharing contract in evaluation artifacts.",
+    "Moved generator conditioning and diffusion embedding transfer off inactive legacy Level2 embeddings and onto active Level1/composer embeddings.",
+    "Added an explicit fail-closed Stage1-to-Stage2 checkpoint transition that allows only generator-head additions and resynchronizes embeddings after loading."
+  ]
+}

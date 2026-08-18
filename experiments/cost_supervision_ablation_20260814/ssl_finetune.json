@@ -1,0 +1,69 @@
+{
+  "direct_cost_head": {
+    "target_probe_rmse_log1p": 0.8125845193862915,
+    "target_probe_mae_dollars": 1525.13671875,
+    "target_probe_rmse_dollars": 2575.3232421875,
+    "target_probe_wape_percent": 32.80307388305664,
+    "pairwise_accuracy": 0.7171421199690386,
+    "pairwise_pairs_evaluated": 499979,
+    "pairwise_pairs_available": 5080078,
+    "spearman_correlation": 0.59357666269984,
+    "top_decile_recall": 0.45768025078369906
+  },
+  "frozen_linear_probe": {
+    "target_probe_rmse_log1p": 0.8256791830062866,
+    "target_probe_mae_dollars": 1598.8177490234375,
+    "target_probe_rmse_dollars": 2577.404541015625,
+    "target_probe_wape_percent": 34.38782501220703
+  },
+  "representation_geometry": {
+    "num_samples": 3188,
+    "embedding_dim": 256,
+    "std_mean": 0.2246396839618683,
+    "std_min": 0.11313419044017792,
+    "std_median": 0.22019971907138824,
+    "low_var_frac_lt_1e-3": 0.0,
+    "low_var_frac_lt_1e-2": 0.0,
+    "participation_ratio": 6.046073556240528,
+    "participation_ratio_fraction": 0.023617474829064563,
+    "explained_variance_top1_share": 0.26217075596293554,
+    "explained_variance_top5_share": 0.8140833366269224,
+    "explained_variance_top10_share": 0.898163750908374,
+    "mean_pairwise_cosine": 0.3534415066242218,
+    "median_pairwise_cosine": 0.33134081959724426,
+    "cosine_sample_size": 2048,
+    "ttnc_proxy_label_cluster_ari": 0.13306565811995366,
+    "cluster_silhouette": 0.2281758189201355
+  },
+  "ttnc_proxy_retrieval_hit_rate_at_5": 0.7528230865746549,
+  "condition": "ssl_finetune",
+  "epochs": 5,
+  "task_weight": 1.0,
+  "encoder_lr": 2e-05,
+  "head_lr": 0.001,
+  "loss_history": {
+    "total": [
+      0.8655222694079081,
+      0.7649332334597906,
+      0.7297468314568202,
+      0.6982314358154933,
+      0.693013455470403
+    ],
+    "task": [
+      0.8655222694079081,
+      0.7649332334597906,
+      0.7297468314568202,
+      0.6982314358154933,
+      0.693013455470403
+    ],
+    "ssl_diagnostic": [
+      0.7586816549301147,
+      0.7693425436814626,
+      0.7792442172765732,
+      0.7832345892985662,
+      0.7792548517386119
+    ]
+  },
+  "evaluation_split": "frozen_validation",
+  "test_accessed": false
+}

@@ -1,0 +1,24 @@
+{
+  "name": "A2_bottleneck_dense_decoder",
+  "recipe": "sigreg_dense",
+  "config_overrides": [
+    "use_dense_decoder_bottleneck=True",
+    "dense_decoder_bottleneck_dim=128"
+  ],
+  "artifact_dir": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder",
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder\\representation_eval.json",
+  "num_samples": 2000,
+  "embedding_dim": 256,
+  "num_specialty_labels": 14,
+  "specialty_retrieval_hit_rate_at_5": 0.789,
+  "cluster_ari": 0.011646028751644626,
+  "cluster_silhouette": 0.25069311261177063,
+  "target_probe_rmse_log1p": 0.7500453591346741,
+  "target_probe_mae_dollars": 2913.75244140625,
+  "target_probe_rmse_dollars": 4317.953125,
+  "target_probe_wape_percent": 50.817745208740234,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A2_bottleneck_dense_decoder\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "device": "cuda"
+}

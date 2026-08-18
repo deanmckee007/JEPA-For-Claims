@@ -1,0 +1,28 @@
+{
+  "protocol": {
+    "representation_selection_split": "val",
+    "ranking_head_fit_split": "train",
+    "calibration_fit_split": "val",
+    "reported_evaluation_split": "test",
+    "ranking_head_selection": "fixed_hyperparameters_no_test_tuning"
+  },
+  "num_train": 10659,
+  "num_val": 2324,
+  "num_test": 2391,
+  "pairwise_accuracy": 0.7222601143698358,
+  "pairwise_pairs_evaluated": 499957,
+  "pairwise_pairs_available": 2857245,
+  "spearman_correlation": 0.6120465377344998,
+  "top_decile_recall": 0.3625,
+  "monotonic_dollar_calibration": {
+    "mae_dollars": 1915.0155029296875,
+    "rmse_dollars": 3022.712646484375,
+    "wape_percent": 40.95245361328125
+  },
+  "training_loss_first": 0.571897077418509,
+  "training_loss_last": 0.4751078479346775,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\composable_level1_20260805\\composable_level1_sigreg_seed42_e4\\encoder.ckpt",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "seed": 42
+}

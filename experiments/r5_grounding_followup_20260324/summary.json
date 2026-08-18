@@ -1,0 +1,32 @@
+[
+  {
+    "name": "cpt_icd_mask070",
+    "mae": 2041.5577392578125,
+    "wape": 44.057071685791016,
+    "rmse": 3116.9287109375,
+    "q4_rmse": 3446.925048828125,
+    "q4_mae": 2291.34033203125,
+    "q4_wape": 26.203548431396484,
+    "source": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\r5_grounding_sweep_20260323\\a6_mask070_cpt_icd_seed42_cost_probe.json"
+  },
+  {
+    "name": "icd_only_mask050",
+    "mae": 2052.8046875,
+    "wape": 44.29978561401367,
+    "rmse": 3131.924072265625,
+    "q4_rmse": 3415.020263671875,
+    "q4_mae": 2271.2177734375,
+    "q4_wape": 25.973430633544922,
+    "source": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\r5_grounding_sweep_20260323\\a6_mask050_icd_only_seed42_cost_probe.json"
+  },
+  {
+    "name": "icd_only_mask070",
+    "mae": 2054.26806640625,
+    "wape": 44.33135986328125,
+    "rmse": 3133.9501953125,
+    "q4_rmse": 3413.095458984375,
+    "q4_mae": 2270.256103515625,
+    "q4_wape": 25.962430953979492,
+    "source": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\R5_mask070_icd_only_seed42\\cost_probe.json"
+  }
+]

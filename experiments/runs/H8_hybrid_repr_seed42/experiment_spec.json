@@ -1,0 +1,14 @@
+{
+  "name": "H8_hybrid_repr_seed42",
+  "recipe": "sigreg_dense_hybrid_repr",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "accelerator": "auto",
+  "devices": 1,
+  "seed": 42,
+  "representation_pretrain_epochs": 20,
+  "max_samples": 20000,
+  "retrieval_k": 5,
+  "config_overrides": [],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed42\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed42\\representation_eval.json"
+}

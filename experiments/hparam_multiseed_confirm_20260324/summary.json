@@ -1,0 +1,138 @@
+{
+    "runs":  [
+                 {
+                     "variant":  "baseline",
+                     "seed":  42,
+                     "mae_dollars":  2041.5577392578125,
+                     "wape_percent":  44.057071685791016,
+                     "rmse_dollars":  3116.9287109375,
+                     "q4_rmse_dollars":  3446.925048828125,
+                     "q4_mae_dollars":  2291.34033203125,
+                     "q4_wape_percent":  26.203548431396484
+                 },
+                 {
+                     "variant":  "baseline",
+                     "seed":  7,
+                     "mae_dollars":  2086.5625,
+                     "wape_percent":  45.322212219238281,
+                     "rmse_dollars":  3172.90771484375,
+                     "q4_rmse_dollars":  3394.27587890625,
+                     "q4_mae_dollars":  2252.23583984375,
+                     "q4_wape_percent":  25.526700973510746
+                 },
+                 {
+                     "variant":  "baseline",
+                     "seed":  123,
+                     "mae_dollars":  2098.662353515625,
+                     "wape_percent":  45.110134124755859,
+                     "rmse_dollars":  3195.26904296875,
+                     "q4_rmse_dollars":  3535.65673828125,
+                     "q4_mae_dollars":  2318.431396484375,
+                     "q4_wape_percent":  25.724269866943359
+                 },
+                 {
+                     "variant":  "batch256",
+                     "seed":  42,
+                     "mae_dollars":  2053.411376953125,
+                     "wape_percent":  44.312873840332031,
+                     "rmse_dollars":  3133.766845703125,
+                     "q4_rmse_dollars":  3418.168701171875,
+                     "q4_mae_dollars":  2268.964111328125,
+                     "q4_wape_percent":  25.947658538818359
+                 },
+                 {
+                     "variant":  "batch256",
+                     "seed":  7,
+                     "mae_dollars":  2096.676025390625,
+                     "wape_percent":  45.541885375976563,
+                     "rmse_dollars":  3192.403076171875,
+                     "q4_rmse_dollars":  3387.809814453125,
+                     "q4_mae_dollars":  2249.62353515625,
+                     "q4_wape_percent":  25.497093200683594
+                 },
+                 {
+                     "variant":  "batch256",
+                     "seed":  123,
+                     "mae_dollars":  2095.63818359375,
+                     "wape_percent":  45.045131683349609,
+                     "rmse_dollars":  3192.962646484375,
+                     "q4_rmse_dollars":  3553.12548828125,
+                     "q4_mae_dollars":  2311.01123046875,
+                     "q4_wape_percent":  25.641939163208008
+                 },
+                 {
+                     "variant":  "batch256_cosine_wd0",
+                     "seed":  42,
+                     "mae_dollars":  2057.230224609375,
+                     "wape_percent":  44.395286560058594,
+                     "rmse_dollars":  3130.63037109375,
+                     "q4_rmse_dollars":  3430.412353515625,
+                     "q4_mae_dollars":  2267.351806640625,
+                     "q4_wape_percent":  25.929218292236328
+                 },
+                 {
+                     "variant":  "batch256_cosine_wd0",
+                     "seed":  7,
+                     "mae_dollars":  2089.5751953125,
+                     "wape_percent":  45.387649536132813,
+                     "rmse_dollars":  3177.97900390625,
+                     "q4_rmse_dollars":  3392.254150390625,
+                     "q4_mae_dollars":  2245.41552734375,
+                     "q4_wape_percent":  25.449398040771484
+                 },
+                 {
+                     "variant":  "batch256_cosine_wd0",
+                     "seed":  123,
+                     "mae_dollars":  2075.04052734375,
+                     "wape_percent":  44.602390289306641,
+                     "rmse_dollars":  3185.879150390625,
+                     "q4_rmse_dollars":  3540.8154296875,
+                     "q4_mae_dollars":  2323.617919921875,
+                     "q4_wape_percent":  25.781818389892575
+                 }
+             ],
+    "summary":  [
+                    {
+                        "variant":  "baseline",
+                        "seeds":  "7,42,123",
+                        "mae_mean":  2075.59,
+                        "mae_std":  24.57,
+                        "wape_mean":  44.83,
+                        "wape_std":  0.55,
+                        "rmse_mean":  3161.7,
+                        "rmse_std":  32.95,
+                        "q4_rmse_mean":  3458.95,
+                        "q4_rmse_std":  58.34,
+                        "delta_rmse":  0,
+                        "delta_q4_rmse":  0
+                    },
+                    {
+                        "variant":  "batch256_cosine_wd0",
+                        "seeds":  "7,42,123",
+                        "mae_mean":  2073.95,
+                        "mae_std":  13.23,
+                        "wape_mean":  44.8,
+                        "wape_std":  0.43,
+                        "rmse_mean":  3164.83,
+                        "rmse_std":  24.4,
+                        "q4_rmse_mean":  3454.49,
+                        "q4_rmse_std":  63,
+                        "delta_rmse":  3.13,
+                        "delta_q4_rmse":  -4.46
+                    },
+                    {
+                        "variant":  "batch256",
+                        "seeds":  "7,42,123",
+                        "mae_mean":  2081.91,
+                        "mae_std":  20.15,
+                        "wape_mean":  44.97,
+                        "wape_std":  0.5,
+                        "rmse_mean":  3173.04,
+                        "rmse_std":  27.77,
+                        "q4_rmse_mean":  3453.03,
+                        "q4_rmse_std":  71.85,
+                        "delta_rmse":  11.34,
+                        "delta_q4_rmse":  -5.92
+                    }
+                ]
+}

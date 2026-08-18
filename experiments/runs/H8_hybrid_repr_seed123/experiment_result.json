@@ -1,0 +1,22 @@
+{
+  "name": "H8_hybrid_repr_seed123",
+  "recipe": "sigreg_dense_hybrid_repr",
+  "config_overrides": [],
+  "artifact_dir": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed123",
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed123\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed123\\representation_eval.json",
+  "seed": 123,
+  "num_samples": 15374,
+  "embedding_dim": 256,
+  "num_specialty_labels": 19,
+  "specialty_retrieval_hit_rate_at_5": 0.6739300117080785,
+  "cluster_ari": -0.02986789257434402,
+  "cluster_silhouette": 0.44589582085609436,
+  "target_probe_rmse_log1p": 0.8479040265083313,
+  "target_probe_mae_dollars": 2088.04541015625,
+  "target_probe_rmse_dollars": 3186.51806640625,
+  "target_probe_wape_percent": 44.881927490234375,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H8_hybrid_repr_seed123\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "device": "cuda"
+}

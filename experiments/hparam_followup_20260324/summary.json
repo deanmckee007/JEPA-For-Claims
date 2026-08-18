@@ -1,0 +1,74 @@
+[
+    {
+        "run":  "baseline",
+        "mae_dollars":  2041.56,
+        "wape_percent":  44.06,
+        "rmse_dollars":  3116.93,
+        "q4_rmse_dollars":  3446.93,
+        "delta_mae":  0,
+        "delta_wape":  0,
+        "delta_rmse":  0,
+        "delta_q4_rmse":  0,
+        "notes":  "AdamW, StepLR, batch 512, wd=1e-4"
+    },
+    {
+        "run":  "weightdecay0",
+        "mae_dollars":  2041.71,
+        "wape_percent":  44.06,
+        "rmse_dollars":  3117.52,
+        "q4_rmse_dollars":  3448.82,
+        "delta_mae":  0.16,
+        "delta_wape":  0,
+        "delta_rmse":  0.59,
+        "delta_q4_rmse":  1.89,
+        "notes":  "AdamW, StepLR, batch 512, wd=0"
+    },
+    {
+        "run":  "batch256_cosine",
+        "mae_dollars":  2056.5,
+        "wape_percent":  44.38,
+        "rmse_dollars":  3130.57,
+        "q4_rmse_dollars":  3438.68,
+        "delta_mae":  14.94,
+        "delta_wape":  0.32,
+        "delta_rmse":  13.64,
+        "delta_q4_rmse":  -8.24,
+        "notes":  "cosine + warmup, batch 256, wd=1e-4"
+    },
+    {
+        "run":  "batch256_cosine_wd0",
+        "mae_dollars":  2057.23,
+        "wape_percent":  44.4,
+        "rmse_dollars":  3130.63,
+        "q4_rmse_dollars":  3430.41,
+        "delta_mae":  15.67,
+        "delta_wape":  0.34,
+        "delta_rmse":  13.7,
+        "delta_q4_rmse":  -16.51,
+        "notes":  "cosine + warmup, batch 256, wd=0"
+    },
+    {
+        "run":  "cosine",
+        "mae_dollars":  2053.27,
+        "wape_percent":  44.31,
+        "rmse_dollars":  3133.74,
+        "q4_rmse_dollars":  3437.37,
+        "delta_mae":  11.71,
+        "delta_wape":  0.25,
+        "delta_rmse":  16.82,
+        "delta_q4_rmse":  -9.56,
+        "notes":  "cosine + warmup, batch 512, wd=1e-4"
+    },
+    {
+        "run":  "batch256",
+        "mae_dollars":  2053.41,
+        "wape_percent":  44.31,
+        "rmse_dollars":  3133.77,
+        "q4_rmse_dollars":  3418.17,
+        "delta_mae":  11.85,
+        "delta_wape":  0.26,
+        "delta_rmse":  16.84,
+        "delta_q4_rmse":  -28.76,
+        "notes":  "StepLR, batch 256, wd=1e-4"
+    }
+]

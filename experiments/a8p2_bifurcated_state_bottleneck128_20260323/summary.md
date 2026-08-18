@@ -1,0 +1,7 @@
+# A8.2 Seed 42 Check
+
+| Run | Pre-SAE RMSE | Pre-SAE MAE | Patient RMSE | Patient MAE | Pre-SAE PR | Patient PR | Predictive PR |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline_seed42 | 3134.77 | 2057.23 | 3136.90 | 2059.20 | 6.78 | 5.06 | 6.78 |
+| a8_seed42 | 3130.69 | 2055.89 | 3123.63 | 2048.23 | 6.46 | 5.34 | 5.43 |
+| a8p2_seed42 | 3134.37 | 2067.92 | 3140.57 | 2072.37 | 7.43 | 5.57 | 3.04 |

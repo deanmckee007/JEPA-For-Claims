@@ -1,0 +1,67 @@
+{
+  "date": "2026-03-23",
+  "data_path": "C:/Users/tmcke/OneDrive/Desktop/claims_data/training_set.parquet",
+  "num_samples": 15374,
+  "runs": [
+    {
+      "name": "A6_baseline_hybrid_dollar_seed42",
+      "recipe": "sigreg_dense_hybrid_dollar",
+      "config_overrides": [],
+      "target_probe_mae_dollars": 2059.1455078125,
+      "target_probe_wape_percent": 44.436614990234375,
+      "target_probe_rmse_dollars": 3136.78857421875,
+      "q4_high_cost_rmse_dollars": 3690.472412109375,
+      "cluster_silhouette": 0.44425296783447266,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6434890074151164,
+      "final_val_rmse": 3140.155
+    },
+    {
+      "name": "A6_masked_grounding_seed42",
+      "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+      "config_overrides": [],
+      "target_probe_mae_dollars": 2047.9864501953125,
+      "target_probe_wape_percent": 44.195804595947266,
+      "target_probe_rmse_dollars": 3125.281005859375,
+      "q4_high_cost_rmse_dollars": 3695.349365234375,
+      "cluster_silhouette": 0.43655744194984436,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6719136203980747,
+      "final_val_rmse": 3140.41
+    },
+    {
+      "name": "A6_masked_grounding_sigreg005_seed42",
+      "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+      "config_overrides": [
+        "sigreg_weight_lvl2=0.05"
+      ],
+      "target_probe_mae_dollars": 2047.56787109375,
+      "target_probe_wape_percent": 44.18677520751953,
+      "target_probe_rmse_dollars": 3125.8232421875,
+      "q4_high_cost_rmse_dollars": 3696.622314453125,
+      "cluster_silhouette": 0.4435080885887146,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6436190971770521,
+      "final_val_rmse": 3141.775
+    },
+    {
+      "name": "A6_masked_grounding_sigreg000_seed42",
+      "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+      "config_overrides": [
+        "sigreg_weight_lvl2=0.0"
+      ],
+      "target_probe_mae_dollars": 2047.42529296875,
+      "target_probe_wape_percent": 44.183692932128906,
+      "target_probe_rmse_dollars": 3126.9189453125,
+      "q4_high_cost_rmse_dollars": 3695.230224609375,
+      "cluster_silhouette": 0.4505186975002289,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6426434239625342,
+      "final_val_rmse": 3141.391
+    }
+  ],
+  "conclusion": {
+    "best_overall_cost_rmse_run": "A6_masked_grounding_seed42",
+    "best_overall_mae_run": "A6_masked_grounding_sigreg000_seed42",
+    "best_overall_wape_run": "A6_masked_grounding_sigreg000_seed42",
+    "best_q4_high_cost_rmse_run": "A6_baseline_hybrid_dollar_seed42",
+    "promote_masked_grounding_now": false,
+    "reason": "A6 improved overall cost metrics, but every A6 variant slightly regressed q4_high_cost RMSE and the zero-SIGReg claim needs seed validation."
+  }
+}

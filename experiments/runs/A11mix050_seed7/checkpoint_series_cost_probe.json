@@ -1,0 +1,487 @@
+{
+  "recipe": "a11_graph_ssl_transfer",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "checkpoint_dir": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints",
+  "pattern": "stage1-epoch*.ckpt",
+  "device": "cuda",
+  "seed": 7,
+  "representation_source": "patient_representation_pre_sae",
+  "results": [
+    {
+      "target_probe_rmse_log1p": 0.8477154970169067,
+      "target_probe_mae_dollars": 2043.17724609375,
+      "target_probe_rmse_dollars": 3108.427490234375,
+      "target_probe_wape_percent": 44.379844665527344,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.9168126583099365,
+          "target_probe_mae_dollars": 526.1255493164062,
+          "target_probe_rmse_dollars": 707.5645141601562,
+          "target_probe_wape_percent": 41.82442092895508,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.1783839464187622,
+          "target_probe_mae_dollars": 466.1764831542969,
+          "target_probe_rmse_dollars": 560.1260986328125,
+          "target_probe_wape_percent": 14.71700382232666,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09658714383840561,
+          "target_probe_mae_dollars": 408.1028747558594,
+          "target_probe_rmse_dollars": 483.07470703125,
+          "target_probe_wape_percent": 8.117425918579102,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.3008975684642792,
+          "target_probe_mae_dollars": 2226.480712890625,
+          "target_probe_rmse_dollars": 3357.3935546875,
+          "target_probe_wape_percent": 25.234792709350586,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=03.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    },
+    {
+      "target_probe_rmse_log1p": 0.8470085859298706,
+      "target_probe_mae_dollars": 2038.2484130859375,
+      "target_probe_rmse_dollars": 3114.428466796875,
+      "target_probe_wape_percent": 44.27278518676758,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.9202751517295837,
+          "target_probe_mae_dollars": 523.5963134765625,
+          "target_probe_rmse_dollars": 695.8419799804688,
+          "target_probe_wape_percent": 41.62336349487305,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.17906111478805542,
+          "target_probe_mae_dollars": 467.0615234375,
+          "target_probe_rmse_dollars": 561.5908203125,
+          "target_probe_wape_percent": 14.744943618774414,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09621529281139374,
+          "target_probe_mae_dollars": 406.7958984375,
+          "target_probe_rmse_dollars": 481.26953125,
+          "target_probe_wape_percent": 8.09142780303955,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.30165907740592957,
+          "target_probe_mae_dollars": 2229.468505859375,
+          "target_probe_rmse_dollars": 3363.61669921875,
+          "target_probe_wape_percent": 25.26865577697754,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=07.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    },
+    {
+      "target_probe_rmse_log1p": 0.8474568724632263,
+      "target_probe_mae_dollars": 2043.649658203125,
+      "target_probe_rmse_dollars": 3112.737548828125,
+      "target_probe_wape_percent": 44.39010238647461,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.9222131371498108,
+          "target_probe_mae_dollars": 528.0779418945312,
+          "target_probe_rmse_dollars": 703.5042114257812,
+          "target_probe_wape_percent": 41.9796257019043,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.1788489818572998,
+          "target_probe_mae_dollars": 466.7093505859375,
+          "target_probe_rmse_dollars": 560.8463745117188,
+          "target_probe_wape_percent": 14.73382568359375,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09674449265003204,
+          "target_probe_mae_dollars": 408.611328125,
+          "target_probe_rmse_dollars": 483.8481140136719,
+          "target_probe_wape_percent": 8.12753963470459,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.3006993532180786,
+          "target_probe_mae_dollars": 2212.031494140625,
+          "target_probe_rmse_dollars": 3352.175537109375,
+          "target_probe_wape_percent": 25.071025848388672,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=11.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    },
+    {
+      "target_probe_rmse_log1p": 0.848480761051178,
+      "target_probe_mae_dollars": 2047.380859375,
+      "target_probe_rmse_dollars": 3127.42431640625,
+      "target_probe_wape_percent": 44.47114562988281,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.9213401079177856,
+          "target_probe_mae_dollars": 528.4861450195312,
+          "target_probe_rmse_dollars": 706.7125244140625,
+          "target_probe_wape_percent": 42.01207733154297,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.17883315682411194,
+          "target_probe_mae_dollars": 466.0075988769531,
+          "target_probe_rmse_dollars": 560.57177734375,
+          "target_probe_wape_percent": 14.71167278289795,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09602358192205429,
+          "target_probe_mae_dollars": 407.0672302246094,
+          "target_probe_rmse_dollars": 480.22735595703125,
+          "target_probe_wape_percent": 8.09682559967041,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.30122363567352295,
+          "target_probe_mae_dollars": 2214.17919921875,
+          "target_probe_rmse_dollars": 3360.103515625,
+          "target_probe_wape_percent": 25.095367431640625,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=15.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    },
+    {
+      "target_probe_rmse_log1p": 0.8475612998008728,
+      "target_probe_mae_dollars": 2043.6134033203125,
+      "target_probe_rmse_dollars": 3118.240478515625,
+      "target_probe_wape_percent": 44.38931655883789,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.921630859375,
+          "target_probe_mae_dollars": 527.8277587890625,
+          "target_probe_rmse_dollars": 702.6796264648438,
+          "target_probe_wape_percent": 41.959739685058594,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.17874018847942352,
+          "target_probe_mae_dollars": 466.2456359863281,
+          "target_probe_rmse_dollars": 560.4442749023438,
+          "target_probe_wape_percent": 14.71918773651123,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09636878222227097,
+          "target_probe_mae_dollars": 407.32440185546875,
+          "target_probe_rmse_dollars": 482.21649169921875,
+          "target_probe_wape_percent": 8.101941108703613,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.302440345287323,
+          "target_probe_mae_dollars": 2224.552978515625,
+          "target_probe_rmse_dollars": 3367.224365234375,
+          "target_probe_wape_percent": 25.21294403076172,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=19.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    },
+    {
+      "target_probe_rmse_log1p": 0.8471442461013794,
+      "target_probe_mae_dollars": 2040.805419921875,
+      "target_probe_rmse_dollars": 3113.321533203125,
+      "target_probe_wape_percent": 44.32832336425781,
+      "target_cost_bucket": {
+        "q1_low_cost": {
+          "target_probe_rmse_log1p": 0.9214901328086853,
+          "target_probe_mae_dollars": 527.4959106445312,
+          "target_probe_rmse_dollars": 695.6345825195312,
+          "target_probe_wape_percent": 41.93335723876953,
+          "target_dollars_min": 1.0,
+          "target_dollars_median": 1247.9398193359375,
+          "target_dollars_max": 2258.676025390625
+        },
+        "q2_mid_low_cost": {
+          "target_probe_rmse_log1p": 0.1787845492362976,
+          "target_probe_mae_dollars": 466.91650390625,
+          "target_probe_rmse_dollars": 560.7061157226562,
+          "target_probe_wape_percent": 14.740365982055664,
+          "target_dollars_min": 2258.8388671875,
+          "target_dollars_median": 3167.172607421875,
+          "target_dollars_max": 4195.94580078125
+        },
+        "q3_mid_high_cost": {
+          "target_probe_rmse_log1p": 0.09625232964754105,
+          "target_probe_mae_dollars": 407.0909118652344,
+          "target_probe_rmse_dollars": 481.4127502441406,
+          "target_probe_wape_percent": 8.097296714782715,
+          "target_dollars_min": 4196.21044921875,
+          "target_dollars_median": 5052.82275390625,
+          "target_dollars_max": 5863.048828125
+        },
+        "q4_high_cost": {
+          "target_probe_rmse_log1p": 0.30115076899528503,
+          "target_probe_mae_dollars": 2219.509765625,
+          "target_probe_rmse_dollars": 3357.971923828125,
+          "target_probe_wape_percent": 25.155784606933594,
+          "target_dollars_min": 5864.30126953125,
+          "target_dollars_median": 7462.6826171875,
+          "target_dollars_max": 22026.466796875
+        }
+      },
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=23.ckpt",
+      "num_samples": 15374,
+      "embedding_dim": 256
+    }
+  ],
+  "best_by_target_probe_rmse_dollars": {
+    "target_probe_rmse_log1p": 0.8477154970169067,
+    "target_probe_mae_dollars": 2043.17724609375,
+    "target_probe_rmse_dollars": 3108.427490234375,
+    "target_probe_wape_percent": 44.379844665527344,
+    "target_cost_bucket": {
+      "q1_low_cost": {
+        "target_probe_rmse_log1p": 0.9168126583099365,
+        "target_probe_mae_dollars": 526.1255493164062,
+        "target_probe_rmse_dollars": 707.5645141601562,
+        "target_probe_wape_percent": 41.82442092895508,
+        "target_dollars_min": 1.0,
+        "target_dollars_median": 1247.9398193359375,
+        "target_dollars_max": 2258.676025390625
+      },
+      "q2_mid_low_cost": {
+        "target_probe_rmse_log1p": 0.1783839464187622,
+        "target_probe_mae_dollars": 466.1764831542969,
+        "target_probe_rmse_dollars": 560.1260986328125,
+        "target_probe_wape_percent": 14.71700382232666,
+        "target_dollars_min": 2258.8388671875,
+        "target_dollars_median": 3167.172607421875,
+        "target_dollars_max": 4195.94580078125
+      },
+      "q3_mid_high_cost": {
+        "target_probe_rmse_log1p": 0.09658714383840561,
+        "target_probe_mae_dollars": 408.1028747558594,
+        "target_probe_rmse_dollars": 483.07470703125,
+        "target_probe_wape_percent": 8.117425918579102,
+        "target_dollars_min": 4196.21044921875,
+        "target_dollars_median": 5052.82275390625,
+        "target_dollars_max": 5863.048828125
+      },
+      "q4_high_cost": {
+        "target_probe_rmse_log1p": 0.3008975684642792,
+        "target_probe_mae_dollars": 2226.480712890625,
+        "target_probe_rmse_dollars": 3357.3935546875,
+        "target_probe_wape_percent": 25.234792709350586,
+        "target_dollars_min": 5864.30126953125,
+        "target_dollars_median": 7462.6826171875,
+        "target_dollars_max": 22026.466796875
+      }
+    },
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=03.ckpt",
+    "num_samples": 15374,
+    "embedding_dim": 256
+  },
+  "best_by_target_probe_mae_dollars": {
+    "target_probe_rmse_log1p": 0.8470085859298706,
+    "target_probe_mae_dollars": 2038.2484130859375,
+    "target_probe_rmse_dollars": 3114.428466796875,
+    "target_probe_wape_percent": 44.27278518676758,
+    "target_cost_bucket": {
+      "q1_low_cost": {
+        "target_probe_rmse_log1p": 0.9202751517295837,
+        "target_probe_mae_dollars": 523.5963134765625,
+        "target_probe_rmse_dollars": 695.8419799804688,
+        "target_probe_wape_percent": 41.62336349487305,
+        "target_dollars_min": 1.0,
+        "target_dollars_median": 1247.9398193359375,
+        "target_dollars_max": 2258.676025390625
+      },
+      "q2_mid_low_cost": {
+        "target_probe_rmse_log1p": 0.17906111478805542,
+        "target_probe_mae_dollars": 467.0615234375,
+        "target_probe_rmse_dollars": 561.5908203125,
+        "target_probe_wape_percent": 14.744943618774414,
+        "target_dollars_min": 2258.8388671875,
+        "target_dollars_median": 3167.172607421875,
+        "target_dollars_max": 4195.94580078125
+      },
+      "q3_mid_high_cost": {
+        "target_probe_rmse_log1p": 0.09621529281139374,
+        "target_probe_mae_dollars": 406.7958984375,
+        "target_probe_rmse_dollars": 481.26953125,
+        "target_probe_wape_percent": 8.09142780303955,
+        "target_dollars_min": 4196.21044921875,
+        "target_dollars_median": 5052.82275390625,
+        "target_dollars_max": 5863.048828125
+      },
+      "q4_high_cost": {
+        "target_probe_rmse_log1p": 0.30165907740592957,
+        "target_probe_mae_dollars": 2229.468505859375,
+        "target_probe_rmse_dollars": 3363.61669921875,
+        "target_probe_wape_percent": 25.26865577697754,
+        "target_dollars_min": 5864.30126953125,
+        "target_dollars_median": 7462.6826171875,
+        "target_dollars_max": 22026.466796875
+      }
+    },
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=07.ckpt",
+    "num_samples": 15374,
+    "embedding_dim": 256
+  },
+  "best_by_target_probe_wape_percent": {
+    "target_probe_rmse_log1p": 0.8470085859298706,
+    "target_probe_mae_dollars": 2038.2484130859375,
+    "target_probe_rmse_dollars": 3114.428466796875,
+    "target_probe_wape_percent": 44.27278518676758,
+    "target_cost_bucket": {
+      "q1_low_cost": {
+        "target_probe_rmse_log1p": 0.9202751517295837,
+        "target_probe_mae_dollars": 523.5963134765625,
+        "target_probe_rmse_dollars": 695.8419799804688,
+        "target_probe_wape_percent": 41.62336349487305,
+        "target_dollars_min": 1.0,
+        "target_dollars_median": 1247.9398193359375,
+        "target_dollars_max": 2258.676025390625
+      },
+      "q2_mid_low_cost": {
+        "target_probe_rmse_log1p": 0.17906111478805542,
+        "target_probe_mae_dollars": 467.0615234375,
+        "target_probe_rmse_dollars": 561.5908203125,
+        "target_probe_wape_percent": 14.744943618774414,
+        "target_dollars_min": 2258.8388671875,
+        "target_dollars_median": 3167.172607421875,
+        "target_dollars_max": 4195.94580078125
+      },
+      "q3_mid_high_cost": {
+        "target_probe_rmse_log1p": 0.09621529281139374,
+        "target_probe_mae_dollars": 406.7958984375,
+        "target_probe_rmse_dollars": 481.26953125,
+        "target_probe_wape_percent": 8.09142780303955,
+        "target_dollars_min": 4196.21044921875,
+        "target_dollars_median": 5052.82275390625,
+        "target_dollars_max": 5863.048828125
+      },
+      "q4_high_cost": {
+        "target_probe_rmse_log1p": 0.30165907740592957,
+        "target_probe_mae_dollars": 2229.468505859375,
+        "target_probe_rmse_dollars": 3363.61669921875,
+        "target_probe_wape_percent": 25.26865577697754,
+        "target_dollars_min": 5864.30126953125,
+        "target_dollars_median": 7462.6826171875,
+        "target_dollars_max": 22026.466796875
+      }
+    },
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=07.ckpt",
+    "num_samples": 15374,
+    "embedding_dim": 256
+  },
+  "best_by_q4_high_cost_rmse_dollars": {
+    "target_probe_rmse_log1p": 0.8474568724632263,
+    "target_probe_mae_dollars": 2043.649658203125,
+    "target_probe_rmse_dollars": 3112.737548828125,
+    "target_probe_wape_percent": 44.39010238647461,
+    "target_cost_bucket": {
+      "q1_low_cost": {
+        "target_probe_rmse_log1p": 0.9222131371498108,
+        "target_probe_mae_dollars": 528.0779418945312,
+        "target_probe_rmse_dollars": 703.5042114257812,
+        "target_probe_wape_percent": 41.9796257019043,
+        "target_dollars_min": 1.0,
+        "target_dollars_median": 1247.9398193359375,
+        "target_dollars_max": 2258.676025390625
+      },
+      "q2_mid_low_cost": {
+        "target_probe_rmse_log1p": 0.1788489818572998,
+        "target_probe_mae_dollars": 466.7093505859375,
+        "target_probe_rmse_dollars": 560.8463745117188,
+        "target_probe_wape_percent": 14.73382568359375,
+        "target_dollars_min": 2258.8388671875,
+        "target_dollars_median": 3167.172607421875,
+        "target_dollars_max": 4195.94580078125
+      },
+      "q3_mid_high_cost": {
+        "target_probe_rmse_log1p": 0.09674449265003204,
+        "target_probe_mae_dollars": 408.611328125,
+        "target_probe_rmse_dollars": 483.8481140136719,
+        "target_probe_wape_percent": 8.12753963470459,
+        "target_dollars_min": 4196.21044921875,
+        "target_dollars_median": 5052.82275390625,
+        "target_dollars_max": 5863.048828125
+      },
+      "q4_high_cost": {
+        "target_probe_rmse_log1p": 0.3006993532180786,
+        "target_probe_mae_dollars": 2212.031494140625,
+        "target_probe_rmse_dollars": 3352.175537109375,
+        "target_probe_wape_percent": 25.071025848388672,
+        "target_dollars_min": 5864.30126953125,
+        "target_dollars_median": 7462.6826171875,
+        "target_dollars_max": 22026.466796875
+      }
+    },
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\A11mix050_seed7\\checkpoints\\stage1-epochepoch=11.ckpt",
+    "num_samples": 15374,
+    "embedding_dim": 256
+  },
+  "selection_metric_priority": [
+    "target_probe_mae_dollars",
+    "target_probe_wape_percent",
+    "target_probe_rmse_dollars",
+    "target_cost_bucket.q4_high_cost.target_probe_rmse_dollars"
+  ]
+}

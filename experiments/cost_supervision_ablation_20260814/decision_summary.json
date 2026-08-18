@@ -1,0 +1,68 @@
+{
+  "selected_cost_protocol": {
+    "base_encoder": "composable_level1_lejepa_any_code",
+    "base_encoder_epochs": 20,
+    "cost_head_source": "patient_representation_pre_sae",
+    "cost_head": "three_layer_mlp",
+    "cost_target": "globally_normalized_train_log1p_cost",
+    "fine_tune_objective": "task_only_mse",
+    "fine_tune_epochs": 20,
+    "fine_tune_encoder_lr": 0.00002,
+    "head_lr": 0.001
+  },
+  "three_optimization_seed_validation_result": {
+    "note": "Seeds vary fine-tuning initialization/order on one fixed seed-42 SSL checkpoint and frozen patient split.",
+    "mae_dollars_mean_sd": [1467.977743, 22.106358],
+    "rmse_dollars_mean_sd": [2452.523112, 41.700091],
+    "wape_percent_mean_sd": [31.573680, 0.475470],
+    "pairwise_accuracy_mean_sd": [0.726343, 0.001102],
+    "spearman_mean_sd": [0.615268, 0.002608],
+    "top_decile_recall_mean_sd": [0.478579, 0.004788],
+    "linear_probe_rmse_mean_sd": [2612.597982, 4.361654],
+    "silhouette_mean_sd": [0.215802, 0.005565],
+    "ttnc_retrieval_at_5_mean_sd": [0.752405, 0.001547]
+  },
+  "matched_frozen_head_three_seed_validation_result": {
+    "mae_dollars_mean_sd": [1525.622355, 9.614220],
+    "rmse_dollars_mean_sd": [2511.128418, 55.475543],
+    "wape_percent_mean_sd": [32.813516, 0.206785],
+    "pairwise_accuracy_mean_sd": [0.711103, 0.001522],
+    "spearman_mean_sd": [0.579450, 0.003470],
+    "top_decile_recall_mean_sd": [0.463950, 0.036152]
+  },
+  "fine_tune_minus_frozen_mean_delta": {
+    "mae_dollars": -57.644613,
+    "rmse_dollars": -58.605306,
+    "wape_percentage_points": -1.239836,
+    "pairwise_accuracy": 0.015239,
+    "spearman": 0.035819,
+    "top_decile_recall": 0.014629
+  },
+  "single_seed_full_label_controls": {
+    "joint_ssl_cost": {
+      "mae_dollars": 1530.617676,
+      "rmse_dollars": 2483.848389,
+      "pairwise_accuracy": 0.710768,
+      "spearman": 0.576393,
+      "top_decile_recall": 0.492163,
+      "linear_probe_rmse": 2770.269043,
+      "silhouette": 0.176499
+    },
+    "supervised_scratch": {
+      "mae_dollars": 1548.553955,
+      "rmse_dollars": 2550.822510,
+      "pairwise_accuracy": 0.727369,
+      "spearman": 0.616073,
+      "top_decile_recall": 0.482759,
+      "linear_probe_rmse": 2724.828857,
+      "silhouette": 0.139209
+    }
+  },
+  "decision": [
+    "Use SSL-pretrained then task-only fine-tuned representations for the cost-specific model.",
+    "Keep the unfine-tuned SSL checkpoint as the canonical general-purpose representation artifact.",
+    "Do not replace the generic embedding with the fine-tuned one: its direct nonlinear head is better, but linear missing-modality transfer is worse.",
+    "Do not claim universal low-label SSL dominance; the 10-percent-label comparison is objective-dependent."
+  ],
+  "evaluation_policy": "Frozen validation only. The test split was not accessed for this ablation."
+}

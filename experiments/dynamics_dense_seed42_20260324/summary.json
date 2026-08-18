@@ -1,0 +1,34 @@
+[
+  {
+    "name": "baseline_obs000_mask070",
+    "note": "current grounded baseline",
+    "mae": 2050.02,
+    "wape": 44.24,
+    "rmse": 3119.47,
+    "q4_rmse": 3414.66
+  },
+  {
+    "name": "ema_sigreg_0.0",
+    "note": "keep EMA teacher, remove SIGReg weight",
+    "mae": 2048.85,
+    "wape": 44.21,
+    "rmse": 3117.56,
+    "q4_rmse": 3414.01
+  },
+  {
+    "name": "shared_sigreg_0.1",
+    "note": "swap Level 2 target encoder to shared, keep SIGReg weight",
+    "mae": 2049.06,
+    "wape": 44.22,
+    "rmse": 3118.71,
+    "q4_rmse": 3419.34
+  },
+  {
+    "name": "no_dense_prediction",
+    "note": "disable dense Level 2 prediction path",
+    "mae": 2077.50,
+    "wape": 44.83,
+    "rmse": 3164.66,
+    "q4_rmse": 3411.87
+  }
+]

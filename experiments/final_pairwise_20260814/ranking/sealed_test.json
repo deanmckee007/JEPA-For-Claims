@@ -1,0 +1,29 @@
+{
+  "protocol": {
+    "ranking_head_fit_split": "train",
+    "ranking_variant_selected_on": "validation",
+    "calibration_fit_split": "validation",
+    "reported_evaluation_split": "sealed_test",
+    "ranking_head_retrained": false,
+    "ranking_variant_reselected": false,
+    "test_access_explicitly_authorized": true
+  },
+  "variant": "rolled_ranknet_pointwise",
+  "num_test": 3274,
+  "pairwise_accuracy": 0.715230370733366,
+  "pairwise_pairs_evaluated": 499955,
+  "pairwise_pairs_available": 5357901,
+  "spearman_correlation": 0.5913670980651817,
+  "top_decile_recall": 0.40853658536585363,
+  "monotonic_dollar_calibration": {
+    "mae_dollars": 1592.596179107341,
+    "rmse_dollars": 2624.157780291278,
+    "wape_percent": 33.89828674182984
+  },
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\selected_lejepa_anycode_seed42_e20\\encoder.ckpt",
+  "head_artifact": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\ranking\\heads.pt",
+  "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+  "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0",
+  "claim_inclusion_policy": "any_code",
+  "seed": 42
+}

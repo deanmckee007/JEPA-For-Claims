@@ -1,0 +1,81 @@
+{
+  "date": "2026-03-23",
+  "checkpoint": "C:/Users/tmcke/code/JEPA-For-Claims/experiments/runs/A6_masked_grounding_seed42/encoder.ckpt",
+  "recipe": "sigreg_dense_hybrid_dollar_masked_grounding",
+  "data_path": "C:/Users/tmcke/OneDrive/Desktop/claims_data/training_set.parquet",
+  "num_samples": 15374,
+  "runs": [
+    {
+      "representation_source": "patient_representation_pre_sae",
+      "embedding_dim": 256,
+      "target_probe_mae_dollars": 2047.12,
+      "target_probe_wape_percent": 44.18,
+      "target_probe_rmse_dollars": 3123.28,
+      "q4_high_cost_mae_dollars": 2365.96,
+      "q4_high_cost_rmse_dollars": 3699.89,
+      "cluster_silhouette": 0.4365,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6506
+    },
+    {
+      "representation_source": "context_pooled",
+      "embedding_dim": 256,
+      "target_probe_mae_dollars": 2047.12,
+      "target_probe_wape_percent": 44.18,
+      "target_probe_rmse_dollars": 3123.28,
+      "q4_high_cost_mae_dollars": 2365.96,
+      "q4_high_cost_rmse_dollars": 3699.89,
+      "cluster_silhouette": 0.4365,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6506
+    },
+    {
+      "representation_source": "patient_representation",
+      "embedding_dim": 256,
+      "target_probe_mae_dollars": 2047.99,
+      "target_probe_wape_percent": 44.2,
+      "target_probe_rmse_dollars": 3125.28,
+      "q4_high_cost_mae_dollars": 2363.32,
+      "q4_high_cost_rmse_dollars": 3695.35,
+      "cluster_silhouette": 0.4366,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6719
+    },
+    {
+      "representation_source": "context_mean_pool",
+      "embedding_dim": 128,
+      "target_probe_mae_dollars": 2067.14,
+      "target_probe_wape_percent": 44.61,
+      "target_probe_rmse_dollars": 3134.72,
+      "q4_high_cost_mae_dollars": 2321.21,
+      "q4_high_cost_rmse_dollars": 3692.52,
+      "cluster_silhouette": 0.4708,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6372
+    },
+    {
+      "representation_source": "next_claim_prediction",
+      "embedding_dim": 128,
+      "target_probe_mae_dollars": 2068.38,
+      "target_probe_wape_percent": 44.64,
+      "target_probe_rmse_dollars": 3199.65,
+      "q4_high_cost_mae_dollars": 2363.8,
+      "q4_high_cost_rmse_dollars": 3722.4,
+      "cluster_silhouette": 0.5016,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6581
+    },
+    {
+      "representation_source": "context_max_pool",
+      "embedding_dim": 128,
+      "target_probe_mae_dollars": 2107.63,
+      "target_probe_wape_percent": 45.48,
+      "target_probe_rmse_dollars": 3221.43,
+      "q4_high_cost_mae_dollars": 2363.94,
+      "q4_high_cost_rmse_dollars": 3716.53,
+      "cluster_silhouette": 0.4384,
+      "ttnc_proxy_retrieval_hit_rate_at_5": 0.6516
+    }
+  ],
+  "conclusion": {
+    "best_overall_cost_source": "patient_representation_pre_sae",
+    "best_q4_high_cost_source": "context_mean_pool",
+    "current_probe_source": "patient_representation",
+    "recommended_default_probe_source": "patient_representation_pre_sae"
+  }
+}

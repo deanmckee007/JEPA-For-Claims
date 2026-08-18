@@ -1,0 +1,16 @@
+{
+  "num_samples": 2000,
+  "embedding_dim": 128,
+  "num_specialty_labels": 14,
+  "specialty_retrieval_hit_rate_at_5": 0.7835,
+  "cluster_ari": 0.023413658825845833,
+  "cluster_silhouette": 0.24545198678970337,
+  "target_probe_rmse_log1p": 0.7148058414459229,
+  "target_probe_mae_dollars": 2646.71240234375,
+  "target_probe_rmse_dollars": 4134.5927734375,
+  "target_probe_wape_percent": 46.16039276123047,
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\runs\\H4_hybrid_embedding_dim64_smoke\\encoder.ckpt",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "recipe": "sigreg_dense_hybrid",
+  "device": "cuda"
+}

@@ -15,10 +15,24 @@ class ClaimsDataset(Dataset):
         self.max_claims_len = config.max_claims_len
         self.max_cpt_tokens = config.max_cpt_tokens
         self.max_icd_tokens = config.max_icd_tokens
+        self.claim_inclusion_policy = getattr(
+            config,
+            'claim_inclusion_policy',
+            'complete_only',
+        )
+        self.evaluation_claim_inclusion_policy = getattr(
+            config,
+            'evaluation_claim_inclusion_policy',
+            None,
+        )
 
         # Process the sequences and filter patients with fewer than 2 valid claims
         self.processed_data = []
         self.targets = []
+        self.raw_sequence_lengths = []
+        self.sample_ids = []
+        self.split_labels = []
+        self.mean_target_baseline_rmse = None
 
         for idx, row in dataframe.iterrows():
             claims = self.process_patient_sequence(row['input'])
@@ -26,20 +40,33 @@ class ClaimsDataset(Dataset):
                 continue  # Skip patients with insufficient valid claims
             self.processed_data.append(claims)
             self.targets.append(row['target'])
+            self.raw_sequence_lengths.append(len(claims))
+            self.sample_ids.append(row.get('_sample_id', str(idx)))
+            self.split_labels.append(row.get('_split', 'unspecified'))
 
         # Print a debug statement for dataset size
         print(f"Number of processed samples after filtering: {len(self.processed_data)}")
         # Calculate RMSE of the error predicting mean log1p(target)
-        self.calculate_rmse()
+        self.mean_target_baseline_rmse = self.calculate_rmse()
 
     def process_patient_sequence(self, sequence):
         claims = []
         current_claim = {'cpt': [], 'icd': [], 'ttnc': None}
 
+        def claim_is_eligible(claim):
+            if claim['ttnc'] is None:
+                return False
+            if self.claim_inclusion_policy == 'complete_only':
+                return bool(claim['cpt'] and claim['icd'])
+            if self.claim_inclusion_policy == 'any_code':
+                return bool(claim['cpt'] or claim['icd'])
+            raise ValueError(
+                f"Unsupported claim_inclusion_policy={self.claim_inclusion_policy!r}."
+            )
+
         for token in sequence:
             if token.startswith('ttnc_'):
-                # Check if the current claim has at least one CPT and one ICD before adding
-                if current_claim['ttnc'] is not None and current_claim['cpt'] and current_claim['icd']:
+                if claim_is_eligible(current_claim):
                     claims.append(current_claim)
                 # Start a new claim
                 current_claim = {'cpt': [], 'icd': [], 'ttnc': token}
@@ -48,19 +75,32 @@ class ClaimsDataset(Dataset):
             elif token.startswith('icd_'):
                 current_claim['icd'].append(token)
 
-        # Add the last claim if it has at least one CPT and one ICD
-        if current_claim['ttnc'] is not None and current_claim['cpt'] and current_claim['icd']:
+        if claim_is_eligible(current_claim):
             claims.append(current_claim)
+        return claims
 
-        # Return claims only if they have at least one CPT and one ICD token
-        valid_claims = [claim for claim in claims if claim['cpt'] and claim['icd']]
-        
-        # If no valid claims, return an empty list to indicate no valid sequence
-        return valid_claims
+    @staticmethod
+    def claim_matches_policy(claim, policy):
+        if policy == 'complete_only':
+            return bool(claim['cpt'] and claim['icd'])
+        if policy == 'any_code':
+            return bool(claim['cpt'] or claim['icd'])
+        raise ValueError(f"Unsupported claim inclusion policy={policy!r}.")
+
+    def sample_matches_evaluation_policy(self, index, min_valid_claims):
+        policy = self.evaluation_claim_inclusion_policy
+        if policy is None:
+            return True
+        matching_claims = sum(
+            self.claim_matches_policy(claim, policy)
+            for claim in self.processed_data[index]
+        )
+        return matching_claims >= min_valid_claims
     
     def calculate_rmse(self):
         if not self.targets:
             print("No valid targets to calculate RMSE.")
+            self.mean_target_baseline_rmse = None
             return
         
         # Convert targets to a numpy array
@@ -74,9 +114,12 @@ class ClaimsDataset(Dataset):
         
         # Calculate the RMSE
         rmse = np.sqrt(np.mean(squared_errors))
+        rmse = float(rmse)
+        self.mean_target_baseline_rmse = rmse
         
         # Print the RMSE
         print(f"RMSE of the error predicting mean target(ln): {rmse:.4f}")
+        return rmse
 
 
     def __len__(self):
@@ -88,6 +131,20 @@ class ClaimsDataset(Dataset):
         return claims, target  # Return both the claims and target
 
     def collate_fn(self, batch):
+        return self._collate(batch, deterministic=False)
+
+    def collate_eval_fn(self, batch):
+        return self._collate(batch, deterministic=True)
+
+    @staticmethod
+    def _truncate_claim_tokens(tokens, max_tokens, deterministic):
+        if len(tokens) <= max_tokens:
+            return list(tokens)
+        if deterministic:
+            return sorted(tokens)[:max_tokens]
+        return random.sample(tokens, max_tokens)
+
+    def _collate(self, batch, deterministic):
         max_claims_len = self.max_claims_len
         max_cpt_tokens = self.max_cpt_tokens
         max_icd_tokens = self.max_icd_tokens
@@ -100,6 +157,16 @@ class ClaimsDataset(Dataset):
         for claims, target in batch:  # Unpack the claims and target from the batch
             targets.append(target)  # Add the target for this patient
 
+            if deterministic and self.evaluation_claim_inclusion_policy is not None:
+                claims = [
+                    claim
+                    for claim in claims
+                    if self.claim_matches_policy(
+                        claim,
+                        self.evaluation_claim_inclusion_policy,
+                    )
+                ]
+
             cpt_tokens = []
             icd_tokens = []
             ttnc_tokens = []
@@ -108,14 +175,20 @@ class ClaimsDataset(Dataset):
             for claim in claims[-max_claims_len:]:
                 # Handle CPT tokens
                 cpt_claim = claim.get('cpt', [])
-                if len(cpt_claim) > max_cpt_tokens:
-                    cpt_claim = random.sample(cpt_claim, max_cpt_tokens)
+                cpt_claim = self._truncate_claim_tokens(
+                    cpt_claim,
+                    max_cpt_tokens,
+                    deterministic,
+                )
                 cpt_tokens.append([self.cpt_vocab.get(token, self.cpt_vocab.get('<UNK>', 0)) for token in cpt_claim] + [self.cpt_vocab.get('<PAD>', 0)] * (max_cpt_tokens - len(cpt_claim)))
 
                 # Handle ICD tokens
                 icd_claim = claim.get('icd', [])
-                if len(icd_claim) > max_icd_tokens:
-                    icd_claim = random.sample(icd_claim, max_icd_tokens)
+                icd_claim = self._truncate_claim_tokens(
+                    icd_claim,
+                    max_icd_tokens,
+                    deterministic,
+                )
                 icd_tokens.append([self.icd_vocab.get(token, self.icd_vocab.get('<UNK>', 0)) for token in icd_claim] + [self.icd_vocab.get('<PAD>', 0)] * (max_icd_tokens - len(icd_claim)))
 
                 # Handle TTNC tokens
