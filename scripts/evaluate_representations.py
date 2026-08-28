@@ -270,6 +270,24 @@ def main(argv=None):
             "data_contract_hash": config.data_contract_hash,
             "vocab_hash": config.vocab_hash,
             "representation_sharing": model.representation_sharing_contract(),
+            "ssl_objective_type": getattr(config, "ssl_objective_type", None),
+            "representation_link_lvl2": getattr(
+                config, "representation_link_lvl2", "identity"
+            ),
+            "rdmreg_weight_lvl2": float(
+                getattr(config, "rdmreg_weight_lvl2", 0.0)
+            ),
+            "rdmreg_target_p": float(getattr(config, "rdmreg_target_p", 2.0)),
+            "rdmreg_target_mu": float(getattr(config, "rdmreg_target_mu", 0.0)),
+            "rdmreg_regularize_prediction": bool(
+                getattr(config, "rdmreg_regularize_prediction", False)
+            ),
+            "rdmreg_support_alignment_weight_lvl2": float(
+                getattr(config, "rdmreg_support_alignment_weight_lvl2", 0.0)
+            ),
+            "rdmreg_support_temperature": float(
+                getattr(config, "rdmreg_support_temperature", 0.5)
+            ),
             "sigreg_formulation": getattr(config, "sigreg_formulation", None),
             "sigreg_weight_lvl1": float(config.sigreg_weight_lvl1),
             "sigreg_weight_lvl2": float(config.sigreg_weight_lvl2),

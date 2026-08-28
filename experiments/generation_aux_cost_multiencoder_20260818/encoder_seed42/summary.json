@@ -1,0 +1,338 @@
+{
+  "aggregate": {
+    "pretrained|0": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1920.2288818359375,
+          "sample_std": 59.440531631149916
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2919.5370279947915,
+          "sample_std": 91.14432923327496
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9022019306818644,
+          "sample_std": 0.012903627250240045
+        },
+        "target_probe_wape_percent": {
+          "mean": 41.27849451700846,
+          "sample_std": 1.2777731804908385
+        }
+      },
+      "num_runs": 3
+    },
+    "pretrained|10": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1734.2146402994792,
+          "sample_std": 49.85959783089062
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2732.5059407552085,
+          "sample_std": 91.72361501542434
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8720404903093973,
+          "sample_std": 0.004082008738385703
+        },
+        "target_probe_wape_percent": {
+          "mean": 37.27980931599935,
+          "sample_std": 1.0718153576035572
+        }
+      },
+      "num_runs": 3
+    },
+    "pretrained|3": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1777.5853678385417,
+          "sample_std": 44.36096427873631
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2773.390869140625,
+          "sample_std": 83.29891198515017
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8803819020589193,
+          "sample_std": 0.004790007305377402
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.212136586507164,
+          "sample_std": 0.9536147713217192
+        }
+      },
+      "num_runs": 3
+    }
+  },
+  "paired_deltas": {
+    "pretrained|10": {
+      "mae_dollars_aux_minus_cost_only_mean": -186.01424153645834,
+      "paired_seeds": 3,
+      "sample_std": 71.44667650773148
+    },
+    "pretrained|3": {
+      "mae_dollars_aux_minus_cost_only_mean": -142.64351399739584,
+      "paired_seeds": 3,
+      "sample_std": 54.58166789898979
+    }
+  },
+  "protocol": {
+    "aux_weights": [
+      0.0,
+      3.0,
+      10.0
+    ],
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\core_architecture_ablations_20260814\\lejepa_anycode_l1w01_seed42_e4\\encoder.ckpt",
+    "cost_label_fraction": 0.1,
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "encoder_frozen": true,
+    "evaluation_split": "frozen_validation",
+    "generation_label_fraction": 1.0,
+    "matched_update_count": true,
+    "representation_source": "next_claim_prediction",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1973.616943359375,
+        "target_probe_rmse_dollars": 3016.3369140625,
+        "target_probe_rmse_log1p": 0.9124120473861694,
+        "target_probe_wape_percent": 42.4261589050293
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8250024197465282,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.3747897100145534,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 3.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1824.9114990234375,
+        "target_probe_rmse_dollars": 2857.20361328125,
+        "target_probe_rmse_log1p": 0.8845461010932922,
+        "target_probe_wape_percent": 39.2294921875
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.36169097870233397,
+        "icd_micro_average_precision": 0.20634749601620492,
+        "ttnc_accuracy": 0.6139359698681732
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8543024866257684,
+        "generation": 2.630852947800846
+      },
+      "training_last": {
+        "cost": 0.49868973988597676,
+        "generation": 1.3809157811989219
+      }
+    },
+    {
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1776.873046875,
+        "target_probe_rmse_dollars": 2818.468017578125,
+        "target_probe_rmse_log1p": 0.8757908940315247,
+        "target_probe_wape_percent": 38.19682312011719
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.3699155999934756,
+        "icd_micro_average_precision": 0.20603157322695,
+        "ttnc_accuracy": 0.6129943502824858
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8612248998577312,
+        "generation": 2.6464686454352684
+      },
+      "training_last": {
+        "cost": 0.5997535061028044,
+        "generation": 1.376359052577261
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1930.8907470703125,
+        "target_probe_rmse_dollars": 2906.908935546875,
+        "target_probe_rmse_log1p": 0.906494677066803,
+        "target_probe_wape_percent": 41.5076904296875
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8479778908066831,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.46996450373681925,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 3.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1736.9495849609375,
+        "target_probe_rmse_dollars": 2690.615478515625,
+        "target_probe_rmse_log1p": 0.8814523816108704,
+        "target_probe_wape_percent": 37.338600158691406
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.36116418521175336,
+        "icd_micro_average_precision": 0.20492714587774827,
+        "ttnc_accuracy": 0.6092278719397364
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.873045153537039,
+        "generation": 2.638975773827504
+      },
+      "training_last": {
+        "cost": 0.5837637175947933,
+        "generation": 1.381174241082143
+      }
+    },
+    {
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1679.4014892578125,
+        "target_probe_rmse_dollars": 2635.942138671875,
+        "target_probe_rmse_log1p": 0.8676927089691162,
+        "target_probe_wape_percent": 36.10150909423828
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.36554422919156504,
+        "icd_micro_average_precision": 0.20528302761013234,
+        "ttnc_accuracy": 0.6117388575015693
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8784089239977174,
+        "generation": 2.654753878965216
+      },
+      "training_last": {
+        "cost": 0.6656586058058981,
+        "generation": 1.3776579004223064
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1856.178955078125,
+        "target_probe_rmse_dollars": 2835.365234375,
+        "target_probe_rmse_log1p": 0.8876990675926208,
+        "target_probe_wape_percent": 39.901634216308594
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8427242252786281,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.4504461561219167,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 3.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1770.89501953125,
+        "target_probe_rmse_dollars": 2772.353515625,
+        "target_probe_rmse_log1p": 0.8751472234725952,
+        "target_probe_wape_percent": 38.06831741333008
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.3686785081544996,
+        "icd_micro_average_precision": 0.20678586163008636,
+        "ttnc_accuracy": 0.6101694915254238
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8677960159414906,
+        "generation": 2.607493859226421
+      },
+      "training_last": {
+        "cost": 0.5500515355902204,
+        "generation": 1.3832943479893571
+      }
+    },
+    {
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1746.369384765625,
+        "target_probe_rmse_dollars": 2743.107666015625,
+        "target_probe_rmse_log1p": 0.8726378679275513,
+        "target_probe_wape_percent": 37.54109573364258
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.3709424906057813,
+        "icd_micro_average_precision": 0.20717608814942046,
+        "ttnc_accuracy": 0.6114249843063403
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8737500117996991,
+        "generation": 2.623488397921546
+      },
+      "training_last": {
+        "cost": 0.6383777897236711,
+        "generation": 1.3790823504076166
+      }
+    }
+  ]
+}

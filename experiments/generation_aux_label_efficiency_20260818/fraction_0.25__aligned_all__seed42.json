@@ -1,0 +1,40 @@
+{
+  "ablation": "aligned_all",
+  "adapter_geometry": {
+    "mean_cosine_to_frozen": 1.0,
+    "mean_relative_l2": 0.0,
+    "shared_hidden_mean_feature_std": 1.204599142074585,
+    "shared_hidden_mean_norm": 24.9929141998291
+  },
+  "aux_modalities": [
+    "cpt",
+    "icd",
+    "ttnc"
+  ],
+  "aux_weight": 10.0,
+  "consistency_weight": 0.0,
+  "cost": {
+    "target_probe_mae_dollars": 1648.2451171875,
+    "target_probe_rmse_dollars": 2643.516357421875,
+    "target_probe_rmse_log1p": 0.8496728539466858,
+    "target_probe_wape_percent": 35.43175506591797
+  },
+  "cost_label_fraction": 0.25,
+  "generation": {
+    "cpt_micro_average_precision": 0.3620034317598229,
+    "icd_micro_average_precision": 0.2106056917941042,
+    "ttnc_accuracy": 0.6136220966729441
+  },
+  "seed": 42,
+  "sigreg_weight": 0.0,
+  "training_first": {
+    "cost": 0.8749000510926974,
+    "generation": 2.6476216417247964,
+    "sigreg": 0.0
+  },
+  "training_last": {
+    "cost": 0.7242156363139718,
+    "generation": 1.3680953838057437,
+    "sigreg": 0.0
+  }
+}

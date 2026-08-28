@@ -1,0 +1,58 @@
+{
+  "recipe": "lpwm_rectified_laplace_cap32",
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\capacity_ablation_seed42_e2\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+  "evaluation_split": "val",
+  "num_train_samples": 12000,
+  "num_val_samples": 3188,
+  "support": {
+    "prediction_active_fraction": 0.6730978473964868,
+    "target_active_fraction": 0.5645315440715182,
+    "prediction_dead_dimension_fraction": 0.03125,
+    "target_dead_dimension_fraction": 0.0,
+    "target_effective_active_dimensions": 114.52325875234615,
+    "prediction_target_support_jaccard_mean": 0.5635835992264826,
+    "prediction_target_support_jaccard_median": 0.5673076923076923,
+    "prediction_target_mse": 0.1747395545244217
+  },
+  "temporal_support_code_jaccard_spearman": 0.4822608278343551,
+  "temporal_support_code_jaccard_pvalue": 0.0,
+  "num_temporal_pairs": 101880,
+  "probes": {
+    "magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8511994481086731,
+        "target_probe_mae_dollars": 1656.35498046875,
+        "target_probe_rmse_dollars": 2696.2822265625,
+        "target_probe_wape_percent": 35.62535095214844
+      },
+      "ttnc": {
+        "accuracy": 0.4623588456712672,
+        "macro_f1": 0.19166166099392373
+      }
+    },
+    "support": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8688962459564209,
+        "target_probe_mae_dollars": 1725.372314453125,
+        "target_probe_rmse_dollars": 2775.32861328125,
+        "target_probe_wape_percent": 37.10979461669922
+      },
+      "ttnc": {
+        "accuracy": 0.39272271016311167,
+        "macro_f1": 0.14851386332745492
+      }
+    },
+    "support_plus_magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8468462228775024,
+        "target_probe_mae_dollars": 1666.3431396484375,
+        "target_probe_rmse_dollars": 2708.472900390625,
+        "target_probe_wape_percent": 35.840179443359375
+      },
+      "ttnc": {
+        "accuracy": 0.4538895859473024,
+        "macro_f1": 0.1881705143604957
+      }
+    }
+  }
+}

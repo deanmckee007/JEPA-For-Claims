@@ -10,12 +10,15 @@ from jepa_models.encoders import Level1Encoder
 from jepa_models.claim_prototypes import ClaimPrototypeObjective, sinkhorn_assignments
 from jepa_models.prediction_blocks import Level2PredictionBlock
 from jepa_models.ssl_objectives import (
+    RDMRegObjective,
     SIGRegObjective,
     WristbandGaussianRegularizer,
     _global_empirical_characteristic_function,
+    rep_relu,
     sigreg_gaussian_distance,
 )
 from jepa_utils.config import Config
+from jepa_utils.config import apply_runtime_config_overrides, apply_training_recipe
 
 
 def build_config(**overrides):
@@ -128,6 +131,129 @@ class TestSSLModernization(unittest.TestCase):
         self.assertEqual(global_count.item(), 10.0)
         (empirical_real.square().mean() + empirical_imag.square().mean()).backward()
         self.assertTrue(torch.isfinite(projected.grad).all())
+
+    def test_reprelu_has_relu_forward_and_gelu_surrogate_gradient(self):
+        values = torch.tensor([-2.0, -0.25, 0.0, 0.5, 2.0], requires_grad=True)
+        linked = rep_relu(values)
+        self.assertTrue(torch.equal(linked.detach(), torch.relu(values.detach())))
+
+        linked.sum().backward()
+        comparison = values.detach().clone().requires_grad_(True)
+        torch.nn.functional.gelu(comparison).sum().backward()
+        self.assertTrue(torch.allclose(values.grad, comparison.grad))
+        self.assertNotEqual(values.grad[1].item(), 0.0)
+
+    def test_rdmreg_is_finite_differentiable_and_reports_support(self):
+        cfg = build_config(
+            ssl_objective_type="rdmreg",
+            representation_link_lvl2="reprelu",
+            rdmreg_target_p=1.0,
+            rdmreg_target_mu=0.0,
+            rdmreg_num_projections=32,
+            rdmreg_weight_lvl2=0.1,
+        )
+        objective = RDMRegObjective(cfg)
+        prediction = rep_relu(torch.randn(24, 4, requires_grad=True))
+        prediction.retain_grad()
+        target = rep_relu(torch.randn(24, 4, requires_grad=True))
+        metrics = objective.compute(prediction, target, level="2")
+
+        self.assertTrue(torch.isfinite(metrics["total"]))
+        self.assertGreater(metrics["diagnostics"]["rdmreg_raw"].item(), 0.0)
+        self.assertGreaterEqual(
+            metrics["diagnostics"]["target_active_fraction"].item(), 0.0
+        )
+        self.assertLessEqual(
+            metrics["diagnostics"]["target_active_fraction"].item(), 1.0
+        )
+        metrics["total"].backward()
+        self.assertTrue(torch.isfinite(prediction.grad).all())
+
+    def test_rdmreg_direct_support_alignment_prefers_matching_activity(self):
+        cfg = build_config(
+            ssl_objective_type="rdmreg",
+            representation_link_lvl2="reprelu",
+            rdmreg_weight_lvl2=0.0,
+            rdmreg_support_alignment_weight_lvl2=1.0,
+            rdmreg_support_temperature=0.5,
+        )
+        objective = RDMRegObjective(cfg)
+        target = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
+        aligned = target.clone().requires_grad_(True)
+        overactive = torch.ones_like(target, requires_grad=True)
+
+        aligned_metrics = objective.compute(aligned, target, level="2")
+        overactive_metrics = objective.compute(overactive, target, level="2")
+
+        self.assertLess(
+            aligned_metrics["diagnostics"]["support_alignment_raw"].item(),
+            overactive_metrics["diagnostics"]["support_alignment_raw"].item(),
+        )
+        aligned_metrics["total"].backward()
+        self.assertTrue(torch.isfinite(aligned.grad).all())
+
+    def test_lpwm_recipe_factorial_controls(self):
+        dense = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_dense_gaussian")
+        )
+        sparse = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_rectified_laplace")
+        )
+
+        self.assertEqual(dense.ssl_objective_type, "rdmreg")
+        self.assertEqual(dense.representation_link_lvl2, "identity")
+        self.assertEqual(dense.rdmreg_target_p, 2.0)
+        self.assertEqual(sparse.representation_link_lvl2, "reprelu")
+        self.assertEqual(sparse.rdmreg_target_p, 1.0)
+        self.assertFalse(sparse.use_sparse_autoencoder)
+
+        link_only = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_rectified_mse")
+        )
+        strong_both = apply_runtime_config_overrides(
+            apply_training_recipe(
+                Config(), "lpwm_rectified_laplace_mu_neg1_w1_both"
+            )
+        )
+        self.assertEqual(link_only.rdmreg_weight_lvl2, 0.0)
+        self.assertEqual(strong_both.rdmreg_weight_lvl2, 1.0)
+        self.assertTrue(strong_both.rdmreg_regularize_prediction)
+
+        capacity = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_rectified_laplace_cap32")
+        )
+        self.assertTrue(capacity.use_dense_decoder_bottleneck)
+        self.assertEqual(capacity.dense_decoder_bottleneck_dim, 32)
+
+        support_aligned = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_rectified_laplace_cap32_support_w003")
+        )
+        self.assertEqual(
+            support_aligned.rdmreg_support_alignment_weight_lvl2, 0.03
+        )
+
+        rdm_sweep = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "lpwm_dense_gaussian_w003")
+        )
+        self.assertEqual(rdm_sweep.rdmreg_weight_lvl2, 0.03)
+
+    def test_rdmreg_model_exposes_exact_sparse_claim_states(self):
+        cfg = build_config(
+            ssl_objective_type="rdmreg",
+            target_encoder_mode="shared",
+            representation_link_lvl2="reprelu",
+            rdmreg_target_p=1.0,
+            rdmreg_num_projections=16,
+        )
+        model = HierarchicalClaimsModel(cfg)
+        outputs = model.training_forward(*make_batch(cfg, batch_size=8))
+
+        self.assertTrue(torch.isfinite(outputs["loss"]))
+        self.assertTrue((outputs["target_lvl2"] >= 0).all())
+        self.assertTrue((outputs["prediction_lvl2"] >= 0).all())
+        self.assertTrue((outputs["target_lvl2"] == 0).any())
+        self.assertTrue((outputs["prediction_lvl2"] == 0).any())
+        self.assertGreater(outputs["ssl_rdmreg_raw_lvl2"].item(), 0.0)
 
     def test_positionwise_sinkhorn_balances_each_claim_slot(self):
         torch.manual_seed(7)

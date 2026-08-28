@@ -347,6 +347,105 @@ TRAINING_RECIPES["levjepa_patient_views"] = {
     "freeze_logvars_after_epoch": 0,
 }
 
+# Sparse canonical-view companion for downstream complementarity experiments.
+# LeVJEPA's projected SIGReg remains the collapse-prevention mechanism; only
+# the canonical Level-2 interface is rectified.
+TRAINING_RECIPES["levjepa_patient_views_reprelu"] = {
+    **TRAINING_RECIPES["levjepa_patient_views"],
+    "representation_link_lvl2": "reprelu",
+}
+
+# LpWM claims pilot: a controlled link x reference-distribution sweep on the
+# selected composable architecture.  The historical Top-K SAE is disabled so
+# sparsity is canonical rather than a post-hoc reconstruction auxiliary.
+_LPWM_CLAIMS_ANCHOR = {
+    **TRAINING_RECIPES["composable_level1_lejepa_any_code"],
+    "ssl_objective_type": "rdmreg",
+    "representation_link_lvl1": "identity",
+    "rdmreg_weight_lvl1": 0.0,
+    "rdmreg_weight_lvl2": 0.1,
+    "rdmreg_num_projections": 512,
+    "rdmreg_target_mu": 0.0,
+    "rdmreg_regularize_prediction": False,
+    "rdmreg_support_alignment_weight_lvl1": 0.0,
+    "rdmreg_support_alignment_weight_lvl2": 0.0,
+    "rdmreg_support_temperature": 0.5,
+    "use_sparse_autoencoder": False,
+}
+TRAINING_RECIPES["lpwm_dense_gaussian"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "identity",
+    "rdmreg_target_p": 2.0,
+}
+TRAINING_RECIPES["lpwm_dense_laplace"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "identity",
+    "rdmreg_target_p": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_gaussian"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "reprelu",
+    "rdmreg_target_p": 2.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "reprelu",
+    "rdmreg_target_p": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_target_mu": -1.0,
+}
+TRAINING_RECIPES["lpwm_dense_mse"] = {
+    **TRAINING_RECIPES["lpwm_dense_gaussian"],
+    "rdmreg_weight_lvl2": 0.0,
+}
+TRAINING_RECIPES["lpwm_rectified_mse"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_weight_lvl2": 0.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_w1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_weight_lvl2": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1"],
+    "rdmreg_weight_lvl2": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1_both"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1"],
+    "rdmreg_regularize_prediction": True,
+}
+TRAINING_RECIPES["lpwm_relu_laplace"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "representation_link_lvl2": "relu",
+}
+for _capacity in (32, 64):
+    TRAINING_RECIPES[f"lpwm_dense_gaussian_cap{_capacity}"] = {
+        **TRAINING_RECIPES["lpwm_dense_gaussian"],
+        "use_dense_decoder_bottleneck": True,
+        "dense_decoder_bottleneck_dim": _capacity,
+    }
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_cap{_capacity}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace"],
+        "use_dense_decoder_bottleneck": True,
+        "dense_decoder_bottleneck_dim": _capacity,
+    }
+for _suffix, _weight in (("w003", 0.03), ("w03", 0.3)):
+    TRAINING_RECIPES[f"lpwm_dense_gaussian_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_dense_gaussian"],
+        "rdmreg_weight_lvl2": _weight,
+    }
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace"],
+        "rdmreg_weight_lvl2": _weight,
+    }
+for _suffix, _weight in (("support_w001", 0.01), ("support_w003", 0.03), ("support_w01", 0.1)):
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_cap32_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace_cap32"],
+        "rdmreg_support_alignment_weight_lvl2": _weight,
+    }
+
 @dataclass
 class Config:
     data_path: str = 'C:/Users/tmcke/OneDrive/Desktop/claims_data/training_set.parquet'
@@ -537,6 +636,18 @@ class Config:
     levjepa_claim_drop_ratio: float = 0.3
     levjepa_projector_hidden_dim: int = 2048
     levjepa_projector_output_dim: int = 256
+    # LpWM-style reference-distribution matching at the canonical JEPA link.
+    representation_link_lvl1: str = "identity"
+    representation_link_lvl2: str = "identity"
+    rdmreg_weight_lvl1: float = 0.0
+    rdmreg_weight_lvl2: float = 0.1
+    rdmreg_num_projections: int = 512
+    rdmreg_target_p: float = 2.0
+    rdmreg_target_mu: float = 0.0
+    rdmreg_regularize_prediction: bool = False
+    rdmreg_support_alignment_weight_lvl1: float = 0.0
+    rdmreg_support_alignment_weight_lvl2: float = 0.0
+    rdmreg_support_temperature: float = 0.5
     intermediate_sequence_supervision_weight: float = 0.0
     # Whether to run a pretraining phase for the diffusion generator before
     # training the main hierarchical model. Kept ``True`` for backwards
@@ -627,11 +738,35 @@ def apply_runtime_config_overrides(config: Config) -> Config:
     if getattr(config, "target_encoder_mode_lvl2", None) is not None:
         config.target_encoder_mode_lvl2 = config.target_encoder_mode_lvl2.lower()
 
-    if config.ssl_objective_type not in {"vicreg", "sigreg"}:
+    if config.ssl_objective_type not in {"vicreg", "sigreg", "rdmreg"}:
         raise ValueError(
             f"Unsupported ssl_objective_type={config.ssl_objective_type!r}. "
-            "Expected 'vicreg' or 'sigreg'."
+            "Expected 'vicreg', 'sigreg', or 'rdmreg'."
         )
+    config.representation_link_lvl1 = getattr(
+        config, "representation_link_lvl1", "identity"
+    ).lower()
+    config.representation_link_lvl2 = getattr(
+        config, "representation_link_lvl2", "identity"
+    ).lower()
+    for field_name in ("representation_link_lvl1", "representation_link_lvl2"):
+        if getattr(config, field_name) not in {"identity", "relu", "reprelu"}:
+            raise ValueError(
+                f"{field_name} must be 'identity', 'relu', or 'reprelu'."
+            )
+    if config.rdmreg_target_p <= 0:
+        raise ValueError("rdmreg_target_p must be positive.")
+    if config.rdmreg_num_projections <= 0:
+        raise ValueError("rdmreg_num_projections must be positive.")
+    if config.rdmreg_weight_lvl1 < 0 or config.rdmreg_weight_lvl2 < 0:
+        raise ValueError("RDMReg weights must be non-negative.")
+    if (
+        config.rdmreg_support_alignment_weight_lvl1 < 0
+        or config.rdmreg_support_alignment_weight_lvl2 < 0
+    ):
+        raise ValueError("RDMReg support-alignment weights must be non-negative.")
+    if config.rdmreg_support_temperature <= 0:
+        raise ValueError("rdmreg_support_temperature must be positive.")
     if config.sigreg_formulation not in {
         "legacy_additive",
         "lejepa_convex",

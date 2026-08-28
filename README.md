@@ -1,7 +1,73 @@
 # JEPA-For-Claims
-Joint Embedding Predictive Architecture for healthcare claims.  A hierarchical approach using within-claims representations and across-claims representation.  Original JEPA paper - https://arxiv.org/abs/2301.08243
 
-Conceptually, the goal here is to generate high quality embeddings for a variety of downstream tasks.  I have a simple prediction head attached that's toggled on/off in config and that should be fine for specializing to a task or expanding to multi-task.  The claims components here are limited to procedures and diagnoses, but anyone implementing this should introduce all of the components relevant for their inference/prediction tasks.
+Joint Embedding Predictive Architecture experiments for healthcare claims, with
+within-claim and across-claim representations. The conceptual starting point is
+the [original JEPA paper](https://arxiv.org/abs/2301.08243).
+
+This repository is best treated as a research reference, not a drop-in claims
+library. Its most reusable output is the set of experimentally tested design
+patterns, controls, and failure modes. An agent adapting the work to another
+project should translate those findings to the local data model, endpoint,
+operating point, and production constraints rather than preserve these classes
+or configurations verbatim.
+
+## General findings
+
+These conclusions were observed on frozen validation splits and, where noted in
+the linked reports, replicated across encoder and downstream seeds. They are
+hypotheses with unusually good local evidence—not universal constants.
+
+| Finding | General lesson | Implementation consequence |
+|---|---|---|
+| Pretraining helps most when labels are scarce | The value of a pretrained sequence representation can disappear when a strong supervised learner has abundant labels | Measure a label-efficiency curve instead of reporting only a full-label score |
+| Strong raw-history baselines are mandatory | Boosted trees over carefully engineered sparse history can beat much more sophisticated encoders on ordinary cost regression | Compare against exact sparse features and nonlinear trees, not only a mean predictor or linear probe |
+| Endpoint choice can reverse the conclusion | Average cost error and concentration in the highest-risk 1--2% reward different information | Predeclare the selection budget and report precision, lift, ranking quality, and captured outcome at that budget |
+| Learned and engineered features are complementary | Representations often add useful nonlinear or rank signal without winning as standalone features | Test feature fusion and percentile-rank blending, but select them on broad ranking quality rather than one lucky cutoff |
+| Patient-view invariance improves missing-history robustness | Training related partial-history views to agree can make the patient state degrade more gracefully when old events are absent | Construct views that preserve the prediction boundary and at least the latest context event; never corrupt the held-out target |
+| Robustness and decodability can trade off against low-label performance | The patient-view recipe improved robustness and full-label CPT/ICD decoding but was not uniformly best for low-label CPT, TTNC, or cost | Keep multiple representation recipes when endpoints differ; avoid declaring a single universal encoder winner |
+| Sequence attention is not automatically a better downstream readout | A learned attentive probe underperformed simple pooled embeddings in the tail-ranking experiments | Treat attention as an ablation and require gains across seeds and ranking metrics |
+| Online and averaged weights may serve different endpoints | Polyak weights were better for some global representation metrics, while online weights ranked the cost tail better | Evaluate the exact checkpoint state that will serve each downstream task |
+| Sparse and dense states can contain orthogonal signal | Sparse+dense fusion sometimes improved embedding-only cutoff retrieval, but degraded broader ranking once strong raw features were present | Retain sparsity only when it adds stable incremental value; sparsity itself is not evidence of interpretability or utility |
+| Generation should exploit persistence | The last observed claim was a strong baseline; copy-plus-residual decoding was more useful than independently synthesizing a whole claim | Copy persistent tokens and predict residual changes, cardinality, and timing; compare against copy-only |
+| Flat add/remove prediction is often too sparse | Explicit vocabulary-wide change events produced weak and inconsistent gains | Retrieve a small candidate set before classification or generation rather than scoring every possible token equally |
+| Auxiliary targets can help cost without fully mediating it | Next-claim supervision improved low-label cost prediction, but much of the gain survived shuffled labels and label-free regularization | Include shuffled-target, random-feature, and label-free controls before attributing improvement to semantics |
+| Smoothness needs anti-collapse protection | Consistency regularization improved cost but collapsed hidden geometry until paired with the existing SigReg objective | Track feature variance and norm; use an anti-collapse objective instead of trusting downstream error alone |
+
+Three practical results illustrate the pattern:
+
+- With roughly 1% of cost-tail labels, raw history plus the patient-view
+  representation more than doubled top-1.5% precision over raw history alone.
+- With a nominal 70% of older context claims removed, the patient-view
+  representation preserved its top-tail precision while the comparison encoder
+  degraded.
+- With full decoder supervision, the patient-view representation improved both
+  CPT and ICD average precision across all three encoder seeds, while another
+  representation remained better for TTNC and slightly better for cost MAE.
+
+The detailed evidence and caveats are in
+[the frozen-generation report](docs/frozen_generation_probe_20260818.md),
+[the latent-prediction study](docs/lpwm_claims_pilot_20260826.md), and
+[the patient-view study](docs/levjepa_patient_views_20260828.md).
+
+## How to transfer the work
+
+For a new domain, preserve the experimental logic before preserving the model:
+
+1. Define a composite event, its temporal context, and a strictly future target.
+2. Freeze entity IDs, dates, vocabularies, transforms, and splits in a data
+   contract before comparing objectives.
+3. Establish exact sparse, boosted-tree, persistence, shuffled-label, and random
+   encoder controls.
+4. Pretrain representations without downstream labels, then evaluate frozen
+   probes at several label budgets.
+5. Measure the operational endpoint directly. Aggregate RMSE is not a substitute
+   for top-budget retrieval, calibration, or event-set quality.
+6. Repeat promising results across encoder seeds, not only downstream-head seeds.
+7. Promote the smallest mechanism that survives those controls.
+
+The claims components here are procedures, diagnoses, and time-to-next-claim.
+An adaptation should introduce the event components that are actually relevant
+to its inference task.
 
 ## Setup
 
@@ -29,17 +95,21 @@ Where we have labels we can trust, we can do better.
 JEPA for claims allows us to extract representations at a variety of abstractions -
 So, want to infer a provider's specialty?  Extract a level 1 provider embedding (within claims) because that captures the procedures and diagnoses providers do.  Optionally also include level 2 provider embeddings since the claims up and downstream from a provider introduce temporal contextual information.  Inferring referring provider is a more obvious use case for level 2 representations.  These features are now the input to the supervised learning model of your choice (or prediction head on this model).
 
-*New*
-
-I've extended this to do claims generation that can be inspected via csv.  It actually works surprisingly well given the smallish training data (12k obs).  The old GAN implementation was removed to keep things simple.
-
-Another interesting point is that although I'm doing claims here, this approach can be conceptually applied to pretty much any sequence-of-composite-entity problems.
+The architecture is not specific to claims. The same experiments apply to a
+sequence of composite events—for example, transactions containing items and
+actors, visits containing observations and interventions, or sessions containing
+heterogeneous actions.
 
 ## Diffusion-based Generation
 
-The generator now uses a diffusion model instead of the old GAN approach.
-Enable it by setting `use_diffusion = True` in your `Config`.
-Leaving it `False` will disable diffusion-based claim synthesis.
+Diffusion remains an experimental generator path, not the currently recommended
+proof of concept. Frozen copy-plus-residual decoding provided a cleaner test of
+whether pretrained embeddings contain downstream next-event information. Revisit
+discrete diffusion only after a sparse candidate decoder has a calibrated,
+reproducible advantage.
+
+Set `use_diffusion = True` in `Config` to enable the implementation. Leaving it
+`False` disables diffusion-based claim synthesis.
 
 # Notes for use
 I have options to toggle all of the level 2 attentional transformations on/off.
@@ -59,9 +129,11 @@ the contextual embedding from JEPA.  The hidden size is controlled by
 monitor how much the model relies on the SAE representation.  An additional
 metric, `gating_sae_fraction`, reports the L2 norm of the SAE contribution
 relative to the combined representation, giving a clearer picture of how much
-the SAE output influences the dense claim embedding. This mechanism improves
-training stability by letting the pretrained SAE guide the hierarchical
-encoders during early epochs.
+the SAE output influences the dense claim embedding. The mechanism is designed
+to improve early training stability by letting the pretrained SAE guide the
+hierarchical encoders. Whether it actually helps must be established with a
+dense control; the experiments in this repository found cutoff-specific
+complementary signal, not a general sparse-representation win.
 
 ## Diffusion Generator
 
@@ -73,7 +145,8 @@ generator by default.  Disable this by setting `pretrain_diffusion = False` in
 `Config`.  If you are sharing embeddings across modalities, skip this phase to
 avoid interfering with the shared weights.
 
-Diffusion support has fully replaced the old GAN implementation. Set `use_diffusion = False` if you want to disable claim synthesis.
+Diffusion support replaced the old GAN implementation, but is not enabled by
+default. Set `use_diffusion = False` to disable it.
 ## Multi-Stage Training
 
 ### Stage 1 – Self-Supervised Representation Pre-Train

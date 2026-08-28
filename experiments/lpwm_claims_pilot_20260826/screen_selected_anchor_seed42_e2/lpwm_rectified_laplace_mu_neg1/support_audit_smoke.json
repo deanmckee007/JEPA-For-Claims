@@ -1,0 +1,58 @@
+{
+  "recipe": "lpwm_rectified_laplace_mu_neg1",
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\screen_selected_anchor_seed42_e2\\lpwm_rectified_laplace_mu_neg1\\encoder.ckpt",
+  "evaluation_split": "val",
+  "num_train_samples": 1000,
+  "num_val_samples": 500,
+  "support": {
+    "prediction_active_fraction": 0.889171875,
+    "target_active_fraction": 0.610078125,
+    "prediction_dead_dimension_fraction": 0.03125,
+    "target_dead_dimension_fraction": 0.0,
+    "target_effective_active_dimensions": 108.23806765296429,
+    "prediction_target_support_jaccard_mean": 0.6263297081318896,
+    "prediction_target_support_jaccard_median": 0.6437730287398673,
+    "prediction_target_mse": 0.14617814123630524
+  },
+  "temporal_support_code_jaccard_spearman": 0.5678128529746744,
+  "temporal_support_code_jaccard_pvalue": 0.0,
+  "num_temporal_pairs": 19942,
+  "probes": {
+    "magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.7787027955055237,
+        "target_probe_mae_dollars": 2523.343994140625,
+        "target_probe_rmse_dollars": 3835.48828125,
+        "target_probe_wape_percent": 49.004249572753906
+      },
+      "ttnc": {
+        "accuracy": 0.52,
+        "macro_f1": 0.13153101546646512
+      }
+    },
+    "support": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8833171725273132,
+        "target_probe_mae_dollars": 2617.156494140625,
+        "target_probe_rmse_dollars": 3943.0791015625,
+        "target_probe_wape_percent": 50.82612228393555
+      },
+      "ttnc": {
+        "accuracy": 0.438,
+        "macro_f1": 0.12909949866813727
+      }
+    },
+    "support_plus_magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 1.1169739961624146,
+        "target_probe_mae_dollars": 2910.00537109375,
+        "target_probe_rmse_dollars": 4458.90185546875,
+        "target_probe_wape_percent": 56.51334762573242
+      },
+      "ttnc": {
+        "accuracy": 0.512,
+        "macro_f1": 0.14382812488002675
+      }
+    }
+  }
+}

@@ -16,6 +16,8 @@ class TestRecipeSweep(unittest.TestCase):
             accelerator="cpu",
             devices=1,
             representation_pretrain_epochs=3,
+            seed=43,
+            data_split_seed=42,
         )
 
         self.assertIn("--recipe", command)
@@ -24,6 +26,9 @@ class TestRecipeSweep(unittest.TestCase):
         self.assertIn(str(checkpoint_path), command)
         self.assertIn("--representation-pretrain-epochs", command)
         self.assertIn("3", command)
+        self.assertIn("--seed", command)
+        self.assertIn("43", command)
+        self.assertIn("data_split_seed=42", command)
 
     def test_build_eval_command_includes_output_json(self):
         checkpoint_path = Path("C:/tmp/sigreg/encoder.ckpt")
@@ -38,6 +43,8 @@ class TestRecipeSweep(unittest.TestCase):
             max_samples=100,
             retrieval_k=7,
             representation_source="next_claim_prediction",
+            seed=44,
+            data_split_seed=42,
         )
 
         self.assertIn("--checkpoint", command)
@@ -48,6 +55,9 @@ class TestRecipeSweep(unittest.TestCase):
         self.assertIn("7", command)
         self.assertIn("--representation-source", command)
         self.assertIn("next_claim_prediction", command)
+        self.assertIn("--seed", command)
+        self.assertIn("44", command)
+        self.assertIn("data_split_seed=42", command)
 
     def test_write_summary_files_emits_json_csv_and_markdown(self):
         results = [

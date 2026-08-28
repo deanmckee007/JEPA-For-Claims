@@ -1,0 +1,645 @@
+{
+  "aggregate": {
+    "pretrained|0": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1945.5480143229167,
+          "sample_std": 96.7466496179141
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2975.9130859375,
+          "sample_std": 176.71052226586113
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.905373732248942,
+          "sample_std": 0.01648462811520028
+        },
+        "target_probe_wape_percent": {
+          "mean": 41.82276916503906,
+          "sample_std": 2.079729210655339
+        }
+      },
+      "num_runs": 3
+    },
+    "pretrained|0.3": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1847.3371988932292,
+          "sample_std": 50.81865272030214
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2843.3275553385415,
+          "sample_std": 97.74814636770954
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8895377318064371,
+          "sample_std": 0.008395204397211581
+        },
+        "target_probe_wape_percent": {
+          "mean": 39.71156692504883,
+          "sample_std": 1.0924310456816078
+        }
+      },
+      "num_runs": 3
+    },
+    "pretrained|1": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1811.7174072265625,
+          "sample_std": 43.78307086658969
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2810.886962890625,
+          "sample_std": 78.1030538934947
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8831594189008077,
+          "sample_std": 0.008331779463345814
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.94585927327474,
+          "sample_std": 0.9411882120928349
+        }
+      },
+      "num_runs": 3
+    },
+    "random_encoder|0": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 2379.2215169270835,
+          "sample_std": 103.00316570372183
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3534.8028971354165,
+          "sample_std": 148.71081822414507
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9907681544621786,
+          "sample_std": 0.023100928739334368
+        },
+        "target_probe_wape_percent": {
+          "mean": 51.14529800415039,
+          "sample_std": 2.2142233158776383
+        }
+      },
+      "num_runs": 3
+    },
+    "random_encoder|0.3": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 2220.980224609375,
+          "sample_std": 82.47609729135185
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3280.015380859375,
+          "sample_std": 112.26960112340356
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9675318400065104,
+          "sample_std": 0.0163131998847828
+        },
+        "target_probe_wape_percent": {
+          "mean": 47.7436408996582,
+          "sample_std": 1.7729585112883954
+        }
+      },
+      "num_runs": 3
+    },
+    "random_encoder|1": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 2149.898193359375,
+          "sample_std": 82.50399234099515
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3158.4419759114585,
+          "sample_std": 120.17027611843305
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9543294111887614,
+          "sample_std": 0.014791196059322342
+        },
+        "target_probe_wape_percent": {
+          "mean": 46.215615590413414,
+          "sample_std": 1.7735619290300169
+        }
+      },
+      "num_runs": 3
+    }
+  },
+  "paired_deltas": {
+    "pretrained|0.3": {
+      "mae_dollars_aux_minus_cost_only_mean": -98.2108154296875,
+      "paired_seeds": 3,
+      "sample_std": 60.63782753533033
+    },
+    "pretrained|1": {
+      "mae_dollars_aux_minus_cost_only_mean": -133.83060709635416,
+      "paired_seeds": 3,
+      "sample_std": 70.80711712692361
+    },
+    "random_encoder|0.3": {
+      "mae_dollars_aux_minus_cost_only_mean": -158.24129231770834,
+      "paired_seeds": 3,
+      "sample_std": 51.49623306241294
+    },
+    "random_encoder|1": {
+      "mae_dollars_aux_minus_cost_only_mean": -229.32332356770834,
+      "paired_seeds": 3,
+      "sample_std": 58.66903288789877
+    }
+  },
+  "protocol": {
+    "aux_weights": [
+      0.0,
+      0.3,
+      1.0
+    ],
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\selected_lejepa_anycode_seed42_e20\\encoder.ckpt",
+    "cost_label_fraction": 0.1,
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "encoder_frozen": true,
+    "evaluation_split": "frozen_validation",
+    "generation_label_fraction": 1.0,
+    "matched_update_count": true,
+    "representation_source": "next_claim_prediction",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 2051.156005859375,
+        "target_probe_rmse_dollars": 3176.855712890625,
+        "target_probe_rmse_log1p": 0.9116382002830505,
+        "target_probe_wape_percent": 44.092987060546875
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8180789341360836,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.35279889884641613,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1904.3314208984375,
+        "target_probe_rmse_dollars": 2952.745361328125,
+        "target_probe_rmse_log1p": 0.8886123895645142,
+        "target_probe_wape_percent": 40.93675231933594
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.34493462945405,
+        "icd_micro_average_precision": 0.20516542953127428,
+        "ttnc_accuracy": 0.6139359698681732
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8238019963442269,
+        "generation": 2.7199602773634055
+      },
+      "training_last": {
+        "cost": 0.39241699950169706,
+        "generation": 1.4082334991228782
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1858.151611328125,
+        "target_probe_rmse_dollars": 2894.368896484375,
+        "target_probe_rmse_log1p": 0.8815363645553589,
+        "target_probe_wape_percent": 39.94403839111328
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.3459198206319593,
+        "icd_micro_average_precision": 0.20930725613884293,
+        "ttnc_accuracy": 0.613308223477715
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8334243721881155,
+        "generation": 2.638426350334943
+      },
+      "training_last": {
+        "cost": 0.4308285420223818,
+        "generation": 1.3871487459893954
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1924.2896728515625,
+        "target_probe_rmse_dollars": 2906.152587890625,
+        "target_probe_rmse_log1p": 0.9178078174591064,
+        "target_probe_wape_percent": 41.365787506103516
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8419216790441739,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.43296651921029816,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1806.7454833984375,
+        "target_probe_rmse_dollars": 2764.62890625,
+        "target_probe_rmse_log1p": 0.8983572721481323,
+        "target_probe_wape_percent": 38.83898162841797
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.33422497618885066,
+        "icd_micro_average_precision": 0.20149933429035277,
+        "ttnc_accuracy": 0.6064030131826742
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8470134916952101,
+        "generation": 2.7186308109154136
+      },
+      "training_last": {
+        "cost": 0.476601812293974,
+        "generation": 1.4070297338194766
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1771.1839599609375,
+        "target_probe_rmse_dollars": 2739.5966796875,
+        "target_probe_rmse_log1p": 0.8921833038330078,
+        "target_probe_wape_percent": 38.074527740478516
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.35265972975020377,
+        "icd_micro_average_precision": 0.20838591967870929,
+        "ttnc_accuracy": 0.6042059008160703
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8546997207706257,
+        "generation": 2.6503355260622703
+      },
+      "training_last": {
+        "cost": 0.5073027358216754,
+        "generation": 1.3856840315511672
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1861.1983642578125,
+        "target_probe_rmse_dollars": 2844.73095703125,
+        "target_probe_rmse_log1p": 0.8866751790046692,
+        "target_probe_wape_percent": 40.0095329284668
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8285082285687074,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.41956489065946156,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1830.9346923828125,
+        "target_probe_rmse_dollars": 2812.6083984375,
+        "target_probe_rmse_log1p": 0.881643533706665,
+        "target_probe_wape_percent": 39.35896682739258
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.35385062258802896,
+        "icd_micro_average_precision": 0.2023777526715078,
+        "ttnc_accuracy": 0.6089139987445072
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8328059649063368,
+        "generation": 2.701800439317348
+      },
+      "training_last": {
+        "cost": 0.4672192426051124,
+        "generation": 1.410089690806502
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1805.816650390625,
+        "target_probe_rmse_dollars": 2798.6953125,
+        "target_probe_rmse_log1p": 0.8757585883140564,
+        "target_probe_wape_percent": 38.81901168823242
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.36914605068701917,
+        "icd_micro_average_precision": 0.2108084581710833,
+        "ttnc_accuracy": 0.6117388575015693
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8430327661966873,
+        "generation": 2.6242983179577326
+      },
+      "training_last": {
+        "cost": 0.49002930420940205,
+        "generation": 1.390318737191669
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2491.537109375,
+        "target_probe_rmse_dollars": 3694.156494140625,
+        "target_probe_rmse_log1p": 0.9895930290222168,
+        "target_probe_wape_percent": 53.55970764160156
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.7823985820099458,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.09458460835582119,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2314.626708984375,
+        "target_probe_rmse_dollars": 3405.425048828125,
+        "target_probe_rmse_log1p": 0.968319833278656,
+        "target_probe_wape_percent": 49.7567253112793
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.2512120394454719,
+        "icd_micro_average_precision": 0.2016500426982717,
+        "ttnc_accuracy": 0.6261770244821092
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8001151953713369,
+        "generation": 2.6894431255631526
+      },
+      "training_last": {
+        "cost": 0.12806793163388464,
+        "generation": 1.2803095053818265
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2241.707763671875,
+        "target_probe_rmse_dollars": 3289.867431640625,
+        "target_probe_rmse_log1p": 0.9493945837020874,
+        "target_probe_wape_percent": 48.18921661376953
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.2687077907003498,
+        "icd_micro_average_precision": 0.21123285350581555,
+        "ttnc_accuracy": 0.6220966729441306
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8223516137923225,
+        "generation": 2.6313459166025712
+      },
+      "training_last": {
+        "cost": 0.1697719571954113,
+        "generation": 1.235658623404422
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2356.9541015625,
+        "target_probe_rmse_dollars": 3510.53125,
+        "target_probe_rmse_log1p": 1.0144342184066772,
+        "target_probe_wape_percent": 50.666622161865234
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.7816196346687059,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.13179793840242646,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2159.155029296875,
+        "target_probe_rmse_dollars": 3188.87158203125,
+        "target_probe_rmse_log1p": 0.9834367632865906,
+        "target_probe_wape_percent": 46.414608001708984
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.26406876297640425,
+        "icd_micro_average_precision": 0.2041929533822637,
+        "ttnc_accuracy": 0.6239799121155053
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.7942090595172624,
+        "generation": 2.7164662005537648
+      },
+      "training_last": {
+        "cost": 0.1551610879221205,
+        "generation": 1.2756428860001645
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2081.967041015625,
+        "target_probe_rmse_dollars": 3054.17529296875,
+        "target_probe_rmse_log1p": 0.9709571599960327,
+        "target_probe_wape_percent": 44.75532150268555
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.29536990811830505,
+        "icd_micro_average_precision": 0.21802663766547276,
+        "ttnc_accuracy": 0.6283741368487131
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8176378294572992,
+        "generation": 2.647892638788385
+      },
+      "training_last": {
+        "cost": 0.19685523174071717,
+        "generation": 1.2312378883361816
+      }
+    },
+    {
+      "aux_weight": 0.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2289.17333984375,
+        "target_probe_rmse_dollars": 3399.720947265625,
+        "target_probe_rmse_log1p": 0.9682772159576416,
+        "target_probe_wape_percent": 49.209564208984375
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.7987856965954021,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.12531865287130162,
+        "generation": 0.0
+      }
+    },
+    {
+      "aux_weight": 0.3,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2189.158935546875,
+        "target_probe_rmse_dollars": 3245.74951171875,
+        "target_probe_rmse_log1p": 0.9508389234542847,
+        "target_probe_wape_percent": 47.05958938598633
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.2930295292714625,
+        "icd_micro_average_precision": 0.21272149982105093,
+        "ttnc_accuracy": 0.6258631512868801
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8160331087597346,
+        "generation": 2.686439586898028
+      },
+      "training_last": {
+        "cost": 0.164204888929755,
+        "generation": 1.2790432461237504
+      }
+    },
+    {
+      "aux_weight": 1.0,
+      "condition": "random_encoder",
+      "cost": {
+        "target_probe_mae_dollars": 2126.019775390625,
+        "target_probe_rmse_dollars": 3131.283203125,
+        "target_probe_rmse_log1p": 0.9426364898681641,
+        "target_probe_wape_percent": 45.702308654785156
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.30188819983345305,
+        "icd_micro_average_precision": 0.2172885080304221,
+        "ttnc_accuracy": 0.6258631512868801
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8397467823351844,
+        "generation": 2.621077264769603
+      },
+      "training_last": {
+        "cost": 0.20560405466516138,
+        "generation": 1.2372410054934226
+      }
+    }
+  ]
+}

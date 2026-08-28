@@ -1,0 +1,38 @@
+{
+  "ablation": "consistency_300_sigreg_0.2",
+  "adapter_geometry": {
+    "mean_cosine_to_frozen": 1.0,
+    "mean_relative_l2": 0.0,
+    "shared_hidden_mean_feature_std": 0.44237005710601807,
+    "shared_hidden_mean_norm": 7.278299331665039
+  },
+  "aux_label_mode": "aligned",
+  "aux_weight": 0.0,
+  "condition": "pretrained",
+  "consistency_weight": 300.0,
+  "cost": {
+    "target_probe_mae_dollars": 1734.3072509765625,
+    "target_probe_rmse_dollars": 2754.534423828125,
+    "target_probe_rmse_log1p": 0.8767226934432983,
+    "target_probe_wape_percent": 37.28179931640625
+  },
+  "feature_source": "next_claim_prediction",
+  "generation": {
+    "cpt_micro_average_precision": 0.08768319705096818,
+    "icd_micro_average_precision": 0.09086284242146578,
+    "ttnc_accuracy": 0.32423101067168864
+  },
+  "seed": 42,
+  "sigreg_formulation": "lejepa_convex",
+  "sigreg_weight": 0.2,
+  "training_first": {
+    "cost": 0.898570679001889,
+    "generation": 0.03890508375430511,
+    "sigreg": 58.769918862035716
+  },
+  "training_last": {
+    "cost": 0.6279282721422487,
+    "generation": 0.048638076916084454,
+    "sigreg": 43.71724183680647
+  }
+}

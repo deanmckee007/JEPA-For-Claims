@@ -1,0 +1,58 @@
+{
+  "recipe": "lpwm_rectified_gaussian",
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\screen_selected_anchor_seed42_e2\\lpwm_rectified_gaussian\\encoder.ckpt",
+  "evaluation_split": "val",
+  "num_train_samples": 12000,
+  "num_val_samples": 3188,
+  "support": {
+    "prediction_active_fraction": 0.8788988982120451,
+    "target_active_fraction": 0.5808427109473023,
+    "prediction_dead_dimension_fraction": 0.03125,
+    "target_dead_dimension_fraction": 0.0,
+    "target_effective_active_dimensions": 114.56001488123489,
+    "prediction_target_support_jaccard_mean": 0.6051327049267599,
+    "prediction_target_support_jaccard_median": 0.6033057851239669,
+    "prediction_target_mse": 0.1590290069580078
+  },
+  "temporal_support_code_jaccard_spearman": 0.47196578478997503,
+  "temporal_support_code_jaccard_pvalue": 0.0,
+  "num_temporal_pairs": 101880,
+  "probes": {
+    "magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8379764556884766,
+        "target_probe_mae_dollars": 1652.431640625,
+        "target_probe_rmse_dollars": 2668.51513671875,
+        "target_probe_wape_percent": 35.54096603393555
+      },
+      "ttnc": {
+        "accuracy": 0.493099121706399,
+        "macro_f1": 0.2623673971369797
+      }
+    },
+    "support": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8847593069076538,
+        "target_probe_mae_dollars": 1759.10693359375,
+        "target_probe_rmse_dollars": 2849.806884765625,
+        "target_probe_wape_percent": 37.83537292480469
+      },
+      "ttnc": {
+        "accuracy": 0.4178168130489335,
+        "macro_f1": 0.15277793776446746
+      }
+    },
+    "support_plus_magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8331398367881775,
+        "target_probe_mae_dollars": 1651.5731201171875,
+        "target_probe_rmse_dollars": 2665.784423828125,
+        "target_probe_wape_percent": 35.522499084472656
+      },
+      "ttnc": {
+        "accuracy": 0.4749058971141782,
+        "macro_f1": 0.2665471615653677
+      }
+    }
+  }
+}

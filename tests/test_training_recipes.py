@@ -120,6 +120,21 @@ class TestTrainingRecipes(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "levjepa_additive"):
             apply_runtime_config_overrides(config)
 
+    def test_levjepa_patient_views_reprelu_changes_only_canonical_link(self):
+        dense = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "levjepa_patient_views")
+        )
+        sparse = apply_runtime_config_overrides(
+            apply_training_recipe(Config(), "levjepa_patient_views_reprelu")
+        )
+
+        self.assertEqual(dense.representation_link_lvl2, "identity")
+        self.assertEqual(sparse.representation_link_lvl2, "reprelu")
+        self.assertTrue(sparse.use_levjepa_patient_views)
+        self.assertEqual(sparse.sigreg_formulation, dense.sigreg_formulation)
+        self.assertEqual(sparse.sigreg_weight_lvl2, dense.sigreg_weight_lvl2)
+        self.assertEqual(sparse.levjepa_claim_drop_ratio, dense.levjepa_claim_drop_ratio)
+
     def test_sigreg_dense_recipe_applies_expected_ssl_flags(self):
         config = apply_training_recipe(Config(), "sigreg_dense")
         config = apply_runtime_config_overrides(config)

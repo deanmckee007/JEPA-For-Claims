@@ -1,0 +1,26 @@
+{
+  "aux_weight": 3.0,
+  "condition": "pretrained",
+  "cost": {
+    "target_probe_mae_dollars": 1770.89501953125,
+    "target_probe_rmse_dollars": 2772.353515625,
+    "target_probe_rmse_log1p": 0.8751472234725952,
+    "target_probe_wape_percent": 38.06831741333008
+  },
+  "cost_label_fraction": 0.1,
+  "generation": {
+    "cpt_micro_average_precision": 0.3686785081544996,
+    "icd_micro_average_precision": 0.20678586163008636,
+    "ttnc_accuracy": 0.6101694915254238
+  },
+  "num_cost_labels": 1500,
+  "seed": 44,
+  "training_first": {
+    "cost": 0.8677960159414906,
+    "generation": 2.607493859226421
+  },
+  "training_last": {
+    "cost": 0.5500515355902204,
+    "generation": 1.3832943479893571
+  }
+}

@@ -48,6 +48,13 @@ def parse_args(argv=None):
         help="Trainer/eval accelerator to use.",
     )
     parser.add_argument("--devices", type=int, default=1, help="Lightning device count.")
+    parser.add_argument("--seed", type=int, default=42, help="Training and evaluation seed.")
+    parser.add_argument(
+        "--data-split-seed",
+        type=int,
+        default=None,
+        help="Frozen split seed, independent from the model seed.",
+    )
     parser.add_argument(
         "--representation-pretrain-epochs",
         type=int,
@@ -71,6 +78,8 @@ def build_train_command(
     accelerator: str,
     devices: int,
     representation_pretrain_epochs: int,
+    seed: int = 42,
+    data_split_seed: int | None = None,
     data_contract: str | None = None,
 ):
     command = [
@@ -86,6 +95,8 @@ def build_train_command(
         str(devices),
         "--representation-pretrain-epochs",
         str(representation_pretrain_epochs),
+        "--seed",
+        str(seed),
         "--generator-train-epochs",
         "0",
         "--joint-train-epochs",
@@ -96,6 +107,8 @@ def build_train_command(
     ]
     if data_contract:
         command.extend(["--data-contract", data_contract])
+    if data_split_seed is not None:
+        command.extend(["--set", f"data_split_seed={data_split_seed}"])
     return command
 
 
@@ -108,6 +121,8 @@ def build_eval_command(
     max_samples: int,
     retrieval_k: int,
     representation_source: str = "patient_representation_pre_sae",
+    seed: int = 42,
+    data_split_seed: int | None = None,
     data_contract: str | None = None,
     split: str = "val",
 ):
@@ -128,11 +143,15 @@ def build_eval_command(
         str(retrieval_k),
         "--representation-source",
         representation_source,
+        "--seed",
+        str(seed),
         "--output-json",
         str(output_json),
     ]
     if data_contract:
         command.extend(["--data-contract", data_contract, "--split", split])
+    if data_split_seed is not None:
+        command.extend(["--set", f"data_split_seed={data_split_seed}"])
     return command
 
 
@@ -258,6 +277,8 @@ def main(argv=None):
                     accelerator=args.accelerator,
                     devices=args.devices,
                     representation_pretrain_epochs=args.representation_pretrain_epochs,
+                    seed=args.seed,
+                    data_split_seed=args.data_split_seed,
                     data_contract=args.data_contract,
                 )
             )
@@ -272,6 +293,8 @@ def main(argv=None):
                     accelerator=args.accelerator,
                     max_samples=args.max_samples,
                     retrieval_k=args.retrieval_k,
+                    seed=args.seed,
+                    data_split_seed=args.data_split_seed,
                     data_contract=args.data_contract,
                     split="val",
                 )

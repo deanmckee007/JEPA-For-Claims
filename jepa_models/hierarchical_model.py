@@ -24,6 +24,7 @@ from jepa_models.discrete_diffusion import DiscreteDiffusionModel
 from jepa_models.sparse_autoencoder import SparseAutoencoder
 from jepa_models.ssl_objectives import (
     WristbandGaussianRegularizer,
+    apply_representation_link,
     build_ssl_objective,
     sigreg_gaussian_distance,
 )
@@ -235,6 +236,9 @@ class HierarchicalClaimsModel(pl.LightningModule):
         self.rnn_type = config.rnn_type
         self.level_2_weight = config.level_2_weight
         self.ssl_objective_type = config.ssl_objective_type
+        self.representation_link_lvl2 = getattr(
+            config, "representation_link_lvl2", "identity"
+        )
         self.target_encoder_mode = config.target_encoder_mode
         self.target_encoder_mode_lvl1 = getattr(
             config, "target_encoder_mode_lvl1", self.target_encoder_mode
@@ -1149,6 +1153,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 "inactive" if composable else self._get_target_mode("2")
             ),
             "level2_sequence_predictor_parameters": "online_shared",
+            "level2_representation_link": self.representation_link_lvl2,
             "level2_patient_view_objective": (
                 "projected_global_local_invariance"
                 if self.use_levjepa_patient_views
@@ -1178,7 +1183,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
         """Encode claims through the canonical Level-2 input path."""
         if not self.use_composable_level1:
             encoder = self._get_ssl_target_encoder_lvl2() if target else self.context_encoder_lvl2
-            encoded = encoder(cpt_tensor, icd_tensor, ttnc_tensor)
+            encoded = apply_representation_link(
+                encoder(cpt_tensor, icd_tensor, ttnc_tensor),
+                self.representation_link_lvl2,
+            )
             if return_components:
                 return encoded, None
             return encoded
@@ -1187,7 +1195,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
         composer = self._get_ssl_target_composer() if target else self.context_level1_composer
         cpt_level1, cpt_mask = level1_encoder(cpt_tensor, "cpt")
         icd_level1, icd_mask = level1_encoder(icd_tensor, "icd")
-        return composer(
+        composed = composer(
             cpt_level1,
             icd_level1,
             cpt_mask,
@@ -1195,6 +1203,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
             ttnc_tensor,
             return_components=return_components,
         )
+        if return_components:
+            encoded, components = composed
+            return (
+                apply_representation_link(encoded, self.representation_link_lvl2),
+                components,
+            )
+        return apply_representation_link(composed, self.representation_link_lvl2)
 
     def _compute_level1_marginal_regularizer(self, components):
         zero = next(self.parameters()).new_zeros(())
@@ -1832,6 +1847,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
             "variance": diagnostics.get("variance", zero),
             "covariance": diagnostics.get("covariance", zero),
             "sigreg_raw": diagnostics.get("sigreg_raw", zero),
+            "rdmreg_raw": diagnostics.get("rdmreg_raw", zero),
+            "support_alignment_raw": diagnostics.get("support_alignment_raw", zero),
+            "target_active_fraction": diagnostics.get("target_active_fraction", zero),
+            "prediction_active_fraction": diagnostics.get(
+                "prediction_active_fraction", zero
+            ),
         }
 
     def calculate_total_loss(
@@ -2219,6 +2240,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             context_ttnc,
             return_aux=True,
         )
+        prediction_lvl2 = apply_representation_link(
+            prediction_lvl2,
+            self.representation_link_lvl2,
+        )
         masked_claim_prediction = torch.zeros_like(masked_claim_target)
         masked_claim_jepa_loss = zero
         if self.use_masked_claim_jepa:
@@ -2253,6 +2278,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
         var_loss_lvl2 = ssl_metrics_lvl2["variance"]
         cov_loss_lvl2 = ssl_metrics_lvl2["covariance"]
         sigreg_raw_lvl2 = ssl_metrics_lvl2["sigreg_raw"]
+        rdmreg_raw_lvl2 = ssl_metrics_lvl2["rdmreg_raw"]
+        support_alignment_raw_lvl2 = ssl_metrics_lvl2["support_alignment_raw"]
+        target_active_fraction_lvl2 = ssl_metrics_lvl2["target_active_fraction"]
+        prediction_active_fraction_lvl2 = ssl_metrics_lvl2[
+            "prediction_active_fraction"
+        ]
+
         levjepa_patient_view_loss = zero
         levjepa_invariance_loss = zero
         levjepa_sigreg_raw = zero
@@ -2523,6 +2555,10 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'ssl_covariance_lvl2': cov_loss_lvl2,
             'ssl_sigreg_raw_lvl1': sigreg_raw_lvl1,
             'ssl_sigreg_raw_lvl2': sigreg_raw_lvl2,
+            'ssl_rdmreg_raw_lvl2': rdmreg_raw_lvl2,
+            'ssl_support_alignment_raw_lvl2': support_alignment_raw_lvl2,
+            'target_active_fraction_lvl2': target_active_fraction_lvl2,
+            'prediction_active_fraction_lvl2': prediction_active_fraction_lvl2,
             'levjepa_patient_view_loss': levjepa_patient_view_loss,
             'levjepa_invariance_loss': levjepa_invariance_loss,
             'levjepa_sigreg_raw': levjepa_sigreg_raw,
@@ -2999,6 +3035,11 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if self.level_2_weight > 0:
             if self.ssl_objective_type == "sigreg":
                 self.log('ssl_sigreg_raw_lvl2', outputs['ssl_sigreg_raw_lvl2'], on_step=False, on_epoch=True, logger=True)
+            if self.ssl_objective_type == "rdmreg":
+                self.log('ssl_rdmreg_raw_lvl2', outputs['ssl_rdmreg_raw_lvl2'], on_step=False, on_epoch=True, logger=True)
+                self.log('ssl_support_alignment_raw_lvl2', outputs['ssl_support_alignment_raw_lvl2'], on_step=False, on_epoch=True, logger=True)
+                self.log('target_active_fraction_lvl2', outputs['target_active_fraction_lvl2'], on_step=False, on_epoch=True, logger=True)
+                self.log('prediction_active_fraction_lvl2', outputs['prediction_active_fraction_lvl2'], on_step=False, on_epoch=True, logger=True)
             if self.ssl_objective_type == "vicreg":
                 self.log('Iloss2', outputs['inv_loss_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)
                 self.log('Var2', outputs['var_pred_lvl2'], on_step=False, on_epoch=True, prog_bar=True, logger=True)

@@ -44,6 +44,24 @@ def _global_empirical_characteristic_function(
     return real_sum / count, imag_sum / count, count
 
 
+def rep_relu(x: torch.Tensor) -> torch.Tensor:
+    """Exact ReLU forward values with the smoother GELU surrogate gradient."""
+    gelu = F.gelu(x)
+    return F.relu(x).detach() + gelu - gelu.detach()
+
+
+def apply_representation_link(x: torch.Tensor, link: str) -> torch.Tensor:
+    """Apply a configured canonical representation link."""
+    normalized = link.lower()
+    if normalized == "identity":
+        return x
+    if normalized == "relu":
+        return F.relu(x)
+    if normalized == "reprelu":
+        return rep_relu(x)
+    raise ValueError(f"Unsupported representation link: {link!r}")
+
+
 class BaseSSLObjective(nn.Module):
     """Common utilities for JEPA representation objectives."""
 
@@ -301,6 +319,153 @@ class SIGRegObjective(BaseSSLObjective):
         }
 
 
+class RDMRegObjective(BaseSSLObjective):
+    """Reference-distribution matching via sliced Wasserstein distance.
+
+    The reference is a unit-variance generalized Gaussian before the configured
+    link is applied. ``p=2`` is Gaussian and ``p=1`` is Laplace. By default only
+    encoder targets are matched, mirroring LpWM; matching predictor outputs is
+    retained as an explicit ablation.
+    """
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.weight_lvl1 = float(config.rdmreg_weight_lvl1)
+        self.weight_lvl2 = float(config.rdmreg_weight_lvl2)
+        self.num_projections = int(config.rdmreg_num_projections)
+        self.target_p = float(config.rdmreg_target_p)
+        self.target_mu = float(config.rdmreg_target_mu)
+        self.link_lvl1 = getattr(config, "representation_link_lvl1", "identity")
+        self.link_lvl2 = getattr(config, "representation_link_lvl2", "identity")
+        self.regularize_prediction = bool(
+            getattr(config, "rdmreg_regularize_prediction", False)
+        )
+        self.support_weight_lvl1 = float(
+            getattr(config, "rdmreg_support_alignment_weight_lvl1", 0.0)
+        )
+        self.support_weight_lvl2 = float(
+            getattr(config, "rdmreg_support_alignment_weight_lvl2", 0.0)
+        )
+        self.support_temperature = float(
+            getattr(config, "rdmreg_support_temperature", 0.5)
+        )
+
+    def _sample_reference(self, like: torch.Tensor, link: str) -> torch.Tensor:
+        shape = like.shape
+        if self.target_p == 2.0:
+            reference = torch.randn(shape, device=like.device, dtype=like.dtype)
+        elif self.target_p == 1.0:
+            # Laplace(0, 1/sqrt(2)) has unit variance.
+            scale = like.new_tensor(1.0 / math.sqrt(2.0))
+            uniform = torch.rand(shape, device=like.device, dtype=like.dtype)
+            uniform = uniform.clamp(
+                min=torch.finfo(like.dtype).eps,
+                max=1.0 - torch.finfo(like.dtype).eps,
+            )
+            reference = torch.where(
+                uniform < 0.5,
+                scale * torch.log(2.0 * uniform),
+                -scale * torch.log(2.0 * (1.0 - uniform)),
+            )
+        else:
+            # If |X / scale|^p ~ Gamma(1/p, 1), this scale gives Var[X]=1.
+            concentration = 1.0 / self.target_p
+            gamma_sample = torch._standard_gamma(
+                torch.full(shape, concentration, device=like.device, dtype=like.dtype)
+            )
+            signs = torch.where(
+                torch.rand(shape, device=like.device) < 0.5,
+                like.new_tensor(-1.0),
+                like.new_tensor(1.0),
+            )
+            scale = math.sqrt(
+                math.gamma(1.0 / self.target_p)
+                / math.gamma(3.0 / self.target_p)
+            )
+            reference = signs * scale * gamma_sample.pow(1.0 / self.target_p)
+        return apply_representation_link(reference + self.target_mu, link).detach()
+
+    def _sliced_wasserstein(self, embeddings: torch.Tensor, link: str) -> torch.Tensor:
+        if embeddings.numel() == 0 or embeddings.size(0) < 2:
+            return embeddings.new_zeros(())
+        directions = torch.randn(
+            embeddings.size(-1),
+            self.num_projections,
+            device=embeddings.device,
+            dtype=embeddings.dtype,
+        )
+        directions = F.normalize(directions, dim=0, eps=self.epsilon)
+        reference = self._sample_reference(embeddings, link)
+        projected_embeddings = (embeddings @ directions).sort(dim=0).values
+        projected_reference = (reference @ directions).sort(dim=0).values
+        return F.mse_loss(projected_embeddings, projected_reference)
+
+    def _support_alignment(
+        self,
+        prediction: torch.Tensor,
+        target: torch.Tensor,
+        sample_weights: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        """Match exact target support with a smooth predictor activity proxy."""
+        threshold = 10.0 * torch.finfo(target.dtype).eps
+        target_support = (target.abs() > threshold).to(prediction.dtype).detach()
+        positive_prediction = prediction.clamp_min(0.0)
+        prediction_activity = -torch.expm1(
+            -positive_prediction / self.support_temperature
+        )
+        per_example = (prediction_activity - target_support).abs().mean(dim=-1)
+        if sample_weights is None:
+            return per_example.mean()
+        weight_sum = sample_weights.sum().clamp(min=self.epsilon)
+        return (per_example * sample_weights).sum() / weight_sum
+
+    def compute(
+        self,
+        prediction: torch.Tensor,
+        target: torch.Tensor,
+        mask: Optional[torch.Tensor] = None,
+        level: str = "2",
+        sample_weights: Optional[torch.Tensor] = None,
+    ) -> Dict[str, torch.Tensor]:
+        prediction_valid, target_valid, weights_valid = self._flatten_valid(
+            prediction, target, mask=mask, sample_weights=sample_weights
+        )
+        if prediction_valid.numel() == 0:
+            return self._zero_metrics(prediction.device, prediction.dtype)
+
+        predictive = self._weighted_mse(prediction_valid, target_valid, weights_valid)
+        link = self.link_lvl1 if level == "1" else self.link_lvl2
+        rdmreg_raw = self._sliced_wasserstein(target_valid, link)
+        if self.regularize_prediction:
+            rdmreg_raw = 0.5 * (
+                rdmreg_raw + self._sliced_wasserstein(prediction_valid, link)
+            )
+        weight = self.weight_lvl1 if level == "1" else self.weight_lvl2
+        support_weight = (
+            self.support_weight_lvl1 if level == "1" else self.support_weight_lvl2
+        )
+        support_alignment_raw = self._support_alignment(
+            prediction_valid, target_valid, weights_valid
+        )
+        regularizer = weight * rdmreg_raw + support_weight * support_alignment_raw
+        threshold = 10.0 * torch.finfo(target_valid.dtype).eps
+        return {
+            "total": predictive + regularizer,
+            "predictive": predictive,
+            "regularizer": regularizer,
+            "diagnostics": {
+                "rdmreg_raw": rdmreg_raw,
+                "support_alignment_raw": support_alignment_raw,
+                "target_active_fraction": (
+                    target_valid.abs() > threshold
+                ).float().mean(),
+                "prediction_active_fraction": (
+                    prediction_valid.abs() > threshold
+                ).float().mean(),
+            },
+        }
+
+
 def sigreg_gaussian_distance(
     embeddings: torch.Tensor,
     *,
@@ -494,4 +659,6 @@ def build_ssl_objective(config) -> BaseSSLObjective:
         return VICRegObjective(config)
     if objective_type == "sigreg":
         return SIGRegObjective(config)
+    if objective_type == "rdmreg":
+        return RDMRegObjective(config)
     raise ValueError(f"Unsupported ssl_objective_type={objective_type!r}")

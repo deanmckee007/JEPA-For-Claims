@@ -1,0 +1,697 @@
+{
+  "aggregate": {
+    "incumbent_embedding_ordinal_severity": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.07548387921348884,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.09128228848511301,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.02123280727860238,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.4102122834205082,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 5.534722222222222,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.08333333333333333,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.08333333333333333,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.0625,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.07894736842105263,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_embedding_ordinal_tail_probability": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.0646116807369929,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.07788605729502635,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.020684515338102512,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.3737965603723086,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 4.151041666666667,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.0625,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.0625,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.041666666666666664,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.05263157894736842,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_embedding_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.10273663815540186,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.1741583096366564,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.030205219007029414,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.006129962383537,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.125,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.15789473684210525,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_hybrid_cost": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.18585642767054558,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.3080209937103945,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.035671046429676403,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.369152000371008,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 13.836805555555557,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.21052631578947367,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_hybrid_ordinal_severity": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.12370956506726306,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.17448018011498867,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03088615526298852,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.051355478716821,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 11.069444444444445,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.18421052631578946,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_hybrid_ordinal_tail_probability": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.1277331855527506,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.25830468488925334,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.030894944828719406,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.051939252374114,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 13.836805555555557,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.21052631578947367,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "incumbent_hybrid_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.133007089947754,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.22601782255711547,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03332113878651485,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.2130789677376947,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 13.836805555555557,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.21052631578947367,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "raw_boosted_cost": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.12207449583568658,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.222104582908858,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.034275348359310745,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.276454386864222,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.18421052631578946,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "raw_boosted_ordinal_severity": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.11868533386601553,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.18717582164223834,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.02625370587405411,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.7436836318017603,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 9.68576388888889,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.18421052631578946,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "raw_boosted_ordinal_tail_probability": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.1260369670741237,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.25778237368969337,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.0276377991628537,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.8356104943995333,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.14583333333333334,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.18421052631578946,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "raw_boosted_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.13224335789411149,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.19296073703874594,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.02976277133042369,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.9767440625289734,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 11.069444444444445,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.16666666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.125,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.15789473684210525,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    }
+  },
+  "protocol": {
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "evaluation_split": "frozen_validation",
+    "mortality_label_available": false,
+    "ordinal_class_counts": {
+      "0": 12040,
+      "1": 2257,
+      "2": 527,
+      "3": 150,
+      "4": 76
+    },
+    "ordinal_fractions": [
+      0.005,
+      0.015,
+      0.05,
+      0.2
+    ],
+    "ordinal_tail_class_minimum": 3,
+    "ordinal_thresholds_log1p_cost": {
+      "0.005": 10.0,
+      "0.015": 9.657930374145508,
+      "0.05": 9.134635925292969,
+      "0.2": 8.685018539428711
+    },
+    "raw_feature_count": 256,
+    "selection_count": 48,
+    "tail_fraction": 0.015,
+    "task": "high_cost_tail_proxy",
+    "test_accessed": false,
+    "train_tail_count": 226,
+    "train_tail_threshold_dollars": 15644.371073175857,
+    "train_tail_threshold_log1p_cost": 9.657930374145508,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "condition": "raw_boosted_cost",
+      "iterations": 107,
+      "metrics": {
+        "average_precision": 0.12207449583568658,
+        "binary_ndcg_at_budget": 0.222104582908858,
+        "cost_capture_at_budget": 0.034275348359310745,
+        "cost_lift_at_budget": 2.276454386864222,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "raw_boosted_tail",
+      "iterations": 53,
+      "metrics": {
+        "average_precision": 0.13224335789411149,
+        "binary_ndcg_at_budget": 0.19296073703874594,
+        "cost_capture_at_budget": 0.02976277133042369,
+        "cost_lift_at_budget": 1.9767440625289734,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "raw_boosted_ordinal_severity",
+      "iterations": 31,
+      "metrics": {
+        "average_precision": 0.11868533386601553,
+        "binary_ndcg_at_budget": 0.18717582164223834,
+        "cost_capture_at_budget": 0.02625370587405411,
+        "cost_lift_at_budget": 1.7436836318017603,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "raw_boosted_ordinal_tail_probability",
+      "iterations": 31,
+      "metrics": {
+        "average_precision": 0.1260369670741237,
+        "binary_ndcg_at_budget": 0.25778237368969337,
+        "cost_capture_at_budget": 0.0276377991628537,
+        "cost_lift_at_budget": 1.8356104943995333,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_embedding_tail",
+      "metrics": {
+        "average_precision": 0.10273663815540186,
+        "binary_ndcg_at_budget": 0.1741583096366564,
+        "cost_capture_at_budget": 0.030205219007029414,
+        "cost_lift_at_budget": 2.006129962383537,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_embedding_ordinal_severity",
+      "metrics": {
+        "average_precision": 0.07548387921348884,
+        "binary_ndcg_at_budget": 0.09128228848511301,
+        "cost_capture_at_budget": 0.02123280727860238,
+        "cost_lift_at_budget": 1.4102122834205082,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_embedding_ordinal_tail_probability",
+      "metrics": {
+        "average_precision": 0.0646116807369929,
+        "binary_ndcg_at_budget": 0.07788605729502635,
+        "cost_capture_at_budget": 0.020684515338102512,
+        "cost_lift_at_budget": 1.3737965603723086,
+        "lift_at_budget": 4.151041666666667,
+        "precision_at_budget": 0.0625,
+        "recall_at_budget": 0.0625,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.041666666666666664,
+        "threshold_recall_at_budget": 0.05263157894736842,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_hybrid_tail",
+      "iterations": 38,
+      "metrics": {
+        "average_precision": 0.133007089947754,
+        "binary_ndcg_at_budget": 0.22601782255711547,
+        "cost_capture_at_budget": 0.03332113878651485,
+        "cost_lift_at_budget": 2.2130789677376947,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_hybrid_ordinal_severity",
+      "iterations": 33,
+      "metrics": {
+        "average_precision": 0.12370956506726306,
+        "binary_ndcg_at_budget": 0.17448018011498867,
+        "cost_capture_at_budget": 0.03088615526298852,
+        "cost_lift_at_budget": 2.051355478716821,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_hybrid_ordinal_tail_probability",
+      "iterations": 33,
+      "metrics": {
+        "average_precision": 0.1277331855527506,
+        "binary_ndcg_at_budget": 0.25830468488925334,
+        "cost_capture_at_budget": 0.030894944828719406,
+        "cost_lift_at_budget": 2.051939252374114,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "incumbent_hybrid_cost",
+      "iterations": 96,
+      "metrics": {
+        "average_precision": 0.18585642767054558,
+        "binary_ndcg_at_budget": 0.3080209937103945,
+        "cost_capture_at_budget": 0.035671046429676403,
+        "cost_lift_at_budget": 2.369152000371008,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    }
+  ]
+}

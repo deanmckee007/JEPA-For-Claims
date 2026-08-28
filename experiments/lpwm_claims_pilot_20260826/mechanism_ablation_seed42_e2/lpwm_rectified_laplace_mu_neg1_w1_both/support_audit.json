@@ -1,0 +1,58 @@
+{
+  "recipe": "lpwm_rectified_laplace_mu_neg1_w1_both",
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\mechanism_ablation_seed42_e2\\lpwm_rectified_laplace_mu_neg1_w1_both\\encoder.ckpt",
+  "evaluation_split": "val",
+  "num_train_samples": 12000,
+  "num_val_samples": 3188,
+  "support": {
+    "prediction_active_fraction": 0.8664449694165621,
+    "target_active_fraction": 0.5968156955771644,
+    "prediction_dead_dimension_fraction": 0.0234375,
+    "target_dead_dimension_fraction": 0.0,
+    "target_effective_active_dimensions": 117.13952397635391,
+    "prediction_target_support_jaccard_mean": 0.6139013808548526,
+    "prediction_target_support_jaccard_median": 0.6103479036574487,
+    "prediction_target_mse": 0.16662025451660156
+  },
+  "temporal_support_code_jaccard_spearman": 0.48895028784482103,
+  "temporal_support_code_jaccard_pvalue": 0.0,
+  "num_temporal_pairs": 101880,
+  "probes": {
+    "magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8360742926597595,
+        "target_probe_mae_dollars": 1655.1029052734375,
+        "target_probe_rmse_dollars": 2663.06298828125,
+        "target_probe_wape_percent": 35.598419189453125
+      },
+      "ttnc": {
+        "accuracy": 0.48462986198243413,
+        "macro_f1": 0.22286691382381782
+      }
+    },
+    "support": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8695798516273499,
+        "target_probe_mae_dollars": 1751.6876220703125,
+        "target_probe_rmse_dollars": 2808.809326171875,
+        "target_probe_wape_percent": 37.6757926940918
+      },
+      "ttnc": {
+        "accuracy": 0.3905269761606023,
+        "macro_f1": 0.16056698565299138
+      }
+    },
+    "support_plus_magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8322291970252991,
+        "target_probe_mae_dollars": 1650.1904296875,
+        "target_probe_rmse_dollars": 2652.359130859375,
+        "target_probe_wape_percent": 35.492759704589844
+      },
+      "ttnc": {
+        "accuracy": 0.47271016311166875,
+        "macro_f1": 0.2110791941997503
+      }
+    }
+  }
+}
