@@ -520,6 +520,7 @@ class Level2PredictionBlock(nn.Module):
 
         aux_outputs = {
             'sequence_output': sequence_out,
+            'valid_token_mask': valid_token_mask,
             'context_pooled': context_pooled,
             'context_mean_pool': context_mean_pool,
             'context_max_pool': context_max_pool,

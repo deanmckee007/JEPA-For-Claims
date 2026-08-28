@@ -1,0 +1,2775 @@
+{
+  "aggregate": {
+    "constant_log_mean|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2102.751708984375,
+          "sample_std": 45.789563930455934
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3075.7943522135415,
+          "sample_std": 49.974117264156135
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9572338461875916,
+          "sample_std": 0.001230195462768647
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.22657903035482,
+          "sample_std": 0.9848553155780974
+        }
+      },
+      "num_runs": 3
+    },
+    "constant_log_mean|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2114.5550944010415,
+          "sample_std": 31.648551675475517
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3088.58984375,
+          "sample_std": 34.68049586007723
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9566353559494019,
+          "sample_std": 0.00043890158937530887
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.48045094807943,
+          "sample_std": 0.6807056864381312
+        }
+      },
+      "num_runs": 3
+    },
+    "constant_log_mean|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2102.4280598958335,
+          "sample_std": 14.493659808558313
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3075.214599609375,
+          "sample_std": 15.850691642171393
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9566034475962321,
+          "sample_std": 0.00031704417272399347
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.219618479410805,
+          "sample_std": 0.31173458850712593
+        }
+      },
+      "num_runs": 3
+    },
+    "constant_log_mean|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2108.5397135416665,
+          "sample_std": 7.361282046200743
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3081.8960774739585,
+          "sample_std": 8.06271521825654
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.956427276134491,
+          "sample_std": 0.0001255816398318903
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.351067860921226,
+          "sample_std": 0.15832880433184146
+        }
+      },
+      "num_runs": 3
+    },
+    "constant_log_mean|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2107.681640625,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3080.9677734375,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9564246535301208,
+          "sample_std": 0.0
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.332611083984375,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_pretrained|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 3337.548095703125,
+          "sample_std": 214.92757768057535
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 5015.763997395833,
+          "sample_std": 301.5575821586543
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.1925028562545776,
+          "sample_std": 0.13186701220996472
+        },
+        "target_probe_wape_percent": {
+          "mean": 71.78492736816406,
+          "sample_std": 4.62272171978112
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_pretrained|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2414.4847819010415,
+          "sample_std": 243.78662035419293
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3576.947509765625,
+          "sample_std": 376.7533973181225
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9716610312461853,
+          "sample_std": 0.04377245732316709
+        },
+        "target_probe_wape_percent": {
+          "mean": 51.9314219156901,
+          "sample_std": 5.243431671933493
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_pretrained|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2026.861083984375,
+          "sample_std": 61.74363609281351
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3067.7775065104165,
+          "sample_std": 80.30538477951967
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.888671358426412,
+          "sample_std": 0.0065660875834099575
+        },
+        "target_probe_wape_percent": {
+          "mean": 43.59429931640625,
+          "sample_std": 1.3279985953067053
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_pretrained|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1790.1981608072917,
+          "sample_std": 37.06748691987794
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2800.181396484375,
+          "sample_std": 30.10171544887358
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8522383371988932,
+          "sample_std": 0.006300425435980375
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.50408808390299,
+          "sample_std": 0.7972586381315175
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_pretrained|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1648.0036214192708,
+          "sample_std": 6.615185580408243
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2661.50537109375,
+          "sample_std": 12.665935182573318
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8316924770673116,
+          "sample_std": 0.005324636767119175
+        },
+        "target_probe_wape_percent": {
+          "mean": 35.445727030436196,
+          "sample_std": 0.14228113153432606
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_random_encoder|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 3531.4351399739585,
+          "sample_std": 586.5105349956721
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 5242.092610677083,
+          "sample_std": 870.4866653597311
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.2051941951115925,
+          "sample_std": 0.16361743236777945
+        },
+        "target_probe_wape_percent": {
+          "mean": 75.95509974161784,
+          "sample_std": 12.614832879254104
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_random_encoder|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2412.5459798177085,
+          "sample_std": 236.04273625862683
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3547.2505696614585,
+          "sample_std": 324.0941085667543
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.980261226495107,
+          "sample_std": 0.04360044046804268
+        },
+        "target_probe_wape_percent": {
+          "mean": 51.88972091674805,
+          "sample_std": 5.076871920226664
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_random_encoder|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2004.7320963541667,
+          "sample_std": 55.954358430221305
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2992.7169596354165,
+          "sample_std": 65.92198587221266
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9052613377571106,
+          "sample_std": 0.0037109346970128597
+        },
+        "target_probe_wape_percent": {
+          "mean": 43.118343353271484,
+          "sample_std": 1.2034816298351054
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_random_encoder|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1789.359375,
+          "sample_std": 19.16832646568082
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2771.7679850260415,
+          "sample_std": 32.29850714566851
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8626104990641276,
+          "sample_std": 0.0033319744605059113
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.48604838053385,
+          "sample_std": 0.41227713422100065
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_random_encoder|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1671.668212890625,
+          "sample_std": 21.96443818213326
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2661.755126953125,
+          "sample_std": 35.0561854503865
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8434507846832275,
+          "sample_std": 0.0023148771940390248
+        },
+        "target_probe_wape_percent": {
+          "mean": 35.9547119140625,
+          "sample_std": 0.47241868637063106
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_shuffled|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 4454.610026041667,
+          "sample_std": 864.2679493381092
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 6350.513346354167,
+          "sample_std": 1195.5878670555344
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.5590988397598267,
+          "sample_std": 0.3340449501132752
+        },
+        "target_probe_wape_percent": {
+          "mean": 95.81100972493489,
+          "sample_std": 18.5889220216293
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_shuffled|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2882.571533203125,
+          "sample_std": 241.63607293042986
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 4064.0772298177085,
+          "sample_std": 298.5797532295211
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.1148149569829304,
+          "sample_std": 0.06956815761075194
+        },
+        "target_probe_wape_percent": {
+          "mean": 61.99916076660156,
+          "sample_std": 5.197177842807445
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_shuffled|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2410.35595703125,
+          "sample_std": 83.51834886246608
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3383.833984375,
+          "sample_std": 102.3973379506113
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.0362372795740764,
+          "sample_std": 0.025579317800600188
+        },
+        "target_probe_wape_percent": {
+          "mean": 51.8426144917806,
+          "sample_std": 1.7963364143595342
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_shuffled|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2174.7210286458335,
+          "sample_std": 57.20829218738861
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3167.645751953125,
+          "sample_std": 62.874601186071445
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9781108101209005,
+          "sample_std": 0.01102917099403842
+        },
+        "target_probe_wape_percent": {
+          "mean": 46.774514516194664,
+          "sample_std": 1.2304528989433956
+        }
+      },
+      "num_runs": 3
+    },
+    "dense_shuffled|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2133.2591959635415,
+          "sample_std": 16.14184590129209
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3114.2720540364585,
+          "sample_std": 20.508305623740934
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9635024070739746,
+          "sample_std": 0.0016702626774699626
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.88274256388346,
+          "sample_std": 0.3471814681501647
+        }
+      },
+      "num_runs": 3
+    },
+    "history_statistics|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1984.8348795572917,
+          "sample_std": 22.84579091841857
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2997.544677734375,
+          "sample_std": 78.7300940971952
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9279930194218954,
+          "sample_std": 0.005091108169065379
+        },
+        "target_probe_wape_percent": {
+          "mean": 42.69038645426432,
+          "sample_std": 0.4913726863526752
+        }
+      },
+      "num_runs": 3
+    },
+    "history_statistics|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1992.197021484375,
+          "sample_std": 61.580741218874046
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3018.6858723958335,
+          "sample_std": 97.46712062397597
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9256114562352499,
+          "sample_std": 0.0056387616240088185
+        },
+        "target_probe_wape_percent": {
+          "mean": 42.84873708089193,
+          "sample_std": 1.3244957580000472
+        }
+      },
+      "num_runs": 3
+    },
+    "history_statistics|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1972.1670328776042,
+          "sample_std": 42.577730077667724
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2998.260498046875,
+          "sample_std": 54.79193133561015
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9243989586830139,
+          "sample_std": 0.0028797912052285035
+        },
+        "target_probe_wape_percent": {
+          "mean": 42.41792551676432,
+          "sample_std": 0.9157763083526956
+        }
+      },
+      "num_runs": 3
+    },
+    "history_statistics|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1965.1946614583333,
+          "sample_std": 8.209922521210983
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3003.1292317708335,
+          "sample_std": 5.6060044000584295
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9237337708473206,
+          "sample_std": 0.0005208839096364114
+        },
+        "target_probe_wape_percent": {
+          "mean": 42.26796213785807,
+          "sample_std": 0.17658255103155843
+        }
+      },
+      "num_runs": 3
+    },
+    "history_statistics|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1951.443359375,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2981.879638671875,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9230445623397827,
+          "sample_std": 0.0
+        },
+        "target_probe_wape_percent": {
+          "mean": 41.97219467163086,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "raw_history_hash|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 5611.89892578125,
+          "sample_std": 1173.8242960762122
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 8106.0029296875,
+          "sample_std": 1232.2349850694075
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 2858.2266330718994,
+          "sample_std": 4935.439108049207
+        },
+        "target_probe_wape_percent": {
+          "mean": 120.70230865478516,
+          "sample_std": 25.246937854107014
+        }
+      },
+      "num_runs": 3
+    },
+    "raw_history_hash|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2317.5237630208335,
+          "sample_std": 203.47818769974106
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3535.7802734375,
+          "sample_std": 338.7371595380768
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9663620193799337,
+          "sample_std": 0.03156847161109615
+        },
+        "target_probe_wape_percent": {
+          "mean": 49.84595489501953,
+          "sample_std": 4.376466082328425
+        }
+      },
+      "num_runs": 3
+    },
+    "raw_history_hash|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2001.8341878255208,
+          "sample_std": 90.16429311736985
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3039.8834635416665,
+          "sample_std": 135.38327232957974
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9056284427642822,
+          "sample_std": 0.010908054751920932
+        },
+        "target_probe_wape_percent": {
+          "mean": 43.056016286214195,
+          "sample_std": 1.9392808859429975
+        }
+      },
+      "num_runs": 3
+    },
+    "raw_history_hash|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1871.45458984375,
+          "sample_std": 33.70999311160879
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2866.6688639322915,
+          "sample_std": 23.31721923394129
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8863885800043741,
+          "sample_std": 0.005173278413960461
+        },
+        "target_probe_wape_percent": {
+          "mean": 40.25177510579427,
+          "sample_std": 0.7250420275428606
+        }
+      },
+      "num_runs": 3
+    },
+    "raw_history_hash|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1797.70556640625,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2778.69921875,
+          "sample_std": 0.0
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8738575577735901,
+          "sample_std": 0.0
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.665557861328125,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_pretrained|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 3646.5762532552085,
+          "sample_std": 505.78081406136636
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 5425.381998697917,
+          "sample_std": 661.1683270473064
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.233436147371928,
+          "sample_std": 0.1787605558585099
+        },
+        "target_probe_wape_percent": {
+          "mean": 78.4315897623698,
+          "sample_std": 10.878472141974465
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_pretrained|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2411.6592610677085,
+          "sample_std": 229.80952650339336
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3576.811767578125,
+          "sample_std": 355.4135641024469
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9727058609326681,
+          "sample_std": 0.02555375092937593
+        },
+        "target_probe_wape_percent": {
+          "mean": 51.87064997355143,
+          "sample_std": 4.942808496621536
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_pretrained|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2032.7163899739583,
+          "sample_std": 44.105296715861
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3064.4698893229165,
+          "sample_std": 71.2676584113566
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8997451861699423,
+          "sample_std": 0.012546319490547913
+        },
+        "target_probe_wape_percent": {
+          "mean": 43.720237731933594,
+          "sample_std": 0.9486288478719556
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_pretrained|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1744.408447265625,
+          "sample_std": 21.363171496085826
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2749.9589029947915,
+          "sample_std": 39.39200734450894
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.850939671198527,
+          "sample_std": 0.014373972052949891
+        },
+        "target_probe_wape_percent": {
+          "mean": 37.519229888916016,
+          "sample_std": 0.45948481067030256
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_pretrained|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1623.095458984375,
+          "sample_std": 29.15093774432252
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2626.6588541666665,
+          "sample_std": 36.33493898236775
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8320829470952352,
+          "sample_std": 0.014385268023963744
+        },
+        "target_probe_wape_percent": {
+          "mean": 34.909996032714844,
+          "sample_std": 0.6269856074017625
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_random_encoder|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 3498.411376953125,
+          "sample_std": 427.44469703437716
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 5148.97509765625,
+          "sample_std": 571.9505650773981
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.228518048922221,
+          "sample_std": 0.14672018741290513
+        },
+        "target_probe_wape_percent": {
+          "mean": 75.24481964111328,
+          "sample_std": 9.193604562306371
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_random_encoder|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2487.423583984375,
+          "sample_std": 280.9204509644273
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3662.34326171875,
+          "sample_std": 435.02892760022786
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9992546240488688,
+          "sample_std": 0.04293101319702332
+        },
+        "target_probe_wape_percent": {
+          "mean": 53.50020853678385,
+          "sample_std": 6.042115275252312
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_random_encoder|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2039.5468343098958,
+          "sample_std": 54.801262312012646
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3013.037841796875,
+          "sample_std": 71.07762330474199
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.910693903764089,
+          "sample_std": 0.005291265929089594
+        },
+        "target_probe_wape_percent": {
+          "mean": 43.867148081461586,
+          "sample_std": 1.1786789043850097
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_random_encoder|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1826.7780354817708,
+          "sample_std": 16.925271397129265
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2801.5629069010415,
+          "sample_std": 34.44348456029492
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8696433305740356,
+          "sample_std": 0.0015418876793275589
+        },
+        "target_probe_wape_percent": {
+          "mean": 39.29085795084635,
+          "sample_std": 0.3640327773473435
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_random_encoder|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 1702.484375,
+          "sample_std": 9.073908856798978
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2689.62939453125,
+          "sample_std": 34.23534090132427
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.8531291087468466,
+          "sample_std": 0.0012930667167504978
+        },
+        "target_probe_wape_percent": {
+          "mean": 36.617514292399086,
+          "sample_std": 0.19516525624116096
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_shuffled|0.01": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 4456.860432942708,
+          "sample_std": 558.6266383034989
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 6432.27197265625,
+          "sample_std": 734.5033036963354
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.474753499031067,
+          "sample_std": 0.1991469532058056
+        },
+        "target_probe_wape_percent": {
+          "mean": 95.85941314697266,
+          "sample_std": 12.015104922666248
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_shuffled|0.05": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2808.3341471354165,
+          "sample_std": 241.96845687094842
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3933.2635091145835,
+          "sample_std": 285.1011117626679
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.1114859183629353,
+          "sample_std": 0.07785087879725623
+        },
+        "target_probe_wape_percent": {
+          "mean": 60.402445475260414,
+          "sample_std": 5.204325403384343
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_shuffled|0.1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2432.65380859375,
+          "sample_std": 102.40136654606015
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3431.9434407552085,
+          "sample_std": 127.82114966495517
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 1.0400781631469727,
+          "sample_std": 0.024756778053989747
+        },
+        "target_probe_wape_percent": {
+          "mean": 52.32220458984375,
+          "sample_std": 2.2024788964502395
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_shuffled|0.25": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2179.3346354166665,
+          "sample_std": 63.315617159024626
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3176.471923828125,
+          "sample_std": 69.74984109810876
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9781685471534729,
+          "sample_std": 0.015507829871736961
+        },
+        "target_probe_wape_percent": {
+          "mean": 46.87374369303385,
+          "sample_std": 1.3618121981017925
+        }
+      },
+      "num_runs": 3
+    },
+    "sparse_shuffled|1": {
+      "metrics": {
+        "target_probe_mae_dollars": {
+          "mean": 2125.7998046875,
+          "sample_std": 15.419026707956197
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3106.0558268229165,
+          "sample_std": 16.012916785043945
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9625926812489828,
+          "sample_std": 0.0036251343564836533
+        },
+        "target_probe_wape_percent": {
+          "mean": 45.722302754720054,
+          "sample_std": 0.3316363272327142
+        }
+      },
+      "num_runs": 3
+    }
+  },
+  "protocol": {
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "evaluation_split": "frozen_validation",
+    "label_fractions": [
+      0.01,
+      0.05,
+      0.1,
+      0.25,
+      1.0
+    ],
+    "probe": "standardized_ridge_alpha_1_on_log1p_cost",
+    "raw_history_excludes_held_out_next_claim": true,
+    "representation_source": "patient_representation_pre_sae",
+    "run_seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_accessed": false,
+    "train_samples": 15050,
+    "validation_samples": 3188,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 2149.7353515625,
+        "target_probe_rmse_dollars": 3127.190185546875,
+        "target_probe_rmse_log1p": 0.9564626216888428,
+        "target_probe_wape_percent": 46.237117767333984
+      },
+      "num_labels": 150,
+      "seed": 42
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2147.142578125,
+        "target_probe_rmse_dollars": 3124.34375,
+        "target_probe_rmse_log1p": 0.9564175009727478,
+        "target_probe_wape_percent": 46.18135070800781
+      },
+      "num_labels": 750,
+      "seed": 42
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2118.05078125,
+        "target_probe_rmse_dollars": 3092.310791015625,
+        "target_probe_rmse_log1p": 0.9562892317771912,
+        "target_probe_wape_percent": 45.55563735961914
+      },
+      "num_labels": 1500,
+      "seed": 42
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2116.116943359375,
+        "target_probe_rmse_dollars": 3090.189208984375,
+        "target_probe_rmse_log1p": 0.9563069343566895,
+        "target_probe_wape_percent": 45.514041900634766
+      },
+      "num_labels": 3760,
+      "seed": 42
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2107.681640625,
+        "target_probe_rmse_dollars": 3080.9677734375,
+        "target_probe_rmse_log1p": 0.9564246535301208,
+        "target_probe_wape_percent": 45.332611083984375
+      },
+      "num_labels": 15050,
+      "seed": 42
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 1985.993896484375,
+        "target_probe_rmse_dollars": 3019.117919921875,
+        "target_probe_rmse_log1p": 0.9338558316230774,
+        "target_probe_wape_percent": 42.71531677246094
+      },
+      "num_labels": 150,
+      "seed": 42
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2063.276611328125,
+        "target_probe_rmse_dollars": 3129.508056640625,
+        "target_probe_rmse_log1p": 0.9321126937866211,
+        "target_probe_wape_percent": 44.37753677368164
+      },
+      "num_labels": 750,
+      "seed": 42
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2020.59033203125,
+        "target_probe_rmse_dollars": 3060.75,
+        "target_probe_rmse_log1p": 0.9277222752571106,
+        "target_probe_wape_percent": 43.45943069458008
+      },
+      "num_labels": 1500,
+      "seed": 42
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1974.1483154296875,
+        "target_probe_rmse_dollars": 3006.51953125,
+        "target_probe_rmse_log1p": 0.923394501209259,
+        "target_probe_wape_percent": 42.460540771484375
+      },
+      "num_labels": 3760,
+      "seed": 42
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1951.443359375,
+        "target_probe_rmse_dollars": 2981.879638671875,
+        "target_probe_rmse_log1p": 0.9230445623397827,
+        "target_probe_wape_percent": 41.97219467163086
+      },
+      "num_labels": 15050,
+      "seed": 42
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 6962.36279296875,
+        "target_probe_rmse_dollars": 9523.2861328125,
+        "target_probe_rmse_log1p": 15.320477485656738,
+        "target_probe_wape_percent": 149.7484588623047
+      },
+      "num_labels": 150,
+      "seed": 42
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2548.00927734375,
+        "target_probe_rmse_dollars": 3924.64599609375,
+        "target_probe_rmse_log1p": 0.9993771910667419,
+        "target_probe_wape_percent": 54.80330276489258
+      },
+      "num_labels": 750,
+      "seed": 42
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2091.145751953125,
+        "target_probe_rmse_dollars": 3172.38623046875,
+        "target_probe_rmse_log1p": 0.914067804813385,
+        "target_probe_wape_percent": 44.97695541381836
+      },
+      "num_labels": 1500,
+      "seed": 42
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1876.8641357421875,
+        "target_probe_rmse_dollars": 2857.5732421875,
+        "target_probe_rmse_log1p": 0.8835200071334839,
+        "target_probe_wape_percent": 40.368125915527344
+      },
+      "num_labels": 3760,
+      "seed": 42
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1797.70556640625,
+        "target_probe_rmse_dollars": 2778.69921875,
+        "target_probe_rmse_log1p": 0.8738575577735901,
+        "target_probe_wape_percent": 38.665557861328125
+      },
+      "num_labels": 15050,
+      "seed": 42
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 2100.261962890625,
+        "target_probe_rmse_dollars": 3072.81787109375,
+        "target_probe_rmse_log1p": 0.9565863609313965,
+        "target_probe_wape_percent": 45.17302703857422
+      },
+      "num_labels": 150,
+      "seed": 43
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2112.585205078125,
+        "target_probe_rmse_dollars": 3086.332763671875,
+        "target_probe_rmse_log1p": 0.9563480019569397,
+        "target_probe_wape_percent": 45.43808364868164
+      },
+      "num_labels": 750,
+      "seed": 43
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2099.814208984375,
+        "target_probe_rmse_dollars": 3072.326416015625,
+        "target_probe_rmse_log1p": 0.9565978646278381,
+        "target_probe_wape_percent": 45.16339874267578
+      },
+      "num_labels": 1500,
+      "seed": 43
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2108.0869140625,
+        "target_probe_rmse_dollars": 3081.41357421875,
+        "target_probe_rmse_log1p": 0.9564173817634583,
+        "target_probe_wape_percent": 45.34132766723633
+      },
+      "num_labels": 3760,
+      "seed": 43
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2107.681640625,
+        "target_probe_rmse_dollars": 3080.9677734375,
+        "target_probe_rmse_log1p": 0.9564246535301208,
+        "target_probe_wape_percent": 45.332611083984375
+      },
+      "num_labels": 15050,
+      "seed": 43
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 2007.0791015625,
+        "target_probe_rmse_dollars": 3063.2392578125,
+        "target_probe_rmse_log1p": 0.9254357218742371,
+        "target_probe_wape_percent": 43.168819427490234
+      },
+      "num_labels": 150,
+      "seed": 43
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 1958.376708984375,
+        "target_probe_rmse_dollars": 2980.26513671875,
+        "target_probe_rmse_log1p": 0.9220508933067322,
+        "target_probe_wape_percent": 42.12131881713867
+      },
+      "num_labels": 750,
+      "seed": 43
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1955.3209228515625,
+        "target_probe_rmse_dollars": 2975.586181640625,
+        "target_probe_rmse_log1p": 0.9228366613388062,
+        "target_probe_wape_percent": 42.05559158325195
+      },
+      "num_labels": 1500,
+      "seed": 43
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1958.020263671875,
+        "target_probe_rmse_dollars": 2996.658447265625,
+        "target_probe_rmse_log1p": 0.9243335127830505,
+        "target_probe_wape_percent": 42.113651275634766
+      },
+      "num_labels": 3760,
+      "seed": 43
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1951.443359375,
+        "target_probe_rmse_dollars": 2981.879638671875,
+        "target_probe_rmse_log1p": 0.9230445623397827,
+        "target_probe_wape_percent": 41.97219467163086
+      },
+      "num_labels": 15050,
+      "seed": 43
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 5036.91162109375,
+        "target_probe_rmse_dollars": 7506.37646484375,
+        "target_probe_rmse_log1p": 2.183640480041504,
+        "target_probe_wape_percent": 108.3353271484375
+      },
+      "num_labels": 150,
+      "seed": 43
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2241.78662109375,
+        "target_probe_rmse_dollars": 3377.82275390625,
+        "target_probe_rmse_log1p": 0.9632360339164734,
+        "target_probe_wape_percent": 48.216976165771484
+      },
+      "num_labels": 750,
+      "seed": 43
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2003.51611328125,
+        "target_probe_rmse_dollars": 3045.471435546875,
+        "target_probe_rmse_log1p": 0.9095062017440796,
+        "target_probe_wape_percent": 43.092193603515625
+      },
+      "num_labels": 1500,
+      "seed": 43
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1902.1326904296875,
+        "target_probe_rmse_dollars": 2893.1630859375,
+        "target_probe_rmse_log1p": 0.8923606276512146,
+        "target_probe_wape_percent": 40.91160583496094
+      },
+      "num_labels": 3760,
+      "seed": 43
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1797.70556640625,
+        "target_probe_rmse_dollars": 2778.69921875,
+        "target_probe_rmse_log1p": 0.8738575577735901,
+        "target_probe_wape_percent": 38.665557861328125
+      },
+      "num_labels": 15050,
+      "seed": 43
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 2058.2578125,
+        "target_probe_rmse_dollars": 3027.375,
+        "target_probe_rmse_log1p": 0.9586525559425354,
+        "target_probe_wape_percent": 44.26959228515625
+      },
+      "num_labels": 150,
+      "seed": 44
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2083.9375,
+        "target_probe_rmse_dollars": 3055.093017578125,
+        "target_probe_rmse_log1p": 0.9571405649185181,
+        "target_probe_wape_percent": 44.82191848754883
+      },
+      "num_labels": 750,
+      "seed": 44
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2089.419189453125,
+        "target_probe_rmse_dollars": 3061.006591796875,
+        "target_probe_rmse_log1p": 0.956923246383667,
+        "target_probe_wape_percent": 44.9398193359375
+      },
+      "num_labels": 1500,
+      "seed": 44
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2101.415283203125,
+        "target_probe_rmse_dollars": 3074.08544921875,
+        "target_probe_rmse_log1p": 0.9565575122833252,
+        "target_probe_wape_percent": 45.19783401489258
+      },
+      "num_labels": 3760,
+      "seed": 44
+    },
+    {
+      "condition": "constant_log_mean",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2107.681640625,
+        "target_probe_rmse_dollars": 3080.9677734375,
+        "target_probe_rmse_log1p": 0.9564246535301208,
+        "target_probe_wape_percent": 45.332611083984375
+      },
+      "num_labels": 15050,
+      "seed": 44
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 1961.431640625,
+        "target_probe_rmse_dollars": 2910.27685546875,
+        "target_probe_rmse_log1p": 0.9246875047683716,
+        "target_probe_wape_percent": 42.1870231628418
+      },
+      "num_labels": 150,
+      "seed": 44
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 1954.937744140625,
+        "target_probe_rmse_dollars": 2946.284423828125,
+        "target_probe_rmse_log1p": 0.9226707816123962,
+        "target_probe_wape_percent": 42.04735565185547
+      },
+      "num_labels": 750,
+      "seed": 44
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1940.58984375,
+        "target_probe_rmse_dollars": 2958.4453125,
+        "target_probe_rmse_log1p": 0.922637939453125,
+        "target_probe_wape_percent": 41.73875427246094
+      },
+      "num_labels": 1500,
+      "seed": 44
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1963.4154052734375,
+        "target_probe_rmse_dollars": 3006.209716796875,
+        "target_probe_rmse_log1p": 0.9234732985496521,
+        "target_probe_wape_percent": 42.22969436645508
+      },
+      "num_labels": 3760,
+      "seed": 44
+    },
+    {
+      "condition": "history_statistics",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1951.443359375,
+        "target_probe_rmse_dollars": 2981.879638671875,
+        "target_probe_rmse_log1p": 0.9230445623397827,
+        "target_probe_wape_percent": 41.97219467163086
+      },
+      "num_labels": 15050,
+      "seed": 44
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 4836.42236328125,
+        "target_probe_rmse_dollars": 7288.34619140625,
+        "target_probe_rmse_log1p": 8557.17578125,
+        "target_probe_wape_percent": 104.02313995361328
+      },
+      "num_labels": 150,
+      "seed": 44
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2162.775390625,
+        "target_probe_rmse_dollars": 3304.8720703125,
+        "target_probe_rmse_log1p": 0.9364728331565857,
+        "target_probe_wape_percent": 46.51758575439453
+      },
+      "num_labels": 750,
+      "seed": 44
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1910.8406982421875,
+        "target_probe_rmse_dollars": 2901.792724609375,
+        "target_probe_rmse_log1p": 0.8933113217353821,
+        "target_probe_wape_percent": 41.098899841308594
+      },
+      "num_labels": 1500,
+      "seed": 44
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1835.366943359375,
+        "target_probe_rmse_dollars": 2849.270263671875,
+        "target_probe_rmse_log1p": 0.8832851052284241,
+        "target_probe_wape_percent": 39.47559356689453
+      },
+      "num_labels": 3760,
+      "seed": 44
+    },
+    {
+      "condition": "raw_history_hash",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1797.70556640625,
+        "target_probe_rmse_dollars": 2778.69921875,
+        "target_probe_rmse_log1p": 0.8738575577735901,
+        "target_probe_wape_percent": 38.665557861328125
+      },
+      "num_labels": 15050,
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3485.158203125,
+        "target_probe_rmse_dollars": 5234.45703125,
+        "target_probe_rmse_log1p": 1.3223438262939453,
+        "target_probe_wape_percent": 74.95976257324219
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2594.20703125,
+        "target_probe_rmse_dollars": 3854.123291015625,
+        "target_probe_rmse_log1p": 0.9931215643882751,
+        "target_probe_wape_percent": 55.796939849853516
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2092.9970703125,
+        "target_probe_rmse_dollars": 3150.693115234375,
+        "target_probe_rmse_log1p": 0.8877574801445007,
+        "target_probe_wape_percent": 45.01676940917969
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1825.883056640625,
+        "target_probe_rmse_dollars": 2833.99609375,
+        "target_probe_rmse_log1p": 0.8498857021331787,
+        "target_probe_wape_percent": 39.271610260009766
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1643.74951171875,
+        "target_probe_rmse_dollars": 2659.52734375,
+        "target_probe_rmse_log1p": 0.8269005417823792,
+        "target_probe_wape_percent": 35.35422897338867
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 5165.2275390625,
+        "target_probe_rmse_dollars": 7241.64599609375,
+        "target_probe_rmse_log1p": 1.9173061847686768,
+        "target_probe_wape_percent": 111.09517669677734
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 3151.89892578125,
+        "target_probe_rmse_dollars": 4394.5712890625,
+        "target_probe_rmse_log1p": 1.1911661624908447,
+        "target_probe_wape_percent": 67.79193115234375
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2466.702880859375,
+        "target_probe_rmse_dollars": 3444.947509765625,
+        "target_probe_rmse_log1p": 1.0535556077957153,
+        "target_probe_wape_percent": 53.054542541503906
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2203.912109375,
+        "target_probe_rmse_dollars": 3184.80322265625,
+        "target_probe_rmse_log1p": 0.9819089770317078,
+        "target_probe_wape_percent": 47.402366638183594
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2139.571533203125,
+        "target_probe_rmse_dollars": 3123.12060546875,
+        "target_probe_rmse_log1p": 0.9637393951416016,
+        "target_probe_wape_percent": 46.01850891113281
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3848.573486328125,
+        "target_probe_rmse_dollars": 5619.63525390625,
+        "target_probe_rmse_log1p": 1.36881685256958,
+        "target_probe_wape_percent": 82.77619934082031
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2650.35986328125,
+        "target_probe_rmse_dollars": 3880.595458984375,
+        "target_probe_rmse_log1p": 1.0200879573822021,
+        "target_probe_wape_percent": 57.00468826293945
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2069.310302734375,
+        "target_probe_rmse_dollars": 3060.79638671875,
+        "target_probe_rmse_log1p": 0.9022170305252075,
+        "target_probe_wape_percent": 44.50730895996094
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1811.4930419921875,
+        "target_probe_rmse_dollars": 2802.859130859375,
+        "target_probe_rmse_log1p": 0.8590288758277893,
+        "target_probe_wape_percent": 38.96210479736328
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1674.125732421875,
+        "target_probe_rmse_dollars": 2673.65673828125,
+        "target_probe_rmse_log1p": 0.8434423208236694,
+        "target_probe_wape_percent": 36.007568359375
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 4142.92822265625,
+        "target_probe_rmse_dollars": 6104.01904296875,
+        "target_probe_rmse_log1p": 1.432342290878296,
+        "target_probe_wape_percent": 89.10726165771484
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2622.7294921875,
+        "target_probe_rmse_dollars": 3902.575439453125,
+        "target_probe_rmse_log1p": 1.0010161399841309,
+        "target_probe_wape_percent": 56.41040802001953
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2031.433837890625,
+        "target_probe_rmse_dollars": 3083.763671875,
+        "target_probe_rmse_log1p": 0.8905189037322998,
+        "target_probe_wape_percent": 43.69265365600586
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1720.404296875,
+        "target_probe_rmse_dollars": 2706.92138671875,
+        "target_probe_rmse_log1p": 0.8402400612831116,
+        "target_probe_wape_percent": 37.0029411315918
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1597.261962890625,
+        "target_probe_rmse_dollars": 2594.697021484375,
+        "target_probe_rmse_log1p": 0.8250200152397156,
+        "target_probe_wape_percent": 34.35436248779297
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 4893.2314453125,
+        "target_probe_rmse_dollars": 6969.02099609375,
+        "target_probe_rmse_log1p": 1.6483232975006104,
+        "target_probe_wape_percent": 105.24501037597656
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 3040.556396484375,
+        "target_probe_rmse_dollars": 4225.3212890625,
+        "target_probe_rmse_log1p": 1.1893314123153687,
+        "target_probe_wape_percent": 65.39714813232422
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2523.734375,
+        "target_probe_rmse_dollars": 3533.68310546875,
+        "target_probe_rmse_log1p": 1.0598599910736084,
+        "target_probe_wape_percent": 54.281192779541016
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2234.879150390625,
+        "target_probe_rmse_dollars": 3212.42578125,
+        "target_probe_rmse_log1p": 0.9946132898330688,
+        "target_probe_wape_percent": 48.06841278076172
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2129.2998046875,
+        "target_probe_rmse_dollars": 3101.59326171875,
+        "target_probe_rmse_log1p": 0.9658055305480957,
+        "target_probe_wape_percent": 45.797584533691406
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3935.9599609375,
+        "target_probe_rmse_dollars": 5721.30078125,
+        "target_probe_rmse_log1p": 1.3852002620697021,
+        "target_probe_wape_percent": 84.6557388305664
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2796.382080078125,
+        "target_probe_rmse_dollars": 4152.3583984375,
+        "target_probe_rmse_log1p": 1.0419015884399414,
+        "target_probe_wape_percent": 60.1453742980957
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2102.747802734375,
+        "target_probe_rmse_dollars": 3085.395751953125,
+        "target_probe_rmse_log1p": 0.9109975695610046,
+        "target_probe_wape_percent": 45.22649002075195
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1845.6490478515625,
+        "target_probe_rmse_dollars": 2821.482421875,
+        "target_probe_rmse_log1p": 0.8697108030319214,
+        "target_probe_wape_percent": 39.696739196777344
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1703.10009765625,
+        "target_probe_rmse_dollars": 2705.968017578125,
+        "target_probe_rmse_log1p": 0.854453444480896,
+        "target_probe_wape_percent": 36.63075637817383
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314201,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 42
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3436.521240234375,
+        "target_probe_rmse_dollars": 5141.0810546875,
+        "target_probe_rmse_log1p": 1.1964656114578247,
+        "target_probe_wape_percent": 73.9136734008789
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2512.258544921875,
+        "target_probe_rmse_dollars": 3728.744384765625,
+        "target_probe_rmse_log1p": 1.0005617141723633,
+        "target_probe_wape_percent": 54.034366607666016
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2016.8538818359375,
+        "target_probe_rmse_dollars": 3062.27392578125,
+        "target_probe_rmse_log1p": 0.8956465125083923,
+        "target_probe_wape_percent": 43.37906265258789
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1792.82373046875,
+        "target_probe_rmse_dollars": 2790.240966796875,
+        "target_probe_rmse_log1p": 0.8593765497207642,
+        "target_probe_wape_percent": 38.5605583190918
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1644.6363525390625,
+        "target_probe_rmse_dollars": 2649.94482421875,
+        "target_probe_rmse_log1p": 0.8307523131370544,
+        "target_probe_wape_percent": 35.3733024597168
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 4706.11767578125,
+        "target_probe_rmse_dollars": 6818.0966796875,
+        "target_probe_rmse_log1p": 1.503896951675415,
+        "target_probe_wape_percent": 101.22050476074219
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2811.03515625,
+        "target_probe_rmse_dollars": 3983.8603515625,
+        "target_probe_rmse_log1p": 1.0982633829116821,
+        "target_probe_wape_percent": 60.46053695678711
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2449.962158203125,
+        "target_probe_rmse_dollars": 3440.93603515625,
+        "target_probe_rmse_log1p": 1.0482990741729736,
+        "target_probe_wape_percent": 52.69447326660156
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2211.445068359375,
+        "target_probe_rmse_dollars": 3220.16064453125,
+        "target_probe_rmse_log1p": 0.9867389798164368,
+        "target_probe_wape_percent": 47.56438446044922
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2145.291015625,
+        "target_probe_rmse_dollars": 3128.87060546875,
+        "target_probe_rmse_log1p": 0.9650415182113647,
+        "target_probe_wape_percent": 46.14152526855469
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3891.095703125,
+        "target_probe_rmse_dollars": 5860.06982421875,
+        "target_probe_rmse_log1p": 1.205183744430542,
+        "target_probe_wape_percent": 83.69078063964844
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2408.962890625,
+        "target_probe_rmse_dollars": 3527.880126953125,
+        "target_probe_rmse_log1p": 0.987019419670105,
+        "target_probe_wape_percent": 51.812652587890625
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1974.212646484375,
+        "target_probe_rmse_dollars": 2929.188232421875,
+        "target_probe_rmse_log1p": 0.9093950390815735,
+        "target_probe_wape_percent": 42.4619255065918
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1778.3106689453125,
+        "target_probe_rmse_dollars": 2738.38427734375,
+        "target_probe_rmse_log1p": 0.8656182885169983,
+        "target_probe_wape_percent": 38.248409271240234
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1648.578369140625,
+        "target_probe_rmse_dollars": 2622.297607421875,
+        "target_probe_rmse_log1p": 0.8457698822021484,
+        "target_probe_wape_percent": 35.45808792114258
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3664.93408203125,
+        "target_probe_rmse_dollars": 5388.93701171875,
+        "target_probe_rmse_log1p": 1.1817595958709717,
+        "target_probe_wape_percent": 78.8264389038086
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2445.406005859375,
+        "target_probe_rmse_dollars": 3630.094970703125,
+        "target_probe_rmse_log1p": 0.9657542109489441,
+        "target_probe_wape_percent": 52.59648513793945
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2077.448974609375,
+        "target_probe_rmse_dollars": 3124.104248046875,
+        "target_probe_rmse_log1p": 0.8946853280067444,
+        "target_probe_wape_percent": 44.68235778808594
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1761.33349609375,
+        "target_probe_rmse_dollars": 2758.727783203125,
+        "target_probe_rmse_log1p": 0.8453008532524109,
+        "target_probe_wape_percent": 37.88325500488281
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1617.323974609375,
+        "target_probe_rmse_dollars": 2619.101318359375,
+        "target_probe_rmse_log1p": 0.8225943446159363,
+        "target_probe_wape_percent": 34.78586196899414
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 4650.07373046875,
+        "target_probe_rmse_dollars": 6732.59814453125,
+        "target_probe_rmse_log1p": 1.518600344657898,
+        "target_probe_wape_percent": 100.01509857177734
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2826.771728515625,
+        "target_probe_rmse_dollars": 3918.799560546875,
+        "target_probe_rmse_log1p": 1.1114966869354248,
+        "target_probe_wape_percent": 60.79900360107422
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2452.4150390625,
+        "target_probe_rmse_dollars": 3473.675048828125,
+        "target_probe_rmse_log1p": 1.0480592250823975,
+        "target_probe_wape_percent": 52.74723434448242
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2192.732421875,
+        "target_probe_rmse_dollars": 3220.9091796875,
+        "target_probe_rmse_log1p": 0.9760838150978088,
+        "target_probe_wape_percent": 47.16190719604492
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed43_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2139.16796875,
+        "target_probe_rmse_dollars": 3123.82666015625,
+        "target_probe_rmse_log1p": 0.9633100032806396,
+        "target_probe_wape_percent": 46.00982666015625
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3477.430908203125,
+        "target_probe_rmse_dollars": 5148.22412109375,
+        "target_probe_rmse_log1p": 1.205987572669983,
+        "target_probe_wape_percent": 74.79357147216797
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2418.529296875,
+        "target_probe_rmse_dollars": 3513.064697265625,
+        "target_probe_rmse_log1p": 0.9998171925544739,
+        "target_probe_wape_percent": 52.018409729003906
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2005.224853515625,
+        "target_probe_rmse_dollars": 2943.313720703125,
+        "target_probe_rmse_log1p": 0.9052573442459106,
+        "target_probe_wape_percent": 43.128944396972656
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1812.9404296875,
+        "target_probe_rmse_dollars": 2761.791015625,
+        "target_probe_rmse_log1p": 0.8680688142776489,
+        "target_probe_wape_percent": 38.99323272705078
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1693.1182861328125,
+        "target_probe_rmse_dollars": 2650.28564453125,
+        "target_probe_rmse_log1p": 0.8518697619438171,
+        "target_probe_wape_percent": 36.41606521606445
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314202,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 43
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3090.96484375,
+        "target_probe_rmse_dollars": 4671.75390625,
+        "target_probe_rmse_log1p": 1.058699131011963,
+        "target_probe_wape_percent": 66.4813461303711
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2136.98876953125,
+        "target_probe_rmse_dollars": 3147.974853515625,
+        "target_probe_rmse_log1p": 0.9212998151779175,
+        "target_probe_wape_percent": 45.96295928955078
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1970.7322998046875,
+        "target_probe_rmse_dollars": 2990.365478515625,
+        "target_probe_rmse_log1p": 0.8826100826263428,
+        "target_probe_wape_percent": 42.38706588745117
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1751.8876953125,
+        "target_probe_rmse_dollars": 2776.30712890625,
+        "target_probe_rmse_log1p": 0.8474527597427368,
+        "target_probe_wape_percent": 37.68009567260742
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1655.625,
+        "target_probe_rmse_dollars": 2675.0439453125,
+        "target_probe_rmse_log1p": 0.8374245762825012,
+        "target_probe_wape_percent": 35.609649658203125
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3492.48486328125,
+        "target_probe_rmse_dollars": 4991.79736328125,
+        "target_probe_rmse_log1p": 1.2560933828353882,
+        "target_probe_wape_percent": 75.11734771728516
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2684.780517578125,
+        "target_probe_rmse_dollars": 3813.800048828125,
+        "target_probe_rmse_log1p": 1.0550153255462646,
+        "target_probe_wape_percent": 57.74501419067383
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2314.40283203125,
+        "target_probe_rmse_dollars": 3265.618408203125,
+        "target_probe_rmse_log1p": 1.00685715675354,
+        "target_probe_wape_percent": 49.77882766723633
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2108.805908203125,
+        "target_probe_rmse_dollars": 3097.973388671875,
+        "target_probe_rmse_log1p": 0.9656844735145569,
+        "target_probe_wape_percent": 45.35679244995117
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+      "condition": "dense_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2114.9150390625,
+        "target_probe_rmse_dollars": 3090.824951171875,
+        "target_probe_rmse_log1p": 0.9617263078689575,
+        "target_probe_wape_percent": 45.48819351196289
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 2854.63623046875,
+        "target_probe_rmse_dollars": 4246.57275390625,
+        "target_probe_rmse_log1p": 1.0415819883346558,
+        "target_probe_wape_percent": 61.398319244384766
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2178.315185546875,
+        "target_probe_rmse_dollars": 3233.276123046875,
+        "target_probe_rmse_log1p": 0.9336763024330139,
+        "target_probe_wape_percent": 46.85182189941406
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1970.67333984375,
+        "target_probe_rmse_dollars": 2988.166259765625,
+        "target_probe_rmse_log1p": 0.9041719436645508,
+        "target_probe_wape_percent": 42.38579559326172
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1778.2744140625,
+        "target_probe_rmse_dollars": 2774.060546875,
+        "target_probe_rmse_log1p": 0.8631843328475952,
+        "target_probe_wape_percent": 38.24763107299805
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "dense_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1692.300537109375,
+        "target_probe_rmse_dollars": 2689.31103515625,
+        "target_probe_rmse_log1p": 0.8411401510238647,
+        "target_probe_wape_percent": 36.39847946166992
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3131.866455078125,
+        "target_probe_rmse_dollars": 4783.18994140625,
+        "target_probe_rmse_log1p": 1.0862065553665161,
+        "target_probe_wape_percent": 67.36106872558594
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2166.84228515625,
+        "target_probe_rmse_dollars": 3197.764892578125,
+        "target_probe_rmse_log1p": 0.9513472318649292,
+        "target_probe_wape_percent": 46.60505676269531
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 1989.266357421875,
+        "target_probe_rmse_dollars": 2985.541748046875,
+        "target_probe_rmse_log1p": 0.9140313267707825,
+        "target_probe_wape_percent": 42.785701751708984
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1751.487548828125,
+        "target_probe_rmse_dollars": 2784.2275390625,
+        "target_probe_rmse_log1p": 0.8672780990600586,
+        "target_probe_wape_percent": 37.67149353027344
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_pretrained",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1654.700439453125,
+        "target_probe_rmse_dollars": 2666.17822265625,
+        "target_probe_rmse_log1p": 0.8486344814300537,
+        "target_probe_wape_percent": 35.58976364135742
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3827.276123046875,
+        "target_probe_rmse_dollars": 5595.19677734375,
+        "target_probe_rmse_log1p": 1.2573368549346924,
+        "target_probe_wape_percent": 82.31813049316406
+      },
+      "num_labels": 150,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2557.67431640625,
+        "target_probe_rmse_dollars": 3655.669677734375,
+        "target_probe_rmse_log1p": 1.0336296558380127,
+        "target_probe_wape_percent": 55.01118469238281
+      },
+      "num_labels": 750,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2321.81201171875,
+        "target_probe_rmse_dollars": 3288.47216796875,
+        "target_probe_rmse_log1p": 1.012315273284912,
+        "target_probe_wape_percent": 49.93818664550781
+      },
+      "num_labels": 1500,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 2110.392333984375,
+        "target_probe_rmse_dollars": 3096.080810546875,
+        "target_probe_rmse_log1p": 0.963808536529541,
+        "target_probe_wape_percent": 45.39091110229492
+      },
+      "num_labels": 3760,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed44_e4\\lpwm_rectified_laplace_cap32\\encoder.ckpt",
+      "condition": "sparse_shuffled",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 2108.931640625,
+        "target_probe_rmse_dollars": 3092.74755859375,
+        "target_probe_rmse_log1p": 0.9586625099182129,
+        "target_probe_wape_percent": 45.3594970703125
+      },
+      "num_labels": 15050,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.01,
+      "metrics": {
+        "target_probe_mae_dollars": 3081.84326171875,
+        "target_probe_rmse_dollars": 4577.400390625,
+        "target_probe_rmse_log1p": 1.0943663120269775,
+        "target_probe_wape_percent": 66.28514862060547
+      },
+      "num_labels": 150,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.05,
+      "metrics": {
+        "target_probe_mae_dollars": 2247.359375,
+        "target_probe_rmse_dollars": 3321.606689453125,
+        "target_probe_rmse_log1p": 0.9560450911521912,
+        "target_probe_wape_percent": 48.33684158325195
+      },
+      "num_labels": 750,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.1,
+      "metrics": {
+        "target_probe_mae_dollars": 2010.6678466796875,
+        "target_probe_rmse_dollars": 3010.404052734375,
+        "target_probe_rmse_log1p": 0.9158267974853516,
+        "target_probe_wape_percent": 43.246009826660156
+      },
+      "num_labels": 1500,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 0.25,
+      "metrics": {
+        "target_probe_mae_dollars": 1821.74462890625,
+        "target_probe_rmse_dollars": 2821.415283203125,
+        "target_probe_rmse_log1p": 0.8711503744125366,
+        "target_probe_wape_percent": 39.18260192871094
+      },
+      "num_labels": 3760,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    },
+    {
+      "condition": "sparse_random_encoder",
+      "label_fraction": 1.0,
+      "metrics": {
+        "target_probe_mae_dollars": 1711.2347412109375,
+        "target_probe_rmse_dollars": 2712.634521484375,
+        "target_probe_rmse_log1p": 0.8530641198158264,
+        "target_probe_wape_percent": 36.805721282958984
+      },
+      "num_labels": 15050,
+      "random_encoder_seed": 314203,
+      "representation_source": "patient_representation_pre_sae",
+      "seed": 44
+    }
+  ]
+}

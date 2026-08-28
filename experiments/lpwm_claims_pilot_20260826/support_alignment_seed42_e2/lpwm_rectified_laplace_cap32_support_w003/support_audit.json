@@ -1,0 +1,58 @@
+{
+  "recipe": "lpwm_rectified_laplace_cap32_support_w003",
+  "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\support_alignment_seed42_e2\\lpwm_rectified_laplace_cap32_support_w003\\encoder.ckpt",
+  "evaluation_split": "val",
+  "num_train_samples": 12000,
+  "num_val_samples": 3188,
+  "support": {
+    "prediction_active_fraction": 0.6756121588770388,
+    "target_active_fraction": 0.5641026897741531,
+    "prediction_dead_dimension_fraction": 0.03125,
+    "target_dead_dimension_fraction": 0.0,
+    "target_effective_active_dimensions": 114.34386470512199,
+    "prediction_target_support_jaccard_mean": 0.5663408896371929,
+    "prediction_target_support_jaccard_median": 0.57,
+    "prediction_target_mse": 0.17330965399742126
+  },
+  "temporal_support_code_jaccard_spearman": 0.4819049231802826,
+  "temporal_support_code_jaccard_pvalue": 0.0,
+  "num_temporal_pairs": 101880,
+  "probes": {
+    "magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8540153503417969,
+        "target_probe_mae_dollars": 1653.9813232421875,
+        "target_probe_rmse_dollars": 2698.4306640625,
+        "target_probe_wape_percent": 35.57429885864258
+      },
+      "ttnc": {
+        "accuracy": 0.4623588456712672,
+        "macro_f1": 0.19269633208901957
+      }
+    },
+    "support": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8744602203369141,
+        "target_probe_mae_dollars": 1721.8876953125,
+        "target_probe_rmse_dollars": 2770.40869140625,
+        "target_probe_wape_percent": 37.034847259521484
+      },
+      "ttnc": {
+        "accuracy": 0.39554579673776663,
+        "macro_f1": 0.17002249887787144
+      }
+    },
+    "support_plus_magnitude": {
+      "cost": {
+        "target_probe_rmse_log1p": 0.8509922027587891,
+        "target_probe_mae_dollars": 1667.4764404296875,
+        "target_probe_rmse_dollars": 2711.338623046875,
+        "target_probe_wape_percent": 35.86455535888672
+      },
+      "ttnc": {
+        "accuracy": 0.46079046424090336,
+        "macro_f1": 0.19841931801555884
+      }
+    }
+  }
+}

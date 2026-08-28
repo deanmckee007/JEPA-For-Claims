@@ -1,0 +1,1263 @@
+{
+  "aggregate": {
+    "0.01|decoder_hidden_mlp": {
+      "mae_dollars": {
+        "mean": 2190.31103515625,
+        "sample_std": 56.791395803565
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 28.424886067708332,
+        "sample_std": 25.797140246405693,
+        "wins": 1
+      },
+      "rmse_dollars": {
+        "mean": 3557.7513834635415,
+        "sample_std": 115.5952434150269
+      }
+    },
+    "0.01|direct_embedding_linear": {
+      "mae_dollars": {
+        "mean": 2353.7141927083335,
+        "sample_std": 345.4049940976275
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 191.82804361979166,
+        "sample_std": 380.6464513755278,
+        "wins": 1
+      },
+      "rmse_dollars": {
+        "mean": 3454.2445475260415,
+        "sample_std": 492.0763557763926
+      }
+    },
+    "0.01|direct_embedding_mlp": {
+      "mae_dollars": {
+        "mean": 2161.8861490885415,
+        "sample_std": 40.138667249571796
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 0.0,
+        "sample_std": 0.0,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3525.4676106770835,
+        "sample_std": 68.69937953770011
+      }
+    },
+    "0.01|oracle_claims_linear": {
+      "mae_dollars": {
+        "mean": 3881.7819010416665,
+        "sample_std": 536.3032415643194
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 1719.895751953125,
+        "sample_std": 557.0554327173016,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 5954.718424479167,
+        "sample_std": 713.7323614084411
+      }
+    },
+    "0.01|predicted_claims_linear": {
+      "mae_dollars": {
+        "mean": 4419.631591796875,
+        "sample_std": 1331.0621068282146
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 2257.7454427083335,
+        "sample_std": 1351.6148238665605,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 6612.47119140625,
+        "sample_std": 1567.2815127533106
+      }
+    },
+    "0.05|decoder_hidden_mlp": {
+      "mae_dollars": {
+        "mean": 2038.0167643229167,
+        "sample_std": 26.96412612818153
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 87.69051106770833,
+        "sample_std": 30.961300930162164,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3249.97119140625,
+        "sample_std": 38.94674067274753
+      }
+    },
+    "0.05|direct_embedding_linear": {
+      "mae_dollars": {
+        "mean": 1808.5836181640625,
+        "sample_std": 51.296762672699884
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": -141.74263509114584,
+        "sample_std": 50.53144516393105,
+        "wins": 3
+      },
+      "rmse_dollars": {
+        "mean": 2796.6475423177085,
+        "sample_std": 50.3261517794505
+      }
+    },
+    "0.05|direct_embedding_mlp": {
+      "mae_dollars": {
+        "mean": 1950.3262532552083,
+        "sample_std": 44.49382225937363
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 0.0,
+        "sample_std": 0.0,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3101.9308268229165,
+        "sample_std": 33.24520492426343
+      }
+    },
+    "0.05|oracle_claims_linear": {
+      "mae_dollars": {
+        "mean": 3080.3821614583335,
+        "sample_std": 119.64770365020976
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 1130.055908203125,
+        "sample_std": 94.6297839339174,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 5002.392252604167,
+        "sample_std": 202.2695962741213
+      }
+    },
+    "0.05|predicted_claims_linear": {
+      "mae_dollars": {
+        "mean": 2523.5823567708335,
+        "sample_std": 308.9613408509277
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 573.256103515625,
+        "sample_std": 296.37261380004173,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3915.5743815104165,
+        "sample_std": 544.1782713969521
+      }
+    },
+    "0.1|decoder_hidden_mlp": {
+      "mae_dollars": {
+        "mean": 1889.8295491536458,
+        "sample_std": 31.03037381864009
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 136.07979329427084,
+        "sample_std": 80.64615264729133,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3005.1923828125,
+        "sample_std": 102.33643696755767
+      }
+    },
+    "0.1|direct_embedding_linear": {
+      "mae_dollars": {
+        "mean": 1725.4324544270833,
+        "sample_std": 37.22848606050074
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": -28.317301432291668,
+        "sample_std": 79.04698045364381,
+        "wins": 1
+      },
+      "rmse_dollars": {
+        "mean": 2738.6708170572915,
+        "sample_std": 32.158012494138966
+      }
+    },
+    "0.1|direct_embedding_mlp": {
+      "mae_dollars": {
+        "mean": 1753.749755859375,
+        "sample_std": 56.162873221840925
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 0.0,
+        "sample_std": 0.0,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 2773.8287760416665,
+        "sample_std": 53.55461879496732
+      }
+    },
+    "0.1|oracle_claims_linear": {
+      "mae_dollars": {
+        "mean": 2611.1278483072915,
+        "sample_std": 82.01359458220126
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 857.3780924479166,
+        "sample_std": 31.184200620315004,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 4328.26708984375,
+        "sample_std": 157.033699727854
+      }
+    },
+    "0.1|predicted_claims_linear": {
+      "mae_dollars": {
+        "mean": 2005.2996419270833,
+        "sample_std": 79.72175732301959
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 251.54988606770834,
+        "sample_std": 92.54290655470896,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3090.6996256510415,
+        "sample_std": 179.09461869191264
+      }
+    },
+    "0.25|decoder_hidden_mlp": {
+      "mae_dollars": {
+        "mean": 1673.8458658854167,
+        "sample_std": 25.981792262623124
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 56.420817057291664,
+        "sample_std": 26.33103338340057,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 2692.0380045572915,
+        "sample_std": 9.617446394946887
+      }
+    },
+    "0.25|direct_embedding_linear": {
+      "mae_dollars": {
+        "mean": 1706.3788248697917,
+        "sample_std": 34.88276197345089
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 88.95377604166667,
+        "sample_std": 14.162195528359584,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 2741.5861002604165,
+        "sample_std": 22.772998494562025
+      }
+    },
+    "0.25|direct_embedding_mlp": {
+      "mae_dollars": {
+        "mean": 1617.425048828125,
+        "sample_std": 20.73843677503391
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 0.0,
+        "sample_std": 0.0,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 2655.7783203125,
+        "sample_std": 10.740515281221171
+      }
+    },
+    "0.25|oracle_claims_linear": {
+      "mae_dollars": {
+        "mean": 2309.4808756510415,
+        "sample_std": 144.1544699912163
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 692.0558268229166,
+        "sample_std": 129.13528778936282,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 3890.1241861979165,
+        "sample_std": 291.11616827283007
+      }
+    },
+    "0.25|predicted_claims_linear": {
+      "mae_dollars": {
+        "mean": 1777.16748046875,
+        "sample_std": 47.94594372645689
+      },
+      "num_runs": 3,
+      "paired_mae_delta_vs_direct_mlp": {
+        "mean": 159.742431640625,
+        "sample_std": 32.51667090566461,
+        "wins": 0
+      },
+      "rmse_dollars": {
+        "mean": 2807.1632486979165,
+        "sample_std": 63.556698890436515
+      }
+    }
+  },
+  "decoder_training": {
+    "first_loss": 2.608570131204896,
+    "last_loss": 1.3734261464264432,
+    "train_generation": {
+      "cpt_micro_average_precision": 0.3724204559612097,
+      "icd_micro_average_precision": 0.21556015364519618,
+      "ttnc_accuracy": 0.61735778841042
+    },
+    "validation_generation": {
+      "cpt_micro_average_precision": 0.3603611824162598,
+      "icd_micro_average_precision": 0.2098368729917304,
+      "ttnc_accuracy": 0.6151914626490897
+    }
+  },
+  "protocol": {
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\selected_lejepa_anycode_seed42_e20\\encoder.ckpt",
+    "cost_label_fractions": [
+      0.01,
+      0.05,
+      0.1,
+      0.25
+    ],
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "decoder_epochs": 20,
+    "decoder_seed": 42,
+    "evaluation_split": "frozen_validation",
+    "future_claim_targets_exclude_cost": true,
+    "generation_label_fraction": 1.0,
+    "probe_epochs": 20,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2137.462890625,
+        "target_probe_rmse_dollars": 3446.543212890625,
+        "target_probe_rmse_log1p": 1.0049879550933838,
+        "target_probe_wape_percent": 45.948299407958984
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 42,
+      "training_first": 0.5393700432979455,
+      "training_last": 0.020730952748050122
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2705.716796875,
+        "target_probe_rmse_dollars": 3910.801513671875,
+        "target_probe_rmse_log1p": 1.0573112964630127,
+        "target_probe_wape_percent": 58.163856506347656
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 42,
+      "training_first": 0.9463028038962412,
+      "training_last": 0.3815647489943747
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2136.193115234375,
+        "target_probe_rmse_dollars": 3434.5244140625,
+        "target_probe_rmse_log1p": 1.0333269834518433,
+        "target_probe_wape_percent": 45.92100524902344
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 42,
+      "training_first": 0.42035079709554124,
+      "training_last": 0.016521917482427623
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 5955.90185546875,
+        "target_probe_rmse_dollars": 8421.5341796875,
+        "target_probe_rmse_log1p": 2.401646375656128,
+        "target_probe_wape_percent": 128.03195190429688
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 42,
+      "training_first": 0.5854196745460316,
+      "training_last": 0.012189033283394272
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3582.62890625,
+        "target_probe_rmse_dollars": 5570.9990234375,
+        "target_probe_rmse_log1p": 18.272918701171875,
+        "target_probe_wape_percent": 77.01453399658203
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 42,
+      "training_first": 0.6067232004666733,
+      "training_last": 0.14417543527433427
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2139.984130859375,
+        "target_probe_rmse_dollars": 3571.84423828125,
+        "target_probe_rmse_log1p": 0.9890542030334473,
+        "target_probe_wape_percent": 46.002498626708984
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 43,
+      "training_first": 0.4771024885319047,
+      "training_last": 0.011740443217804876
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2340.117431640625,
+        "target_probe_rmse_dollars": 3518.892578125,
+        "target_probe_rmse_log1p": 0.9692167639732361,
+        "target_probe_wape_percent": 50.304691314697266
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 43,
+      "training_first": 0.890530148805198,
+      "training_last": 0.38399409793191036
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2185.296630859375,
+        "target_probe_rmse_dollars": 3574.939697265625,
+        "target_probe_rmse_log1p": 1.029897928237915,
+        "target_probe_wape_percent": 46.9765625
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 43,
+      "training_first": 0.3546164442422026,
+      "training_last": 0.007622035417579494
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3611.103515625,
+        "target_probe_rmse_dollars": 5750.8310546875,
+        "target_probe_rmse_log1p": 1.34940767288208,
+        "target_probe_wape_percent": 77.62663269042969
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 43,
+      "training_first": 0.3591004327192145,
+      "training_last": 0.0014029431504086923
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 4500.9345703125,
+        "target_probe_rmse_dollars": 6778.2294921875,
+        "target_probe_rmse_log1p": 15.665270805358887,
+        "target_probe_wape_percent": 96.75503540039062
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 43,
+      "training_first": 0.5875430753675558,
+      "training_last": 0.267946556968204
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2208.21142578125,
+        "target_probe_rmse_dollars": 3558.015380859375,
+        "target_probe_rmse_log1p": 0.9524794816970825,
+        "target_probe_wape_percent": 47.46915054321289
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 44,
+      "training_first": 0.5088668788893748,
+      "training_last": 0.018812865003059478
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2015.308349609375,
+        "target_probe_rmse_dollars": 2933.03955078125,
+        "target_probe_rmse_log1p": 0.9182145595550537,
+        "target_probe_wape_percent": 43.322383880615234
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 44,
+      "training_first": 0.8894883970082816,
+      "training_last": 0.38394966569997496
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2249.443359375,
+        "target_probe_rmse_dollars": 3663.7900390625,
+        "target_probe_rmse_log1p": 0.9804582595825195,
+        "target_probe_wape_percent": 48.35550308227539
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 44,
+      "training_first": 0.3983659271971654,
+      "training_last": 0.014379313594456447
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3691.889404296875,
+        "target_probe_rmse_dollars": 5665.04833984375,
+        "target_probe_rmse_log1p": 1.2293241024017334,
+        "target_probe_wape_percent": 79.36326599121094
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 44,
+      "training_first": 0.3932730146383835,
+      "training_last": 0.03071615731312057
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3561.7822265625,
+        "target_probe_rmse_dollars": 5514.9267578125,
+        "target_probe_rmse_log1p": 10.745920181274414,
+        "target_probe_wape_percent": 76.56639099121094
+      },
+      "cost_label_fraction": 0.01,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 44,
+      "training_first": 0.510439802024324,
+      "training_last": 0.1631403572983661
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1936.0113525390625,
+        "target_probe_rmse_dollars": 3133.1259765625,
+        "target_probe_rmse_log1p": 0.9396100640296936,
+        "target_probe_wape_percent": 41.61776351928711
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 42,
+      "training_first": 0.8124884094222117,
+      "training_last": 0.10030414833355758
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1851.924072265625,
+        "target_probe_rmse_dollars": 2846.088623046875,
+        "target_probe_rmse_log1p": 0.8765190839767456,
+        "target_probe_wape_percent": 39.81016540527344
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 42,
+      "training_first": 0.9776615929805627,
+      "training_last": 0.7237532290361696
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2011.2137451171875,
+        "target_probe_rmse_dollars": 3208.205322265625,
+        "target_probe_rmse_log1p": 0.9821668863296509,
+        "target_probe_wape_percent": 43.2343635559082
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 42,
+      "training_first": 0.735475955878274,
+      "training_last": 0.06664135471238929
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2809.9384765625,
+        "target_probe_rmse_dollars": 4459.61962890625,
+        "target_probe_rmse_log1p": 1.1354784965515137,
+        "target_probe_wape_percent": 60.40427017211914
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 42,
+      "training_first": 0.7278337948403116,
+      "training_last": 0.24278744474305944
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3149.954833984375,
+        "target_probe_rmse_dollars": 5138.1376953125,
+        "target_probe_rmse_log1p": 18.85452651977539,
+        "target_probe_wape_percent": 67.71348571777344
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 42,
+      "training_first": 0.7600328619197264,
+      "training_last": 0.31145086455143106
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2000.215576171875,
+        "target_probe_rmse_dollars": 3105.708251953125,
+        "target_probe_rmse_log1p": 0.9973530769348145,
+        "target_probe_wape_percent": 42.99794006347656
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 43,
+      "training_first": 0.8186743330147307,
+      "training_last": 0.19311809729216461
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1821.8785400390625,
+        "target_probe_rmse_dollars": 2798.373291015625,
+        "target_probe_rmse_log1p": 0.8847478032112122,
+        "target_probe_wape_percent": 39.16429138183594
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 43,
+      "training_first": 1.0217523958723425,
+      "training_last": 0.7602604910478754
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2065.13916015625,
+        "target_probe_rmse_dollars": 3256.41259765625,
+        "target_probe_rmse_log1p": 1.0100030899047852,
+        "target_probe_wape_percent": 44.39358139038086
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 43,
+      "training_first": 0.7674475559743784,
+      "training_last": 0.15519964505555267
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2564.67919921875,
+        "target_probe_rmse_dollars": 3915.84033203125,
+        "target_probe_rmse_log1p": 1.0926172733306885,
+        "target_probe_wape_percent": 55.13201904296875
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 43,
+      "training_first": 0.752064861483493,
+      "training_last": 0.3374394860308049
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 3148.965576171875,
+        "target_probe_rmse_dollars": 5099.11865234375,
+        "target_probe_rmse_log1p": 17.309595108032227,
+        "target_probe_wape_percent": 67.69221496582031
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 43,
+      "training_first": 0.7715134489334236,
+      "training_last": 0.3823455784280421
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1914.7518310546875,
+        "target_probe_rmse_dollars": 3066.958251953125,
+        "target_probe_rmse_log1p": 0.9186928272247314,
+        "target_probe_wape_percent": 41.1607551574707
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 44,
+      "training_first": 0.7483589891660012,
+      "training_last": 0.1511645631517394
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1751.9482421875,
+        "target_probe_rmse_dollars": 2745.480712890625,
+        "target_probe_rmse_log1p": 0.875781774520874,
+        "target_probe_wape_percent": 37.6610221862793
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 44,
+      "training_first": 0.9007177408468925,
+      "training_last": 0.6820062939393319
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2037.6973876953125,
+        "target_probe_rmse_dollars": 3285.295654296875,
+        "target_probe_rmse_log1p": 0.9378947019577026,
+        "target_probe_wape_percent": 43.803672790527344
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 44,
+      "training_first": 0.6772798890784636,
+      "training_last": 0.08741269424810248
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2196.12939453125,
+        "target_probe_rmse_dollars": 3371.26318359375,
+        "target_probe_rmse_log1p": 0.9691072106361389,
+        "target_probe_wape_percent": 47.20942687988281
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 44,
+      "training_first": 0.665135038101067,
+      "training_last": 0.25673273079476117
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2942.22607421875,
+        "target_probe_rmse_dollars": 4769.92041015625,
+        "target_probe_rmse_log1p": 12.452032089233398,
+        "target_probe_wape_percent": 63.24801254272461
+      },
+      "cost_label_fraction": 0.05,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 44,
+      "training_first": 0.7107233268729711,
+      "training_last": 0.4580589896541531
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1753.68115234375,
+        "target_probe_rmse_dollars": 2811.38330078125,
+        "target_probe_rmse_log1p": 0.8978680968284607,
+        "target_probe_wape_percent": 37.69827651977539
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 42,
+      "training_first": 0.7932544224343058,
+      "training_last": 0.2011391240156303
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1764.6885986328125,
+        "target_probe_rmse_dollars": 2768.98681640625,
+        "target_probe_rmse_log1p": 0.8621697425842285,
+        "target_probe_wape_percent": 37.93490219116211
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 42,
+      "training_first": 0.9385233708357407,
+      "training_last": 0.7123119159270141
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1863.7423095703125,
+        "target_probe_rmse_dollars": 2978.1640625,
+        "target_probe_rmse_log1p": 0.9420385360717773,
+        "target_probe_wape_percent": 40.0642204284668
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 42,
+      "training_first": 0.7564103138648858,
+      "training_last": 0.16236763220217268
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2096.829345703125,
+        "target_probe_rmse_dollars": 3297.476806640625,
+        "target_probe_rmse_log1p": 0.9313525557518005,
+        "target_probe_wape_percent": 45.07481002807617
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 42,
+      "training_first": 0.7287822931499804,
+      "training_last": 0.41768960099099045
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2635.166015625,
+        "target_probe_rmse_dollars": 4451.869140625,
+        "target_probe_rmse_log1p": 16.985883712768555,
+        "target_probe_wape_percent": 56.64725112915039
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 42,
+      "training_first": 0.7903266008627616,
+      "training_last": 0.4211118837534371
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1809.9468994140625,
+        "target_probe_rmse_dollars": 2797.599609375,
+        "target_probe_rmse_log1p": 0.9358963370323181,
+        "target_probe_wape_percent": 38.907798767089844
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 43,
+      "training_first": 0.8182890470755302,
+      "training_last": 0.274806358551575
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1690.6328125,
+        "target_probe_rmse_dollars": 2704.94287109375,
+        "target_probe_rmse_log1p": 0.8647737503051758,
+        "target_probe_wape_percent": 36.34294509887695
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 43,
+      "training_first": 1.0105569099975844,
+      "training_last": 0.7550851268283392
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1881.6016845703125,
+        "target_probe_rmse_dollars": 2919.0830078125,
+        "target_probe_rmse_log1p": 0.9495569467544556,
+        "target_probe_wape_percent": 40.44813537597656
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 43,
+      "training_first": 0.7907355104462576,
+      "training_last": 0.20444161268108982
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1968.037353515625,
+        "target_probe_rmse_dollars": 2984.61279296875,
+        "target_probe_rmse_log1p": 0.9403981566429138,
+        "target_probe_wape_percent": 42.306217193603516
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 43,
+      "training_first": 0.7798534394320795,
+      "training_last": 0.48465037699473107
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2678.436279296875,
+        "target_probe_rmse_dollars": 4381.36376953125,
+        "target_probe_rmse_log1p": 16.28891944885254,
+        "target_probe_wape_percent": 57.577415466308594
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 43,
+      "training_first": 0.7929691732940027,
+      "training_last": 0.49808017530683746
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1697.6212158203125,
+        "target_probe_rmse_dollars": 2712.50341796875,
+        "target_probe_rmse_log1p": 0.8924800157546997,
+        "target_probe_wape_percent": 36.49317169189453
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 44,
+      "training_first": 0.8059591671167794,
+      "training_last": 0.3015879372418937
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1720.9759521484375,
+        "target_probe_rmse_dollars": 2742.082763671875,
+        "target_probe_rmse_log1p": 0.868114173412323,
+        "target_probe_wape_percent": 36.99522399902344
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 44,
+      "training_first": 0.9139861373578088,
+      "training_last": 0.7592775836839514
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1924.1446533203125,
+        "target_probe_rmse_dollars": 3118.330078125,
+        "target_probe_rmse_log1p": 0.9384729862213135,
+        "target_probe_wape_percent": 41.3626708984375
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 44,
+      "training_first": 0.773253447423547,
+      "training_last": 0.20446496090646518
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1951.0322265625,
+        "target_probe_rmse_dollars": 2990.00927734375,
+        "target_probe_rmse_log1p": 0.913034975528717,
+        "target_probe_wape_percent": 41.9406623840332
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 44,
+      "training_first": 0.763918166443453,
+      "training_last": 0.4800413160000817
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2519.78125,
+        "target_probe_rmse_dollars": 4151.568359375,
+        "target_probe_rmse_log1p": 12.673407554626465,
+        "target_probe_wape_percent": 54.16686248779297
+      },
+      "cost_label_fraction": 0.1,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 44,
+      "training_first": 0.8121814823756783,
+      "training_last": 0.5847614599486529
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1641.196533203125,
+        "target_probe_rmse_dollars": 2667.720947265625,
+        "target_probe_rmse_log1p": 0.8723956942558289,
+        "target_probe_wape_percent": 35.28023147583008
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 42,
+      "training_first": 0.8337990641593933,
+      "training_last": 0.4549485015667091
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1746.220703125,
+        "target_probe_rmse_dollars": 2754.0361328125,
+        "target_probe_rmse_log1p": 0.8611370921134949,
+        "target_probe_wape_percent": 37.537899017333984
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 42,
+      "training_first": 0.9615555203567117,
+      "training_last": 0.7883376671096026
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1688.57421875,
+        "target_probe_rmse_dollars": 2702.264892578125,
+        "target_probe_rmse_log1p": 0.9065954089164734,
+        "target_probe_wape_percent": 36.2986946105957
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 42,
+      "training_first": 0.8179193295664706,
+      "training_last": 0.37130884523108854
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1826.9840087890625,
+        "target_probe_rmse_dollars": 2879.64599609375,
+        "target_probe_rmse_log1p": 0.8798660635948181,
+        "target_probe_wape_percent": 39.27404022216797
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 42,
+      "training_first": 0.819281373488701,
+      "training_last": 0.6368189393463781
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2447.900146484375,
+        "target_probe_rmse_dollars": 4177.60595703125,
+        "target_probe_rmse_log1p": 16.821081161499023,
+        "target_probe_wape_percent": 52.62165451049805
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 42,
+      "training_first": 0.9261825756501343,
+      "training_last": 0.6143185077077251
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1603.0352783203125,
+        "target_probe_rmse_dollars": 2646.91064453125,
+        "target_probe_rmse_log1p": 0.8824360966682434,
+        "target_probe_wape_percent": 34.45989227294922
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 43,
+      "training_first": 0.8391142613806967,
+      "training_last": 0.5426767296710256
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1681.3319091796875,
+        "target_probe_rmse_dollars": 2715.30224609375,
+        "target_probe_rmse_log1p": 0.862296462059021,
+        "target_probe_wape_percent": 36.143009185791016
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 43,
+      "training_first": 1.0007212586322074,
+      "training_last": 0.8123919938580465
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1689.1170654296875,
+        "target_probe_rmse_dollars": 2690.67333984375,
+        "target_probe_rmse_log1p": 0.9008879661560059,
+        "target_probe_wape_percent": 36.31036376953125
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 43,
+      "training_first": 0.8252362199759079,
+      "training_last": 0.4342607161251165
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1773.1768798828125,
+        "target_probe_rmse_dollars": 2780.87890625,
+        "target_probe_rmse_log1p": 0.8831902146339417,
+        "target_probe_wape_percent": 38.117366790771484
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 43,
+      "training_first": 0.8356142523935286,
+      "training_last": 0.678373956074149
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2320.33740234375,
+        "target_probe_rmse_dollars": 3897.26171875,
+        "target_probe_rmse_log1p": 16.913637161254883,
+        "target_probe_wape_percent": 49.87948989868164
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 43,
+      "training_first": 0.8757524369126659,
+      "training_last": 0.6322961765325675
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1608.0433349609375,
+        "target_probe_rmse_dollars": 2652.703369140625,
+        "target_probe_rmse_log1p": 0.8551150560379028,
+        "target_probe_wape_percent": 34.56754684448242
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": false,
+      "pathway": "direct_embedding_mlp",
+      "seed": 44,
+      "training_first": 0.8241900311688245,
+      "training_last": 0.4839565460964785
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1691.5838623046875,
+        "target_probe_rmse_dollars": 2755.419921875,
+        "target_probe_rmse_log1p": 0.8603066205978394,
+        "target_probe_wape_percent": 36.3633918762207
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 128,
+      "linear_cost_head": true,
+      "pathway": "direct_embedding_linear",
+      "seed": 44,
+      "training_first": 0.9120636097455429,
+      "training_last": 0.7448372613575499
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1643.8463134765625,
+        "target_probe_rmse_dollars": 2683.17578125,
+        "target_probe_rmse_log1p": 0.8732705116271973,
+        "target_probe_wape_percent": 35.33719253540039
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 256,
+      "linear_cost_head": false,
+      "pathway": "decoder_hidden_mlp",
+      "seed": 44,
+      "training_first": 0.8076310667951229,
+      "training_last": 0.405542888883817
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 1731.341552734375,
+        "target_probe_rmse_dollars": 2760.96484375,
+        "target_probe_rmse_log1p": 0.8663619160652161,
+        "target_probe_wape_percent": 37.21804428100586
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "predicted_claims_linear",
+      "seed": 44,
+      "training_first": 0.8100152116710857,
+      "training_last": 0.6082017770258047
+    },
+    {
+      "cost": {
+        "target_probe_mae_dollars": 2160.205078125,
+        "target_probe_rmse_dollars": 3595.5048828125,
+        "target_probe_rmse_log1p": 13.060481071472168,
+        "target_probe_wape_percent": 46.43717575073242
+      },
+      "cost_label_fraction": 0.25,
+      "feature_dimension": 2945,
+      "linear_cost_head": true,
+      "pathway": "oracle_claims_linear",
+      "seed": 44,
+      "training_first": 0.8952516377982447,
+      "training_last": 0.5846799556481637
+    }
+  ]
+}

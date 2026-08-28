@@ -1,0 +1,75 @@
+{
+  "add_remove": true,
+  "condition": "pretrained",
+  "copy_residual": false,
+  "cost": {
+    "target_probe_mae_dollars": 1680.141845703125,
+    "target_probe_rmse_dollars": 2694.61962890625,
+    "target_probe_rmse_log1p": 0.8492335081100464,
+    "target_probe_wape_percent": 36.11742401123047
+  },
+  "event_ranking_weight": 0.1,
+  "generation": {
+    "changes": {
+      "cpt": {
+        "add": {
+          "average_precision": 0.09957299475836198,
+          "f1_at_0_5": 0.03501103201365472,
+          "prevalence": 0.00025532464496791363
+        },
+        "remove": {
+          "average_precision": 0.863854545971284,
+          "f1_at_0_5": 0.7768873892872206,
+          "prevalence": 0.4749063551425934
+        }
+      },
+      "icd": {
+        "add": {
+          "average_precision": 0.035314230792442475,
+          "f1_at_0_5": 0.04713922282635806,
+          "prevalence": 0.0006082055042497814
+        },
+        "remove": {
+          "average_precision": 0.5843988529861434,
+          "f1_at_0_5": 0.5762280478493256,
+          "prevalence": 0.2764184772968292
+        }
+      }
+    },
+    "cpt": {
+      "binary_nll": 0.022024739533662796,
+      "cardinality_mae": 3.316070318222046,
+      "exact_set_match": 0.01349654739485248,
+      "mean_set_jaccard": 0.09279611195807053,
+      "micro_average_precision": 0.16294913562894606,
+      "micro_f1": 0.1813013656306,
+      "micro_precision": 0.10978073785826536,
+      "micro_recall": 0.5202127659574468,
+      "supported_class_count": 110,
+      "supported_macro_average_precision": 0.11521553784226105
+    },
+    "icd": {
+      "binary_nll": 0.03363703936338425,
+      "cardinality_mae": 1.7514123916625977,
+      "exact_set_match": 0.17890772128060264,
+      "mean_set_jaccard": 0.3752552088004065,
+      "micro_average_precision": 0.44003005230592257,
+      "micro_f1": 0.4418604651162791,
+      "micro_precision": 0.35204042569481664,
+      "micro_recall": 0.5932137788672429,
+      "supported_class_count": 281,
+      "supported_macro_average_precision": 0.42918629074092957
+    },
+    "ttnc": {
+      "accuracy": 0.5910232266164469,
+      "macro_f1": 0.1734296555767425,
+      "negative_log_likelihood": 1.3897877931594849
+    }
+  },
+  "label_fraction": 1.0,
+  "num_labels": 15048,
+  "seed": 42,
+  "source": "next_claim_prediction",
+  "training_loss_first": 2.16591805926824,
+  "training_loss_last": 1.7284513792749179
+}

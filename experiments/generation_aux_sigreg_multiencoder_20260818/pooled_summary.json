@@ -1,0 +1,32 @@
+{
+  "protocol": {
+    "encoder_recipe": "lejepa_anycode_l1w01_e4",
+    "encoder_seeds": [42, 43, 44],
+    "downstream_seeds": [42, 43, 44],
+    "cost_label_fraction": 0.1,
+    "consistency_weight": 300.0,
+    "sigreg_weight": 0.2,
+    "evaluation_split": "frozen_validation",
+    "test_accessed": false
+  },
+  "aggregate": {
+    "sigreg_0.2": {
+      "num_runs": 9,
+      "mae_dollars_mean": 1707.7015923394097,
+      "mae_dollars_sample_std": 43.192033115585446,
+      "rmse_dollars_mean": 2715.7778049045137,
+      "rmse_dollars_sample_std": 46.34702519035729,
+      "hidden_feature_std_mean": 0.9378679659631517,
+      "hidden_feature_std_sample_std": 0.010465703855005648
+    },
+    "consistency_300_sigreg_0.2": {
+      "num_runs": 9,
+      "mae_dollars_mean": 1680.568359375,
+      "mae_dollars_sample_std": 28.94608404531525,
+      "rmse_dollars_mean": 2696.6078830295137,
+      "rmse_dollars_sample_std": 41.30073098610039,
+      "hidden_feature_std_mean": 0.4434676104121738,
+      "hidden_feature_std_sample_std": 0.0039843568796322825
+    }
+  }
+}

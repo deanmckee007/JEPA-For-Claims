@@ -58,7 +58,6 @@ def build_smoke_config(data_path: str, recipe_name: str, recipe_overrides: dict 
     config.use_plotting = False
     config.use_lr_find = False
     config.use_predictor_head = False
-    config.use_level1 = False
     config.use_token_prediction_head = False
     config.use_diffusion = False
     config.use_generative_save = False
@@ -143,6 +142,16 @@ def run_recipe(
     if config.use_level2_dense_prediction:
         result["dense_observed_loss"] = float(outputs["dense_observed_loss"].detach().cpu())
         result["dense_next_loss"] = float(outputs["dense_next_loss"].detach().cpu())
+    if config.use_levjepa_patient_views:
+        result["levjepa_invariance_loss"] = float(
+            outputs["levjepa_invariance_loss"].detach().cpu()
+        )
+        result["levjepa_sigreg_raw"] = float(
+            outputs["levjepa_sigreg_raw"].detach().cpu()
+        )
+        result["levjepa_retained_claim_fraction"] = float(
+            outputs["levjepa_retained_claim_fraction"].detach().cpu()
+        )
 
     return result
 
@@ -195,6 +204,14 @@ def main() -> None:
         (
             "sigreg_dense",
             {},
+        ),
+        (
+            "levjepa_patient_views",
+            {
+                "sigreg_num_slices": 32,
+                "levjepa_projector_hidden_dim": 64,
+                "levjepa_projector_output_dim": 32,
+            },
         ),
     ]
 

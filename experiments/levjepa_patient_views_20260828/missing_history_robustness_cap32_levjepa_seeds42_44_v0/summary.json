@@ -1,0 +1,2292 @@
+{
+  "aggregate": {
+    "cap32_boosted": {
+      "0.0": {
+        "context_retention_mean": 1.0,
+        "delta_from_no_drop": {
+          "average_precision": 0.0,
+          "binary_ndcg_at_budget": 0.0,
+          "cost_capture_at_budget": 0.0,
+          "cost_lift_at_budget": 0.0,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.0,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.12698563879540173,
+            "sample_std": 0.024082469353722644
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.20247537595272405,
+            "sample_std": 0.024878801880281486
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.032754592302690504,
+            "sample_std": 0.00014112898949385845
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.175450838770361,
+            "sample_std": 0.009373317052217011
+          },
+          "lift_at_budget": {
+            "mean": 12.453125,
+            "sample_std": 0.0
+          },
+          "precision_at_budget": {
+            "mean": 0.1875,
+            "sample_std": 0.0
+          },
+          "recall_at_budget": {
+            "mean": 0.1875,
+            "sample_std": 0.0
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.13888888888888892,
+            "sample_std": 0.012028130608117209
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.17543859649122806,
+            "sample_std": 0.0151934281365691
+          }
+        },
+        "num_runs": 3
+      },
+      "0.1": {
+        "context_retention_mean": 0.9030121537758967,
+        "delta_from_no_drop": {
+          "average_precision": -0.005438616413645139,
+          "binary_ndcg_at_budget": -0.003787813883165847,
+          "cost_capture_at_budget": -0.0033220644986554845,
+          "cost_lift_at_budget": -0.22064045045236846,
+          "lift_at_budget": -1.3836805555555554,
+          "precision_at_budget": -0.020833333333333343,
+          "recall_at_budget": -0.020833333333333343,
+          "threshold_precision_at_budget": -0.006944444444444475,
+          "threshold_recall_at_budget": -0.008771929824561403
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.12154702238175659,
+            "sample_std": 0.009373595127795065
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.1986875620695582,
+            "sample_std": 0.026613925526538667
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02943252780403502,
+            "sample_std": 0.0019903999445528616
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.9548103883179924,
+            "sample_std": 0.13219572965071918
+          },
+          "lift_at_budget": {
+            "mean": 11.069444444444445,
+            "sample_std": 2.3966050236673526
+          },
+          "precision_at_budget": {
+            "mean": 0.16666666666666666,
+            "sample_std": 0.036084391824351615
+          },
+          "recall_at_budget": {
+            "mean": 0.16666666666666666,
+            "sample_std": 0.036084391824351615
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.13194444444444445,
+            "sample_std": 0.043368041655544434
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.16666666666666666,
+            "sample_std": 0.05478068419647718
+          }
+        },
+        "num_runs": 3
+      },
+      "0.3": {
+        "context_retention_mean": 0.7109575816078898,
+        "delta_from_no_drop": {
+          "average_precision": -0.018426689529657397,
+          "binary_ndcg_at_budget": -0.030004378268002563,
+          "cost_capture_at_budget": -0.004206785404149847,
+          "cost_lift_at_budget": -0.2794006639256188,
+          "lift_at_budget": -2.7673611111111107,
+          "precision_at_budget": -0.04166666666666666,
+          "recall_at_budget": -0.04166666666666666,
+          "threshold_precision_at_budget": -0.03472222222222225,
+          "threshold_recall_at_budget": -0.043859649122807015
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.10855894926574433,
+            "sample_std": 0.011707881263949671
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.1724709976847215,
+            "sample_std": 0.02604293393841717
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.028547806898540657,
+            "sample_std": 0.0010137659378354406
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.896050174844742,
+            "sample_std": 0.06733095437123725
+          },
+          "lift_at_budget": {
+            "mean": 9.68576388888889,
+            "sample_std": 0.0
+          },
+          "precision_at_budget": {
+            "mean": 0.14583333333333334,
+            "sample_std": 0.0
+          },
+          "recall_at_budget": {
+            "mean": 0.14583333333333334,
+            "sample_std": 0.0
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.10416666666666667,
+            "sample_std": 0.020833333333333336
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.13157894736842105,
+            "sample_std": 0.02631578947368421
+          }
+        },
+        "num_runs": 3
+      },
+      "0.5": {
+        "context_retention_mean": 0.5156641095858511,
+        "delta_from_no_drop": {
+          "average_precision": -0.021180403307342305,
+          "binary_ndcg_at_budget": -0.027144992864048062,
+          "cost_capture_at_budget": -0.003587222050367999,
+          "cost_lift_at_budget": -0.23825133117860764,
+          "lift_at_budget": -0.46122685185185297,
+          "precision_at_budget": -0.0069444444444444475,
+          "recall_at_budget": -0.0069444444444444475,
+          "threshold_precision_at_budget": -5.551115123125783e-17,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.10580523548805942,
+            "sample_std": 0.016682015778663278
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.175330383088676,
+            "sample_std": 0.04151988527890918
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.029167370252322505,
+            "sample_std": 0.000961216911299547
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.9371995075917532,
+            "sample_std": 0.06384082319214493
+          },
+          "lift_at_budget": {
+            "mean": 11.991898148148147,
+            "sample_std": 2.8803607666224087
+          },
+          "precision_at_budget": {
+            "mean": 0.18055555555555555,
+            "sample_std": 0.04336804165554442
+          },
+          "recall_at_budget": {
+            "mean": 0.18055555555555555,
+            "sample_std": 0.04336804165554442
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.13888888888888887,
+            "sample_std": 0.0240562612162344
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.17543859649122806,
+            "sample_std": 0.0303868562731382
+          }
+        },
+        "num_runs": 3
+      },
+      "0.7": {
+        "context_retention_mean": 0.32329688320653377,
+        "delta_from_no_drop": {
+          "average_precision": -0.026129778991116695,
+          "binary_ndcg_at_budget": -0.031455292607044855,
+          "cost_capture_at_budget": -0.0031304940606952346,
+          "cost_lift_at_budget": -0.2079169805311749,
+          "lift_at_budget": -1.8449074074074066,
+          "precision_at_budget": -0.027777777777777762,
+          "recall_at_budget": -0.027777777777777762,
+          "threshold_precision_at_budget": 0.00694444444444442,
+          "threshold_recall_at_budget": 0.008771929824561403
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.10085585980428503,
+            "sample_std": 0.0034718220597368637
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.1710200833456792,
+            "sample_std": 0.009612124165185858
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02962409824199527,
+            "sample_std": 0.0026261894455856696
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.967533858239186,
+            "sample_std": 0.17442274901098145
+          },
+          "lift_at_budget": {
+            "mean": 10.608217592592593,
+            "sample_std": 1.5977366824449017
+          },
+          "precision_at_budget": {
+            "mean": 0.15972222222222224,
+            "sample_std": 0.0240562612162344
+          },
+          "recall_at_budget": {
+            "mean": 0.15972222222222224,
+            "sample_std": 0.0240562612162344
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.14583333333333334,
+            "sample_std": 0.036084391824351615
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.18421052631578946,
+            "sample_std": 0.045580284409707295
+          }
+        },
+        "num_runs": 3
+      }
+    },
+    "cap32_logistic": {
+      "0.0": {
+        "context_retention_mean": 1.0,
+        "delta_from_no_drop": {
+          "average_precision": 0.0,
+          "binary_ndcg_at_budget": 0.0,
+          "cost_capture_at_budget": 0.0,
+          "cost_lift_at_budget": 0.0,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.0,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.07779140727176835,
+            "sample_std": 0.012494831616938071
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.10293999219550731,
+            "sample_std": 0.07310813584356704
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.025925482996391275,
+            "sample_std": 0.0013713963314958277
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.721884162343654,
+            "sample_std": 0.09108357301684784
+          },
+          "lift_at_budget": {
+            "mean": 6.4571759259259265,
+            "sample_std": 4.227213922314589
+          },
+          "precision_at_budget": {
+            "mean": 0.09722222222222221,
+            "sample_std": 0.06364688465216445
+          },
+          "recall_at_budget": {
+            "mean": 0.09722222222222221,
+            "sample_std": 0.06364688465216445
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.06944444444444443,
+            "sample_std": 0.043368041655544434
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.08771929824561403,
+            "sample_std": 0.05478068419647717
+          }
+        },
+        "num_runs": 3
+      },
+      "0.1": {
+        "context_retention_mean": 0.9030121537758967,
+        "delta_from_no_drop": {
+          "average_precision": 0.0004444871176612908,
+          "binary_ndcg_at_budget": 0.027979051776973685,
+          "cost_capture_at_budget": -0.0003314393151209148,
+          "cost_lift_at_budget": -0.022013094512614018,
+          "lift_at_budget": 1.8449074074074074,
+          "precision_at_budget": 0.02777777777777779,
+          "recall_at_budget": 0.02777777777777779,
+          "threshold_precision_at_budget": 0.006944444444444461,
+          "threshold_recall_at_budget": 0.008771929824561417
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.07823589438942964,
+            "sample_std": 0.008253204557341817
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.130919043972481,
+            "sample_std": 0.04112820169601117
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02559404368127036,
+            "sample_std": 0.001138769643922857
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.69987106783104,
+            "sample_std": 0.07563328385054306
+          },
+          "lift_at_budget": {
+            "mean": 8.302083333333334,
+            "sample_std": 2.767361111111111
+          },
+          "precision_at_budget": {
+            "mean": 0.125,
+            "sample_std": 0.041666666666666664
+          },
+          "recall_at_budget": {
+            "mean": 0.125,
+            "sample_std": 0.041666666666666664
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.0763888888888889,
+            "sample_std": 0.02405626121623441
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.09649122807017545,
+            "sample_std": 0.030386856273138196
+          }
+        },
+        "num_runs": 3
+      },
+      "0.3": {
+        "context_retention_mean": 0.7109575816078898,
+        "delta_from_no_drop": {
+          "average_precision": -0.007522724628304819,
+          "binary_ndcg_at_budget": 0.006028675363550007,
+          "cost_capture_at_budget": 0.0005377216919678074,
+          "cost_lift_at_budget": 0.03571368237486183,
+          "lift_at_budget": 1.8449074074074074,
+          "precision_at_budget": 0.02777777777777779,
+          "recall_at_budget": 0.02777777777777779,
+          "threshold_precision_at_budget": 0.013888888888888895,
+          "threshold_recall_at_budget": 0.017543859649122806
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.07026868264346353,
+            "sample_std": 0.012135520607317936
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.10896866755905732,
+            "sample_std": 0.03213397764759197
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.026463204688359082,
+            "sample_std": 0.0008757623324453403
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.7575978447185159,
+            "sample_std": 0.058165214913244674
+          },
+          "lift_at_budget": {
+            "mean": 8.302083333333334,
+            "sample_std": 2.396605023667353
+          },
+          "precision_at_budget": {
+            "mean": 0.125,
+            "sample_std": 0.036084391824351615
+          },
+          "recall_at_budget": {
+            "mean": 0.125,
+            "sample_std": 0.036084391824351615
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.08333333333333333,
+            "sample_std": 0.020833333333333336
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.10526315789473684,
+            "sample_std": 0.02631578947368421
+          }
+        },
+        "num_runs": 3
+      },
+      "0.5": {
+        "context_retention_mean": 0.5156641095858511,
+        "delta_from_no_drop": {
+          "average_precision": -0.019047525313397894,
+          "binary_ndcg_at_budget": -0.008290306151808549,
+          "cost_capture_at_budget": 0.00073500926980756,
+          "cost_lift_at_budget": 0.048816865669718545,
+          "lift_at_budget": 0.4612268518518521,
+          "precision_at_budget": 0.006944444444444461,
+          "recall_at_budget": 0.006944444444444461,
+          "threshold_precision_at_budget": 1.3877787807814457e-17,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.05874388195837046,
+            "sample_std": 0.009674499189777938
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.09464968604369876,
+            "sample_std": 0.04144874482579994
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.026660492266198835,
+            "sample_std": 0.003861020268718049
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.7707010280133726,
+            "sample_std": 0.25643609618069046
+          },
+          "lift_at_budget": {
+            "mean": 6.918402777777779,
+            "sample_std": 2.767361111111111
+          },
+          "precision_at_budget": {
+            "mean": 0.10416666666666667,
+            "sample_std": 0.04166666666666667
+          },
+          "recall_at_budget": {
+            "mean": 0.10416666666666667,
+            "sample_std": 0.04166666666666667
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.06944444444444445,
+            "sample_std": 0.031823442326082224
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.08771929824561403,
+            "sample_std": 0.040198032411893334
+          }
+        },
+        "num_runs": 3
+      },
+      "0.7": {
+        "context_retention_mean": 0.32329688320653377,
+        "delta_from_no_drop": {
+          "average_precision": -0.022201722620608398,
+          "binary_ndcg_at_budget": -0.04385028149078524,
+          "cost_capture_at_budget": -0.001808225092477845,
+          "cost_lift_at_budget": -0.12009628322540378,
+          "lift_at_budget": -1.8449074074074083,
+          "precision_at_budget": -0.027777777777777776,
+          "recall_at_budget": -0.027777777777777776,
+          "threshold_precision_at_budget": -0.020833333333333322,
+          "threshold_recall_at_budget": -0.02631578947368421
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.05558968465115995,
+            "sample_std": 0.012143315157597069
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.059089710704722076,
+            "sample_std": 0.0072118149350302845
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02411725790391343,
+            "sample_std": 0.0009086937644281672
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.6017878791182503,
+            "sample_std": 0.060352410854104054
+          },
+          "lift_at_budget": {
+            "mean": 4.612268518518518,
+            "sample_std": 1.5977366824449017
+          },
+          "precision_at_budget": {
+            "mean": 0.06944444444444443,
+            "sample_std": 0.024056261216234408
+          },
+          "recall_at_budget": {
+            "mean": 0.06944444444444443,
+            "sample_std": 0.024056261216234408
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.04861111111111111,
+            "sample_std": 0.031823442326082224
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.06140350877192982,
+            "sample_std": 0.040198032411893334
+          }
+        },
+        "num_runs": 3
+      }
+    },
+    "levjepa_boosted": {
+      "0.0": {
+        "context_retention_mean": 1.0,
+        "delta_from_no_drop": {
+          "average_precision": 0.0,
+          "binary_ndcg_at_budget": 0.0,
+          "cost_capture_at_budget": 0.0,
+          "cost_lift_at_budget": 0.0,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.0,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.14367107024988052,
+            "sample_std": 0.04210602840102505
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.23352780361103073,
+            "sample_std": 0.06494609467331486
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.03311745153946092,
+            "sample_std": 0.0005209338760059594
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.1995507397458627,
+            "sample_std": 0.03459869159806233
+          },
+          "lift_at_budget": {
+            "mean": 12.914351851851853,
+            "sample_std": 0.7988683412224518
+          },
+          "precision_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "recall_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.1527777777777778,
+            "sample_std": 0.012028130608117193
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.1929824561403509,
+            "sample_std": 0.015193428136569098
+          }
+        },
+        "num_runs": 3
+      },
+      "0.1": {
+        "context_retention_mean": 0.9030121537758967,
+        "delta_from_no_drop": {
+          "average_precision": -0.006503292565611746,
+          "binary_ndcg_at_budget": -0.014292699878978854,
+          "cost_capture_at_budget": 1.1418750584239745e-05,
+          "cost_lift_at_budget": 0.0007583953513035091,
+          "lift_at_budget": -0.46122685185185297,
+          "precision_at_budget": -0.0069444444444444475,
+          "recall_at_budget": -0.0069444444444444475,
+          "threshold_precision_at_budget": -0.0069444444444444475,
+          "threshold_recall_at_budget": -0.00877192982456143
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.13716777768426877,
+            "sample_std": 0.03857594912255618
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.21923510373205188,
+            "sample_std": 0.09148131937271821
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.03312887029004516,
+            "sample_std": 0.0020709174302907464
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.200309135097166,
+            "sample_std": 0.13754343266181035
+          },
+          "lift_at_budget": {
+            "mean": 12.453125,
+            "sample_std": 4.151041666666667
+          },
+          "precision_at_budget": {
+            "mean": 0.1875,
+            "sample_std": 0.0625
+          },
+          "recall_at_budget": {
+            "mean": 0.1875,
+            "sample_std": 0.0625
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.14583333333333334,
+            "sample_std": 0.041666666666666664
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.18421052631578946,
+            "sample_std": 0.05263157894736842
+          }
+        },
+        "num_runs": 3
+      },
+      "0.3": {
+        "context_retention_mean": 0.7109575816078898,
+        "delta_from_no_drop": {
+          "average_precision": -0.019633877130610336,
+          "binary_ndcg_at_budget": -0.042218438509317696,
+          "cost_capture_at_budget": -0.0006838860772873934,
+          "cost_lift_at_budget": -0.04542143363317086,
+          "lift_at_budget": -0.9224537037037059,
+          "precision_at_budget": -0.013888888888888867,
+          "recall_at_budget": -0.013888888888888867,
+          "threshold_precision_at_budget": 0.0069444444444444475,
+          "threshold_recall_at_budget": 0.008771929824561375
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.12403719311927018,
+            "sample_std": 0.019890892701378532
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.19130936510171304,
+            "sample_std": 0.07493715510887407
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.032433565462173526,
+            "sample_std": 0.0018369813648277495
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.154129306112692,
+            "sample_std": 0.12200617898064318
+          },
+          "lift_at_budget": {
+            "mean": 11.991898148148147,
+            "sample_std": 4.859326412629417
+          },
+          "precision_at_budget": {
+            "mean": 0.18055555555555558,
+            "sample_std": 0.07316426217258847
+          },
+          "recall_at_budget": {
+            "mean": 0.18055555555555558,
+            "sample_std": 0.07316426217258847
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.15972222222222224,
+            "sample_std": 0.048112522432468816
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.20175438596491227,
+            "sample_std": 0.0607737125462764
+          }
+        },
+        "num_runs": 3
+      },
+      "0.5": {
+        "context_retention_mean": 0.5156641095858511,
+        "delta_from_no_drop": {
+          "average_precision": -0.02262090658648959,
+          "binary_ndcg_at_budget": -0.031660703943130225,
+          "cost_capture_at_budget": -0.0017621712883396715,
+          "cost_lift_at_budget": -0.11703754306722658,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.0,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.12105016366339093,
+            "sample_std": 0.034976887513573536
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.2018670996679005,
+            "sample_std": 0.07075911571494058
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.03135528025112125,
+            "sample_std": 0.0008843283903867242
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.082513196678636,
+            "sample_std": 0.058734143928184955
+          },
+          "lift_at_budget": {
+            "mean": 12.914351851851853,
+            "sample_std": 0.7988683412224518
+          },
+          "precision_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "recall_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.1527777777777778,
+            "sample_std": 0.031823442326082224
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.1929824561403509,
+            "sample_std": 0.040198032411893334
+          }
+        },
+        "num_runs": 3
+      },
+      "0.7": {
+        "context_retention_mean": 0.32329688320653377,
+        "delta_from_no_drop": {
+          "average_precision": -0.020330642025231938,
+          "binary_ndcg_at_budget": -0.02856271751447087,
+          "cost_capture_at_budget": 0.000215965646792049,
+          "cost_lift_at_budget": 0.014343718374439263,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.020833333333333287,
+          "threshold_recall_at_budget": 0.02631578947368418
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.12334042822464858,
+            "sample_std": 0.02151666988579094
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.20496508609655986,
+            "sample_std": 0.03894487867423663
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.03333341718625297,
+            "sample_std": 0.0018660425552640555
+          },
+          "cost_lift_at_budget": {
+            "mean": 2.213894458120302,
+            "sample_std": 0.12393632637878768
+          },
+          "lift_at_budget": {
+            "mean": 12.914351851851853,
+            "sample_std": 1.5977366824449026
+          },
+          "precision_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.024056261216234418
+          },
+          "recall_at_budget": {
+            "mean": 0.19444444444444445,
+            "sample_std": 0.024056261216234418
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.17361111111111108,
+            "sample_std": 0.012028130608117209
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.21929824561403508,
+            "sample_std": 0.015193428136569098
+          }
+        },
+        "num_runs": 3
+      }
+    },
+    "levjepa_logistic": {
+      "0.0": {
+        "context_retention_mean": 1.0,
+        "delta_from_no_drop": {
+          "average_precision": 0.0,
+          "binary_ndcg_at_budget": 0.0,
+          "cost_capture_at_budget": 0.0,
+          "cost_lift_at_budget": 0.0,
+          "lift_at_budget": 0.0,
+          "precision_at_budget": 0.0,
+          "recall_at_budget": 0.0,
+          "threshold_precision_at_budget": 0.0,
+          "threshold_recall_at_budget": 0.0
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.1079596260836841,
+            "sample_std": 0.03711037035617729
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.18741347691339896,
+            "sample_std": 0.05594220885179932
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.029571775153055934,
+            "sample_std": 0.0014294156978494107
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.9640587330821315,
+            "sample_std": 0.09493702593216494
+          },
+          "lift_at_budget": {
+            "mean": 10.146990740740742,
+            "sample_std": 2.113606961157294
+          },
+          "precision_at_budget": {
+            "mean": 0.1527777777777778,
+            "sample_std": 0.031823442326082224
+          },
+          "recall_at_budget": {
+            "mean": 0.1527777777777778,
+            "sample_std": 0.031823442326082224
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.1111111111111111,
+            "sample_std": 0.02405626121623441
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.14035087719298245,
+            "sample_std": 0.0303868562731382
+          }
+        },
+        "num_runs": 3
+      },
+      "0.1": {
+        "context_retention_mean": 0.9030121537758967,
+        "delta_from_no_drop": {
+          "average_precision": -0.014111001474877066,
+          "binary_ndcg_at_budget": -0.038512620330204195,
+          "cost_capture_at_budget": -0.0012744667779808726,
+          "cost_lift_at_budget": -0.08464583517089608,
+          "lift_at_budget": -0.9224537037037042,
+          "precision_at_budget": -0.013888888888888895,
+          "recall_at_budget": -0.013888888888888895,
+          "threshold_precision_at_budget": -0.006944444444444434,
+          "threshold_recall_at_budget": -0.008771929824561403
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.09384862460880704,
+            "sample_std": 0.030546036463832922
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.14890085658319477,
+            "sample_std": 0.0529705132523017
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02829730837507506,
+            "sample_std": 0.0016914405488148957
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.8794128979112354,
+            "sample_std": 0.11233984311712265
+          },
+          "lift_at_budget": {
+            "mean": 9.224537037037038,
+            "sample_std": 2.880360766622409
+          },
+          "precision_at_budget": {
+            "mean": 0.1388888888888889,
+            "sample_std": 0.04336804165554443
+          },
+          "recall_at_budget": {
+            "mean": 0.1388888888888889,
+            "sample_std": 0.04336804165554443
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.10416666666666667,
+            "sample_std": 0.020833333333333336
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.13157894736842105,
+            "sample_std": 0.02631578947368421
+          }
+        },
+        "num_runs": 3
+      },
+      "0.3": {
+        "context_retention_mean": 0.7109575816078898,
+        "delta_from_no_drop": {
+          "average_precision": -0.007486759928943598,
+          "binary_ndcg_at_budget": -0.015226252367055715,
+          "cost_capture_at_budget": -0.001067645355387517,
+          "cost_lift_at_budget": -0.07090944568698743,
+          "lift_at_budget": 0.4612268518518512,
+          "precision_at_budget": 0.00694444444444442,
+          "recall_at_budget": 0.00694444444444442,
+          "threshold_precision_at_budget": -0.006944444444444434,
+          "threshold_recall_at_budget": -0.008771929824561403
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.1004728661547405,
+            "sample_std": 0.030827873424945883
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.17218722454634325,
+            "sample_std": 0.034443846967287535
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.028504129797668417,
+            "sample_std": 0.0022665150803834904
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.893149287395144,
+            "sample_std": 0.1505343765888035
+          },
+          "lift_at_budget": {
+            "mean": 10.608217592592593,
+            "sample_std": 2.113606961157294
+          },
+          "precision_at_budget": {
+            "mean": 0.1597222222222222,
+            "sample_std": 0.031823442326082224
+          },
+          "recall_at_budget": {
+            "mean": 0.1597222222222222,
+            "sample_std": 0.031823442326082224
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.10416666666666667,
+            "sample_std": 0.03608439182435161
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.13157894736842105,
+            "sample_std": 0.045580284409707295
+          }
+        },
+        "num_runs": 3
+      },
+      "0.5": {
+        "context_retention_mean": 0.5156641095858511,
+        "delta_from_no_drop": {
+          "average_precision": -0.030285795132244192,
+          "binary_ndcg_at_budget": -0.06757100243253536,
+          "cost_capture_at_budget": -0.0027485892241304252,
+          "cost_lift_at_budget": -0.18255213430266193,
+          "lift_at_budget": -1.3836805555555571,
+          "precision_at_budget": -0.020833333333333343,
+          "recall_at_budget": -0.020833333333333343,
+          "threshold_precision_at_budget": -0.034722222222222224,
+          "threshold_recall_at_budget": -0.043859649122807
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.07767383095143991,
+            "sample_std": 0.007327564108128073
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.1198424744808636,
+            "sample_std": 0.012089209191897024
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.02682318592892551,
+            "sample_std": 0.001474772676370717
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.7815065987794696,
+            "sample_std": 0.09794948525562176
+          },
+          "lift_at_budget": {
+            "mean": 8.763310185185185,
+            "sample_std": 0.7988683412224509
+          },
+          "precision_at_budget": {
+            "mean": 0.13194444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "recall_at_budget": {
+            "mean": 0.13194444444444445,
+            "sample_std": 0.012028130608117209
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.07638888888888888,
+            "sample_std": 0.0120281306081172
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.09649122807017545,
+            "sample_std": 0.015193428136569098
+          }
+        },
+        "num_runs": 3
+      },
+      "0.7": {
+        "context_retention_mean": 0.32329688320653377,
+        "delta_from_no_drop": {
+          "average_precision": -0.015496439792018424,
+          "binary_ndcg_at_budget": -0.025392375770687675,
+          "cost_capture_at_budget": -0.003159325293274888,
+          "cost_lift_at_budget": -0.2098318548950069,
+          "lift_at_budget": -1.7763568394002505e-15,
+          "precision_at_budget": -2.7755575615628914e-17,
+          "recall_at_budget": -2.7755575615628914e-17,
+          "threshold_precision_at_budget": 0.006944444444444461,
+          "threshold_recall_at_budget": 0.008771929824561403
+        },
+        "metrics": {
+          "average_precision": {
+            "mean": 0.09246318629166568,
+            "sample_std": 0.022887509266851288
+          },
+          "binary_ndcg_at_budget": {
+            "mean": 0.1620211011427113,
+            "sample_std": 0.044952303193264743
+          },
+          "cost_capture_at_budget": {
+            "mean": 0.026412449859781046,
+            "sample_std": 0.0019394227714229274
+          },
+          "cost_lift_at_budget": {
+            "mean": 1.7542268781871246,
+            "sample_std": 0.12880999573533944
+          },
+          "lift_at_budget": {
+            "mean": 10.14699074074074,
+            "sample_std": 1.5977366824449017
+          },
+          "precision_at_budget": {
+            "mean": 0.15277777777777776,
+            "sample_std": 0.0240562612162344
+          },
+          "recall_at_budget": {
+            "mean": 0.15277777777777776,
+            "sample_std": 0.0240562612162344
+          },
+          "threshold_precision_at_budget": {
+            "mean": 0.11805555555555557,
+            "sample_std": 0.0120281306081172
+          },
+          "threshold_recall_at_budget": {
+            "mean": 0.14912280701754385,
+            "sample_std": 0.015193428136569098
+          }
+        },
+        "num_runs": 3
+      }
+    }
+  },
+  "protocol": {
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "drop_ratios": [
+      0.0,
+      0.1,
+      0.3,
+      0.5,
+      0.7
+    ],
+    "evaluation_split": "frozen_validation",
+    "evaluation_weights": "online",
+    "future_claims_untouched": true,
+    "latest_context_claim_always_retained": true,
+    "tail_fraction": 0.015,
+    "tail_head_fit_on_complete_training_history": true,
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.1419282930490421,
+        "binary_ndcg_at_budget": 0.23037753049988818,
+        "cost_capture_at_budget": 0.032679970898542555,
+        "cost_lift_at_budget": 2.170494733844868,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.06796017500865334,
+        "binary_ndcg_at_budget": 0.038349127028046326,
+        "cost_capture_at_budget": 0.026136504286387495,
+        "cost_lift_at_budget": 1.7358994930209029,
+        "lift_at_budget": 2.767361111111111,
+        "precision_at_budget": 0.041666666666666664,
+        "recall_at_budget": 0.041666666666666664,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.020833333333333332,
+        "threshold_recall_at_budget": 0.02631578947368421,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.903097692554184,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.13235541681843777,
+        "binary_ndcg_at_budget": 0.22503644026037703,
+        "cost_capture_at_budget": 0.030361498581610444,
+        "cost_lift_at_budget": 2.0165095307952936,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.903097692554184,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.08426562320305848,
+        "binary_ndcg_at_budget": 0.13246523687586734,
+        "cost_capture_at_budget": 0.026449265560693717,
+        "cost_lift_at_budget": 1.756672054322741,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.7108630595851685,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.11064528963208642,
+        "binary_ndcg_at_budget": 0.1437225181204078,
+        "cost_capture_at_budget": 0.02739472275472153,
+        "cost_lift_at_budget": 1.8194661696260883,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.7108630595851685,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.07933975037512658,
+        "binary_ndcg_at_budget": 0.13021681052234046,
+        "cost_capture_at_budget": 0.027318236354792635,
+        "cost_lift_at_budget": 1.8143861978974776,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.5150581667952958,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.10723827015879488,
+        "binary_ndcg_at_budget": 0.15908530661970116,
+        "cost_capture_at_budget": 0.028951720653386526,
+        "cost_lift_at_budget": 1.9228767800624218,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.5150581667952958,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.05754995397990543,
+        "binary_ndcg_at_budget": 0.08831221941725967,
+        "cost_capture_at_budget": 0.027791430418320794,
+        "cost_lift_at_budget": 1.8458141702834727,
+        "lift_at_budget": 6.918402777777779,
+        "precision_at_budget": 0.10416666666666667,
+        "recall_at_budget": 0.10416666666666667,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.32266808939592245,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.09696207347468362,
+        "binary_ndcg_at_budget": 0.17555153141720187,
+        "cost_capture_at_budget": 0.03240282620182764,
+        "cost_lift_at_budget": 2.152087706904719,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.32266808939592245,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.04490557818175821,
+        "binary_ndcg_at_budget": 0.06637656152871556,
+        "cost_capture_at_budget": 0.023637559160391407,
+        "cost_lift_at_budget": 1.5699278875693294,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.041666666666666664,
+        "threshold_recall_at_budget": 0.05263157894736842,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.13982448505693829,
+        "binary_ndcg_at_budget": 0.19444520331592885,
+        "cost_capture_at_budget": 0.03266643935979989,
+        "cost_lift_at_budget": 2.1695960141467094,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.07356202634060627,
+        "binary_ndcg_at_budget": 0.08816298454919862,
+        "cost_capture_at_budget": 0.024460807015822667,
+        "cost_lift_at_budget": 1.6246052659675556,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.9032042210597635,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.1156445853660663,
+        "binary_ndcg_at_budget": 0.17181628043668087,
+        "cost_capture_at_budget": 0.030788606039536284,
+        "cost_lift_at_budget": 2.0448765844592014,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.9032042210597635,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.06882985143003995,
+        "binary_ndcg_at_budget": 0.08903954971732038,
+        "cost_capture_at_budget": 0.024301422363218125,
+        "cost_lift_at_budget": 1.6140194686237372,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.7109652372802893,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.11908340077406945,
+        "binary_ndcg_at_budget": 0.19448579374086386,
+        "cost_capture_at_budget": 0.029299046121743694,
+        "cost_lift_at_budget": 1.9459449799191437,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.7109652372802893,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.05648341050747948,
+        "binary_ndcg_at_budget": 0.07200109906363925,
+        "cost_capture_at_budget": 0.02650328943253395,
+        "cost_lift_at_budget": 1.7602601398107964,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.517244135985152,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.12172450665711561,
+        "binary_ndcg_at_budget": 0.22251663839491234,
+        "cost_capture_at_budget": 0.030218094510071868,
+        "cost_lift_at_budget": 2.0069851103772733,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.517244135985152,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.06895993304356446,
+        "binary_ndcg_at_budget": 0.13890218543554547,
+        "cost_capture_at_budget": 0.0298297536606682,
+        "cost_lift_at_budget": 1.9811928056293797,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.32256394102265,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.1019766964159174,
+        "binary_ndcg_at_budget": 0.15997982714300032,
+        "cost_capture_at_budget": 0.02928633979555632,
+        "cost_lift_at_budget": 1.945101068088199,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.32256394102265,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.06879605633882244,
+        "binary_ndcg_at_budget": 0.058937220476708976,
+        "cost_capture_at_budget": 0.025165278788478608,
+        "cost_lift_at_budget": 1.6713939328681209,
+        "lift_at_budget": 5.534722222222222,
+        "precision_at_budget": 0.08333333333333333,
+        "recall_at_budget": 0.08333333333333333,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.09920413828022485,
+        "binary_ndcg_at_budget": 0.18260339404235515,
+        "cost_capture_at_budget": 0.03291736664972906,
+        "cost_lift_at_budget": 2.186261768319505,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.09185202046604546,
+        "binary_ndcg_at_budget": 0.18230786500927695,
+        "cost_capture_at_budget": 0.027179137686963662,
+        "cost_lift_at_budget": 1.8051477280425032,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.9027345477137426,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.11664106496076573,
+        "binary_ndcg_at_budget": 0.19920996551161674,
+        "cost_capture_at_budget": 0.02714747879095833,
+        "cost_lift_at_budget": 1.8030450496994823,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.9027345477137426,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.08161220853519054,
+        "binary_ndcg_at_budget": 0.1712523453242553,
+        "cost_capture_at_budget": 0.026031443119899248,
+        "cost_lift_at_budget": 1.7289216805466419,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.7110444479582115,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.09594815739107714,
+        "binary_ndcg_at_budget": 0.17920468119289276,
+        "cost_capture_at_budget": 0.02894965181915675,
+        "cost_lift_at_budget": 1.922739374988994,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.7110444479582115,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.07498288704778454,
+        "binary_ndcg_at_budget": 0.12468809309119222,
+        "cost_capture_at_budget": 0.025568088277750662,
+        "cost_lift_at_budget": 1.6981471964472732,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.5146900259771054,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.08845292964826776,
+        "binary_ndcg_at_budget": 0.14438920425141447,
+        "cost_capture_at_budget": 0.028332295593509124,
+        "cost_lift_at_budget": 1.8817366323355644,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.5146900259771054,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.049721758851641484,
+        "binary_ndcg_at_budget": 0.05673465327829116,
+        "cost_capture_at_budget": 0.02236029271960751,
+        "cost_lift_at_budget": 1.4850961081272653,
+        "lift_at_budget": 4.151041666666667,
+        "precision_at_budget": 0.0625,
+        "recall_at_budget": 0.0625,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.041666666666666664,
+        "threshold_recall_at_budget": 0.05263157894736842,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_boosted",
+      "context_retention": 0.32465861920102895,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.10362880952225409,
+        "binary_ndcg_at_budget": 0.17752889147683532,
+        "cost_capture_at_budget": 0.02718312872860185,
+        "cost_lift_at_budget": 1.8054127997246396,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "cap32_logistic",
+      "context_retention": 0.32465861920102895,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.05306741943289919,
+        "binary_ndcg_at_budget": 0.05195535010874168,
+        "cost_capture_at_budget": 0.02354893576287027,
+        "cost_lift_at_budget": 1.5640418169173005,
+        "lift_at_budget": 2.767361111111111,
+        "precision_at_budget": 0.041666666666666664,
+        "recall_at_budget": 0.041666666666666664,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.020833333333333332,
+        "threshold_recall_at_budget": 0.02631578947368421,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.19228144320890755,
+        "binary_ndcg_at_budget": 0.30503744707895264,
+        "cost_capture_at_budget": 0.03347108340772203,
+        "cost_lift_at_budget": 2.2230377896628712,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.15080738753342396,
+        "binary_ndcg_at_budget": 0.24781354568645533,
+        "cost_capture_at_budget": 0.03073759205338982,
+        "cost_lift_at_budget": 2.041488405545974,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.903097692554184,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.18013545585141486,
+        "binary_ndcg_at_budget": 0.3113606516918618,
+        "cost_capture_at_budget": 0.035239229573746866,
+        "cost_lift_at_budget": 2.3404721641896877,
+        "lift_at_budget": 16.604166666666668,
+        "precision_at_budget": 0.25,
+        "recall_at_budget": 0.25,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.903097692554184,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.12880624964952667,
+        "binary_ndcg_at_budget": 0.19996914152939388,
+        "cost_capture_at_budget": 0.029804174520365597,
+        "cost_lift_at_budget": 1.9794939243942817,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.7108630595851685,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.13746859929477045,
+        "binary_ndcg_at_budget": 0.24248564708367526,
+        "cost_capture_at_budget": 0.033685727806954315,
+        "cost_lift_at_budget": 2.2372937551785492,
+        "lift_at_budget": 16.604166666666668,
+        "precision_at_budget": 0.25,
+        "recall_at_budget": 0.25,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.7108630595851685,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.1309786647571487,
+        "binary_ndcg_at_budget": 0.2050098956199945,
+        "cost_capture_at_budget": 0.030900515927021893,
+        "cost_lift_at_budget": 2.0523092661530375,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.5150581667952958,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.16137441473606282,
+        "binary_ndcg_at_budget": 0.2831821277768292,
+        "cost_capture_at_budget": 0.03153525655964406,
+        "cost_lift_at_budget": 2.094466623169693,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.5150581667952958,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.08569139220948092,
+        "binary_ndcg_at_budget": 0.1246314506381887,
+        "cost_capture_at_budget": 0.028411100094673316,
+        "cost_lift_at_budget": 1.8869705646212194,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.32266808939592245,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.12022451556878327,
+        "binary_ndcg_at_budget": 0.17955501683560715,
+        "cost_capture_at_budget": 0.03177204740784728,
+        "cost_lift_at_budget": 2.1101934820045236,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.32266808939592245,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.10414971289013072,
+        "binary_ndcg_at_budget": 0.19161508854745452,
+        "cost_capture_at_budget": 0.028651431583480824,
+        "cost_lift_at_budget": 1.9029325810028515,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.11853440418784758,
+        "binary_ndcg_at_budget": 0.17820838677179873,
+        "cost_capture_at_budget": 0.0333620385947398,
+        "cost_lift_at_budget": 2.215795396667302,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.08701698545718868,
+        "binary_ndcg_at_budget": 0.17704786967705288,
+        "cost_capture_at_budget": 0.027976995933753804,
+        "cost_lift_at_budget": 1.8581388132668153,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.9032042210597635,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.10551349979996244,
+        "binary_ndcg_at_budget": 0.12841191918653838,
+        "cost_capture_at_budget": 0.031099787791974785,
+        "cost_lift_at_budget": 2.0655442391836587,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.9032042210597635,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.08043597517963644,
+        "binary_ndcg_at_budget": 0.15251972388100277,
+        "cost_capture_at_budget": 0.026467777283981583,
+        "cost_lift_at_budget": 1.7579015412777768,
+        "lift_at_budget": 6.918402777777779,
+        "precision_at_budget": 0.10416666666666667,
+        "recall_at_budget": 0.10416666666666667,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.7109652372802893,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.10118626122715214,
+        "binary_ndcg_at_budget": 0.10529508458743896,
+        "cost_capture_at_budget": 0.030324727522319492,
+        "cost_lift_at_budget": 2.014067319607386,
+        "lift_at_budget": 6.918402777777779,
+        "precision_at_budget": 0.10416666666666667,
+        "recall_at_budget": 0.10416666666666667,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.7109652372802893,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.0693327087947502,
+        "binary_ndcg_at_budget": 0.13632382506763485,
+        "cost_capture_at_budget": 0.026394843571516148,
+        "cost_lift_at_budget": 1.7530575272081976,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.517244135985152,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.10284985914546255,
+        "binary_ndcg_at_budget": 0.16811987572988202,
+        "cost_capture_at_budget": 0.03213577650127031,
+        "cost_lift_at_budget": 2.1343511559593695,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.517244135985152,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.0760064664246739,
+        "binary_ndcg_at_budget": 0.1288035251128425,
+        "cost_capture_at_budget": 0.02549645225250349,
+        "cost_lift_at_budget": 1.6933893704371068,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.0625,
+        "threshold_recall_at_budget": 0.07894736842105263,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.32256394102265,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.10355159558527126,
+        "binary_ndcg_at_budget": 0.18553836291539136,
+        "cost_capture_at_budget": 0.0354000679106814,
+        "cost_lift_at_budget": 2.3511545104010896,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.32256394102265,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.10714812073329026,
+        "binary_ndcg_at_budget": 0.18415453519977842,
+        "cost_capture_at_budget": 0.025332724774895406,
+        "cost_lift_at_budget": 1.6825151371326366,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.12019736335288637,
+        "binary_ndcg_at_budget": 0.2173375769823408,
+        "cost_capture_at_budget": 0.03251923261592093,
+        "cost_lift_at_budget": 2.159819032907415,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 1.0,
+      "drop_ratio": 0.0,
+      "metrics": {
+        "average_precision": 0.0860545052604397,
+        "binary_ndcg_at_budget": 0.1373790153766887,
+        "cost_capture_at_budget": 0.030000737472024176,
+        "cost_lift_at_budget": 1.9925489804336058,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.9027345477137426,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.12585437740142902,
+        "binary_ndcg_at_budget": 0.21793274031775542,
+        "cost_capture_at_budget": 0.03304759350441383,
+        "cost_lift_at_budget": 2.194911001918152,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.9027345477137426,
+      "drop_ratio": 0.1,
+      "metrics": {
+        "average_precision": 0.07230364899725801,
+        "binary_ndcg_at_budget": 0.09421370433918769,
+        "cost_capture_at_budget": 0.028619973320878008,
+        "cost_lift_at_budget": 1.9008432280616476,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.7110444479582115,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.13345671883588794,
+        "binary_ndcg_at_budget": 0.22614736363402485,
+        "cost_capture_at_budget": 0.03329024105724678,
+        "cost_lift_at_budget": 2.2110268435521405,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.7110444479582115,
+      "drop_ratio": 0.3,
+      "metrics": {
+        "average_precision": 0.10110722491232263,
+        "binary_ndcg_at_budget": 0.17522795295140037,
+        "cost_capture_at_budget": 0.028217029894467206,
+        "cost_lift_at_budget": 1.874081068824197,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.5146900259771054,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.09892621710864741,
+        "binary_ndcg_at_budget": 0.15429929549699026,
+        "cost_capture_at_budget": 0.030394807692449368,
+        "cost_lift_at_budget": 2.0187218109068454,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.5146900259771054,
+      "drop_ratio": 0.5,
+      "metrics": {
+        "average_precision": 0.07132363422016491,
+        "binary_ndcg_at_budget": 0.10609244769155961,
+        "cost_capture_at_budget": 0.026562005439599728,
+        "cost_lift_at_budget": 1.764159861280082,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_boosted",
+      "context_retention": 0.32465861920102895,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.1462451735198912,
+        "binary_ndcg_at_budget": 0.24980187853868108,
+        "cost_capture_at_budget": 0.03282813624023023,
+        "cost_lift_at_budget": 2.1803353819552913,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "condition": "levjepa_logistic",
+      "context_retention": 0.32465861920102895,
+      "drop_ratio": 0.7,
+      "metrics": {
+        "average_precision": 0.06609172525157607,
+        "binary_ndcg_at_budget": 0.11029367968090092,
+        "cost_capture_at_budget": 0.02525319322096691,
+        "cost_lift_at_budget": 1.6772329164258857,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    }
+  ]
+}

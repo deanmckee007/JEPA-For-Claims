@@ -323,9 +323,132 @@ TRAINING_RECIPES["composable_level1_lejepa_any_code"] = {
     "level1_predictive_weight": 0.1,
 }
 
+# LeVJEPA claims port: learn patient-history invariance from one complete
+# context and multiple independently thinned views.  The projector is used
+# only by the pretraining loss; downstream consumers continue to read the
+# canonical pre-SAE patient representation.
+TRAINING_RECIPES["levjepa_patient_views"] = {
+    **TRAINING_RECIPES["composable_level1_lejepa_any_code"],
+    "sigreg_formulation": "levjepa_additive",
+    "sigreg_weight_lvl2": 0.02,
+    "sigreg_num_slices": 1024,
+    "level1_marginal_regularizer": "none",
+    "use_level2_dense_prediction": False,
+    "use_masked_next_claim_token_grounding": False,
+    "use_sparse_autoencoder": False,
+    "use_levjepa_patient_views": True,
+    "levjepa_num_local_views": 2,
+    "levjepa_claim_drop_ratio": 0.3,
+    "levjepa_projector_hidden_dim": 2048,
+    "levjepa_projector_output_dim": 256,
+    "use_eval_polyak_average": True,
+    "eval_polyak_decay": 0.9999,
+    "eval_polyak_update_interval": 32,
+    "freeze_logvars_after_epoch": 0,
+}
+
+# Sparse canonical-view companion for downstream complementarity experiments.
+# LeVJEPA's projected SIGReg remains the collapse-prevention mechanism; only
+# the canonical Level-2 interface is rectified.
+TRAINING_RECIPES["levjepa_patient_views_reprelu"] = {
+    **TRAINING_RECIPES["levjepa_patient_views"],
+    "representation_link_lvl2": "reprelu",
+}
+
+# LpWM claims pilot: a controlled link x reference-distribution sweep on the
+# selected composable architecture.  The historical Top-K SAE is disabled so
+# sparsity is canonical rather than a post-hoc reconstruction auxiliary.
+_LPWM_CLAIMS_ANCHOR = {
+    **TRAINING_RECIPES["composable_level1_lejepa_any_code"],
+    "ssl_objective_type": "rdmreg",
+    "representation_link_lvl1": "identity",
+    "rdmreg_weight_lvl1": 0.0,
+    "rdmreg_weight_lvl2": 0.1,
+    "rdmreg_num_projections": 512,
+    "rdmreg_target_mu": 0.0,
+    "rdmreg_regularize_prediction": False,
+    "rdmreg_support_alignment_weight_lvl1": 0.0,
+    "rdmreg_support_alignment_weight_lvl2": 0.0,
+    "rdmreg_support_temperature": 0.5,
+    "use_sparse_autoencoder": False,
+}
+TRAINING_RECIPES["lpwm_dense_gaussian"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "identity",
+    "rdmreg_target_p": 2.0,
+}
+TRAINING_RECIPES["lpwm_dense_laplace"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "identity",
+    "rdmreg_target_p": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_gaussian"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "reprelu",
+    "rdmreg_target_p": 2.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace"] = {
+    **_LPWM_CLAIMS_ANCHOR,
+    "representation_link_lvl2": "reprelu",
+    "rdmreg_target_p": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_target_mu": -1.0,
+}
+TRAINING_RECIPES["lpwm_dense_mse"] = {
+    **TRAINING_RECIPES["lpwm_dense_gaussian"],
+    "rdmreg_weight_lvl2": 0.0,
+}
+TRAINING_RECIPES["lpwm_rectified_mse"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_weight_lvl2": 0.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_w1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "rdmreg_weight_lvl2": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1"],
+    "rdmreg_weight_lvl2": 1.0,
+}
+TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1_both"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace_mu_neg1_w1"],
+    "rdmreg_regularize_prediction": True,
+}
+TRAINING_RECIPES["lpwm_relu_laplace"] = {
+    **TRAINING_RECIPES["lpwm_rectified_laplace"],
+    "representation_link_lvl2": "relu",
+}
+for _capacity in (32, 64):
+    TRAINING_RECIPES[f"lpwm_dense_gaussian_cap{_capacity}"] = {
+        **TRAINING_RECIPES["lpwm_dense_gaussian"],
+        "use_dense_decoder_bottleneck": True,
+        "dense_decoder_bottleneck_dim": _capacity,
+    }
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_cap{_capacity}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace"],
+        "use_dense_decoder_bottleneck": True,
+        "dense_decoder_bottleneck_dim": _capacity,
+    }
+for _suffix, _weight in (("w003", 0.03), ("w03", 0.3)):
+    TRAINING_RECIPES[f"lpwm_dense_gaussian_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_dense_gaussian"],
+        "rdmreg_weight_lvl2": _weight,
+    }
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace"],
+        "rdmreg_weight_lvl2": _weight,
+    }
+for _suffix, _weight in (("support_w001", 0.01), ("support_w003", 0.03), ("support_w01", 0.1)):
+    TRAINING_RECIPES[f"lpwm_rectified_laplace_cap32_{_suffix}"] = {
+        **TRAINING_RECIPES["lpwm_rectified_laplace_cap32"],
+        "rdmreg_support_alignment_weight_lvl2": _weight,
+    }
+
 @dataclass
 class Config:
-    data_path: str = 'C:/Users/tmcke/Desktop/claims_data/training_set.parquet'
+    data_path: str = 'C:/Users/tmcke/OneDrive/Desktop/claims_data/training_set.parquet'
     data_contract_path: str | None = None
     create_data_contract_if_missing: bool = False
     train_split_fraction: float = 0.70
@@ -379,6 +502,11 @@ class Config:
     scheduler_warmup_start_factor: float = 0.2
     epochs: int = 25
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
+    # Evaluation-only parameter averaging. Unlike target-encoder EMA, these
+    # weights never participate in a training forward pass.
+    use_eval_polyak_average: bool = False
+    eval_polyak_decay: float = 0.9999
+    eval_polyak_update_interval: int = 32
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
     cov_penalty_scale_lvl1: float = 0.015 # .01 *Results for downstream task is very sensitive to this*
@@ -499,6 +627,27 @@ class Config:
     sigreg_num_slices: int = 256
     sigreg_num_points: int = 17
     sigreg_formulation: str = "legacy_additive"
+    # LeVJEPA-style patient-history view objective. Local views thin valid
+    # context claims independently while always retaining the most recent
+    # claim. The projector is training-only: canonical downstream features do
+    # not pass through it.
+    use_levjepa_patient_views: bool = False
+    levjepa_num_local_views: int = 2
+    levjepa_claim_drop_ratio: float = 0.3
+    levjepa_projector_hidden_dim: int = 2048
+    levjepa_projector_output_dim: int = 256
+    # LpWM-style reference-distribution matching at the canonical JEPA link.
+    representation_link_lvl1: str = "identity"
+    representation_link_lvl2: str = "identity"
+    rdmreg_weight_lvl1: float = 0.0
+    rdmreg_weight_lvl2: float = 0.1
+    rdmreg_num_projections: int = 512
+    rdmreg_target_p: float = 2.0
+    rdmreg_target_mu: float = 0.0
+    rdmreg_regularize_prediction: bool = False
+    rdmreg_support_alignment_weight_lvl1: float = 0.0
+    rdmreg_support_alignment_weight_lvl2: float = 0.0
+    rdmreg_support_temperature: float = 0.5
     intermediate_sequence_supervision_weight: float = 0.0
     # Whether to run a pretraining phase for the diffusion generator before
     # training the main hierarchical model. Kept ``True`` for backwards
@@ -589,14 +738,43 @@ def apply_runtime_config_overrides(config: Config) -> Config:
     if getattr(config, "target_encoder_mode_lvl2", None) is not None:
         config.target_encoder_mode_lvl2 = config.target_encoder_mode_lvl2.lower()
 
-    if config.ssl_objective_type not in {"vicreg", "sigreg"}:
+    if config.ssl_objective_type not in {"vicreg", "sigreg", "rdmreg"}:
         raise ValueError(
             f"Unsupported ssl_objective_type={config.ssl_objective_type!r}. "
-            "Expected 'vicreg' or 'sigreg'."
+            "Expected 'vicreg', 'sigreg', or 'rdmreg'."
         )
-    if config.sigreg_formulation not in {"legacy_additive", "lejepa_convex"}:
+    config.representation_link_lvl1 = getattr(
+        config, "representation_link_lvl1", "identity"
+    ).lower()
+    config.representation_link_lvl2 = getattr(
+        config, "representation_link_lvl2", "identity"
+    ).lower()
+    for field_name in ("representation_link_lvl1", "representation_link_lvl2"):
+        if getattr(config, field_name) not in {"identity", "relu", "reprelu"}:
+            raise ValueError(
+                f"{field_name} must be 'identity', 'relu', or 'reprelu'."
+            )
+    if config.rdmreg_target_p <= 0:
+        raise ValueError("rdmreg_target_p must be positive.")
+    if config.rdmreg_num_projections <= 0:
+        raise ValueError("rdmreg_num_projections must be positive.")
+    if config.rdmreg_weight_lvl1 < 0 or config.rdmreg_weight_lvl2 < 0:
+        raise ValueError("RDMReg weights must be non-negative.")
+    if (
+        config.rdmreg_support_alignment_weight_lvl1 < 0
+        or config.rdmreg_support_alignment_weight_lvl2 < 0
+    ):
+        raise ValueError("RDMReg support-alignment weights must be non-negative.")
+    if config.rdmreg_support_temperature <= 0:
+        raise ValueError("rdmreg_support_temperature must be positive.")
+    if config.sigreg_formulation not in {
+        "legacy_additive",
+        "lejepa_convex",
+        "levjepa_additive",
+    }:
         raise ValueError(
-            "sigreg_formulation must be 'legacy_additive' or 'lejepa_convex'."
+            "sigreg_formulation must be 'legacy_additive', 'lejepa_convex', "
+            "or 'levjepa_additive'."
         )
     if config.sigreg_formulation == "lejepa_convex":
         for field_name in ("sigreg_weight_lvl1", "sigreg_weight_lvl2"):
@@ -605,6 +783,26 @@ def apply_runtime_config_overrides(config: Config) -> Config:
                 raise ValueError(
                     f"{field_name} must be in [0, 1] for lejepa_convex SIGReg."
                 )
+    elif config.sigreg_weight_lvl1 < 0 or config.sigreg_weight_lvl2 < 0:
+        raise ValueError("Additive SIGReg weights must be non-negative.")
+
+    if config.levjepa_num_local_views <= 0:
+        raise ValueError("levjepa_num_local_views must be positive.")
+    if not 0.0 <= config.levjepa_claim_drop_ratio < 1.0:
+        raise ValueError("levjepa_claim_drop_ratio must be in the interval [0, 1).")
+    if config.levjepa_projector_hidden_dim <= 0:
+        raise ValueError("levjepa_projector_hidden_dim must be positive.")
+    if config.levjepa_projector_output_dim <= 0:
+        raise ValueError("levjepa_projector_output_dim must be positive.")
+    if config.use_levjepa_patient_views:
+        if config.ssl_objective_type != "sigreg":
+            raise ValueError("LeVJEPA patient views require ssl_objective_type='sigreg'.")
+        if config.sigreg_formulation != "levjepa_additive":
+            raise ValueError(
+                "LeVJEPA patient views require sigreg_formulation='levjepa_additive'."
+            )
+        if config.target_encoder_mode != "shared":
+            raise ValueError("LeVJEPA patient views require a shared target encoder.")
 
     config.level1_marginal_regularizer = getattr(
         config, "level1_marginal_regularizer", "none"
@@ -653,6 +851,10 @@ def apply_runtime_config_overrides(config: Config) -> Config:
             f"Unsupported scheduler_type={config.scheduler_type!r}. "
             "Expected 'step', 'cosine', or 'none'."
         )
+    if not 0.0 <= config.eval_polyak_decay < 1.0:
+        raise ValueError("eval_polyak_decay must be in the interval [0, 1).")
+    if config.eval_polyak_update_interval <= 0:
+        raise ValueError("eval_polyak_update_interval must be positive.")
 
     split_total = (
         config.train_split_fraction
@@ -709,6 +911,13 @@ def apply_runtime_config_overrides(config: Config) -> Config:
             raise ValueError(
                 f"Unsupported {level_name}={mode!r}. Expected 'ema' or 'shared'."
             )
+    if config.use_levjepa_patient_views and (
+        config.target_encoder_mode_lvl1 != "shared"
+        or config.target_encoder_mode_lvl2 != "shared"
+    ):
+        raise ValueError(
+            "LeVJEPA patient views require shared Level-1 and Level-2 targets."
+        )
 
     if getattr(config, "clean_ssl_mode", False):
         config.use_token_prediction_head = False

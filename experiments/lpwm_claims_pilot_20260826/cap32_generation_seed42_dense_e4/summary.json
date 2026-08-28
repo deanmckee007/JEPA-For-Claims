@@ -1,0 +1,230 @@
+{
+  "aggregate": {
+    "next_claim_prediction|pretrained|0.1": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 1783.9337158203125,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 2837.347900390625,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.3357117786027002,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.4737604053564966,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4255695314105395,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5510084198159388,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5778405524168236,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "next_claim_prediction|pretrained|1.0": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 1704.2479248046875,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 2781.445068359375,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.4597462475654092,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.5034913634693128,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.5046459232031584,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5814120566912677,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5947897049591965,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    }
+  },
+  "empirical_prior": {
+    "cpt": {
+      "binary_nll": 0.002602712018415332,
+      "cardinality_mae": 0.7054395079612732,
+      "exact_set_match": 0.12397991211550534,
+      "mean_set_jaccard": 0.14422473320778406,
+      "micro_average_precision": 0.08768319673073187,
+      "micro_f1": 0.17882117882117884,
+      "micro_precision": 0.16854990583804144,
+      "micro_recall": 0.19042553191489361,
+      "supported_class_count": 110,
+      "supported_macro_average_precision": 0.007284711521999657
+    },
+    "icd": {
+      "binary_nll": 0.009913439862430096,
+      "cardinality_mae": 1.6305583715438843,
+      "exact_set_match": 0.0018832391713747645,
+      "mean_set_jaccard": 0.14995291902071564,
+      "micro_average_precision": 0.09086280352283191,
+      "micro_f1": 0.17574169793953126,
+      "micro_precision": 0.19475831763967358,
+      "micro_recall": 0.16010837311314668,
+      "supported_class_count": 281,
+      "supported_macro_average_precision": 0.008319315153261713
+    },
+    "ttnc": {
+      "accuracy": 0.32423101067168864,
+      "macro_f1": 0.02880526469891109,
+      "negative_log_likelihood": 1.9954139600190188
+    }
+  },
+  "protocol": {
+    "add_remove": false,
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+    "conditions": [
+      "pretrained"
+    ],
+    "copy_logit_boost": 4.0,
+    "copy_residual": true,
+    "copy_ttnc_logit_boost": 2.0,
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "epochs": 20,
+    "evaluation_split": "frozen_validation",
+    "event_ranking_weight": 0.1,
+    "label_fractions": [
+      0.1,
+      1.0
+    ],
+    "seeds": [
+      42
+    ],
+    "sources": [
+      "next_claim_prediction"
+    ],
+    "test_accessed": false,
+    "train_samples": 15048,
+    "validation_samples": 3186,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 1783.9337158203125,
+        "target_probe_rmse_dollars": 2837.347900390625,
+        "target_probe_rmse_log1p": 0.8691695332527161,
+        "target_probe_wape_percent": 38.348602294921875
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.06693006306886673,
+          "cardinality_mae": 0.5235050916671753,
+          "exact_set_match": 0.5671688637790333,
+          "mean_set_jaccard": 0.29647415777359276,
+          "micro_average_precision": 0.3357117786027002,
+          "micro_f1": 0.4737604053564966,
+          "micro_precision": 0.483739837398374,
+          "micro_recall": 0.46418439716312054,
+          "supported_class_count": 18,
+          "supported_macro_average_precision": 0.26919302155066677
+        },
+        "icd": {
+          "binary_nll": 0.10818665474653244,
+          "cardinality_mae": 1.023236870765686,
+          "exact_set_match": 0.24764595103578155,
+          "mean_set_jaccard": 0.5048097330583207,
+          "micro_average_precision": 0.4255695314105395,
+          "micro_f1": 0.5510084198159388,
+          "micro_precision": 0.5575957727873183,
+          "micro_recall": 0.544574893562121,
+          "supported_class_count": 73,
+          "supported_macro_average_precision": 0.44261462396901263
+        },
+        "ttnc": {
+          "accuracy": 0.5778405524168236,
+          "macro_f1": 0.17051469161493493,
+          "negative_log_likelihood": 1.4155628681182861
+        }
+      },
+      "label_fraction": 0.1,
+      "num_labels": 1500,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 3.701948960622152,
+      "training_loss_last": 1.4609166979789734
+    },
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 1704.2479248046875,
+        "target_probe_rmse_dollars": 2781.445068359375,
+        "target_probe_rmse_log1p": 0.8636714220046997,
+        "target_probe_wape_percent": 36.635623931884766
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.08301478624343872,
+          "cardinality_mae": 0.5062738060951233,
+          "exact_set_match": 0.5976145637162587,
+          "mean_set_jaccard": 0.3185708307177234,
+          "micro_average_precision": 0.4597462475654092,
+          "micro_f1": 0.5034913634693128,
+          "micro_precision": 0.5225019069412662,
+          "micro_recall": 0.4858156028368794,
+          "supported_class_count": 110,
+          "supported_macro_average_precision": 0.18564705055207087
+        },
+        "icd": {
+          "binary_nll": 0.11915692687034607,
+          "cardinality_mae": 0.9254353642463684,
+          "exact_set_match": 0.27369742623979915,
+          "mean_set_jaccard": 0.5358172909255773,
+          "micro_average_precision": 0.5046459232031584,
+          "micro_f1": 0.5814120566912677,
+          "micro_precision": 0.5887566137566138,
+          "micro_recall": 0.574248484066572,
+          "supported_class_count": 281,
+          "supported_macro_average_precision": 0.3769946686686657
+        },
+        "ttnc": {
+          "accuracy": 0.5947897049591965,
+          "macro_f1": 0.17879643880372403,
+          "negative_log_likelihood": 1.329140067100525
+        }
+      },
+      "label_fraction": 1.0,
+      "num_labels": 15048,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 2.836490885686066,
+      "training_loss_last": 1.4351960359993627
+    }
+  ]
+}

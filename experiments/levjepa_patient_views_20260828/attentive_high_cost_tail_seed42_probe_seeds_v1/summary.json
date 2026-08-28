@@ -1,0 +1,1281 @@
+{
+  "aggregate": {
+    "incumbent_online_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.0972909964996576,
+          "sample_std": 0.0036308869758422103
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.13335128764377727,
+          "sample_std": 0.03037549482303445
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.02880676049515683,
+          "sample_std": 0.0020692630063332633
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.9132490095533328,
+          "sample_std": 0.13743355133730098
+        },
+        "lift_at_budget": {
+          "mean": 10.608217592592593,
+          "sample_std": 2.88036076662241
+        },
+        "precision_at_budget": {
+          "mean": 0.15972222222222224,
+          "sample_std": 0.043368041655544434
+        },
+        "recall_at_budget": {
+          "mean": 0.15972222222222224,
+          "sample_std": 0.043368041655544434
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.11111111111111112,
+          "sample_std": 0.03182344232608223
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.14035087719298245,
+          "sample_std": 0.040198032411893334
+        }
+      },
+      "num_runs": 3
+    },
+    "incumbent_online_pooled_logistic": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.10273663815540186,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.17415830963665643,
+          "sample_std": 3.3993498887762956e-17
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.030205219007029414,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.006129962383537,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.125,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.15789473684210525,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "incumbent_online_raw_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.13270997529279438,
+          "sample_std": 0.022190815078721754
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.2104192751535323,
+          "sample_std": 0.014927601778010459
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03096780270192126,
+          "sample_std": 0.0009262037278624513
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.0567782294526036,
+          "sample_std": 0.06151536425886446
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 2.7673611111111107
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.04166666666666666
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.04166666666666666
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.1527777777777778,
+          "sample_std": 0.031823442326082224
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.1929824561403509,
+          "sample_std": 0.040198032411893334
+        }
+      },
+      "num_runs": 3
+    },
+    "incumbent_online_raw_pooled_boosted": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.15007728428191627,
+          "sample_std": 0.0205637784757054
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.2400656899235878,
+          "sample_std": 0.03766703235484303
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03329651978146433,
+          "sample_std": 9.519920146078856e-05
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.2114438554855895,
+          "sample_std": 0.006322813630353965
+        },
+        "lift_at_budget": {
+          "mean": 13.375578703703704,
+          "sample_std": 0.7988683412224518
+        },
+        "precision_at_budget": {
+          "mean": 0.20138888888888892,
+          "sample_std": 0.012028130608117209
+        },
+        "recall_at_budget": {
+          "mean": 0.20138888888888892,
+          "sample_std": 0.012028130608117209
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.1597222222222222,
+          "sample_std": 0.012028130608117193
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.20175438596491227,
+          "sample_std": 0.0151934281365691
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_online_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.1045554821869304,
+          "sample_std": 0.011831203324891543
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.14145949987165984,
+          "sample_std": 0.059403212287647535
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.02756566519524682,
+          "sample_std": 0.004906163314107378
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.830819596717643,
+          "sample_std": 0.3258510134452984
+        },
+        "lift_at_budget": {
+          "mean": 10.608217592592593,
+          "sample_std": 4.227213922314588
+        },
+        "precision_at_budget": {
+          "mean": 0.1597222222222222,
+          "sample_std": 0.06364688465216443
+        },
+        "recall_at_budget": {
+          "mean": 0.1597222222222222,
+          "sample_std": 0.06364688465216443
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.125,
+          "sample_std": 0.055119818980512304
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.15789473684210525,
+          "sample_std": 0.06962503450169975
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_online_pooled_logistic": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.15080738753342396,
+          "sample_std": 0.0
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.24781354568645533,
+          "sample_std": 0.0
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.030737592053389818,
+          "sample_std": 4.2491873609703695e-18
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.041488405545974,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 0.0
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.125,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.15789473684210525,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_online_raw_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.11167143156326342,
+          "sample_std": 0.022701160155984352
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.20365931976085458,
+          "sample_std": 0.045228315754994315
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03175558743326776,
+          "sample_std": 0.0010960375465795997
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.109100265359533,
+          "sample_std": 0.07279516038532823
+        },
+        "lift_at_budget": {
+          "mean": 13.836805555555557,
+          "sample_std": 1.3836805555555554
+        },
+        "precision_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.02083333333333333
+        },
+        "recall_at_budget": {
+          "mean": 0.20833333333333334,
+          "sample_std": 0.02083333333333333
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.17361111111111113,
+          "sample_std": 0.031823442326082224
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.21929824561403508,
+          "sample_std": 0.040198032411893334
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_online_raw_pooled_boosted": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.1896744534561912,
+          "sample_std": 0.04283298275066318
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.2926475275496487,
+          "sample_std": 0.04021672800876637
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03249059948175023,
+          "sample_std": 0.0019375256597604423
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.157917315579578,
+          "sample_std": 0.12868399590242263
+        },
+        "lift_at_budget": {
+          "mean": 13.375578703703704,
+          "sample_std": 0.7988683412224518
+        },
+        "precision_at_budget": {
+          "mean": 0.20138888888888892,
+          "sample_std": 0.012028130608117209
+        },
+        "recall_at_budget": {
+          "mean": 0.20138888888888892,
+          "sample_std": 0.012028130608117209
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.1597222222222222,
+          "sample_std": 0.012028130608117193
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.20175438596491227,
+          "sample_std": 0.015193428136569098
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_polyak_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.08803503013669307,
+          "sample_std": 0.010188607742892606
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.09016261165185413,
+          "sample_std": 0.04449829907641307
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.025512224795191957,
+          "sample_std": 0.0025530212985032663
+        },
+        "cost_lift_at_budget": {
+          "mean": 1.6944369301473328,
+          "sample_std": 0.16956316457559195
+        },
+        "lift_at_budget": {
+          "mean": 6.4571759259259265,
+          "sample_std": 3.195473364889804
+        },
+        "precision_at_budget": {
+          "mean": 0.09722222222222221,
+          "sample_std": 0.048112522432468816
+        },
+        "recall_at_budget": {
+          "mean": 0.09722222222222221,
+          "sample_std": 0.048112522432468816
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.0763888888888889,
+          "sample_std": 0.031823442326082224
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.09649122807017545,
+          "sample_std": 0.040198032411893334
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_polyak_pooled_logistic": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.11171590980031924,
+          "sample_std": 1.6996749443881478e-17
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.2026609301964101,
+          "sample_std": 3.3993498887762956e-17
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.031174295229509975,
+          "sample_std": 0.0
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.070492774826621,
+          "sample_std": 0.0
+        },
+        "lift_at_budget": {
+          "mean": 15.220486111111109,
+          "sample_std": 2.175583928816829e-15
+        },
+        "precision_at_budget": {
+          "mean": 0.22916666666666666,
+          "sample_std": 0.0
+        },
+        "recall_at_budget": {
+          "mean": 0.22916666666666666,
+          "sample_std": 0.0
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.0
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.23684210526315788,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_polyak_raw_attentive_tail": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.12346127178982229,
+          "sample_std": 0.02693072825945066
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.20147102051082774,
+          "sample_std": 0.05298337638998511
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.030422187112306782,
+          "sample_std": 0.0005334892255437116
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.020540260709042,
+          "sample_std": 0.035432576063194894
+        },
+        "lift_at_budget": {
+          "mean": 12.453125,
+          "sample_std": 1.3836805555555562
+        },
+        "precision_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.020833333333333343
+        },
+        "recall_at_budget": {
+          "mean": 0.1875,
+          "sample_std": 0.020833333333333343
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.15972222222222224,
+          "sample_std": 0.0240562612162344
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.20175438596491227,
+          "sample_std": 0.0303868562731382
+        }
+      },
+      "num_runs": 3
+    },
+    "levjepa_polyak_raw_pooled_boosted": {
+      "metrics": {
+        "average_precision": {
+          "mean": 0.1429833361874768,
+          "sample_std": 0.005949398319443138
+        },
+        "binary_ndcg_at_budget": {
+          "mean": 0.226103243865,
+          "sample_std": 0.0320047365349677
+        },
+        "cost_capture_at_budget": {
+          "mean": 0.03292040241669742,
+          "sample_std": 0.002005593433411587
+        },
+        "cost_lift_at_budget": {
+          "mean": 2.1864633938423204,
+          "sample_std": 0.1332048305357528
+        },
+        "lift_at_budget": {
+          "mean": 12.914351851851853,
+          "sample_std": 1.5977366824449026
+        },
+        "precision_at_budget": {
+          "mean": 0.19444444444444445,
+          "sample_std": 0.024056261216234418
+        },
+        "recall_at_budget": {
+          "mean": 0.19444444444444445,
+          "sample_std": 0.024056261216234418
+        },
+        "threshold_precision_at_budget": {
+          "mean": 0.15277777777777776,
+          "sample_std": 0.0240562612162344
+        },
+        "threshold_recall_at_budget": {
+          "mean": 0.1929824561403509,
+          "sample_std": 0.030386856273138196
+        }
+      },
+      "num_runs": 3
+    }
+  },
+  "protocol": {
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "early_stopping_split": "training_only_stratified_15_percent",
+    "encoder_frozen": true,
+    "evaluation_split": "frozen_validation",
+    "mortality_label_available": false,
+    "polyak_online_comparison": true,
+    "probe_seeds": [
+      42,
+      43,
+      44
+    ],
+    "raw_feature_count": 256,
+    "tail_fraction": 0.015,
+    "task": "high_cost_tail_proxy_frozen_attentive_sequence_probe",
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.11171590980031923,
+        "binary_ndcg_at_budget": 0.20266093019641013,
+        "cost_capture_at_budget": 0.031174295229509975,
+        "cost_lift_at_budget": 2.070492774826621,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_pooled_boosted",
+      "iterations": 54,
+      "metrics": {
+        "average_precision": 0.13720917575774752,
+        "binary_ndcg_at_budget": 0.19513174806299388,
+        "cost_capture_at_budget": 0.031242102968214277,
+        "cost_lift_at_budget": 2.074996338805565,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "best_epoch": 6,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_attentive_tail",
+      "inner_validation_ap": 0.1535494824921458,
+      "metrics": {
+        "average_precision": 0.0924979335970338,
+        "binary_ndcg_at_budget": 0.1230145202585945,
+        "cost_capture_at_budget": 0.026541552121239306,
+        "cost_lift_at_budget": 1.7628014200523106,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 42
+    },
+    {
+      "best_epoch": 3,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_attentive_tail",
+      "inner_validation_ap": 0.15921711630988367,
+      "metrics": {
+        "average_precision": 0.11446670415449321,
+        "binary_ndcg_at_budget": 0.1925144886756066,
+        "cost_capture_at_budget": 0.0308734863449365,
+        "cost_lift_at_budget": 2.050514051409533,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.11171590980031923,
+        "binary_ndcg_at_budget": 0.20266093019641013,
+        "cost_capture_at_budget": 0.031174295229509975,
+        "cost_lift_at_budget": 2.070492774826621,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_pooled_boosted",
+      "iterations": 44,
+      "metrics": {
+        "average_precision": 0.14909371345073835,
+        "binary_ndcg_at_budget": 0.2590497476635132,
+        "cost_capture_at_budget": 0.03514153920349043,
+        "cost_lift_at_budget": 2.333983895431823,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "best_epoch": 8,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_attentive_tail",
+      "inner_validation_ap": 0.14643452185236894,
+      "metrics": {
+        "average_precision": 0.07637651113900573,
+        "binary_ndcg_at_budget": 0.039521708914141855,
+        "cost_capture_at_budget": 0.022605223009640355,
+        "cost_lift_at_budget": 1.501363561556947,
+        "lift_at_budget": 2.767361111111111,
+        "precision_at_budget": 0.041666666666666664,
+        "recall_at_budget": 0.041666666666666664,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.041666666666666664,
+        "threshold_recall_at_budget": 0.05263157894736842,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 43
+    },
+    {
+      "best_epoch": 5,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_attentive_tail",
+      "inner_validation_ap": 0.2130733731123762,
+      "metrics": {
+        "average_precision": 0.1021789621395034,
+        "binary_ndcg_at_budget": 0.15353675379743167,
+        "cost_capture_at_budget": 0.030559659384263745,
+        "cost_lift_at_budget": 2.029670710771517,
+        "lift_at_budget": 11.069444444444445,
+        "precision_at_budget": 0.16666666666666666,
+        "recall_at_budget": 0.16666666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.11171590980031923,
+        "binary_ndcg_at_budget": 0.20266093019641013,
+        "cost_capture_at_budget": 0.031174295229509975,
+        "cost_lift_at_budget": 2.070492774826621,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_pooled_boosted",
+      "iterations": 49,
+      "metrics": {
+        "average_precision": 0.14264711935394447,
+        "binary_ndcg_at_budget": 0.22412823586849295,
+        "cost_capture_at_budget": 0.03237756507838755,
+        "cost_lift_at_budget": 2.1504099472895732,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "best_epoch": 17,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_attentive_tail",
+      "inner_validation_ap": 0.19002295407377492,
+      "metrics": {
+        "average_precision": 0.09523064567403972,
+        "binary_ndcg_at_budget": 0.10795160578282602,
+        "cost_capture_at_budget": 0.027389899254696218,
+        "cost_lift_at_budget": 1.8191458088327406,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 44
+    },
+    {
+      "best_epoch": 2,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_polyak_raw_attentive_tail",
+      "inner_validation_ap": 0.17756337377894058,
+      "metrics": {
+        "average_precision": 0.1537381490754702,
+        "binary_ndcg_at_budget": 0.25836181905944494,
+        "cost_capture_at_budget": 0.02983341560772009,
+        "cost_lift_at_budget": 1.981436019946076,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 44
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.15080738753342396,
+        "binary_ndcg_at_budget": 0.24781354568645533,
+        "cost_capture_at_budget": 0.03073759205338982,
+        "cost_lift_at_budget": 2.041488405545974,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_pooled_boosted",
+      "iterations": 54,
+      "metrics": {
+        "average_precision": 0.23910998991461863,
+        "binary_ndcg_at_budget": 0.33873733980475,
+        "cost_capture_at_budget": 0.03340108000450845,
+        "cost_lift_at_budget": 2.2183883969661027,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "best_epoch": 9,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_attentive_tail",
+      "inner_validation_ap": 0.13908089735886248,
+      "metrics": {
+        "average_precision": 0.10768870456867305,
+        "binary_ndcg_at_budget": 0.15369685170792013,
+        "cost_capture_at_budget": 0.024523793899853152,
+        "cost_lift_at_budget": 1.6287886448485802,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 42
+    },
+    {
+      "best_epoch": 3,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_attentive_tail",
+      "inner_validation_ap": 0.1665066103158366,
+      "metrics": {
+        "average_precision": 0.10973819554429039,
+        "binary_ndcg_at_budget": 0.2038428802375655,
+        "cost_capture_at_budget": 0.032636915531938426,
+        "cost_lift_at_budget": 2.1676351399129103,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.20833333333333334,
+        "threshold_recall_at_budget": 0.2631578947368421,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.15080738753342396,
+        "binary_ndcg_at_budget": 0.24781354568645533,
+        "cost_capture_at_budget": 0.03073759205338982,
+        "cost_lift_at_budget": 2.041488405545974,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_pooled_boosted",
+      "iterations": 42,
+      "metrics": {
+        "average_precision": 0.16628341527458707,
+        "binary_ndcg_at_budget": 0.27452015296223337,
+        "cost_capture_at_budget": 0.033805182543612346,
+        "cost_lift_at_budget": 2.24522754060492,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "best_epoch": 10,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_attentive_tail",
+      "inner_validation_ap": 0.14447818466035842,
+      "metrics": {
+        "average_precision": 0.09147303145893307,
+        "binary_ndcg_at_budget": 0.07689061398711469,
+        "cost_capture_at_budget": 0.024947675531780362,
+        "cost_lift_at_budget": 1.6569414499024124,
+        "lift_at_budget": 6.918402777777779,
+        "precision_at_budget": 0.10416666666666667,
+        "recall_at_budget": 0.10416666666666667,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 43
+    },
+    {
+      "best_epoch": 10,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_attentive_tail",
+      "inner_validation_ap": 0.18702771218996228,
+      "metrics": {
+        "average_precision": 0.08999871165621934,
+        "binary_ndcg_at_budget": 0.1583395031380062,
+        "cost_capture_at_budget": 0.03052832063134228,
+        "cost_lift_at_budget": 2.0275892952649834,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.15080738753342396,
+        "binary_ndcg_at_budget": 0.24781354568645533,
+        "cost_capture_at_budget": 0.03073759205338982,
+        "cost_lift_at_budget": 2.041488405545974,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_pooled_boosted",
+      "iterations": 44,
+      "metrics": {
+        "average_precision": 0.16362995517936793,
+        "binary_ndcg_at_budget": 0.26468508988196265,
+        "cost_capture_at_budget": 0.03026553589712991,
+        "cost_lift_at_budget": 2.0101360091677116,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "best_epoch": 21,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_attentive_tail",
+      "inner_validation_ap": 0.24651737206518734,
+      "metrics": {
+        "average_precision": 0.11450471053318512,
+        "binary_ndcg_at_budget": 0.19379103391994473,
+        "cost_capture_at_budget": 0.03322552615410694,
+        "cost_lift_at_budget": 2.206728695401936,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 44
+    },
+    {
+      "best_epoch": 1,
+      "checkpoint_seed": 42,
+      "condition": "levjepa_online_raw_attentive_tail",
+      "inner_validation_ap": 0.19069154356601914,
+      "metrics": {
+        "average_precision": 0.13527738748928056,
+        "binary_ndcg_at_budget": 0.24879557590699192,
+        "cost_capture_at_budget": 0.03210152613652256,
+        "cost_lift_at_budget": 2.1320763609007067,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 44
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.10273663815540186,
+        "binary_ndcg_at_budget": 0.1741583096366564,
+        "cost_capture_at_budget": 0.030205219007029414,
+        "cost_lift_at_budget": 2.006129962383537,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_pooled_boosted",
+      "iterations": 38,
+      "metrics": {
+        "average_precision": 0.133007089947754,
+        "binary_ndcg_at_budget": 0.22601782255711547,
+        "cost_capture_at_budget": 0.03332113878651485,
+        "cost_lift_at_budget": 2.2130789677376947,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 42
+    },
+    {
+      "best_epoch": 6,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_attentive_tail",
+      "inner_validation_ap": 0.1261660049998924,
+      "metrics": {
+        "average_precision": 0.09903619314869253,
+        "binary_ndcg_at_budget": 0.10638647402574034,
+        "cost_capture_at_budget": 0.026965992273026474,
+        "cost_lift_at_budget": 1.7909913201335084,
+        "lift_at_budget": 8.302083333333334,
+        "precision_at_budget": 0.125,
+        "recall_at_budget": 0.125,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.08333333333333333,
+        "threshold_recall_at_budget": 0.10526315789473684,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 42
+    },
+    {
+      "best_epoch": 3,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_attentive_tail",
+      "inner_validation_ap": 0.17831347217192278,
+      "metrics": {
+        "average_precision": 0.12098623471884369,
+        "binary_ndcg_at_budget": 0.21406996398199446,
+        "cost_capture_at_budget": 0.031871449188844735,
+        "cost_lift_at_budget": 2.1167954169591043,
+        "lift_at_budget": 15.22048611111111,
+        "precision_at_budget": 0.22916666666666666,
+        "recall_at_budget": 0.22916666666666666,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.1875,
+        "threshold_recall_at_budget": 0.23684210526315788,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 42
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.10273663815540186,
+        "binary_ndcg_at_budget": 0.1741583096366564,
+        "cost_capture_at_budget": 0.030205219007029414,
+        "cost_lift_at_budget": 2.006129962383537,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_pooled_boosted",
+      "iterations": 53,
+      "metrics": {
+        "average_precision": 0.14431814015247046,
+        "binary_ndcg_at_budget": 0.21144136427679078,
+        "cost_capture_at_budget": 0.03319142926578706,
+        "cost_lift_at_budget": 2.204464093736024,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "seed": 43
+    },
+    {
+      "best_epoch": 5,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_attentive_tail",
+      "inner_validation_ap": 0.15329277170554378,
+      "metrics": {
+        "average_precision": 0.09311702622949564,
+        "binary_ndcg_at_budget": 0.12740832944586244,
+        "cost_capture_at_budget": 0.02840785363995426,
+        "cost_lift_at_budget": 1.8867549459202955,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.10416666666666667,
+        "threshold_recall_at_budget": 0.13157894736842105,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 43
+    },
+    {
+      "best_epoch": 5,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_attentive_tail",
+      "inner_validation_ap": 0.21399437596588283,
+      "metrics": {
+        "average_precision": 0.11883994997711532,
+        "binary_ndcg_at_budget": 0.19400497436294695,
+        "cost_capture_at_budget": 0.03101137890891283,
+        "cost_lift_at_budget": 2.0596724158669604,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 43
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_pooled_logistic",
+      "metrics": {
+        "average_precision": 0.10273663815540186,
+        "binary_ndcg_at_budget": 0.1741583096366564,
+        "cost_capture_at_budget": 0.030205219007029414,
+        "cost_lift_at_budget": 2.006129962383537,
+        "lift_at_budget": 12.453125,
+        "precision_at_budget": 0.1875,
+        "recall_at_budget": 0.1875,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_pooled_boosted",
+      "iterations": 35,
+      "metrics": {
+        "average_precision": 0.17290662274552432,
+        "binary_ndcg_at_budget": 0.28273788293685703,
+        "cost_capture_at_budget": 0.03337699129209108,
+        "cost_lift_at_budget": 2.2167885049830494,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.16666666666666666,
+        "threshold_recall_at_budget": 0.21052631578947367,
+        "validation_samples": 3188
+      },
+      "seed": 44
+    },
+    {
+      "best_epoch": 14,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_attentive_tail",
+      "inner_validation_ap": 0.18424103208476672,
+      "metrics": {
+        "average_precision": 0.09971977012078463,
+        "binary_ndcg_at_budget": 0.16625905945972907,
+        "cost_capture_at_budget": 0.031046435572489744,
+        "cost_lift_at_budget": 2.062000762606194,
+        "lift_at_budget": 13.836805555555557,
+        "precision_at_budget": 0.20833333333333334,
+        "recall_at_budget": 0.20833333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.14583333333333334,
+        "threshold_recall_at_budget": 0.18421052631578946,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 0,
+      "seed": 44
+    },
+    {
+      "best_epoch": 2,
+      "checkpoint_seed": 42,
+      "condition": "incumbent_online_raw_attentive_tail",
+      "inner_validation_ap": 0.1828185734089693,
+      "metrics": {
+        "average_precision": 0.1583037411824241,
+        "binary_ndcg_at_budget": 0.22318288711565543,
+        "cost_capture_at_budget": 0.030020580008006205,
+        "cost_lift_at_budget": 1.9938668555317454,
+        "lift_at_budget": 9.68576388888889,
+        "precision_at_budget": 0.14583333333333334,
+        "recall_at_budget": 0.14583333333333334,
+        "selection_count": 48,
+        "threshold_positive_prevalence": 0.01191969887076537,
+        "threshold_precision_at_budget": 0.125,
+        "threshold_recall_at_budget": 0.15789473684210525,
+        "validation_samples": 3188
+      },
+      "num_heads": 4,
+      "raw_features_in_probe": 256,
+      "seed": 44
+    }
+  ]
+}

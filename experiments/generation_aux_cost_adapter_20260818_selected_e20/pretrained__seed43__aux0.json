@@ -1,0 +1,30 @@
+{
+  "adapter_geometry": {
+    "mean_cosine_to_frozen": 0.9704155921936035,
+    "mean_relative_l2": 0.20448389649391174
+  },
+  "aux_weight": 0.0,
+  "condition": "pretrained",
+  "cost": {
+    "target_probe_mae_dollars": 2317.171630859375,
+    "target_probe_rmse_dollars": 3607.612548828125,
+    "target_probe_rmse_log1p": 0.9978964328765869,
+    "target_probe_wape_percent": 49.81143569946289
+  },
+  "cost_label_fraction": 0.1,
+  "generation": {
+    "cpt_micro_average_precision": 0.08768319705096818,
+    "icd_micro_average_precision": 0.09086284242146578,
+    "ttnc_accuracy": 0.32423101067168864
+  },
+  "num_cost_labels": 1500,
+  "seed": 43,
+  "training_first": {
+    "cost": 0.8606834694490595,
+    "generation": 0.0
+  },
+  "training_last": {
+    "cost": 0.37349925152326036,
+    "generation": 0.0
+  }
+}

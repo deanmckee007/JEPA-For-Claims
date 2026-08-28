@@ -1,0 +1,260 @@
+{
+  "aggregate": {
+    "pretrained|0": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 2188.847941080729,
+          "sample_std": 155.00303428829045
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 3349.272216796875,
+          "sample_std": 290.40523585102727
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.9473065535227457,
+          "sample_std": 0.03011557458421996
+        },
+        "target_probe_wape_percent": {
+          "mean": 47.052904764811196,
+          "sample_std": 3.3320476617638417
+        }
+      },
+      "num_runs": 3
+    },
+    "pretrained|10": {
+      "cost": {
+        "target_probe_mae_dollars": {
+          "mean": 1774.2469889322917,
+          "sample_std": 52.61026765372712
+        },
+        "target_probe_rmse_dollars": {
+          "mean": 2764.5288899739585,
+          "sample_std": 66.59921927721791
+        },
+        "target_probe_rmse_log1p": {
+          "mean": 0.86738520860672,
+          "sample_std": 0.003033449858125181
+        },
+        "target_probe_wape_percent": {
+          "mean": 38.14037195841471,
+          "sample_std": 1.1309446036401323
+        }
+      },
+      "num_runs": 3
+    }
+  },
+  "paired_deltas": {
+    "pretrained|10": {
+      "mae_dollars_aux_minus_cost_only_mean": -414.6009521484375,
+      "paired_seeds": 3,
+      "sample_std": 141.31812714033123
+    }
+  },
+  "protocol": {
+    "adapter_dim": 32,
+    "adapter_l2_weight": 10.0,
+    "aux_weights": [
+      0.0,
+      10.0
+    ],
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\final_pairwise_20260814\\selected_lejepa_anycode_seed42_e20\\encoder.ckpt",
+    "cost_label_fraction": 0.1,
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "encoder_frozen": true,
+    "evaluation_split": "frozen_validation",
+    "generation_label_fraction": 1.0,
+    "linear_heads": true,
+    "matched_update_count": true,
+    "representation_source": "next_claim_prediction",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_accessed": false,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.9979126453399658,
+        "mean_relative_l2": 0.04459948092699051
+      },
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 2346.258544921875,
+        "target_probe_rmse_dollars": 3652.047119140625,
+        "target_probe_rmse_log1p": 0.9617396593093872,
+        "target_probe_wape_percent": 50.43670654296875
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.84298679434647,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.3293236597614773,
+        "generation": 0.0
+      }
+    },
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.9614870548248291,
+        "mean_relative_l2": 0.26541444659233093
+      },
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1822.859375,
+        "target_probe_rmse_dollars": 2804.7568359375,
+        "target_probe_rmse_log1p": 0.8704313039779663,
+        "target_probe_wape_percent": 39.18537521362305
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.24684955021511842,
+        "icd_micro_average_precision": 0.11827801908613968,
+        "ttnc_accuracy": 0.6136220966729441
+      },
+      "num_cost_labels": 1500,
+      "seed": 42,
+      "training_first": {
+        "cost": 0.8531693013037666,
+        "generation": 2.946538597850476
+      },
+      "training_last": {
+        "cost": 0.6019934036974179,
+        "generation": 1.4565634545633348
+      }
+    },
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.9980393052101135,
+        "mean_relative_l2": 0.041867464780807495
+      },
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 2183.9150390625,
+        "target_probe_rmse_dollars": 3322.70751953125,
+        "target_probe_rmse_log1p": 0.9674891233444214,
+        "target_probe_wape_percent": 46.94686508178711
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8648086553913051,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.3747752667483637,
+        "generation": 0.0
+      }
+    },
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.95623379945755,
+        "mean_relative_l2": 0.2804447114467621
+      },
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1718.3897705078125,
+        "target_probe_rmse_dollars": 2687.654541015625,
+        "target_probe_rmse_log1p": 0.8673597574234009,
+        "target_probe_wape_percent": 36.93962860107422
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.23124426331161851,
+        "icd_micro_average_precision": 0.12292093665933529,
+        "ttnc_accuracy": 0.6101694915254238
+      },
+      "num_cost_labels": 1500,
+      "seed": 43,
+      "training_first": {
+        "cost": 0.8719408411090657,
+        "generation": 2.961618597224607
+      },
+      "training_last": {
+        "cost": 0.6597996177309651,
+        "generation": 1.4556978799528995
+      }
+    },
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.998247504234314,
+        "mean_relative_l2": 0.04162031412124634
+      },
+      "aux_weight": 0.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 2036.3702392578125,
+        "target_probe_rmse_dollars": 3073.06201171875,
+        "target_probe_rmse_log1p": 0.9126908779144287,
+        "target_probe_wape_percent": 43.775142669677734
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.08768319705096818,
+        "icd_micro_average_precision": 0.09086284242146578,
+        "ttnc_accuracy": 0.32423101067168864
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.8537006034689435,
+        "generation": 0.0
+      },
+      "training_last": {
+        "cost": 0.3974796993247533,
+        "generation": 0.0
+      }
+    },
+    {
+      "adapter_geometry": {
+        "mean_cosine_to_frozen": 0.9634138345718384,
+        "mean_relative_l2": 0.25929251313209534
+      },
+      "aux_weight": 10.0,
+      "condition": "pretrained",
+      "cost": {
+        "target_probe_mae_dollars": 1781.4918212890625,
+        "target_probe_rmse_dollars": 2801.17529296875,
+        "target_probe_rmse_log1p": 0.8643645644187927,
+        "target_probe_wape_percent": 38.296112060546875
+      },
+      "cost_label_fraction": 0.1,
+      "generation": {
+        "cpt_micro_average_precision": 0.25188098961112254,
+        "icd_micro_average_precision": 0.12165346602233293,
+        "ttnc_accuracy": 0.6145637162586315
+      },
+      "num_cost_labels": 1500,
+      "seed": 44,
+      "training_first": {
+        "cost": 0.863294388278056,
+        "generation": 2.94902157379409
+      },
+      "training_last": {
+        "cost": 0.5994223462323011,
+        "generation": 1.4559163501707173
+      }
+    }
+  ]
+}

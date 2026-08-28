@@ -1,0 +1,35 @@
+{
+  "ablation": "shuffled_all",
+  "adapter_geometry": {
+    "mean_cosine_to_frozen": 1.0,
+    "mean_relative_l2": 0.0,
+    "shared_hidden_mean_feature_std": 1.2104840278625488,
+    "shared_hidden_mean_norm": 23.7054443359375
+  },
+  "aux_label_mode": "shuffled",
+  "aux_weight": 10.0,
+  "condition": "raw_history",
+  "consistency_noise_std": 0.1,
+  "consistency_weight": 0.0,
+  "cost": {
+    "target_probe_mae_dollars": 2338.59130859375,
+    "target_probe_rmse_dollars": 3477.080322265625,
+    "target_probe_rmse_log1p": 0.9492548704147339,
+    "target_probe_wape_percent": 50.27188491821289
+  },
+  "feature_source": "raw_history_hash",
+  "generation": {
+    "cpt_micro_average_precision": 0.06447703336754138,
+    "icd_micro_average_precision": 0.07555711119753153,
+    "ttnc_accuracy": 0.2335216572504708
+  },
+  "seed": 42,
+  "training_first": {
+    "cost": 0.8401459167569371,
+    "generation": 3.470572758529146
+  },
+  "training_last": {
+    "cost": 0.22782702617726083,
+    "generation": 1.8182201365293083
+  }
+}

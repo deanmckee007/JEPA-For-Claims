@@ -1,0 +1,15 @@
+{
+  "cost": {
+    "target_probe_mae_dollars": 2447.900146484375,
+    "target_probe_rmse_dollars": 4177.60595703125,
+    "target_probe_rmse_log1p": 16.821081161499023,
+    "target_probe_wape_percent": 52.62165451049805
+  },
+  "cost_label_fraction": 0.25,
+  "feature_dimension": 2945,
+  "linear_cost_head": true,
+  "pathway": "oracle_claims_linear",
+  "seed": 42,
+  "training_first": 0.9261825756501343,
+  "training_last": 0.6143185077077251
+}

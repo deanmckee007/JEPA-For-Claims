@@ -1,0 +1,724 @@
+{
+  "aggregate": {
+    "next_claim_prediction|pretrained|0.1": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 1783.9337158203125,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 2837.347900390625,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.3357117786027002,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.4737604053564966,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4255695314105395,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5510084198159388,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5778405524168236,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "next_claim_prediction|pretrained|1.0": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 1704.2479248046875,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 2781.445068359375,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.4597462475654092,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.5034913634693128,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.5046459232031584,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5814120566912677,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5947897049591965,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "next_claim_prediction|shuffled|0.1": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 2135.097900390625,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 3123.494140625,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.2687160984967271,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.34465534465534464,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4845032239401657,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.4494252873563218,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5646578782172003,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "next_claim_prediction|shuffled|1.0": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 2107.761962890625,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 3083.5986328125,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.3319658749559561,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.39260739260739264,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.5372660679541519,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.4633033863165169,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5721908349026993,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "patient_representation_pre_sae|pretrained|0.1": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 2081.170654296875,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 3098.2548828125,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.34219608675695645,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.479940287367046,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4447747487965681,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5433781065472715,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5963590709353421,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "patient_representation_pre_sae|pretrained|1.0": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 1644.4449462890625,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 2660.287109375,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.44311232048709365,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.5045581395348836,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4943831229248329,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.5846539883782357,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.6368487131198995,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "patient_representation_pre_sae|shuffled|0.1": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 2491.6025390625,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 3563.901123046875,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.2813720164142889,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.34907391957283496,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.4711845995961812,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.4456802897051216,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.561519146264909,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    },
+    "patient_representation_pre_sae|shuffled|1.0": {
+      "metrics": {
+        "cost.target_probe_mae_dollars": {
+          "mean": 2113.357421875,
+          "sample_std": 0.0
+        },
+        "cost.target_probe_rmse_dollars": {
+          "mean": 3097.814453125,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_average_precision": {
+          "mean": 0.33708253847727965,
+          "sample_std": 0.0
+        },
+        "generation.cpt.micro_f1": {
+          "mean": 0.38734388009991677,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_average_precision": {
+          "mean": 0.5183499179056951,
+          "sample_std": 0.0
+        },
+        "generation.icd.micro_f1": {
+          "mean": 0.45935828877005347,
+          "sample_std": 0.0
+        },
+        "generation.ttnc.accuracy": {
+          "mean": 0.5646578782172003,
+          "sample_std": 0.0
+        }
+      },
+      "num_runs": 1
+    }
+  },
+  "empirical_prior": {
+    "cpt": {
+      "binary_nll": 0.002602712018415332,
+      "cardinality_mae": 0.7054395079612732,
+      "exact_set_match": 0.12397991211550534,
+      "mean_set_jaccard": 0.14422473320778406,
+      "micro_average_precision": 0.08768319673073187,
+      "micro_f1": 0.17882117882117884,
+      "micro_precision": 0.16854990583804144,
+      "micro_recall": 0.19042553191489361,
+      "supported_class_count": 110,
+      "supported_macro_average_precision": 0.007284711521999657
+    },
+    "icd": {
+      "binary_nll": 0.009913439862430096,
+      "cardinality_mae": 1.6305583715438843,
+      "exact_set_match": 0.0018832391713747645,
+      "mean_set_jaccard": 0.14995291902071564,
+      "micro_average_precision": 0.09086280352283191,
+      "micro_f1": 0.17574169793953126,
+      "micro_precision": 0.19475831763967358,
+      "micro_recall": 0.16010837311314668,
+      "supported_class_count": 281,
+      "supported_macro_average_precision": 0.008319315153261713
+    },
+    "ttnc": {
+      "accuracy": 0.32423101067168864,
+      "macro_f1": 0.02880526469891109,
+      "negative_log_likelihood": 1.9954139600190188
+    }
+  },
+  "protocol": {
+    "add_remove": false,
+    "checkpoint": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\lpwm_claims_pilot_20260826\\cap32_promotion_seed42_e4\\lpwm_dense_gaussian_cap32\\encoder.ckpt",
+    "conditions": [
+      "pretrained",
+      "shuffled"
+    ],
+    "copy_logit_boost": 4.0,
+    "copy_residual": true,
+    "copy_ttnc_logit_boost": 2.0,
+    "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+    "data_contract_hash": "349d6b49a743282dbeb84b105338674cada85ee78b3fe2f2229d9ad5b4492644",
+    "epochs": 20,
+    "evaluation_split": "frozen_validation",
+    "event_ranking_weight": 0.1,
+    "label_fractions": [
+      0.1,
+      1.0
+    ],
+    "seeds": [
+      42
+    ],
+    "sources": [
+      "next_claim_prediction",
+      "patient_representation_pre_sae"
+    ],
+    "test_accessed": false,
+    "train_samples": 15048,
+    "validation_samples": 3186,
+    "vocab_hash": "7554200552fdf0e3609d927cfadb68c5444a656df4c77d929cf2ff71341893f0"
+  },
+  "runs": [
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 1783.9337158203125,
+        "target_probe_rmse_dollars": 2837.347900390625,
+        "target_probe_rmse_log1p": 0.8691695332527161,
+        "target_probe_wape_percent": 38.348602294921875
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.06693006306886673,
+          "cardinality_mae": 0.5235050916671753,
+          "exact_set_match": 0.5671688637790333,
+          "mean_set_jaccard": 0.29647415777359276,
+          "micro_average_precision": 0.3357117786027002,
+          "micro_f1": 0.4737604053564966,
+          "micro_precision": 0.483739837398374,
+          "micro_recall": 0.46418439716312054,
+          "supported_class_count": 18,
+          "supported_macro_average_precision": 0.26919302155066677
+        },
+        "icd": {
+          "binary_nll": 0.10818665474653244,
+          "cardinality_mae": 1.023236870765686,
+          "exact_set_match": 0.24764595103578155,
+          "mean_set_jaccard": 0.5048097330583207,
+          "micro_average_precision": 0.4255695314105395,
+          "micro_f1": 0.5510084198159388,
+          "micro_precision": 0.5575957727873183,
+          "micro_recall": 0.544574893562121,
+          "supported_class_count": 73,
+          "supported_macro_average_precision": 0.44261462396901263
+        },
+        "ttnc": {
+          "accuracy": 0.5778405524168236,
+          "macro_f1": 0.17051469161493493,
+          "negative_log_likelihood": 1.4155628681182861
+        }
+      },
+      "label_fraction": 0.1,
+      "num_labels": 1500,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 3.701948960622152,
+      "training_loss_last": 1.4609166979789734
+    },
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 1704.2479248046875,
+        "target_probe_rmse_dollars": 2781.445068359375,
+        "target_probe_rmse_log1p": 0.8636714220046997,
+        "target_probe_wape_percent": 36.635623931884766
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.08301478624343872,
+          "cardinality_mae": 0.5062738060951233,
+          "exact_set_match": 0.5976145637162587,
+          "mean_set_jaccard": 0.3185708307177234,
+          "micro_average_precision": 0.4597462475654092,
+          "micro_f1": 0.5034913634693128,
+          "micro_precision": 0.5225019069412662,
+          "micro_recall": 0.4858156028368794,
+          "supported_class_count": 110,
+          "supported_macro_average_precision": 0.18564705055207087
+        },
+        "icd": {
+          "binary_nll": 0.11915692687034607,
+          "cardinality_mae": 0.9254353642463684,
+          "exact_set_match": 0.27369742623979915,
+          "mean_set_jaccard": 0.5358172909255773,
+          "micro_average_precision": 0.5046459232031584,
+          "micro_f1": 0.5814120566912677,
+          "micro_precision": 0.5887566137566138,
+          "micro_recall": 0.574248484066572,
+          "supported_class_count": 281,
+          "supported_macro_average_precision": 0.3769946686686657
+        },
+        "ttnc": {
+          "accuracy": 0.5947897049591965,
+          "macro_f1": 0.17879643880372403,
+          "negative_log_likelihood": 1.329140067100525
+        }
+      },
+      "label_fraction": 1.0,
+      "num_labels": 15048,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 2.836490885686066,
+      "training_loss_last": 1.4351960359993627
+    },
+    {
+      "add_remove": false,
+      "condition": "shuffled",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 2135.097900390625,
+        "target_probe_rmse_dollars": 3123.494140625,
+        "target_probe_rmse_log1p": 0.9633821845054626,
+        "target_probe_wape_percent": 45.897457122802734
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.09076230227947235,
+          "cardinality_mae": 0.7187820076942444,
+          "exact_set_match": 0.2630257376020088,
+          "mean_set_jaccard": 0.2903588616865453,
+          "micro_average_precision": 0.2687160984967271,
+          "micro_f1": 0.34465534465534464,
+          "micro_precision": 0.3248587570621469,
+          "micro_recall": 0.3670212765957447,
+          "supported_class_count": 18,
+          "supported_macro_average_precision": 0.2490811414264972
+        },
+        "icd": {
+          "binary_nll": 0.12225020676851273,
+          "cardinality_mae": 1.6410460472106934,
+          "exact_set_match": 0.008788449466415568,
+          "mean_set_jaccard": 0.32453143215855085,
+          "micro_average_precision": 0.4845032239401657,
+          "micro_f1": 0.4494252873563218,
+          "micro_precision": 0.4449361486913643,
+          "micro_recall": 0.4540059347181009,
+          "supported_class_count": 73,
+          "supported_macro_average_precision": 0.4924891113147555
+        },
+        "ttnc": {
+          "accuracy": 0.5646578782172003,
+          "macro_f1": 0.16323749236758434,
+          "negative_log_likelihood": 1.6755976676940918
+        }
+      },
+      "label_fraction": 0.1,
+      "num_labels": 1500,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 3.758830507596334,
+      "training_loss_last": 1.757331132888794
+    },
+    {
+      "add_remove": false,
+      "condition": "shuffled",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 2107.761962890625,
+        "target_probe_rmse_dollars": 3083.5986328125,
+        "target_probe_rmse_log1p": 0.9550471305847168,
+        "target_probe_wape_percent": 45.30982971191406
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.12009839713573456,
+          "cardinality_mae": 0.7315533757209778,
+          "exact_set_match": 0.29252981795354677,
+          "mean_set_jaccard": 0.32650136011717934,
+          "micro_average_precision": 0.3319658749559561,
+          "micro_f1": 0.39260739260739264,
+          "micro_precision": 0.3700564971751412,
+          "micro_recall": 0.41808510638297874,
+          "supported_class_count": 110,
+          "supported_macro_average_precision": 0.15322376281042344
+        },
+        "icd": {
+          "binary_nll": 0.14226774871349335,
+          "cardinality_mae": 1.6088299751281738,
+          "exact_set_match": 0.016635279347143754,
+          "mean_set_jaccard": 0.35162915134666545,
+          "micro_average_precision": 0.5372660679541519,
+          "micro_f1": 0.4633033863165169,
+          "micro_precision": 0.4988837624646525,
+          "micro_recall": 0.43246032769965165,
+          "supported_class_count": 281,
+          "supported_macro_average_precision": 0.4109092892149087
+        },
+        "ttnc": {
+          "accuracy": 0.5721908349026993,
+          "macro_f1": 0.16826348208503075,
+          "negative_log_likelihood": 1.6358598470687866
+        }
+      },
+      "label_fraction": 1.0,
+      "num_labels": 15048,
+      "seed": 42,
+      "source": "next_claim_prediction",
+      "training_loss_first": 3.12865501743252,
+      "training_loss_last": 1.840723488290431
+    },
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 2081.170654296875,
+        "target_probe_rmse_dollars": 3098.2548828125,
+        "target_probe_rmse_log1p": 0.8899163603782654,
+        "target_probe_wape_percent": 44.73820495605469
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.054537419229745865,
+          "cardinality_mae": 0.5202966928482056,
+          "exact_set_match": 0.5932203389830508,
+          "mean_set_jaccard": 0.3095888261142498,
+          "micro_average_precision": 0.34219608675695645,
+          "micro_f1": 0.479940287367046,
+          "micro_precision": 0.5064986215045293,
+          "micro_recall": 0.45602836879432623,
+          "supported_class_count": 18,
+          "supported_macro_average_precision": 0.26473972094699794
+        },
+        "icd": {
+          "binary_nll": 0.09445919841527939,
+          "cardinality_mae": 1.001920223236084,
+          "exact_set_match": 0.23603264281230382,
+          "mean_set_jaccard": 0.4948765182993054,
+          "micro_average_precision": 0.4447747487965681,
+          "micro_f1": 0.5433781065472715,
+          "micro_precision": 0.5466057441253264,
+          "micro_recall": 0.5401883627918979,
+          "supported_class_count": 73,
+          "supported_macro_average_precision": 0.44973420926346325
+        },
+        "ttnc": {
+          "accuracy": 0.5963590709353421,
+          "macro_f1": 0.1883331711912345,
+          "negative_log_likelihood": 1.4008166790008545
+        }
+      },
+      "label_fraction": 0.1,
+      "num_labels": 1500,
+      "seed": 42,
+      "source": "patient_representation_pre_sae",
+      "training_loss_first": 3.7038743098576865,
+      "training_loss_last": 1.2486244042714436
+    },
+    {
+      "add_remove": false,
+      "condition": "pretrained",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 1644.4449462890625,
+        "target_probe_rmse_dollars": 2660.287109375,
+        "target_probe_rmse_log1p": 0.8259097933769226,
+        "target_probe_wape_percent": 35.35006332397461
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.06536394357681274,
+          "cardinality_mae": 0.4908469617366791,
+          "exact_set_match": 0.6076585059635907,
+          "mean_set_jaccard": 0.32375795892745046,
+          "micro_average_precision": 0.44311232048709365,
+          "micro_f1": 0.5045581395348836,
+          "micro_precision": 0.5307240704500978,
+          "micro_recall": 0.4808510638297872,
+          "supported_class_count": 110,
+          "supported_macro_average_precision": 0.19229007431724246
+        },
+        "icd": {
+          "binary_nll": 0.10257145762443542,
+          "cardinality_mae": 0.8884827494621277,
+          "exact_set_match": 0.3173258003766478,
+          "mean_set_jaccard": 0.5554532976613956,
+          "micro_average_precision": 0.4943831229248329,
+          "micro_f1": 0.5846539883782357,
+          "micro_precision": 0.598809684837008,
+          "micro_recall": 0.5711521094052381,
+          "supported_class_count": 281,
+          "supported_macro_average_precision": 0.3570976454322062
+        },
+        "ttnc": {
+          "accuracy": 0.6368487131198995,
+          "macro_f1": 0.28012173436984816,
+          "negative_log_likelihood": 1.2322542667388916
+        }
+      },
+      "label_fraction": 1.0,
+      "num_labels": 15048,
+      "seed": 42,
+      "source": "patient_representation_pre_sae",
+      "training_loss_first": 2.7997777805490007,
+      "training_loss_last": 1.1116008617110171
+    },
+    {
+      "add_remove": false,
+      "condition": "shuffled",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 2491.6025390625,
+        "target_probe_rmse_dollars": 3563.901123046875,
+        "target_probe_rmse_log1p": 1.0591908693313599,
+        "target_probe_wape_percent": 53.56111526489258
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.0743061974644661,
+          "cardinality_mae": 0.7135656476020813,
+          "exact_set_match": 0.26961707470182045,
+          "mean_set_jaccard": 0.29459091860221803,
+          "micro_average_precision": 0.2813720164142889,
+          "micro_f1": 0.34907391957283496,
+          "micro_precision": 0.32965647652064295,
+          "micro_recall": 0.3709219858156028,
+          "supported_class_count": 18,
+          "supported_macro_average_precision": 0.24352702079993316
+        },
+        "icd": {
+          "binary_nll": 0.10556042939424515,
+          "cardinality_mae": 1.642933964729309,
+          "exact_set_match": 0.00973006905210295,
+          "mean_set_jaccard": 0.3226833168923564,
+          "micro_average_precision": 0.4711845995961812,
+          "micro_f1": 0.4456802897051216,
+          "micro_precision": 0.4467781667314923,
+          "micro_recall": 0.4445877951232099,
+          "supported_class_count": 73,
+          "supported_macro_average_precision": 0.48606649621941966
+        },
+        "ttnc": {
+          "accuracy": 0.561519146264909,
+          "macro_f1": 0.16051501899121035,
+          "negative_log_likelihood": 1.7040793895721436
+        }
+      },
+      "label_fraction": 0.1,
+      "num_labels": 1500,
+      "seed": 42,
+      "source": "patient_representation_pre_sae",
+      "training_loss_first": 3.7598530054092407,
+      "training_loss_last": 1.6219441890716553
+    },
+    {
+      "add_remove": false,
+      "condition": "shuffled",
+      "copy_residual": true,
+      "cost": {
+        "target_probe_mae_dollars": 2113.357421875,
+        "target_probe_rmse_dollars": 3097.814453125,
+        "target_probe_rmse_log1p": 0.9600625038146973,
+        "target_probe_wape_percent": 45.43011474609375
+      },
+      "event_ranking_weight": 0.1,
+      "generation": {
+        "cpt": {
+          "binary_nll": 0.09688185900449753,
+          "cardinality_mae": 0.7263128161430359,
+          "exact_set_match": 0.28876333961079725,
+          "mean_set_jaccard": 0.3223006905210295,
+          "micro_average_precision": 0.33708253847727965,
+          "micro_f1": 0.38734388009991677,
+          "micro_precision": 0.36514913657770803,
+          "micro_recall": 0.4124113475177305,
+          "supported_class_count": 110,
+          "supported_macro_average_precision": 0.1471739015528823
+        },
+        "icd": {
+          "binary_nll": 0.12636305391788483,
+          "cardinality_mae": 1.6147449016571045,
+          "exact_set_match": 0.01694915254237288,
+          "mean_set_jaccard": 0.343157564344005,
+          "micro_average_precision": 0.5183499179056951,
+          "micro_f1": 0.45935828877005347,
+          "micro_precision": 0.47662643917325564,
+          "micro_recall": 0.44329763901432073,
+          "supported_class_count": 281,
+          "supported_macro_average_precision": 0.3593245239722038
+        },
+        "ttnc": {
+          "accuracy": 0.5646578782172003,
+          "macro_f1": 0.16352914697714507,
+          "negative_log_likelihood": 1.6857595443725586
+        }
+      },
+      "label_fraction": 1.0,
+      "num_labels": 15048,
+      "seed": 42,
+      "source": "patient_representation_pre_sae",
+      "training_loss_first": 3.1127313638137557,
+      "training_loss_last": 1.7130081896054543
+    }
+  ]
+}

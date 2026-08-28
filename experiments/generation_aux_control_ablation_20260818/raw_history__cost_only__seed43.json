@@ -1,0 +1,36 @@
+{
+  "ablation": "cost_only",
+  "adapter_geometry": {
+    "mean_cosine_to_frozen": 1.0,
+    "mean_relative_l2": 0.0
+  },
+  "aux_label_mode": "aligned",
+  "aux_modalities": [
+    "cpt",
+    "icd",
+    "ttnc"
+  ],
+  "aux_weight": 0.0,
+  "condition": "raw_history",
+  "cost": {
+    "target_probe_mae_dollars": 2260.91015625,
+    "target_probe_rmse_dollars": 3378.488037109375,
+    "target_probe_rmse_log1p": 0.9584637880325317,
+    "target_probe_wape_percent": 48.60200500488281
+  },
+  "feature_source": "raw_history_hash",
+  "generation": {
+    "cpt_micro_average_precision": 0.08768319705096818,
+    "icd_micro_average_precision": 0.09086284242146578,
+    "ttnc_accuracy": 0.32423101067168864
+  },
+  "seed": 43,
+  "training_first": {
+    "cost": 0.7853365333403571,
+    "generation": 0.0
+  },
+  "training_last": {
+    "cost": 0.08450251685108169,
+    "generation": 0.0
+  }
+}

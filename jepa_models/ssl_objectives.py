@@ -2,8 +2,64 @@ import math
 from typing import Dict, Optional, Tuple
 
 import torch
+import torch.distributed as dist
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+def _distributed_sigreg_active() -> bool:
+    return (
+        dist.is_available()
+        and dist.is_initialized()
+        and dist.get_world_size() > 1
+    )
+
+
+def _synchronize_sigreg_directions(directions: torch.Tensor) -> torch.Tensor:
+    """Use identical random projections on every distributed worker."""
+    if _distributed_sigreg_active():
+        dist.broadcast(directions, src=0)
+    return directions
+
+
+def _global_empirical_characteristic_function(
+    projected: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Average cosine/sine statistics over the full distributed batch.
+
+    Only the two characteristic-function sufficient statistics are reduced;
+    embeddings never leave their worker. The autograd-aware reductions retain
+    gradients to each local embedding shard.
+    """
+    real_sum = torch.cos(projected).sum(dim=0)
+    imag_sum = torch.sin(projected).sum(dim=0)
+    count = projected.new_tensor(float(projected.size(0)))
+    if _distributed_sigreg_active():
+        from torch.distributed.nn.functional import all_reduce
+
+        real_sum = all_reduce(real_sum, op=dist.ReduceOp.SUM)
+        imag_sum = all_reduce(imag_sum, op=dist.ReduceOp.SUM)
+        dist.all_reduce(count, op=dist.ReduceOp.SUM)
+    count = count.clamp_min(1.0)
+    return real_sum / count, imag_sum / count, count
+
+
+def rep_relu(x: torch.Tensor) -> torch.Tensor:
+    """Exact ReLU forward values with the smoother GELU surrogate gradient."""
+    gelu = F.gelu(x)
+    return F.relu(x).detach() + gelu - gelu.detach()
+
+
+def apply_representation_link(x: torch.Tensor, link: str) -> torch.Tensor:
+    """Apply a configured canonical representation link."""
+    normalized = link.lower()
+    if normalized == "identity":
+        return x
+    if normalized == "relu":
+        return F.relu(x)
+    if normalized == "reprelu":
+        return rep_relu(x)
+    raise ValueError(f"Unsupported representation link: {link!r}")
 
 
 class BaseSSLObjective(nn.Module):
@@ -186,9 +242,10 @@ class SIGRegObjective(BaseSSLObjective):
             dtype=embeddings.dtype,
         )
         directions = F.normalize(directions, dim=0, eps=self.epsilon)
+        directions = _synchronize_sigreg_directions(directions)
 
         projections = embeddings @ directions
-        if self.formulation == "lejepa_convex":
+        if self.formulation in {"lejepa_convex", "levjepa_additive"}:
             t_values = torch.linspace(
                 0.0,
                 3.0,
@@ -206,12 +263,13 @@ class SIGRegObjective(BaseSSLObjective):
             )
 
         projected = projections.unsqueeze(-1) * t_values.view(1, 1, -1)
-        empirical_real = torch.cos(projected).mean(dim=0)
-        empirical_imag = torch.sin(projected).mean(dim=0)
+        empirical_real, empirical_imag, global_count = (
+            _global_empirical_characteristic_function(projected)
+        )
         gaussian_real = torch.exp(-0.5 * (t_values**2)).view(1, -1)
 
         error = (empirical_real - gaussian_real) ** 2 + empirical_imag**2
-        if self.formulation == "lejepa_convex":
+        if self.formulation in {"lejepa_convex", "levjepa_additive"}:
             step = 3.0 / max(self.num_points - 1, 1)
             quadrature_weights = torch.full_like(t_values, 2.0 * step)
             if self.num_points > 1:
@@ -220,7 +278,7 @@ class SIGRegObjective(BaseSSLObjective):
                 -0.5 * t_values.square()
             )
             return (
-                (error @ quadrature_weights) * embeddings.size(0)
+                (error @ quadrature_weights) * global_count
             ).mean()
         return error.mean()
 
@@ -261,12 +319,160 @@ class SIGRegObjective(BaseSSLObjective):
         }
 
 
+class RDMRegObjective(BaseSSLObjective):
+    """Reference-distribution matching via sliced Wasserstein distance.
+
+    The reference is a unit-variance generalized Gaussian before the configured
+    link is applied. ``p=2`` is Gaussian and ``p=1`` is Laplace. By default only
+    encoder targets are matched, mirroring LpWM; matching predictor outputs is
+    retained as an explicit ablation.
+    """
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.weight_lvl1 = float(config.rdmreg_weight_lvl1)
+        self.weight_lvl2 = float(config.rdmreg_weight_lvl2)
+        self.num_projections = int(config.rdmreg_num_projections)
+        self.target_p = float(config.rdmreg_target_p)
+        self.target_mu = float(config.rdmreg_target_mu)
+        self.link_lvl1 = getattr(config, "representation_link_lvl1", "identity")
+        self.link_lvl2 = getattr(config, "representation_link_lvl2", "identity")
+        self.regularize_prediction = bool(
+            getattr(config, "rdmreg_regularize_prediction", False)
+        )
+        self.support_weight_lvl1 = float(
+            getattr(config, "rdmreg_support_alignment_weight_lvl1", 0.0)
+        )
+        self.support_weight_lvl2 = float(
+            getattr(config, "rdmreg_support_alignment_weight_lvl2", 0.0)
+        )
+        self.support_temperature = float(
+            getattr(config, "rdmreg_support_temperature", 0.5)
+        )
+
+    def _sample_reference(self, like: torch.Tensor, link: str) -> torch.Tensor:
+        shape = like.shape
+        if self.target_p == 2.0:
+            reference = torch.randn(shape, device=like.device, dtype=like.dtype)
+        elif self.target_p == 1.0:
+            # Laplace(0, 1/sqrt(2)) has unit variance.
+            scale = like.new_tensor(1.0 / math.sqrt(2.0))
+            uniform = torch.rand(shape, device=like.device, dtype=like.dtype)
+            uniform = uniform.clamp(
+                min=torch.finfo(like.dtype).eps,
+                max=1.0 - torch.finfo(like.dtype).eps,
+            )
+            reference = torch.where(
+                uniform < 0.5,
+                scale * torch.log(2.0 * uniform),
+                -scale * torch.log(2.0 * (1.0 - uniform)),
+            )
+        else:
+            # If |X / scale|^p ~ Gamma(1/p, 1), this scale gives Var[X]=1.
+            concentration = 1.0 / self.target_p
+            gamma_sample = torch._standard_gamma(
+                torch.full(shape, concentration, device=like.device, dtype=like.dtype)
+            )
+            signs = torch.where(
+                torch.rand(shape, device=like.device) < 0.5,
+                like.new_tensor(-1.0),
+                like.new_tensor(1.0),
+            )
+            scale = math.sqrt(
+                math.gamma(1.0 / self.target_p)
+                / math.gamma(3.0 / self.target_p)
+            )
+            reference = signs * scale * gamma_sample.pow(1.0 / self.target_p)
+        return apply_representation_link(reference + self.target_mu, link).detach()
+
+    def _sliced_wasserstein(self, embeddings: torch.Tensor, link: str) -> torch.Tensor:
+        if embeddings.numel() == 0 or embeddings.size(0) < 2:
+            return embeddings.new_zeros(())
+        directions = torch.randn(
+            embeddings.size(-1),
+            self.num_projections,
+            device=embeddings.device,
+            dtype=embeddings.dtype,
+        )
+        directions = F.normalize(directions, dim=0, eps=self.epsilon)
+        reference = self._sample_reference(embeddings, link)
+        projected_embeddings = (embeddings @ directions).sort(dim=0).values
+        projected_reference = (reference @ directions).sort(dim=0).values
+        return F.mse_loss(projected_embeddings, projected_reference)
+
+    def _support_alignment(
+        self,
+        prediction: torch.Tensor,
+        target: torch.Tensor,
+        sample_weights: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        """Match exact target support with a smooth predictor activity proxy."""
+        threshold = 10.0 * torch.finfo(target.dtype).eps
+        target_support = (target.abs() > threshold).to(prediction.dtype).detach()
+        positive_prediction = prediction.clamp_min(0.0)
+        prediction_activity = -torch.expm1(
+            -positive_prediction / self.support_temperature
+        )
+        per_example = (prediction_activity - target_support).abs().mean(dim=-1)
+        if sample_weights is None:
+            return per_example.mean()
+        weight_sum = sample_weights.sum().clamp(min=self.epsilon)
+        return (per_example * sample_weights).sum() / weight_sum
+
+    def compute(
+        self,
+        prediction: torch.Tensor,
+        target: torch.Tensor,
+        mask: Optional[torch.Tensor] = None,
+        level: str = "2",
+        sample_weights: Optional[torch.Tensor] = None,
+    ) -> Dict[str, torch.Tensor]:
+        prediction_valid, target_valid, weights_valid = self._flatten_valid(
+            prediction, target, mask=mask, sample_weights=sample_weights
+        )
+        if prediction_valid.numel() == 0:
+            return self._zero_metrics(prediction.device, prediction.dtype)
+
+        predictive = self._weighted_mse(prediction_valid, target_valid, weights_valid)
+        link = self.link_lvl1 if level == "1" else self.link_lvl2
+        rdmreg_raw = self._sliced_wasserstein(target_valid, link)
+        if self.regularize_prediction:
+            rdmreg_raw = 0.5 * (
+                rdmreg_raw + self._sliced_wasserstein(prediction_valid, link)
+            )
+        weight = self.weight_lvl1 if level == "1" else self.weight_lvl2
+        support_weight = (
+            self.support_weight_lvl1 if level == "1" else self.support_weight_lvl2
+        )
+        support_alignment_raw = self._support_alignment(
+            prediction_valid, target_valid, weights_valid
+        )
+        regularizer = weight * rdmreg_raw + support_weight * support_alignment_raw
+        threshold = 10.0 * torch.finfo(target_valid.dtype).eps
+        return {
+            "total": predictive + regularizer,
+            "predictive": predictive,
+            "regularizer": regularizer,
+            "diagnostics": {
+                "rdmreg_raw": rdmreg_raw,
+                "support_alignment_raw": support_alignment_raw,
+                "target_active_fraction": (
+                    target_valid.abs() > threshold
+                ).float().mean(),
+                "prediction_active_fraction": (
+                    prediction_valid.abs() > threshold
+                ).float().mean(),
+            },
+        }
+
+
 def sigreg_gaussian_distance(
     embeddings: torch.Tensor,
     *,
     num_slices: int = 256,
     num_points: int = 17,
     epsilon: float = 1e-4,
+    formulation: str = "legacy_additive",
 ) -> torch.Tensor:
     """Characteristic-function distance used for typed marginal SIGReg."""
     if embeddings.numel() == 0 or embeddings.size(0) < 2:
@@ -278,19 +484,34 @@ def sigreg_gaussian_distance(
         dtype=embeddings.dtype,
     )
     directions = F.normalize(directions, dim=0, eps=epsilon)
+    directions = _synchronize_sigreg_directions(directions)
     projections = embeddings @ directions
-    t_values = torch.linspace(
-        0.25,
-        2.25,
-        steps=num_points,
-        device=embeddings.device,
-        dtype=embeddings.dtype,
-    )
+    if formulation in {"lejepa_convex", "levjepa_additive"}:
+        t_values = torch.linspace(
+            0.0, 3.0, steps=num_points,
+            device=embeddings.device, dtype=embeddings.dtype,
+        )
+    elif formulation == "legacy_additive":
+        t_values = torch.linspace(
+            0.25, 2.25, steps=num_points,
+            device=embeddings.device, dtype=embeddings.dtype,
+        )
+    else:
+        raise ValueError(f"Unsupported SIGReg formulation: {formulation!r}")
     projected = projections.unsqueeze(-1) * t_values.view(1, 1, -1)
-    empirical_real = torch.cos(projected).mean(dim=0)
-    empirical_imag = torch.sin(projected).mean(dim=0)
+    empirical_real, empirical_imag, global_count = _global_empirical_characteristic_function(
+        projected
+    )
     gaussian_real = torch.exp(-0.5 * t_values.square()).view(1, -1)
-    return ((empirical_real - gaussian_real).square() + empirical_imag.square()).mean()
+    error = (empirical_real - gaussian_real).square() + empirical_imag.square()
+    if formulation in {"lejepa_convex", "levjepa_additive"}:
+        step = 3.0 / max(num_points - 1, 1)
+        quadrature_weights = torch.full_like(t_values, 2.0 * step)
+        if num_points > 1:
+            quadrature_weights[[0, -1]] = step
+        quadrature_weights = quadrature_weights * torch.exp(-0.5 * t_values.square())
+        return ((error @ quadrature_weights) * global_count).mean()
+    return error.mean()
 
 
 class WristbandGaussianRegularizer(nn.Module):
@@ -438,4 +659,6 @@ def build_ssl_objective(config) -> BaseSSLObjective:
         return VICRegObjective(config)
     if objective_type == "sigreg":
         return SIGRegObjective(config)
+    if objective_type == "rdmreg":
+        return RDMRegObjective(config)
     raise ValueError(f"Unsupported ssl_objective_type={objective_type!r}")

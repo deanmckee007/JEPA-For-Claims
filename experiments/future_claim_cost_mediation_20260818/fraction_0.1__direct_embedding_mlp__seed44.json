@@ -1,0 +1,15 @@
+{
+  "cost": {
+    "target_probe_mae_dollars": 1697.6212158203125,
+    "target_probe_rmse_dollars": 2712.50341796875,
+    "target_probe_rmse_log1p": 0.8924800157546997,
+    "target_probe_wape_percent": 36.49317169189453
+  },
+  "cost_label_fraction": 0.1,
+  "feature_dimension": 128,
+  "linear_cost_head": false,
+  "pathway": "direct_embedding_mlp",
+  "seed": 44,
+  "training_first": 0.8059591671167794,
+  "training_last": 0.3015879372418937
+}
