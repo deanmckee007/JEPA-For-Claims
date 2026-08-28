@@ -323,9 +323,33 @@ TRAINING_RECIPES["composable_level1_lejepa_any_code"] = {
     "level1_predictive_weight": 0.1,
 }
 
+# LeVJEPA claims port: learn patient-history invariance from one complete
+# context and multiple independently thinned views.  The projector is used
+# only by the pretraining loss; downstream consumers continue to read the
+# canonical pre-SAE patient representation.
+TRAINING_RECIPES["levjepa_patient_views"] = {
+    **TRAINING_RECIPES["composable_level1_lejepa_any_code"],
+    "sigreg_formulation": "levjepa_additive",
+    "sigreg_weight_lvl2": 0.02,
+    "sigreg_num_slices": 1024,
+    "level1_marginal_regularizer": "none",
+    "use_level2_dense_prediction": False,
+    "use_masked_next_claim_token_grounding": False,
+    "use_sparse_autoencoder": False,
+    "use_levjepa_patient_views": True,
+    "levjepa_num_local_views": 2,
+    "levjepa_claim_drop_ratio": 0.3,
+    "levjepa_projector_hidden_dim": 2048,
+    "levjepa_projector_output_dim": 256,
+    "use_eval_polyak_average": True,
+    "eval_polyak_decay": 0.9999,
+    "eval_polyak_update_interval": 32,
+    "freeze_logvars_after_epoch": 0,
+}
+
 @dataclass
 class Config:
-    data_path: str = 'C:/Users/tmcke/Desktop/claims_data/training_set.parquet'
+    data_path: str = 'C:/Users/tmcke/OneDrive/Desktop/claims_data/training_set.parquet'
     data_contract_path: str | None = None
     create_data_contract_if_missing: bool = False
     train_split_fraction: float = 0.70
@@ -379,6 +403,11 @@ class Config:
     scheduler_warmup_start_factor: float = 0.2
     epochs: int = 25
     ema_decay: float = 0.999    # Higher value = less lagged updates to target encoder (use < 1)
+    # Evaluation-only parameter averaging. Unlike target-encoder EMA, these
+    # weights never participate in a training forward pass.
+    use_eval_polyak_average: bool = False
+    eval_polyak_decay: float = 0.9999
+    eval_polyak_update_interval: int = 32
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
     cov_penalty_scale_lvl1: float = 0.015 # .01 *Results for downstream task is very sensitive to this*
@@ -499,6 +528,15 @@ class Config:
     sigreg_num_slices: int = 256
     sigreg_num_points: int = 17
     sigreg_formulation: str = "legacy_additive"
+    # LeVJEPA-style patient-history view objective. Local views thin valid
+    # context claims independently while always retaining the most recent
+    # claim. The projector is training-only: canonical downstream features do
+    # not pass through it.
+    use_levjepa_patient_views: bool = False
+    levjepa_num_local_views: int = 2
+    levjepa_claim_drop_ratio: float = 0.3
+    levjepa_projector_hidden_dim: int = 2048
+    levjepa_projector_output_dim: int = 256
     intermediate_sequence_supervision_weight: float = 0.0
     # Whether to run a pretraining phase for the diffusion generator before
     # training the main hierarchical model. Kept ``True`` for backwards
@@ -594,9 +632,14 @@ def apply_runtime_config_overrides(config: Config) -> Config:
             f"Unsupported ssl_objective_type={config.ssl_objective_type!r}. "
             "Expected 'vicreg' or 'sigreg'."
         )
-    if config.sigreg_formulation not in {"legacy_additive", "lejepa_convex"}:
+    if config.sigreg_formulation not in {
+        "legacy_additive",
+        "lejepa_convex",
+        "levjepa_additive",
+    }:
         raise ValueError(
-            "sigreg_formulation must be 'legacy_additive' or 'lejepa_convex'."
+            "sigreg_formulation must be 'legacy_additive', 'lejepa_convex', "
+            "or 'levjepa_additive'."
         )
     if config.sigreg_formulation == "lejepa_convex":
         for field_name in ("sigreg_weight_lvl1", "sigreg_weight_lvl2"):
@@ -605,6 +648,26 @@ def apply_runtime_config_overrides(config: Config) -> Config:
                 raise ValueError(
                     f"{field_name} must be in [0, 1] for lejepa_convex SIGReg."
                 )
+    elif config.sigreg_weight_lvl1 < 0 or config.sigreg_weight_lvl2 < 0:
+        raise ValueError("Additive SIGReg weights must be non-negative.")
+
+    if config.levjepa_num_local_views <= 0:
+        raise ValueError("levjepa_num_local_views must be positive.")
+    if not 0.0 <= config.levjepa_claim_drop_ratio < 1.0:
+        raise ValueError("levjepa_claim_drop_ratio must be in the interval [0, 1).")
+    if config.levjepa_projector_hidden_dim <= 0:
+        raise ValueError("levjepa_projector_hidden_dim must be positive.")
+    if config.levjepa_projector_output_dim <= 0:
+        raise ValueError("levjepa_projector_output_dim must be positive.")
+    if config.use_levjepa_patient_views:
+        if config.ssl_objective_type != "sigreg":
+            raise ValueError("LeVJEPA patient views require ssl_objective_type='sigreg'.")
+        if config.sigreg_formulation != "levjepa_additive":
+            raise ValueError(
+                "LeVJEPA patient views require sigreg_formulation='levjepa_additive'."
+            )
+        if config.target_encoder_mode != "shared":
+            raise ValueError("LeVJEPA patient views require a shared target encoder.")
 
     config.level1_marginal_regularizer = getattr(
         config, "level1_marginal_regularizer", "none"
@@ -653,6 +716,10 @@ def apply_runtime_config_overrides(config: Config) -> Config:
             f"Unsupported scheduler_type={config.scheduler_type!r}. "
             "Expected 'step', 'cosine', or 'none'."
         )
+    if not 0.0 <= config.eval_polyak_decay < 1.0:
+        raise ValueError("eval_polyak_decay must be in the interval [0, 1).")
+    if config.eval_polyak_update_interval <= 0:
+        raise ValueError("eval_polyak_update_interval must be positive.")
 
     split_total = (
         config.train_split_fraction
@@ -709,6 +776,13 @@ def apply_runtime_config_overrides(config: Config) -> Config:
             raise ValueError(
                 f"Unsupported {level_name}={mode!r}. Expected 'ema' or 'shared'."
             )
+    if config.use_levjepa_patient_views and (
+        config.target_encoder_mode_lvl1 != "shared"
+        or config.target_encoder_mode_lvl2 != "shared"
+    ):
+        raise ValueError(
+            "LeVJEPA patient views require shared Level-1 and Level-2 targets."
+        )
 
     if getattr(config, "clean_ssl_mode", False):
         config.use_token_prediction_head = False

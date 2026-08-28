@@ -1,0 +1,18 @@
+{
+  "name": "levjepa_patient_views_seed42_e4",
+  "recipe": "levjepa_patient_views",
+  "data_path": "C:\\Users\\tmcke\\OneDrive\\Desktop\\claims_data\\training_set.parquet",
+  "data_contract": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\artifacts\\data_contracts\\claims_seed42_v1.json",
+  "accelerator": "gpu",
+  "devices": 1,
+  "seed": 42,
+  "representation_pretrain_epochs": 4,
+  "max_samples": 20000,
+  "retrieval_k": 5,
+  "max_claims": 10000,
+  "representation_source": "patient_representation_pre_sae",
+  "config_overrides": [],
+  "checkpoint_path": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\levjepa_patient_views_20260828\\levjepa_patient_views_seed42_e4\\encoder.ckpt",
+  "eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\levjepa_patient_views_20260828\\levjepa_patient_views_seed42_e4\\representation_eval.json",
+  "claim_eval_json": "C:\\Users\\tmcke\\code\\JEPA-For-Claims\\experiments\\levjepa_patient_views_20260828\\levjepa_patient_views_seed42_e4\\claim_representation_eval.json"
+}

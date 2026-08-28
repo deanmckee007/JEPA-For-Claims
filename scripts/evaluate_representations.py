@@ -23,6 +23,7 @@ from jepa_utils.data_prep import prepare_data
 from jepa_utils.checkpointing import load_claims_model_checkpoint
 from jepa_utils.representation_eval import (
     collect_patient_representations,
+    compute_attentive_regression_probe_metrics,
     compute_claim_prototype_metrics,
     compute_claim_prototype_stability,
     compute_heldout_regression_probe_metrics,
@@ -58,6 +59,22 @@ def parse_args(argv=None):
     parser.add_argument("--batch-size", type=int, default=256, help="Batch size for embedding extraction.")
     parser.add_argument("--max-samples", type=int, default=2000, help="Maximum number of samples to score.")
     parser.add_argument("--retrieval-k", type=int, default=5, help="Neighborhood size for retrieval metrics.")
+    parser.add_argument(
+        "--attentive-probe",
+        action="store_true",
+        help="Fit a frozen query-attention probe over per-claim sequence states.",
+    )
+    parser.add_argument("--attentive-probe-epochs", type=int, default=20)
+    parser.add_argument("--attentive-probe-batch-size", type=int, default=256)
+    parser.add_argument("--attentive-probe-lr", type=float, default=1e-3)
+    parser.add_argument("--attentive-probe-weight-decay", type=float, default=1e-4)
+    parser.add_argument("--attentive-probe-num-heads", type=int, default=4)
+    parser.add_argument(
+        "--attentive-probe-train-max-samples",
+        type=int,
+        default=10000,
+        help="Maximum frozen training sequences retained for the attentive probe.",
+    )
     parser.add_argument(
         "--representation-source",
         choices=get_representation_source_names(),
@@ -142,12 +159,14 @@ def main(argv=None):
         allow_legacy=config.allow_legacy_checkpoint_loading,
     )
 
-    train_embeddings, _, train_targets, _ = collect_patient_representations(
+    train_embeddings, _, train_targets, train_metadata = collect_patient_representations(
         model,
         train_probe_dataloader,
         device=device,
         max_samples=None,
         representation_source=args.representation_source,
+        include_sequence_states=args.attentive_probe,
+        sequence_state_max_samples=args.attentive_probe_train_max_samples,
     )
     embeddings, specialty_labels, regression_targets, metadata = collect_patient_representations(
         model,
@@ -155,6 +174,7 @@ def main(argv=None):
         device=device,
         max_samples=args.max_samples,
         representation_source=args.representation_source,
+        include_sequence_states=args.attentive_probe,
     )
     raw_sequence_lengths = extract_raw_sequence_lengths(eval_dataset, max_samples=args.max_samples)
     effective_sequence_lengths = metadata.get("effective_sequence_lengths", metadata.get("sequence_lengths"))
@@ -176,6 +196,26 @@ def main(argv=None):
         )
     )
     results["target_probe_protocol"] = "frozen_train_fit_to_heldout_eval"
+    if args.attentive_probe:
+        attentive_train_samples = train_metadata["sequence_states"].shape[0]
+        results["attentive_probe"] = compute_attentive_regression_probe_metrics(
+            train_metadata["sequence_states"],
+            train_metadata["sequence_state_masks"],
+            train_targets[:attentive_train_samples],
+            metadata["sequence_states"],
+            metadata["sequence_state_masks"],
+            regression_targets,
+            device=device,
+            epochs=args.attentive_probe_epochs,
+            batch_size=args.attentive_probe_batch_size,
+            learning_rate=args.attentive_probe_lr,
+            weight_decay=args.attentive_probe_weight_decay,
+            num_heads=args.attentive_probe_num_heads,
+            random_state=config.seed,
+        )
+        results["attentive_probe_protocol"] = (
+            "frozen_claim_sequence_query_attention_train_fit_to_heldout_eval"
+        )
     if "claim_prototype_assignments" in metadata:
         results["claim_prototypes"] = compute_claim_prototype_metrics(
             metadata["claim_prototype_assignments"],
@@ -225,6 +265,7 @@ def main(argv=None):
             "device": str(device),
             "seed": int(config.seed),
             "representation_source": args.representation_source,
+            "evaluation_weights": metadata.get("evaluation_weights", "online"),
             "evaluation_split": args.split,
             "data_contract_hash": config.data_contract_hash,
             "vocab_hash": config.vocab_hash,

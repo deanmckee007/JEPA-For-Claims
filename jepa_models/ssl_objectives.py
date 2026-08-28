@@ -2,8 +2,46 @@ import math
 from typing import Dict, Optional, Tuple
 
 import torch
+import torch.distributed as dist
 import torch.nn as nn
 import torch.nn.functional as F
+
+
+def _distributed_sigreg_active() -> bool:
+    return (
+        dist.is_available()
+        and dist.is_initialized()
+        and dist.get_world_size() > 1
+    )
+
+
+def _synchronize_sigreg_directions(directions: torch.Tensor) -> torch.Tensor:
+    """Use identical random projections on every distributed worker."""
+    if _distributed_sigreg_active():
+        dist.broadcast(directions, src=0)
+    return directions
+
+
+def _global_empirical_characteristic_function(
+    projected: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Average cosine/sine statistics over the full distributed batch.
+
+    Only the two characteristic-function sufficient statistics are reduced;
+    embeddings never leave their worker. The autograd-aware reductions retain
+    gradients to each local embedding shard.
+    """
+    real_sum = torch.cos(projected).sum(dim=0)
+    imag_sum = torch.sin(projected).sum(dim=0)
+    count = projected.new_tensor(float(projected.size(0)))
+    if _distributed_sigreg_active():
+        from torch.distributed.nn.functional import all_reduce
+
+        real_sum = all_reduce(real_sum, op=dist.ReduceOp.SUM)
+        imag_sum = all_reduce(imag_sum, op=dist.ReduceOp.SUM)
+        dist.all_reduce(count, op=dist.ReduceOp.SUM)
+    count = count.clamp_min(1.0)
+    return real_sum / count, imag_sum / count, count
 
 
 class BaseSSLObjective(nn.Module):
@@ -186,9 +224,10 @@ class SIGRegObjective(BaseSSLObjective):
             dtype=embeddings.dtype,
         )
         directions = F.normalize(directions, dim=0, eps=self.epsilon)
+        directions = _synchronize_sigreg_directions(directions)
 
         projections = embeddings @ directions
-        if self.formulation == "lejepa_convex":
+        if self.formulation in {"lejepa_convex", "levjepa_additive"}:
             t_values = torch.linspace(
                 0.0,
                 3.0,
@@ -206,12 +245,13 @@ class SIGRegObjective(BaseSSLObjective):
             )
 
         projected = projections.unsqueeze(-1) * t_values.view(1, 1, -1)
-        empirical_real = torch.cos(projected).mean(dim=0)
-        empirical_imag = torch.sin(projected).mean(dim=0)
+        empirical_real, empirical_imag, global_count = (
+            _global_empirical_characteristic_function(projected)
+        )
         gaussian_real = torch.exp(-0.5 * (t_values**2)).view(1, -1)
 
         error = (empirical_real - gaussian_real) ** 2 + empirical_imag**2
-        if self.formulation == "lejepa_convex":
+        if self.formulation in {"lejepa_convex", "levjepa_additive"}:
             step = 3.0 / max(self.num_points - 1, 1)
             quadrature_weights = torch.full_like(t_values, 2.0 * step)
             if self.num_points > 1:
@@ -220,7 +260,7 @@ class SIGRegObjective(BaseSSLObjective):
                 -0.5 * t_values.square()
             )
             return (
-                (error @ quadrature_weights) * embeddings.size(0)
+                (error @ quadrature_weights) * global_count
             ).mean()
         return error.mean()
 
@@ -267,6 +307,7 @@ def sigreg_gaussian_distance(
     num_slices: int = 256,
     num_points: int = 17,
     epsilon: float = 1e-4,
+    formulation: str = "legacy_additive",
 ) -> torch.Tensor:
     """Characteristic-function distance used for typed marginal SIGReg."""
     if embeddings.numel() == 0 or embeddings.size(0) < 2:
@@ -278,19 +319,34 @@ def sigreg_gaussian_distance(
         dtype=embeddings.dtype,
     )
     directions = F.normalize(directions, dim=0, eps=epsilon)
+    directions = _synchronize_sigreg_directions(directions)
     projections = embeddings @ directions
-    t_values = torch.linspace(
-        0.25,
-        2.25,
-        steps=num_points,
-        device=embeddings.device,
-        dtype=embeddings.dtype,
-    )
+    if formulation in {"lejepa_convex", "levjepa_additive"}:
+        t_values = torch.linspace(
+            0.0, 3.0, steps=num_points,
+            device=embeddings.device, dtype=embeddings.dtype,
+        )
+    elif formulation == "legacy_additive":
+        t_values = torch.linspace(
+            0.25, 2.25, steps=num_points,
+            device=embeddings.device, dtype=embeddings.dtype,
+        )
+    else:
+        raise ValueError(f"Unsupported SIGReg formulation: {formulation!r}")
     projected = projections.unsqueeze(-1) * t_values.view(1, 1, -1)
-    empirical_real = torch.cos(projected).mean(dim=0)
-    empirical_imag = torch.sin(projected).mean(dim=0)
+    empirical_real, empirical_imag, global_count = _global_empirical_characteristic_function(
+        projected
+    )
     gaussian_real = torch.exp(-0.5 * t_values.square()).view(1, -1)
-    return ((empirical_real - gaussian_real).square() + empirical_imag.square()).mean()
+    error = (empirical_real - gaussian_real).square() + empirical_imag.square()
+    if formulation in {"lejepa_convex", "levjepa_additive"}:
+        step = 3.0 / max(num_points - 1, 1)
+        quadrature_weights = torch.full_like(t_values, 2.0 * step)
+        if num_points > 1:
+            quadrature_weights[[0, -1]] = step
+        quadrature_weights = quadrature_weights * torch.exp(-0.5 * t_values.square())
+        return ((error @ quadrature_weights) * global_count).mean()
+    return error.mean()
 
 
 class WristbandGaussianRegularizer(nn.Module):

@@ -2,9 +2,13 @@ import unittest
 
 import numpy as np
 import torch
-from torch.utils.data import Subset
+from torch import nn
+from torch.utils.data import DataLoader, Subset, TensorDataset
 
 from jepa_utils.representation_eval import (
+    FrozenAttentiveRegressionProbe,
+    collect_patient_representations,
+    compute_attentive_regression_probe_metrics,
     compute_claim_prototype_metrics,
     compute_claim_prototype_stability,
     compute_representation_geometry_metrics,
@@ -17,6 +21,87 @@ from jepa_utils.representation_eval import (
 
 
 class TestRepresentationEval(unittest.TestCase):
+    def test_collection_exports_frozen_sequences_and_restores_polyak_weights(self):
+        class FakeClaimsModel(nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.anchor = nn.Parameter(torch.ones(()))
+                self.polyak_active = False
+
+            def activate_eval_polyak_weights(self):
+                self.polyak_active = True
+                return True
+
+            def restore_online_weights(self):
+                self.polyak_active = False
+                return True
+
+            def forward(self, cpt_tensor, icd_tensor, ttnc_tensor, target, **kwargs):
+                batch_size, sequence_length = ttnc_tensor.shape
+                states = torch.ones(batch_size, sequence_length, 4, device=ttnc_tensor.device)
+                return {
+                    "patient_representation": states.mean(dim=1),
+                    "patient_representation_pre_sae": states.mean(dim=1),
+                    "sequence_aux": {
+                        "sequence_output": states,
+                        "valid_token_mask": ttnc_tensor != 0,
+                    },
+                }
+
+        cpt = torch.ones(3, 2, 1, dtype=torch.long)
+        icd = torch.ones(3, 2, 1, dtype=torch.long)
+        ttnc = torch.tensor([[0, 1], [2, 3], [0, 4]], dtype=torch.long)
+        target = torch.arange(3, dtype=torch.float32)
+        dataloader = DataLoader(TensorDataset(cpt, icd, ttnc, target), batch_size=2)
+        model = FakeClaimsModel()
+
+        _, _, _, metadata = collect_patient_representations(
+            model,
+            dataloader,
+            device="cpu",
+            max_samples=1,
+            include_sequence_states=True,
+            sequence_state_max_samples=2,
+        )
+
+        self.assertEqual(metadata["sequence_states"].shape, (1, 2, 4))
+        self.assertEqual(metadata["sequence_state_masks"].shape, (1, 2))
+        self.assertEqual(metadata["evaluation_weights"], "polyak")
+        self.assertFalse(model.polyak_active)
+
+    def test_frozen_attentive_probe_fits_sequence_signal(self):
+        rng = np.random.default_rng(7)
+        train_states = rng.normal(size=(48, 4, 8)).astype(np.float32)
+        eval_states = rng.normal(size=(16, 4, 8)).astype(np.float32)
+        train_masks = np.ones((48, 4), dtype=bool)
+        eval_masks = np.ones((16, 4), dtype=bool)
+        train_targets = train_states[:, -1, 0] + 0.5 * train_states[:, -1, 1]
+        eval_targets = eval_states[:, -1, 0] + 0.5 * eval_states[:, -1, 1]
+
+        metrics = compute_attentive_regression_probe_metrics(
+            train_states,
+            train_masks,
+            train_targets,
+            eval_states,
+            eval_masks,
+            eval_targets,
+            device="cpu",
+            epochs=3,
+            batch_size=16,
+            num_heads=4,
+            random_state=7,
+        )
+
+        self.assertTrue(np.isfinite(metrics["attentive_target_probe_rmse_log1p"]))
+        self.assertEqual(metrics["attentive_probe_train_samples"], 48)
+        self.assertEqual(metrics["attentive_probe_num_heads"], 4)
+
+    def test_attentive_probe_handles_empty_sequence_mask_without_nan(self):
+        probe = FrozenAttentiveRegressionProbe(embedding_dim=4, num_heads=2)
+        output = probe(torch.randn(2, 3, 4), torch.zeros(2, 3, dtype=torch.bool))
+
+        self.assertTrue(torch.isfinite(output).all())
+
     def test_claim_prototype_metrics_and_missing_modality_stability(self):
         assignments = np.eye(4, dtype=np.float32)
         probabilities = assignments * 0.9 + 0.1 / 4

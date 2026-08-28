@@ -212,6 +212,17 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
         # Configuration parameters
         self.ema_decay = config.ema_decay
+        self.use_eval_polyak_average = bool(
+            getattr(config, "use_eval_polyak_average", False)
+        )
+        self.eval_polyak_decay = float(
+            getattr(config, "eval_polyak_decay", 0.9999)
+        )
+        self.eval_polyak_update_interval = int(
+            getattr(config, "eval_polyak_update_interval", 32)
+        )
+        self._eval_polyak_active = False
+        self._eval_polyak_online_backup = None
         self.epsilon = config.epsilon
         self.target_var_lvl1 = config.target_var_lvl1
         self.target_var_lvl2 = config.target_var_lvl2
@@ -346,6 +357,21 @@ class HierarchicalClaimsModel(pl.LightningModule):
         )
         self.sigreg_num_slices = getattr(config, "sigreg_num_slices", 256)
         self.sigreg_num_points = getattr(config, "sigreg_num_points", 17)
+        self.sigreg_formulation = getattr(
+            config, "sigreg_formulation", "legacy_additive"
+        )
+        self.sigreg_weight_lvl2 = float(
+            getattr(config, "sigreg_weight_lvl2", 0.1)
+        )
+        self.use_levjepa_patient_views = bool(
+            getattr(config, "use_levjepa_patient_views", False)
+        )
+        self.levjepa_num_local_views = int(
+            getattr(config, "levjepa_num_local_views", 2)
+        )
+        self.levjepa_claim_drop_ratio = float(
+            getattr(config, "levjepa_claim_drop_ratio", 0.3)
+        )
         self.use_zero_target_mask = config.use_zero_target_mask
         self.use_token_prediction_head = config.use_token_prediction_head
         self.use_sparse_autoencoder = config.use_sparse_autoencoder
@@ -498,6 +524,25 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 self.ttnc_id_to_token, config.ttnc_vocab_size
             ),
         )
+        if self.use_levjepa_patient_views:
+            # Keep projector construction from perturbing initialization of
+            # unrelated optional heads in paired recipe comparisons.
+            with torch.random.fork_rng(devices=[]):
+                torch.manual_seed(int(config.seed) + 63031)
+                self.levjepa_patient_projector = nn.Sequential(
+                    nn.Linear(
+                        config.patient_representation_dim,
+                        config.levjepa_projector_hidden_dim,
+                    ),
+                    nn.BatchNorm1d(config.levjepa_projector_hidden_dim),
+                    nn.GELU(),
+                    nn.Linear(
+                        config.levjepa_projector_hidden_dim,
+                        config.levjepa_projector_output_dim,
+                    ),
+                )
+        else:
+            self.levjepa_patient_projector = None
         if (
             self.use_composable_level1
             and config.share_ttnc_embeddings
@@ -725,6 +770,95 @@ class HierarchicalClaimsModel(pl.LightningModule):
             if self.use_sparse_autoencoder:
                 for p in self.sparse_autoencoder.parameters():
                     p.requires_grad = False
+
+        if self.use_eval_polyak_average:
+            self._initialize_eval_polyak_average()
+
+    def _eval_polyak_modules(self):
+        modules = []
+        if self.use_level1:
+            modules.append(self.context_encoder_lvl1)
+        if self.use_composable_level1:
+            modules.append(self.context_level1_composer)
+        else:
+            modules.append(self.context_encoder_lvl2)
+        modules.append(self.prediction_block_lvl2)
+        return modules
+
+    def _initialize_eval_polyak_average(self):
+        online_parameters = []
+        seen = set()
+        for module in self._eval_polyak_modules():
+            for parameter in module.parameters():
+                if id(parameter) in seen:
+                    continue
+                seen.add(id(parameter))
+                online_parameters.append(parameter)
+        self._eval_polyak_online_parameters = online_parameters
+        self.eval_polyak_parameters = nn.ParameterList(
+            [
+                nn.Parameter(parameter.detach().clone(), requires_grad=False)
+                for parameter in online_parameters
+            ]
+        )
+        self.register_buffer(
+            "eval_polyak_batches",
+            torch.zeros((), dtype=torch.long),
+        )
+        self.register_buffer(
+            "eval_polyak_updates",
+            torch.zeros((), dtype=torch.long),
+        )
+
+    @torch.no_grad()
+    def update_eval_polyak_average(self):
+        if not self.use_eval_polyak_average or self._eval_polyak_active:
+            return False
+        self.eval_polyak_batches.add_(1)
+        if int(self.eval_polyak_batches.item()) % self.eval_polyak_update_interval:
+            return False
+        for averaged, online in zip(
+            self.eval_polyak_parameters,
+            self._eval_polyak_online_parameters,
+        ):
+            averaged.mul_(self.eval_polyak_decay).add_(
+                online.detach(), alpha=1.0 - self.eval_polyak_decay
+            )
+        self.eval_polyak_updates.add_(1)
+        return True
+
+    @torch.no_grad()
+    def activate_eval_polyak_weights(self):
+        if (
+            not self.use_eval_polyak_average
+            or self._eval_polyak_active
+            or int(self.eval_polyak_updates.item()) == 0
+        ):
+            return False
+        self._eval_polyak_online_backup = [
+            parameter.detach().clone()
+            for parameter in self._eval_polyak_online_parameters
+        ]
+        for online, averaged in zip(
+            self._eval_polyak_online_parameters,
+            self.eval_polyak_parameters,
+        ):
+            online.copy_(averaged)
+        self._eval_polyak_active = True
+        return True
+
+    @torch.no_grad()
+    def restore_online_weights(self):
+        if not self._eval_polyak_active:
+            return False
+        for online, backup in zip(
+            self._eval_polyak_online_parameters,
+            self._eval_polyak_online_backup,
+        ):
+            online.copy_(backup)
+        self._eval_polyak_online_backup = None
+        self._eval_polyak_active = False
+        return True
 
     def _unfreeze_last_n(self, module, n_layers):
         """Helper to unfreeze the last ``n_layers`` child modules of ``module``."""
@@ -1015,6 +1149,16 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 "inactive" if composable else self._get_target_mode("2")
             ),
             "level2_sequence_predictor_parameters": "online_shared",
+            "level2_patient_view_objective": (
+                "projected_global_local_invariance"
+                if self.use_levjepa_patient_views
+                else "inactive"
+            ),
+            "evaluation_parameter_average": (
+                "polyak_shadow_no_training_forward"
+                if self.use_eval_polyak_average
+                else "inactive"
+            ),
             "claim_prototype_target": (
                 "detached_shared_composed_claim"
                 if self.use_claim_prototypes
@@ -1315,6 +1459,125 @@ class HierarchicalClaimsModel(pl.LightningModule):
             icd_tensor = icd_tensor.clone()
             icd_tensor[icd_drop] = 0
         return cpt_tensor, icd_tensor
+
+    def _sample_levjepa_local_history(
+        self,
+        cpt_tensor,
+        icd_tensor,
+        ttnc_tensor,
+    ):
+        """Thin a history view while preserving its latest observed claim.
+
+        The corruption is an encoder observation, not a reconstruction mask:
+        dropped claims are removed from every input stream and receive no
+        token-level target. Each retained claim remains otherwise intact so a
+        naturally partial CPT- or ICD-only claim is never fabricated.
+        """
+        valid_claims = ttnc_tensor.ne(0)
+        if self.levjepa_claim_drop_ratio <= 0.0:
+            keep_claims = valid_claims.clone()
+        else:
+            keep_claims = (
+                torch.rand(valid_claims.shape, device=ttnc_tensor.device)
+                >= self.levjepa_claim_drop_ratio
+            ) & valid_claims
+
+        has_valid_claim = valid_claims.any(dim=1)
+        if has_valid_claim.any():
+            last_valid = (
+                valid_claims.size(1)
+                - 1
+                - valid_claims.flip(1).to(torch.int64).argmax(dim=1)
+            )
+            batch_indices = torch.arange(
+                valid_claims.size(0), device=ttnc_tensor.device
+            )[has_valid_claim]
+            keep_claims[batch_indices, last_valid[has_valid_claim]] = True
+
+        dropped_claims = valid_claims & ~keep_claims
+        local_cpt = cpt_tensor.clone()
+        local_icd = icd_tensor.clone()
+        local_ttnc = ttnc_tensor.clone()
+        local_cpt[dropped_claims] = 0
+        local_icd[dropped_claims] = 0
+        local_ttnc[dropped_claims] = 0
+        return local_cpt, local_icd, local_ttnc, keep_claims
+
+    def _compute_levjepa_patient_view_loss(
+        self,
+        global_patient_representation,
+        context_cpt,
+        context_icd,
+        context_ttnc,
+    ):
+        """Compute projected global/local invariance plus additive SIGReg."""
+        patient_views = [global_patient_representation]
+        retained_fractions = []
+        valid_claim_count = context_ttnc.ne(0).sum().clamp(min=1).to(
+            global_patient_representation.dtype
+        )
+
+        for _ in range(self.levjepa_num_local_views):
+            local_cpt, local_icd, local_ttnc, keep_claims = (
+                self._sample_levjepa_local_history(
+                    context_cpt,
+                    context_icd,
+                    context_ttnc,
+                )
+            )
+            local_claims = self.encode_claims(
+                local_cpt,
+                local_icd,
+                local_ttnc,
+            )
+            local_patient, _ = self.prediction_block_lvl2(
+                local_claims,
+                local_ttnc,
+            )
+            patient_views.append(local_patient)
+            retained_fractions.append(
+                keep_claims.sum().to(global_patient_representation.dtype)
+                / valid_claim_count
+            )
+
+        stacked_views = torch.stack(patient_views, dim=0)
+        projected_views = self.levjepa_patient_projector(
+            stacked_views.reshape(-1, stacked_views.size(-1))
+        ).reshape(
+            stacked_views.size(0),
+            stacked_views.size(1),
+            -1,
+        )
+        global_projection = projected_views[0]
+        local_projections = projected_views[1:]
+        invariance = (
+            local_projections - global_projection.unsqueeze(0)
+        ).square().mean()
+
+        per_view_sigreg = torch.stack(
+            [
+                sigreg_gaussian_distance(
+                    view,
+                    num_slices=self.sigreg_num_slices,
+                    num_points=self.sigreg_num_points,
+                    epsilon=self.epsilon,
+                    formulation="levjepa_additive",
+                )
+                for view in projected_views
+            ]
+        )
+        sigreg_raw = per_view_sigreg.mean()
+        regularizer = self.sigreg_weight_lvl2 * sigreg_raw
+        retained_fraction = torch.stack(retained_fractions).mean()
+        return {
+            "total": invariance + regularizer,
+            "invariance": invariance,
+            "regularizer": regularizer,
+            "sigreg_raw": sigreg_raw,
+            "retained_claim_fraction": retained_fraction,
+            "global_projection": global_projection,
+            "local_projections": local_projections,
+        }
 
     def _compute_embedding_variance(self, prediction, mask=None):
         if mask is None:
@@ -1990,6 +2253,38 @@ class HierarchicalClaimsModel(pl.LightningModule):
         var_loss_lvl2 = ssl_metrics_lvl2["variance"]
         cov_loss_lvl2 = ssl_metrics_lvl2["covariance"]
         sigreg_raw_lvl2 = ssl_metrics_lvl2["sigreg_raw"]
+        levjepa_patient_view_loss = zero
+        levjepa_invariance_loss = zero
+        levjepa_sigreg_raw = zero
+        levjepa_retained_claim_fraction = zero
+        levjepa_global_projection = None
+        levjepa_local_projections = None
+        if self.use_levjepa_patient_views:
+            levjepa_metrics = self._compute_levjepa_patient_view_loss(
+                patient_representation_pre_sae,
+                context_cpt,
+                context_icd,
+                context_ttnc,
+            )
+            levjepa_patient_view_loss = levjepa_metrics["total"]
+            levjepa_invariance_loss = levjepa_metrics["invariance"]
+            levjepa_sigreg_raw = levjepa_metrics["sigreg_raw"]
+            levjepa_retained_claim_fraction = levjepa_metrics[
+                "retained_claim_fraction"
+            ]
+            levjepa_global_projection = levjepa_metrics["global_projection"]
+            levjepa_local_projections = levjepa_metrics["local_projections"]
+
+            # In this opt-in recipe the Level-2 objective is view agreement,
+            # not next-claim prediction. Existing prediction outputs remain
+            # available for downstream probes and Stage-2 generators.
+            ssl_loss_lvl2 = levjepa_patient_view_loss
+            ssl_predictive_lvl2 = levjepa_invariance_loss
+            ssl_regularizer_lvl2 = levjepa_metrics["regularizer"]
+            sigreg_raw_lvl2 = levjepa_sigreg_raw
+            embedding_variance_lvl2 = self._compute_embedding_variance(
+                levjepa_global_projection
+            )
 
         multi_hypothesis_predictions = torch.empty(
             context_lvl2.size(0), 0, context_lvl2.size(-1), device=context_lvl2.device
@@ -2228,6 +2523,12 @@ class HierarchicalClaimsModel(pl.LightningModule):
             'ssl_covariance_lvl2': cov_loss_lvl2,
             'ssl_sigreg_raw_lvl1': sigreg_raw_lvl1,
             'ssl_sigreg_raw_lvl2': sigreg_raw_lvl2,
+            'levjepa_patient_view_loss': levjepa_patient_view_loss,
+            'levjepa_invariance_loss': levjepa_invariance_loss,
+            'levjepa_sigreg_raw': levjepa_sigreg_raw,
+            'levjepa_retained_claim_fraction': levjepa_retained_claim_fraction,
+            'levjepa_global_projection': levjepa_global_projection,
+            'levjepa_local_projections': levjepa_local_projections,
             'claim_prototype_loss': claim_prototype_loss,
             'claim_prototype_prediction_loss': claim_prototype_prediction_loss,
             'claim_prototype_clustering_loss': claim_prototype_clustering_loss,
@@ -2493,6 +2794,37 @@ class HierarchicalClaimsModel(pl.LightningModule):
                     logger=True,
                 )
 
+            if self.use_levjepa_patient_views:
+                self.log(
+                    "levjepa_patient_view_loss",
+                    outputs["levjepa_patient_view_loss"],
+                    on_step=False,
+                    on_epoch=True,
+                    prog_bar=True,
+                    logger=True,
+                )
+                self.log(
+                    "levjepa_invariance_loss",
+                    outputs["levjepa_invariance_loss"],
+                    on_step=False,
+                    on_epoch=True,
+                    logger=True,
+                )
+                self.log(
+                    "levjepa_sigreg_raw",
+                    outputs["levjepa_sigreg_raw"],
+                    on_step=False,
+                    on_epoch=True,
+                    logger=True,
+                )
+                self.log(
+                    "levjepa_retained_claim_fraction",
+                    outputs["levjepa_retained_claim_fraction"],
+                    on_step=False,
+                    on_epoch=True,
+                    logger=True,
+                )
+
             if self.use_claim_prototypes:
                 for metric_name in (
                     "claim_prototype_loss",
@@ -2752,6 +3084,7 @@ class HierarchicalClaimsModel(pl.LightningModule):
 
 
     def on_train_batch_end(self, outputs, batch, batch_idx, dataloader_idx=None):
+        self.update_eval_polyak_average()
         if (batch_idx + 1) == self.steps_per_epoch:
             if self.use_grad_print:
                 total_norm = 0
@@ -2764,6 +3097,18 @@ class HierarchicalClaimsModel(pl.LightningModule):
                 print(f"Total Gradient Norm: {total_norm}")
 
             self.prediction_block_lvl2.on_epoch_end()
+
+    def on_validation_start(self):
+        self.activate_eval_polyak_weights()
+
+    def on_validation_epoch_end(self):
+        # Restore before validation-end checkpoint callbacks can serialize the
+        # model, keeping checkpoints authoritative for the online parameters.
+        self.restore_online_weights()
+
+    def on_validation_end(self):
+        # Safety net for interrupted or non-standard evaluation loops.
+        self.restore_online_weights()
 
     def on_after_backward(self):
         if not self._grad_check_done:
@@ -2966,6 +3311,8 @@ class HierarchicalClaimsModel(pl.LightningModule):
             collect_params(self.context_encoder_lvl2, adapter_params)
             collect_params(self.target_encoder_lvl2, adapter_params)
         collect_params(self.prediction_block_lvl2, generator_params)
+        if self.use_levjepa_patient_views:
+            collect_params(self.levjepa_patient_projector, generator_params)
         if self.use_world_model_dynamics:
             collect_params(self.world_model, generator_params)
         if self.use_temporal_contrastive:

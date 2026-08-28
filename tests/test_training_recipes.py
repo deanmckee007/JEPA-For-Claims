@@ -46,6 +46,7 @@ class TestTrainingRecipes(unittest.TestCase):
         self.assertIn("composable_level1_lejepa", names)
         self.assertIn("composable_level1_lejepa_any_code", names)
         self.assertIn("composable_level1_capi", names)
+        self.assertIn("levjepa_patient_views", names)
 
     def test_composable_lejepa_recipe_removes_ema_and_enables_level2_sigreg(self):
         config = apply_training_recipe(Config(), "composable_level1_lejepa")
@@ -89,6 +90,35 @@ class TestTrainingRecipes(unittest.TestCase):
         self.assertEqual(config.target_encoder_mode_lvl1, "shared")
         self.assertEqual(config.target_encoder_mode_lvl2, "shared")
         self.assertTrue(config.use_composable_level1)
+
+    def test_levjepa_patient_view_recipe_is_additive_shared_and_projected(self):
+        config = apply_training_recipe(Config(), "levjepa_patient_views")
+        config = apply_runtime_config_overrides(config)
+
+        self.assertTrue(config.use_levjepa_patient_views)
+        self.assertEqual(config.sigreg_formulation, "levjepa_additive")
+        self.assertEqual(config.sigreg_weight_lvl2, 0.02)
+        self.assertEqual(config.sigreg_num_slices, 1024)
+        self.assertEqual(config.target_encoder_mode_lvl1, "shared")
+        self.assertEqual(config.target_encoder_mode_lvl2, "shared")
+        self.assertEqual(config.levjepa_num_local_views, 2)
+        self.assertEqual(config.levjepa_claim_drop_ratio, 0.3)
+        self.assertFalse(config.use_level2_dense_prediction)
+        self.assertFalse(config.use_masked_next_claim_token_grounding)
+        self.assertFalse(config.use_sparse_autoencoder)
+        self.assertTrue(config.use_eval_polyak_average)
+        self.assertEqual(config.eval_polyak_decay, 0.9999)
+        self.assertEqual(config.eval_polyak_update_interval, 32)
+
+    def test_levjepa_patient_views_require_paper_faithful_formulation(self):
+        config = Config()
+        config.use_levjepa_patient_views = True
+        config.ssl_objective_type = "sigreg"
+        config.target_encoder_mode = "shared"
+        config.sigreg_formulation = "lejepa_convex"
+
+        with self.assertRaisesRegex(ValueError, "levjepa_additive"):
+            apply_runtime_config_overrides(config)
 
     def test_sigreg_dense_recipe_applies_expected_ssl_flags(self):
         config = apply_training_recipe(Config(), "sigreg_dense")

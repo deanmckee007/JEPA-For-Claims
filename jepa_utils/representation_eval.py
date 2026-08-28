@@ -3,13 +3,14 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import torch.nn as nn
 from sklearn.cluster import KMeans
 from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.metrics import accuracy_score, adjusted_rand_score, f1_score, silhouette_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-from torch.utils.data import Subset
+from torch.utils.data import DataLoader, Subset, TensorDataset
 
 
 TTNC_PROXY_LABEL_SOURCE = "last_valid_ttnc"
@@ -110,6 +111,8 @@ def collect_patient_representations(
     max_samples=None,
     representation_source: str = "patient_representation_pre_sae",
     missing_modality: str | None = None,
+    include_sequence_states: bool = False,
+    sequence_state_max_samples: int | None = None,
 ):
     if device is None:
         device = next(model.parameters()).device
@@ -124,54 +127,88 @@ def collect_patient_representations(
     prototype_assignments = []
     prototype_probabilities = []
     prototype_active_masks = []
+    sequence_states = []
+    sequence_state_masks = []
+    sequence_state_count = 0
+    sequence_state_limit = sequence_state_max_samples
+    if max_samples is not None:
+        sequence_state_limit = (
+            max_samples
+            if sequence_state_limit is None
+            else min(sequence_state_limit, max_samples)
+        )
 
-    with torch.no_grad():
-        for batch in dataloader:
-            cpt_tensor, icd_tensor, ttnc_tensor, target = batch
-            if missing_modality == "cpt":
-                cpt_tensor = torch.zeros_like(cpt_tensor)
-            elif missing_modality == "icd":
-                icd_tensor = torch.zeros_like(icd_tensor)
-            elif missing_modality is not None:
-                raise ValueError("missing_modality must be None, 'cpt', or 'icd'.")
-            specialty = extract_last_valid_ttnc(ttnc_tensor).cpu()
-            lengths = extract_sequence_lengths(ttnc_tensor).cpu()
+    polyak_activated = False
+    activate_polyak = getattr(model, "activate_eval_polyak_weights", None)
+    if callable(activate_polyak):
+        polyak_activated = bool(activate_polyak())
 
-            outputs = model(
-                cpt_tensor=cpt_tensor.to(device),
-                icd_tensor=icd_tensor.to(device),
-                ttnc_tensor=ttnc_tensor.to(device),
-                target=target.to(device),
-                teacher_forcing=True,
-                generation=False,
-            )
+    try:
+        with torch.no_grad():
+            for batch in dataloader:
+                cpt_tensor, icd_tensor, ttnc_tensor, target = batch
+                if missing_modality == "cpt":
+                    cpt_tensor = torch.zeros_like(cpt_tensor)
+                elif missing_modality == "icd":
+                    icd_tensor = torch.zeros_like(icd_tensor)
+                elif missing_modality is not None:
+                    raise ValueError("missing_modality must be None, 'cpt', or 'icd'.")
+                specialty = extract_last_valid_ttnc(ttnc_tensor).cpu()
+                lengths = extract_sequence_lengths(ttnc_tensor).cpu()
 
-            embeddings.append(
-                select_representation_tensor(outputs, representation_source).detach().cpu()
-            )
-            specialty_labels.append(specialty)
-            regression_targets.append(target.detach().cpu())
-            sequence_lengths.append(lengths)
-            assignments = outputs.get("claim_prototype_assignments")
-            probabilities = outputs.get("claim_prototype_probabilities")
-            active_mask = outputs.get("claim_prototype_active_mask")
-            if (
-                assignments is not None
-                and probabilities is not None
-                and active_mask is not None
-            ):
-                prototype_assignments.append(
-                    assignments.detach().cpu()
+                outputs = model(
+                    cpt_tensor=cpt_tensor.to(device),
+                    icd_tensor=icd_tensor.to(device),
+                    ttnc_tensor=ttnc_tensor.to(device),
+                    target=target.to(device),
+                    teacher_forcing=True,
+                    generation=False,
                 )
-                prototype_probabilities.append(
-                    probabilities.detach().cpu()
-                )
-                prototype_active_masks.append(active_mask.detach().cpu())
 
-            if max_samples is not None:
-                current_size = sum(chunk.size(0) for chunk in embeddings)
-                if current_size >= max_samples:
-                    break
+                embeddings.append(
+                    select_representation_tensor(outputs, representation_source).detach().cpu()
+                )
+                specialty_labels.append(specialty)
+                regression_targets.append(target.detach().cpu())
+                sequence_lengths.append(lengths)
+                if include_sequence_states:
+                    sequence_aux = outputs.get("sequence_aux") or {}
+                    states = sequence_aux.get("sequence_output")
+                    valid_mask = sequence_aux.get("valid_token_mask")
+                    if states is None or valid_mask is None:
+                        raise ValueError(
+                            "The attentive probe requires sequence_output and valid_token_mask "
+                            "in the model's sequence_aux outputs."
+                        )
+                    remaining = states.size(0)
+                    if sequence_state_limit is not None:
+                        remaining = min(
+                            remaining,
+                            max(sequence_state_limit - sequence_state_count, 0),
+                        )
+                    if remaining > 0:
+                        sequence_states.append(states[:remaining].detach().cpu())
+                        sequence_state_masks.append(valid_mask[:remaining].detach().cpu())
+                        sequence_state_count += remaining
+                assignments = outputs.get("claim_prototype_assignments")
+                probabilities = outputs.get("claim_prototype_probabilities")
+                active_mask = outputs.get("claim_prototype_active_mask")
+                if (
+                    assignments is not None
+                    and probabilities is not None
+                    and active_mask is not None
+                ):
+                    prototype_assignments.append(assignments.detach().cpu())
+                    prototype_probabilities.append(probabilities.detach().cpu())
+                    prototype_active_masks.append(active_mask.detach().cpu())
+
+                if max_samples is not None:
+                    current_size = sum(chunk.size(0) for chunk in embeddings)
+                    if current_size >= max_samples:
+                        break
+    finally:
+        if polyak_activated:
+            model.restore_online_weights()
 
     if not embeddings:
         raise ValueError("No embeddings were collected from the dataloader.")
@@ -191,7 +228,13 @@ def collect_patient_representations(
         "sequence_lengths": sequence_lengths_np,
         "effective_sequence_lengths": sequence_lengths_np,
         "representation_source": representation_source,
+        "evaluation_weights": "polyak" if polyak_activated else "online",
     }
+    if include_sequence_states:
+        if not sequence_states:
+            raise ValueError("No sequence states were collected for the attentive probe.")
+        metadata["sequence_states"] = torch.cat(sequence_states, dim=0).numpy()
+        metadata["sequence_state_masks"] = torch.cat(sequence_state_masks, dim=0).numpy()
     if prototype_assignments:
         stacked_assignments = torch.cat(
             prototype_assignments,
@@ -471,6 +514,148 @@ def score_regression_predictions(predictions, targets):
         "target_probe_rmse_dollars": float(rmse_dollars),
         "target_probe_wape_percent": float(wape_percent),
     }
+
+
+class FrozenAttentiveRegressionProbe(nn.Module):
+    """Small query-attention readout trained over frozen claim-sequence states."""
+
+    def __init__(self, embedding_dim: int, num_heads: int = 4):
+        super().__init__()
+        if embedding_dim <= 0:
+            raise ValueError("embedding_dim must be positive.")
+        if num_heads <= 0 or embedding_dim % num_heads:
+            raise ValueError("num_heads must be positive and divide embedding_dim.")
+        self.query = nn.Parameter(torch.zeros(1, 1, embedding_dim))
+        nn.init.normal_(self.query, std=0.02)
+        self.attention = nn.MultiheadAttention(
+            embedding_dim,
+            num_heads,
+            batch_first=True,
+        )
+        self.attention_norm = nn.LayerNorm(embedding_dim)
+        self.feed_forward = nn.Sequential(
+            nn.Linear(embedding_dim, 2 * embedding_dim),
+            nn.GELU(),
+            nn.Linear(2 * embedding_dim, embedding_dim),
+        )
+        self.output_norm = nn.LayerNorm(embedding_dim)
+        self.regressor = nn.Linear(embedding_dim, 1)
+
+    def forward(self, sequence_states, valid_token_mask):
+        valid_token_mask = valid_token_mask.bool()
+        safe_mask = valid_token_mask.clone()
+        empty = ~safe_mask.any(dim=1)
+        if empty.any():
+            safe_mask[empty, 0] = True
+            sequence_states = sequence_states.clone()
+            sequence_states[empty, 0] = 0
+        query = self.query.expand(sequence_states.size(0), -1, -1)
+        attended, _ = self.attention(
+            query,
+            sequence_states,
+            sequence_states,
+            key_padding_mask=~safe_mask,
+            need_weights=False,
+        )
+        state = self.attention_norm(query + attended)
+        state = self.output_norm(state + self.feed_forward(state))
+        return self.regressor(state[:, 0]).squeeze(-1)
+
+
+def compute_attentive_regression_probe_metrics(
+    train_sequence_states,
+    train_sequence_masks,
+    train_targets,
+    eval_sequence_states,
+    eval_sequence_masks,
+    eval_targets,
+    *,
+    device=None,
+    epochs=20,
+    batch_size=256,
+    learning_rate=1e-3,
+    weight_decay=1e-4,
+    num_heads=4,
+    random_state=42,
+):
+    """Fit an attentive probe without backpropagating into the claims encoder."""
+    train_states = torch.as_tensor(train_sequence_states, dtype=torch.float32)
+    train_masks = torch.as_tensor(train_sequence_masks, dtype=torch.bool)
+    eval_states = torch.as_tensor(eval_sequence_states, dtype=torch.float32)
+    eval_masks = torch.as_tensor(eval_sequence_masks, dtype=torch.bool)
+    train_targets = np.asarray(train_targets, dtype=np.float32).reshape(-1)
+    eval_targets = np.asarray(eval_targets, dtype=np.float32).reshape(-1)
+
+    if train_states.ndim != 3 or eval_states.ndim != 3:
+        raise ValueError("Attentive probe sequence states must have shape [N, T, D].")
+    if train_masks.shape != train_states.shape[:2] or eval_masks.shape != eval_states.shape[:2]:
+        raise ValueError("Attentive probe masks must match the first two state dimensions.")
+    if train_states.shape[0] != train_targets.size or eval_states.shape[0] != eval_targets.size:
+        raise ValueError("Attentive probe targets must align with sequence states.")
+    if train_states.shape[2] != eval_states.shape[2]:
+        raise ValueError("Train and evaluation sequence-state dimensions must match.")
+    if train_states.shape[0] < 2 or eval_states.shape[0] < 1:
+        return {}
+    if epochs <= 0 or batch_size <= 0:
+        raise ValueError("Attentive probe epochs and batch_size must be positive.")
+
+    embedding_dim = train_states.shape[2]
+    compatible_heads = [head for head in range(min(num_heads, embedding_dim), 0, -1) if embedding_dim % head == 0]
+    if not compatible_heads:
+        raise ValueError("No attention-head count divides the sequence-state dimension.")
+    effective_heads = compatible_heads[0]
+    device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+    torch.manual_seed(int(random_state))
+
+    target_mean = float(train_targets.mean())
+    target_scale = float(train_targets.std())
+    if target_scale < 1e-8:
+        target_scale = 1.0
+    scaled_targets = torch.from_numpy((train_targets - target_mean) / target_scale).float()
+    dataset = TensorDataset(train_states, train_masks, scaled_targets)
+    generator = torch.Generator().manual_seed(int(random_state))
+    dataloader = DataLoader(
+        dataset,
+        batch_size=min(int(batch_size), len(dataset)),
+        shuffle=True,
+        generator=generator,
+    )
+    probe = FrozenAttentiveRegressionProbe(embedding_dim, effective_heads).to(device)
+    optimizer = torch.optim.AdamW(
+        probe.parameters(),
+        lr=float(learning_rate),
+        weight_decay=float(weight_decay),
+    )
+
+    probe.train()
+    for _ in range(int(epochs)):
+        for states_batch, masks_batch, target_batch in dataloader:
+            predictions = probe(states_batch.to(device), masks_batch.to(device))
+            loss = torch.mean((predictions - target_batch.to(device)) ** 2)
+            optimizer.zero_grad(set_to_none=True)
+            loss.backward()
+            optimizer.step()
+
+    probe.eval()
+    predictions = []
+    with torch.no_grad():
+        for start in range(0, eval_states.shape[0], int(batch_size)):
+            stop = start + int(batch_size)
+            predictions.append(
+                probe(eval_states[start:stop].to(device), eval_masks[start:stop].to(device)).cpu()
+            )
+    predictions = torch.cat(predictions).numpy() * target_scale + target_mean
+    metrics = score_regression_predictions(predictions, eval_targets)
+    metrics = {f"attentive_{key}": value for key, value in metrics.items()}
+    metrics.update(
+        {
+            "attentive_probe_train_samples": int(train_states.shape[0]),
+            "attentive_probe_eval_samples": int(eval_states.shape[0]),
+            "attentive_probe_num_heads": int(effective_heads),
+            "attentive_probe_epochs": int(epochs),
+        }
+    )
+    return metrics
 
 
 def compute_heldout_regression_probe_metrics(

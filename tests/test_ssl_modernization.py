@@ -9,7 +9,12 @@ from jepa_models.hierarchical_model import HierarchicalClaimsModel
 from jepa_models.encoders import Level1Encoder
 from jepa_models.claim_prototypes import ClaimPrototypeObjective, sinkhorn_assignments
 from jepa_models.prediction_blocks import Level2PredictionBlock
-from jepa_models.ssl_objectives import SIGRegObjective, WristbandGaussianRegularizer
+from jepa_models.ssl_objectives import (
+    SIGRegObjective,
+    WristbandGaussianRegularizer,
+    _global_empirical_characteristic_function,
+    sigreg_gaussian_distance,
+)
 from jepa_utils.config import Config
 
 
@@ -67,6 +72,63 @@ def make_batch(cfg, batch_size=2):
 
 
 class TestSSLModernization(unittest.TestCase):
+    def test_eval_polyak_average_updates_swaps_and_restores_online_weights(self):
+        cfg = build_config(
+            use_eval_polyak_average=True,
+            eval_polyak_decay=0.5,
+            eval_polyak_update_interval=1,
+        )
+        model = HierarchicalClaimsModel(cfg)
+        online = model._eval_polyak_online_parameters[0]
+        averaged = model.eval_polyak_parameters[0]
+        initial = online.detach().clone()
+
+        with torch.no_grad():
+            online.add_(2.0)
+        modified = online.detach().clone()
+        self.assertTrue(model.update_eval_polyak_average())
+        self.assertTrue(torch.allclose(averaged, initial + 1.0))
+        self.assertEqual(model.eval_polyak_updates.item(), 1)
+
+        self.assertTrue(model.activate_eval_polyak_weights())
+        self.assertTrue(torch.allclose(online, averaged))
+        self.assertTrue(model.restore_online_weights())
+        self.assertTrue(torch.allclose(online, modified))
+
+    def test_sigreg_distributed_characteristic_function_uses_global_sufficient_statistics(self):
+        projected = torch.randn(5, 3, 4, requires_grad=True)
+
+        def double_in_place(tensor, op=None):
+            tensor.mul_(2.0)
+
+        with (
+            patch(
+                "jepa_models.ssl_objectives._distributed_sigreg_active",
+                return_value=True,
+            ),
+            patch(
+                "torch.distributed.nn.functional.all_reduce",
+                side_effect=lambda tensor, op=None: tensor * 2.0,
+            ),
+            patch(
+                "jepa_models.ssl_objectives.dist.all_reduce",
+                side_effect=double_in_place,
+            ),
+        ):
+            empirical_real, empirical_imag, global_count = (
+                _global_empirical_characteristic_function(projected)
+            )
+
+        self.assertTrue(
+            torch.allclose(empirical_real, torch.cos(projected).mean(dim=0))
+        )
+        self.assertTrue(
+            torch.allclose(empirical_imag, torch.sin(projected).mean(dim=0))
+        )
+        self.assertEqual(global_count.item(), 10.0)
+        (empirical_real.square().mean() + empirical_imag.square().mean()).backward()
+        self.assertTrue(torch.isfinite(projected.grad).all())
+
     def test_positionwise_sinkhorn_balances_each_claim_slot(self):
         torch.manual_seed(7)
         assignments = sinkhorn_assignments(torch.randn(32, 8), iterations=5)
@@ -406,6 +468,111 @@ class TestSSLModernization(unittest.TestCase):
         self.assertTrue(torch.allclose(metrics["total"], expected))
         self.assertTrue(torch.isfinite(metrics["total"]))
 
+    def test_levjepa_sigreg_uses_paper_additive_mixing(self):
+        cfg = build_config(
+            ssl_objective_type="sigreg",
+            sigreg_formulation="levjepa_additive",
+            sigreg_weight_lvl2=0.02,
+            sigreg_num_slices=16,
+        )
+        objective = SIGRegObjective(cfg)
+        prediction = torch.randn(12, cfg.embedding_dim)
+        target = torch.randn(12, cfg.embedding_dim)
+
+        metrics = objective.compute(prediction, target, level="2")
+
+        expected = (
+            metrics["predictive"]
+            + metrics["diagnostics"]["sigreg_raw"] * 0.02
+        )
+        self.assertTrue(torch.allclose(metrics["total"], expected))
+        self.assertTrue(torch.isfinite(metrics["total"]))
+
+    def test_levjepa_local_history_preserves_latest_claim_and_zeros_drops(self):
+        cfg = build_config(
+            ssl_objective_type="sigreg",
+            sigreg_formulation="levjepa_additive",
+            target_encoder_mode="shared",
+            use_levjepa_patient_views=True,
+            levjepa_claim_drop_ratio=0.5,
+            levjepa_projector_hidden_dim=8,
+            levjepa_projector_output_dim=4,
+            sigreg_num_slices=8,
+        )
+        model = HierarchicalClaimsModel(cfg)
+        cpt, icd, ttnc, _ = make_batch(cfg, batch_size=2)
+        ttnc[0, :2] = 0
+        cpt[0, :2] = 0
+        icd[0, :2] = 0
+        sampled = torch.tensor(
+            [
+                [0.0, 0.0, 0.1, 0.9, 0.1],
+                [0.1, 0.9, 0.1, 0.9, 0.1],
+            ],
+            device=ttnc.device,
+        )
+
+        with patch("torch.rand", return_value=sampled):
+            local_cpt, local_icd, local_ttnc, keep = (
+                model._sample_levjepa_local_history(cpt, icd, ttnc)
+            )
+
+        self.assertTrue(keep[0, 4])
+        self.assertTrue(keep[1, 4])
+        dropped = ttnc.ne(0) & ~keep
+        self.assertTrue((local_cpt[dropped] == 0).all())
+        self.assertTrue((local_icd[dropped] == 0).all())
+        self.assertTrue((local_ttnc[dropped] == 0).all())
+        self.assertTrue(torch.equal(local_ttnc[keep], ttnc[keep]))
+
+    def test_levjepa_patient_view_loss_replaces_level2_objective_and_backpropagates(self):
+        cfg = build_config(
+            ssl_objective_type="sigreg",
+            sigreg_formulation="levjepa_additive",
+            sigreg_weight_lvl2=0.02,
+            sigreg_num_slices=8,
+            target_encoder_mode="shared",
+            use_levjepa_patient_views=True,
+            levjepa_num_local_views=2,
+            levjepa_claim_drop_ratio=0.5,
+            levjepa_projector_hidden_dim=8,
+            levjepa_projector_output_dim=4,
+        )
+        model = HierarchicalClaimsModel(cfg)
+        batch = make_batch(cfg, batch_size=4)
+
+        outputs = model.training_forward(*batch)
+
+        self.assertTrue(torch.isfinite(outputs["levjepa_patient_view_loss"]))
+        self.assertGreater(outputs["levjepa_invariance_loss"].item(), 0.0)
+        self.assertGreater(outputs["levjepa_sigreg_raw"].item(), 0.0)
+        self.assertTrue(
+            torch.allclose(
+                outputs["ssl_loss_lvl2"],
+                outputs["levjepa_patient_view_loss"],
+            )
+        )
+        self.assertEqual(
+            outputs["levjepa_local_projections"].shape,
+            (2, 4, cfg.levjepa_projector_output_dim),
+        )
+        self.assertGreater(outputs["levjepa_retained_claim_fraction"].item(), 0.0)
+        self.assertLessEqual(outputs["levjepa_retained_claim_fraction"].item(), 1.0)
+
+        outputs["loss"].backward()
+        projector_grad = next(
+            parameter.grad
+            for parameter in model.levjepa_patient_projector.parameters()
+            if parameter.grad is not None
+        )
+        encoder_grad = next(
+            parameter.grad
+            for parameter in model.context_encoder_lvl2.parameters()
+            if parameter.grad is not None
+        )
+        self.assertTrue(torch.isfinite(projector_grad).all())
+        self.assertTrue(torch.isfinite(encoder_grad).all())
+
     def test_lejepa_sigreg_statistic_scales_with_sample_count(self):
         cfg = build_config(
             ssl_objective_type="sigreg",
@@ -422,6 +589,27 @@ class TestSSLModernization(unittest.TestCase):
         )
 
         self.assertTrue(torch.allclose(duplicated, original * 2.0, rtol=1e-5))
+
+    def test_public_sigreg_distance_matches_lejepa_objective_statistic(self):
+        cfg = build_config(
+            ssl_objective_type="sigreg",
+            sigreg_formulation="lejepa_convex",
+        )
+        objective = SIGRegObjective(cfg)
+        embeddings = torch.randn(10, cfg.embedding_dim)
+
+        torch.manual_seed(123)
+        objective_value = objective._characteristic_function_distance(embeddings)
+        torch.manual_seed(123)
+        public_value = sigreg_gaussian_distance(
+            embeddings,
+            num_slices=cfg.sigreg_num_slices,
+            num_points=cfg.sigreg_num_points,
+            epsilon=cfg.epsilon,
+            formulation="lejepa_convex",
+        )
+
+        self.assertTrue(torch.allclose(public_value, objective_value))
 
     def test_logvars_can_be_frozen_after_configured_epoch(self):
         cfg = build_config(
@@ -573,6 +761,7 @@ class TestSSLModernization(unittest.TestCase):
         self.assertFalse(torch.allclose(patient_representation[0], patient_representation[1]))
         self.assertFalse(torch.allclose(prediction[0], prediction[1]))
         self.assertEqual(aux["sequence_output"][:, :-10].count_nonzero().item(), 0)
+        self.assertTrue(torch.equal(aux["valid_token_mask"], ttnc_tokens != 0))
 
     def test_gru_short_sequence_representation_depends_on_latest_claim(self):
         torch.manual_seed(1)
