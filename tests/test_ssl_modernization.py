@@ -80,6 +80,7 @@ class TestSSLModernization(unittest.TestCase):
             use_eval_polyak_average=True,
             eval_polyak_decay=0.5,
             eval_polyak_update_interval=1,
+            eval_polyak_warmup_batches=1,
         )
         model = HierarchicalClaimsModel(cfg)
         online = model._eval_polyak_online_parameters[0]
@@ -90,13 +91,28 @@ class TestSSLModernization(unittest.TestCase):
             online.add_(2.0)
         modified = online.detach().clone()
         self.assertTrue(model.update_eval_polyak_average())
-        self.assertTrue(torch.allclose(averaged, initial + 1.0))
+        self.assertTrue(torch.allclose(averaged, modified))
         self.assertEqual(model.eval_polyak_updates.item(), 1)
 
         self.assertTrue(model.activate_eval_polyak_weights())
         self.assertTrue(torch.allclose(online, averaged))
         self.assertTrue(model.restore_online_weights())
         self.assertTrue(torch.allclose(online, modified))
+        with torch.no_grad():
+            online.add_(2.0)
+        model.update_eval_polyak_average()
+        self.assertTrue(torch.allclose(averaged, initial + 3.0))
+
+    def test_eval_average_waits_for_warmup(self):
+        model = HierarchicalClaimsModel(build_config(
+            use_eval_polyak_average=True, eval_polyak_warmup_batches=2,
+            eval_polyak_update_interval=2,
+        ))
+        self.assertFalse(model.update_eval_polyak_average())
+        self.assertFalse(model.activate_eval_polyak_weights())
+        self.assertTrue(model.update_eval_polyak_average())
+        self.assertTrue(model.activate_eval_polyak_weights())
+        model.restore_online_weights()
 
     def test_sigreg_distributed_characteristic_function_uses_global_sufficient_statistics(self):
         projected = torch.randn(5, 3, 4, requires_grad=True)

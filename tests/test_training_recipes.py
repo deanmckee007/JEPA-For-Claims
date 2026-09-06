@@ -107,8 +107,8 @@ class TestTrainingRecipes(unittest.TestCase):
         self.assertFalse(config.use_masked_next_claim_token_grounding)
         self.assertFalse(config.use_sparse_autoencoder)
         self.assertTrue(config.use_eval_polyak_average)
-        self.assertEqual(config.eval_polyak_decay, 0.9999)
-        self.assertEqual(config.eval_polyak_update_interval, 32)
+        self.assertEqual(config.eval_polyak_decay, 0.9)
+        self.assertEqual(config.eval_polyak_update_interval, 1)
 
     def test_levjepa_patient_views_require_paper_faithful_formulation(self):
         config = Config()

@@ -217,10 +217,13 @@ class HierarchicalClaimsModel(pl.LightningModule):
             getattr(config, "use_eval_polyak_average", False)
         )
         self.eval_polyak_decay = float(
-            getattr(config, "eval_polyak_decay", 0.9999)
+            getattr(config, "eval_polyak_decay", 0.9)
         )
         self.eval_polyak_update_interval = int(
-            getattr(config, "eval_polyak_update_interval", 32)
+            getattr(config, "eval_polyak_update_interval", 1)
+        )
+        self.eval_polyak_warmup_batches = int(
+            getattr(config, "eval_polyak_warmup_batches", 32)
         )
         self._eval_polyak_active = False
         self._eval_polyak_online_backup = None
@@ -819,15 +822,19 @@ class HierarchicalClaimsModel(pl.LightningModule):
         if not self.use_eval_polyak_average or self._eval_polyak_active:
             return False
         self.eval_polyak_batches.add_(1)
-        if int(self.eval_polyak_batches.item()) % self.eval_polyak_update_interval:
+        elapsed = int(self.eval_polyak_batches.item()) - self.eval_polyak_warmup_batches
+        if elapsed < 0 or elapsed % self.eval_polyak_update_interval:
             return False
         for averaged, online in zip(
             self.eval_polyak_parameters,
             self._eval_polyak_online_parameters,
         ):
-            averaged.mul_(self.eval_polyak_decay).add_(
-                online.detach(), alpha=1.0 - self.eval_polyak_decay
-            )
+            if int(self.eval_polyak_updates.item()) == 0:
+                averaged.copy_(online.detach())
+            else:
+                averaged.mul_(self.eval_polyak_decay).add_(
+                    online.detach(), alpha=1.0 - self.eval_polyak_decay
+                )
         self.eval_polyak_updates.add_(1)
         return True
 
