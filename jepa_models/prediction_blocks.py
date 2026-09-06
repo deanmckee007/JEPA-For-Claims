@@ -212,6 +212,15 @@ class Level2PredictionBlock(nn.Module):
                 dropout=dropout,
                 bidirectional=False
             )
+        elif self.rnn_type == 'deepsets':
+            layers = []
+            for _ in range(num_layers):
+                layers.extend([nn.Linear(embed_dim, 3 * embed_dim), nn.GELU(),
+                    nn.Linear(3 * embed_dim, embed_dim), nn.LayerNorm(embed_dim)])
+            self.sequence_encoder = nn.Sequential(*layers)
+            self.position_embedding.weight.requires_grad_(False)
+        else:
+            raise ValueError(f"Unsupported rnn_type={self.rnn_type!r}")
 
         # Dropout layers for regularization
         self.dropout = nn.Dropout(dropout)
@@ -397,6 +406,8 @@ class Level2PredictionBlock(nn.Module):
         position_ids = position_ids.unsqueeze(0).expand(batch_size, seq_length)  # [batch_size, seq_length]
 
         position_embeds = self.position_embedding(position_ids)  # [batch_size, seq_length, embed_dim]
+        if self.rnn_type == 'deepsets':
+            position_embeds = torch.zeros_like(position_embeds)
         self.record_statistics('position_embeds', position_embeds)
 
         ttnc_embeds = (
@@ -433,6 +444,8 @@ class Level2PredictionBlock(nn.Module):
                 combined_sequence,
                 valid_token_mask,
             )
+        elif self.rnn_type == 'deepsets':
+            sequence_out = self.sequence_encoder(combined_sequence)
 
         self.record_statistics('sequence_out', sequence_out)
         # Apply dropout
