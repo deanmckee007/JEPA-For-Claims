@@ -53,6 +53,8 @@ def parse_args(argv=None):
         default=[0.0, 0.1, 0.3, 0.5, 0.7],
     )
     parser.add_argument("--boost-iterations", type=int, default=100)
+    parser.add_argument("--corruption", choices=["independent", "contiguous", "latest", "cpt", "icd"], default="independent")
+    parser.add_argument("--perturbation-seed", type=int, default=10001)
     args = parser.parse_args(argv)
     if any(not 0.0 <= ratio < 1.0 for ratio in args.drop_ratios):
         parser.error("drop ratios must be in [0, 1)")
@@ -78,13 +80,17 @@ def configure(checkpoint_path, args):
     return apply_runtime_config_overrides(config)
 
 
-def drop_context_claims(cpt, icd, ttnc, *, drop_ratio, future_claim_k, generator):
-    """Drop context claims jointly across modalities, retaining its latest claim.
+def drop_context_claims(cpt, icd, ttnc, *, drop_ratio, future_claim_k, generator, corruption="independent"):
+    """Corrupt context claims without changing the future target suffix.
 
     The held-out future suffix is never touched. This mirrors the model's
     per-patient context/future split and avoids turning a robustness audit into
-    a different prediction target.
+    a different prediction target. Independent dropout protects the latest claim;
+    contiguous/latest deletion retains at least one context claim. CPT/ICD modes
+    remove only that modality and preserve timing and the other code modality.
     """
+    if corruption not in {"independent", "contiguous", "latest", "cpt", "icd"}:
+        raise ValueError(f"Unknown corruption: {corruption}")
     if drop_ratio == 0.0:
         return cpt, icd, ttnc, 1.0
     cpt_out = cpt.clone()
@@ -104,11 +110,25 @@ def drop_context_claims(cpt, icd, ttnc, *, drop_ratio, future_claim_k, generator
         if context_indices.numel() == 0:
             continue
         keep = random_values[row, context_indices] >= drop_ratio
-        keep[-1] = True
+        if corruption == "independent":
+            keep[-1] = True
+        elif corruption in {"contiguous", "latest"}:
+            # Keep at least one context event so the model's future boundary
+            # stays identical, including for a multi-claim future suffix.
+            count = min(int(np.ceil(len(context_indices) * drop_ratio)), len(context_indices) - 1)
+            keep[:] = True
+            if count:
+                start = len(context_indices) - count if corruption == "latest" else int(
+                    torch.randint(len(context_indices) - count + 1, (), generator=generator)
+                )
+                keep[start:start + count] = False
         drop_indices = context_indices[~keep]
-        cpt_out[row, drop_indices] = 0
-        icd_out[row, drop_indices] = 0
-        ttnc_out[row, drop_indices] = 0
+        if corruption != "icd":
+            cpt_out[row, drop_indices] = 0
+        if corruption != "cpt":
+            icd_out[row, drop_indices] = 0
+        if corruption not in {"cpt", "icd"}:
+            ttnc_out[row, drop_indices] = 0
         retained += int(keep.sum())
         available += int(keep.numel())
     retention = float(retained / available) if available else 1.0
@@ -116,7 +136,7 @@ def drop_context_claims(cpt, icd, ttnc, *, drop_ratio, future_claim_k, generator
 
 
 def collect_perturbed_features(
-    model, loader, *, drop_ratio, future_claim_k, perturbation_seed, device
+    model, loader, *, drop_ratio, future_claim_k, perturbation_seed, device, corruption="independent"
 ):
     model = model.to(device)
     model.eval()
@@ -132,6 +152,7 @@ def collect_perturbed_features(
                 drop_ratio=drop_ratio,
                 future_claim_k=future_claim_k,
                 generator=generator,
+                corruption=corruption,
             )
             outputs = model(
                 cpt_tensor=cpt.to(device),
@@ -248,7 +269,7 @@ def main(argv=None):
     labels = None
     threshold = None
     runs = []
-    ratios = sorted(set(args.drop_ratios))
+    ratios = sorted(set([0.0, *args.drop_ratios]))
     for checkpoint in args.checkpoints:
         group = checkpoint["group"]
         seed = checkpoint["seed"]
@@ -276,8 +297,9 @@ def main(argv=None):
             val_x, val_targets, retention = collect_perturbed_features(
                 model, val_loader, drop_ratio=ratio,
                 future_claim_k=getattr(config, "future_claim_k", 0),
-                perturbation_seed=10_000 + seed + int(round(ratio * 1_000)),
+                perturbation_seed=args.perturbation_seed,
                 device=device,
+                corruption=args.corruption,
             )
             boosted_scores = boosted.predict_proba(val_x)[:, 1]
             logistic_scores = logistic.predict_proba(val_x)[:, 1]
@@ -305,7 +327,11 @@ def main(argv=None):
             "test_accessed": False,
             "tail_fraction": args.tail_fraction,
             "drop_ratios": ratios,
-            "latest_context_claim_always_retained": True,
+            "corruption": args.corruption,
+            "perturbation_seed": args.perturbation_seed,
+            "retention_definition": "fraction of context claims whose selected modalities are untouched; averaged over batches",
+            "latest_context_claim_always_retained": args.corruption == "independent",
+            "minimum_context_claims_retained": 1,
             "future_claims_untouched": True,
             "tail_head_fit_on_complete_training_history": True,
             "evaluation_weights": "online",

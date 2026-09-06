@@ -35,6 +35,31 @@ hypotheses with unusually good local evidence—not universal constants.
 
 Three practical results illustrate the pattern:
 
+Follow-up: the [September 5 audit](docs/followup_20260905.md) found that the
+1% tail-label advantage below is sensitive to label-subset selection. Its crossed
+seed pilot did not reproduce the doubling claim. Historical Polyak evaluations
+also used an average dominated by initialization; new runs use corrected averaging.
+
+The subsequent [nine-run retrieval replication](docs/retrieval_replication_20260905.md)
+found stable CPT/ICD ranking gains and better calibrated CPT sets. ICD set quality
+remained tied with copy-only, and retrieval covered only about 40% of new codes.
+An [expanded-bank pilot](docs/new_code_probe_20260905.md) raised new-code coverage
+to 58--64%, but did not translate that coverage into better decoded sets.
+The [mechanism pilots](docs/mechanism_probes_20260905.md) then found that simple
+raw/hybrid neighbor voting outperformed the learned decoder on CPT F1 in a
+single-seed comparison. Those voting controls now warrant replication.
+
+The [cost-transfer pilot](docs/neighbor_cost_20260905.md) tested grouped out-of-fold
+neighbor summaries at 1%, 5%, and full cost-label budgets. Combined cost/code
+summaries did not consistently beat raw history. Full-label cost-only summaries
+improved MAE by just $1.76 and RMSE by $19.28; code votes alone worsened both.
+
+The [cost-objective comparison](docs/cost_objectives_20260905.md) found a larger
+gain from dollar absolute-error training: raw-history MAE improved by about
+$212 at 1% labels, $186 at 5%, and $90 at full labels under matched inner
+selection. Dollar squared error better matched total spending. These remain
+validation results on the existing capped-cost endpoint.
+
 - With roughly 1% of cost-tail labels, raw history plus the patient-view
   representation more than doubled top-1.5% precision over raw history alone.
 - With a nominal 70% of older context claims removed, the patient-view

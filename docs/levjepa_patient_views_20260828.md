@@ -1,5 +1,12 @@
 # LeVJEPA Patient-View Port
 
+Historical report: the settings and measurements below describe the August runs.
+The [September 5 follow-up](followup_20260905.md) corrects evaluation averaging
+and tests independently crossed label subsets. Current averaging defaults copy
+the online model at batch 32, then update every batch with decay 0.9. Existing
+checkpoint averages are not rewritten, and the old 1% label conclusion did not
+replicate in the crossed pilot.
+
 ## Scope
 
 `levjepa_patient_views` is an opt-in Stage-1 representation recipe. It keeps

@@ -192,7 +192,7 @@ class ClaimsDataset(Dataset):
                 icd_tokens.append([self.icd_vocab.get(token, self.icd_vocab.get('<UNK>', 0)) for token in icd_claim] + [self.icd_vocab.get('<PAD>', 0)] * (max_icd_tokens - len(icd_claim)))
 
                 # Handle TTNC tokens
-                ttnc_tokens.append(self.ttnc_vocab.get(claim['ttnc'], self.ttnc_vocab.get('<PAD>', 0)))
+                ttnc_tokens.append(self.ttnc_vocab.get(claim['ttnc'], self.ttnc_vocab['<UNK>']))
 
             # Pad claims to max_claims_len if they are shorter
             num_padding = max_claims_len - len(cpt_tokens)

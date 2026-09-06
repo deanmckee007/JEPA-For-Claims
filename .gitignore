@@ -18,6 +18,16 @@ tb_logs/
 tmp_smoke/
 tmp_sweep/
 
+# Local research runs can contain per-row labels, identifiers and predictions.
+# Publish reviewed aggregate Markdown reports under docs/ instead.
+/experiments/followup_20260905/
+/experiments/retrieval_replication_20260905/
+/experiments/new_code_probe_20260905/
+/experiments/mechanism_probes_20260905/
+/experiments/neighbor_cost_20260905/
+/experiments/cost_objectives_20260905/
+/tmp/
+
 # Virtual environments
 venv/
 ENV/

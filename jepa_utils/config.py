@@ -342,8 +342,8 @@ TRAINING_RECIPES["levjepa_patient_views"] = {
     "levjepa_projector_hidden_dim": 2048,
     "levjepa_projector_output_dim": 256,
     "use_eval_polyak_average": True,
-    "eval_polyak_decay": 0.9999,
-    "eval_polyak_update_interval": 32,
+    "eval_polyak_decay": 0.9,
+    "eval_polyak_update_interval": 1,
     "freeze_logvars_after_epoch": 0,
 }
 
@@ -485,7 +485,7 @@ class Config:
     num_heads: int = 4         # For the prediction transformer
     ff_hidden_dim: int = 200   # For the prediction transformer
     dropout: float = 0.00
-    rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru'
+    rnn_type: str = 'gru'       # Options: 'transformer', 'lstm', 'gru', 'deepsets'
     lr: float = 7e-3            # Default, but overridden by LR finder
     adapter_lr: float = 1e-4    # LR for encoder adapter layers during Stage 2
     generator_lr: float = 5e-4  # LR for generator modules during Stage 2
@@ -505,8 +505,9 @@ class Config:
     # Evaluation-only parameter averaging. Unlike target-encoder EMA, these
     # weights never participate in a training forward pass.
     use_eval_polyak_average: bool = False
-    eval_polyak_decay: float = 0.9999
-    eval_polyak_update_interval: int = 32
+    eval_polyak_decay: float = 0.9
+    eval_polyak_warmup_batches: int = 32
+    eval_polyak_update_interval: int = 1
     epsilon: float = 1e-4  
     var_penalty_scale_lvl1: float = 1.0
     cov_penalty_scale_lvl1: float = 0.015 # .01 *Results for downstream task is very sensitive to this*
@@ -855,6 +856,8 @@ def apply_runtime_config_overrides(config: Config) -> Config:
         raise ValueError("eval_polyak_decay must be in the interval [0, 1).")
     if config.eval_polyak_update_interval <= 0:
         raise ValueError("eval_polyak_update_interval must be positive.")
+    if config.eval_polyak_warmup_batches < 0:
+        raise ValueError("eval_polyak_warmup_batches must be nonnegative.")
 
     split_total = (
         config.train_split_fraction

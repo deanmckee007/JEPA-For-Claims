@@ -38,6 +38,17 @@ def make_contract_dataframe(num_rows=30):
 
 
 class TestDataContract(unittest.TestCase):
+    def test_unknown_timing_keeps_claim_valid(self):
+        cfg = Config()
+        cfg.min_valid_claims = 2
+        cfg.max_claims_len = 3
+        vocab = {'<PAD>': 0, '<UNK>': 1}
+        dataset = ClaimsDataset(make_contract_dataframe(1), vocab, vocab, vocab, cfg)
+        cpt, icd, ttnc, _ = dataset.collate_eval_fn([dataset[0]])
+        self.assertEqual(ttnc.tolist(), [[0, 1, 1]])
+        self.assertEqual(int(ttnc.ne(0).sum()), 2)
+        self.assertTrue(cpt[0, -1].ne(0).any())
+
     def test_contract_freezes_disjoint_splits_and_train_only_vocab(self):
         dataframe = make_contract_dataframe()
         contract = build_data_contract(

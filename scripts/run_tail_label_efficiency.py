@@ -4,6 +4,7 @@ import argparse
 import copy
 import json
 import math
+import itertools
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -53,6 +54,8 @@ def parse_args(argv=None):
     )
     parser.add_argument("--raw-top-columns", type=int, default=256)
     parser.add_argument("--boost-iterations", type=int, default=100)
+    parser.add_argument("--label-seeds", type=int, nargs="+", default=[101, 102, 103, 104, 105])
+    parser.add_argument("--probe-seeds", type=int, nargs="+", default=[201])
     args = parser.parse_args(argv)
     if any(not 0.0 < value <= 1.0 for value in args.label_fractions):
         parser.error("label fractions must be in (0, 1]")
@@ -214,16 +217,24 @@ def main(argv=None):
                 np.concatenate([raw_train, train_embedding], axis=1),
                 np.concatenate([raw_val, val_embedding], axis=1),
             )
-        for fraction in sorted(set(args.label_fractions)):
-            positions = stratified_binary_positions(labels, fraction, seed)
+        for fraction, label_seed, probe_seed in itertools.product(
+            sorted(set(args.label_fractions)), sorted(set(args.label_seeds)),
+            sorted(set(args.probe_seeds)),
+        ):
+            # A full-label subset has no sampling randomness: do not duplicate it.
+            if fraction == 1.0 and label_seed != min(args.label_seeds):
+                continue
+            positions = stratified_binary_positions(labels, fraction, label_seed)
             subset_labels = labels[positions]
             for feature_name, (train_x, val_x) in feature_sets.items():
+                if feature_name == "raw" and seed != min(seeds):
+                    continue
                 logistic_scores = fit_embedding_logistic(
-                    train_x[positions], subset_labels, val_x, seed=seed
+                    train_x[positions], subset_labels, val_x, seed=probe_seed
                 )
                 boosted_scores = fit_low_label_boosted(
                     train_x, labels, val_x, positions,
-                    seed=seed, iterations=args.boost_iterations,
+                    seed=probe_seed, iterations=args.boost_iterations,
                 )
                 for learner, scores in (
                     ("logistic", logistic_scores), ("boosted", boosted_scores)
@@ -231,6 +242,10 @@ def main(argv=None):
                     runs.append({
                         "condition": f"{feature_name}_{learner}",
                         "seed": int(seed),
+                        "encoder_seed": int(seed) if feature_name != "raw" else None,
+                        "label_seed": int(label_seed),
+                        "probe_seed": int(probe_seed),
+                        "label_positions": positions.tolist(),
                         "label_fraction": float(fraction),
                         "num_labels": int(len(positions)),
                         "num_positives": int(subset_labels.sum()),
@@ -246,6 +261,10 @@ def main(argv=None):
         "protocol": {
             "evaluation_split": "frozen_validation",
             "test_accessed": False,
+            "label_seeds": args.label_seeds,
+            "probe_seeds": args.probe_seeds,
+            "design": "crossed_encoder_label_probe_seeds",
+            "dispersion_note": "Sample SD describes crossed runs; it is not a confidence interval over independent patients.",
             "mortality_label_available": False,
             "task": "high_cost_tail_proxy_label_efficiency",
             "tail_fraction": args.tail_fraction,

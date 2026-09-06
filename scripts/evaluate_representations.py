@@ -82,6 +82,8 @@ def parse_args(argv=None):
         help="Which sequence-level representation to feed into downstream probes.",
     )
     parser.add_argument("--seed", type=int, default=None, help="Random seed for evaluation and downstream probes.")
+    parser.add_argument("--evaluation-weights", choices=["averaged", "online"], default="averaged",
+        help="Use the evaluation average when available, or force the saved online weights.")
     parser.add_argument(
         "--output-json",
         type=str,
@@ -158,6 +160,8 @@ def main(argv=None):
         map_location=device,
         allow_legacy=config.allow_legacy_checkpoint_loading,
     )
+    if args.evaluation_weights == "online":
+        model.use_eval_polyak_average = False
 
     train_embeddings, _, train_targets, train_metadata = collect_patient_representations(
         model,
